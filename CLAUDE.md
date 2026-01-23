@@ -102,6 +102,64 @@ The project MUST target 80% test coverage. Tests MUST exercise real implementati
 
 Tests MUST use xUnit with standard assertions.
 
+### IX. Adherence to Planning Documents (NON-NEGOTIABLE)
+
+Claude MUST strictly adhere to the following planning documents during all development and testing. These documents define exact 1:1 mappings that govern implementation:
+
+| Document | Purpose | Scope |
+|----------|---------|-------|
+| `docs/api-mapping.md` | Python → C# API mappings | 35+ modules, all classes/methods/properties |
+| `docs/test-mapping.md` | Python → C# test mappings | 155 tests with naming conventions |
+| `docs/examples-mapping.md` | Python → C# example mappings | 129 examples across 9 projects |
+| `docs/doc-plan.md` | Documentation strategy | 30 pages, DocFX + GitHub Pages |
+
+**Strict Compliance Requirements**:
+- Claude MUST consult `api-mapping.md` before implementing ANY module
+- Claude MUST consult `test-mapping.md` before implementing ANY tests
+- Claude MUST consult `examples-mapping.md` before implementing ANY examples
+- Claude MUST consult `doc-plan.md` before creating ANY documentation
+- Claude MUST NOT skip, rename, or reorganize mapped items
+- Deviations require explicit user approval
+
+## Planning Documents
+
+### API Mapping (`docs/api-mapping.md`)
+
+The authoritative reference for all Python → C# API translations:
+- **35+ Python modules** mapped to .NET namespaces
+- **Every class, method, property, constant** with C# equivalents
+- **Naming conventions**: `snake_case` → `PascalCase`
+- **Type mappings**: Python types → C# types
+
+Before implementing any module, Claude MUST:
+1. Find the module section in `api-mapping.md`
+2. Identify all mapped APIs
+3. Implement each API exactly as documented
+
+### Test Mapping (`docs/test-mapping.md`)
+
+Complete 1:1 mapping of Python Prompt Toolkit tests:
+- **155 Python tests** → 155 C# tests
+- **Test naming**: `test_foo_bar` → `FooBar`
+- **Helper classes**: PromptSessionTestHelper, HandlerTracker, KeyCollector, OutputCapture
+- **TestKeys**: Static class with ANSI escape sequences
+
+### Examples Mapping (`docs/examples-mapping.md`)
+
+Complete 1:1 mapping of Python Prompt Toolkit examples:
+- **129 Python examples** → 129 C# examples
+- **9 example projects**: Prompts, FullScreen, ProgressBar, Dialogs, PrintText, Choices, Telnet, Ssh, Tutorial
+- **Naming**: `get-input.py` → `GetInput.cs`
+- **Implementation phases**: 5 phases from foundation to advanced
+
+### Documentation Plan (`docs/doc-plan.md`)
+
+Documentation strategy using DocFX + GitHub Pages:
+- **30 documentation pages** mirroring Python PTK structure
+- **10 namespace override pages** for API enrichment
+- **Auto-generated API docs** from XML comments
+- **Hosting**: `https://<username>.github.io/stroke`
+
 ## Reference Repositories
 
 The following repositories are cloned locally as architectural references:

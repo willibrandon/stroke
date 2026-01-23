@@ -1,13 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.1 → 1.3.0
+Version change: 1.4.0 → 1.4.1
 Modified principles:
-  - Principle I (Faithful Port): Strengthened from "API shape parity where idiomatic" to "100% API match"
+  - Principle IX (Adherence to Planning Documents): Added api-mapping.md requirements
 Added sections: None
 Removed sections: None
 Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ (no changes required - already references Constitution Check)
+  - .specify/templates/plan-template.md ✅ (no changes required - Constitution Check already present)
   - .specify/templates/spec-template.md ✅ (no changes required)
   - .specify/templates/tasks-template.md ✅ (no changes required)
   - .specify/templates/checklist-template.md ✅ (no changes required)
@@ -109,6 +109,47 @@ The project MUST target 80% test coverage. Tests MUST exercise real implementati
 
 Tests MUST use xUnit with standard assertions. Integration and unit tests MUST interact with actual implementations, leveraging the layered architecture to test components in isolation through their real interfaces.
 
+### IX. Adherence to Planning Documents (NON-NEGOTIABLE)
+
+Claude MUST strictly adhere to the following planning documents during all development and testing of Stroke. These documents define the exact 1:1 mappings and strategies that govern implementation:
+
+**API Mapping** (`docs/api-mapping.md`):
+- All APIs MUST be implemented according to the documented Python → C# mappings
+- Namespace mappings MUST follow the 35+ module mappings exactly as specified
+- Naming conventions MUST follow the documented transformations (`snake_case` → `PascalCase`)
+- Class, method, property, and constant mappings MUST match the documented equivalents
+- The api-mapping.md document is the authoritative reference for API implementation decisions
+- When implementing any module, Claude MUST consult the corresponding section in api-mapping.md
+
+**Documentation Plan** (`docs/doc-plan.md`):
+- Documentation MUST use DocFX + GitHub Pages as specified
+- All 30 documentation pages MUST be created as defined in the file inventory
+- Documentation structure MUST mirror Python Prompt Toolkit's documentation structure exactly
+- API reference MUST be auto-generated from XML documentation comments
+- All namespace override pages (10) MUST be created as specified
+
+**Examples Mapping** (`docs/examples-mapping.md`):
+- All 129 Python Prompt Toolkit examples MUST have corresponding C# examples
+- Example naming MUST follow the documented naming conventions (`snake_case` → `PascalCase`)
+- Example project structure MUST follow the defined layout with 9 example projects
+- Example implementations MUST use the documented Python → C# idiom translations
+- Implementation order MUST follow the 5 phases defined in the document
+
+**Test Mapping** (`docs/test-mapping.md`):
+- All 155 Python tests MUST have corresponding C# tests
+- Test naming MUST follow the documented naming conventions
+- Test project structure MUST follow the defined layout with test projects per namespace
+- Helper classes (PromptSessionTestHelper, HandlerTracker, KeyCollector, OutputCapture) MUST be implemented as specified
+- TestKeys static class MUST contain all ANSI escape sequences as defined
+
+**Strict Compliance Requirements**:
+- Claude MUST NOT skip any mapped API, test, example, or documentation page
+- Claude MUST NOT rename mapped items beyond the documented conventions
+- Claude MUST NOT reorganize the project structure differently from the specifications
+- Claude MUST NOT omit helper classes or infrastructure defined in the mappings
+- Claude MUST consult these documents before implementing any APIs, tests, examples, or documentation
+- Deviations are permitted ONLY with explicit user approval and documented rationale
+
 ## Technical Standards
 
 **Framework**: .NET 10+
@@ -125,11 +166,13 @@ Tests MUST use xUnit with standard assertions. Integration and unit tests MUST i
 ## Development Workflow
 
 1. **Reference First**: Before implementing any feature, locate the equivalent in Python Prompt Toolkit source and read it completely
-2. **API Inventory**: List all public APIs in the Python module before writing any C# code
-3. **Faithful Implementation**: Port each API exactly as defined in Python Prompt Toolkit
-4. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
-5. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
-6. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
+2. **Consult API Mapping**: Before implementing any module, consult `docs/api-mapping.md` for the exact Python → C# API mappings
+3. **API Inventory**: List all public APIs in the Python module before writing any C# code
+4. **Faithful Implementation**: Port each API exactly as defined in Python Prompt Toolkit and api-mapping.md
+5. **Consult Planning Documents**: Before implementing tests, examples, or documentation, consult the relevant mapping document to ensure 1:1 compliance
+6. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
+7. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
+8. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
 
 ## Governance
 
@@ -142,4 +185,4 @@ All pull requests MUST verify compliance with Core Principles. Violations requir
 
 Use `CLAUDE.md` for runtime development guidance and architectural reference.
 
-**Version**: 1.3.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
+**Version**: 1.4.1 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
