@@ -250,3 +250,66 @@ The complete specification is in `docs/design.md` (~65K tokens). It contains:
 - **Nullability**: Nullable reference types enabled; explicit null handling required
 - **Testing**: Unit tests MUST accompany new public APIs; use xUnit conventions; target 80% coverage
 - **Documentation**: Triple-slash XML doc comments (`///`) required for all public types and members
+
+## End-to-End Testing with TUI Driver
+
+The TUI Driver MCP tools provide real terminal automation for testing Stroke applications. These tools align with Principle VIII (Real-World Testing) by exercising actual terminal behavior without mocks or simulations.
+
+### Available TUI Tools
+
+| Tool | Purpose |
+|------|---------|
+| `tui_launch` | Launch a Stroke application in a controlled PTY session |
+| `tui_text` | Get current terminal text content for assertions |
+| `tui_snapshot` | Get accessibility-style DOM snapshot with element refs |
+| `tui_screenshot` | Capture PNG screenshot for visual verification |
+| `tui_press_key` | Send single key (Enter, Tab, Ctrl+c, arrow keys, etc.) |
+| `tui_press_keys` | Send key sequences for complex interactions |
+| `tui_send_text` | Type raw text into the terminal |
+| `tui_click` | Click on elements by reference ID from snapshot |
+| `tui_wait_for_text` | Wait for expected text to appear (with timeout) |
+| `tui_wait_for_idle` | Wait for screen to stabilize after updates |
+| `tui_resize` | Test responsive behavior at different terminal sizes |
+| `tui_run_code` | Execute JavaScript for complex automation sequences |
+| `tui_get_input` | Get raw input sent to process (escape sequences) for debugging |
+| `tui_get_output` | Get raw PTY output (escape sequences) for debugging |
+| `tui_close` | Clean up session after test completion |
+
+### When to Use TUI Driver
+
+Use TUI Driver for verification and debugging:
+
+1. **Rendering verification** - Confirm screen output matches expectations
+2. **Input handling** - Test keyboard input, Emacs/Vi key bindings, mouse events
+3. **Wide character display** - Verify CJK characters render at correct column widths
+4. **Differential updates** - Confirm only changed regions are redrawn
+5. **Layout behavior** - Test HSplit, VSplit, FloatContainer at various sizes
+6. **Completion menus** - Verify dropdown positioning and selection
+7. **Dialog workflows** - Test multi-step user interactions
+8. **Color output** - Screenshot verification for ANSI color rendering
+9. **Debugging** - Inspect terminal state, capture screenshots of failures, trace input/output sequences
+
+### Example Verification Flow
+
+```
+1. tui_launch: Start example application (e.g., dotnet run --project examples/Prompts)
+2. tui_wait_for_text: Wait for prompt to appear
+3. tui_send_text: Type user input
+4. tui_press_key: Press Enter to submit
+5. tui_wait_for_idle: Wait for response to render
+6. tui_text: Capture output and verify expected content
+7. tui_screenshot: (optional) Save visual state for regression comparison
+8. tui_close: Clean up the session
+```
+
+### Example Verification
+
+Claude SHOULD use TUI Driver to verify the 129 examples from `docs/examples-mapping.md` work correctly:
+
+1. Launch each example application with `tui_launch`
+2. Interact with it using `tui_send_text`, `tui_press_key`, etc.
+3. Verify expected output appears with `tui_text` and `tui_wait_for_text`
+4. Capture screenshots for visual confirmation when needed
+5. Test edge cases (resize, special keys, wide characters)
+
+This ensures examples behave correctly in real terminal environments before marking implementation complete.
