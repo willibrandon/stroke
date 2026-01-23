@@ -1235,10 +1235,146 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 | `Lexer` | `ILexer` | Interface (abstract in Python) |
 | `SimpleLexer` | `SimpleLexer` | Single-style lexer |
 | `DynamicLexer` | `DynamicLexer` | Dynamic wrapper |
-| `PygmentsLexer` | `PygmentsLexer` | Pygments integration |
-| `SyntaxSync` | `ISyntaxSync` | Interface |
+| `PygmentsLexer` | `PygmentsLexer` | Pygments integration via TextMateSharp |
+| `SyntaxSync` | `ISyntaxSync` | Interface for sync strategy |
 | `SyncFromStart` | `SyncFromStart` | Sync from document start |
 | `RegexSync` | `RegexSync` | Regex-based sync |
+
+### PygmentsLexer Class
+
+```python
+# Python
+class PygmentsLexer(Lexer):
+    MIN_LINES_BACKWARDS = 50
+    REUSE_GENERATOR_MAX_DISTANCE = 100
+
+    def __init__(self, pygments_lexer_cls, sync_from_start=True, syntax_sync=None) -> None
+    @classmethod
+    def from_filename(cls, filename, sync_from_start=True) -> Lexer
+    def lex_document(self, document) -> Callable[[int], StyleAndTextTuples]
+```
+
+```csharp
+// Stroke
+public sealed class PygmentsLexer : ILexer
+{
+    public const int MinLinesBackwards = 50;
+    public const int ReuseGeneratorMaxDistance = 100;
+
+    public PygmentsLexer(string scopeName, ISyntaxSync? syncStrategy = null);
+    public static ILexer FromFilename(string filename);
+    public Func<int, IReadOnlyList<StyleAndTextTuple>> LexDocument(Document document);
+}
+```
+
+### ISyntaxSync Interface
+
+```python
+# Python
+class SyntaxSync(ABC):
+    @abstractmethod
+    def get_sync_start_position(self, document, lineno) -> tuple[int, int]
+```
+
+```csharp
+// Stroke
+public interface ISyntaxSync
+{
+    (int Row, int Column) GetSyncStartPosition(Document document, int lineNo);
+}
+```
+
+### RegexSync Class
+
+```python
+# Python
+class RegexSync(SyntaxSync):
+    FROM_START_IF_NO_SYNC_POS_FOUND = 100
+    def __init__(self, pattern) -> None
+    @classmethod
+    def from_pygments_lexer_cls(cls, lexer_cls) -> RegexSync
+```
+
+```csharp
+// Stroke
+public sealed class RegexSync : ISyntaxSync
+{
+    public const int FromStartIfNoSyncPosFound = 100;
+    public RegexSync(string pattern);
+    public static RegexSync ForLanguage(string language);
+    public (int Row, int Column) GetSyncStartPosition(Document document, int lineNo);
+}
+```
+
+### Token Types (Stroke.Lexers.TokenTypes)
+
+| Pygments Token | Stroke Constant |
+|----------------|-----------------|
+| `Token` | `TokenTypes.Token` |
+| `Token.Keyword` | `TokenTypes.Keyword` |
+| `Token.Keyword.Constant` | `TokenTypes.KeywordConstant` |
+| `Token.Keyword.Declaration` | `TokenTypes.KeywordDeclaration` |
+| `Token.Keyword.Namespace` | `TokenTypes.KeywordNamespace` |
+| `Token.Keyword.Pseudo` | `TokenTypes.KeywordPseudo` |
+| `Token.Keyword.Reserved` | `TokenTypes.KeywordReserved` |
+| `Token.Keyword.Type` | `TokenTypes.KeywordType` |
+| `Token.Name` | `TokenTypes.Name` |
+| `Token.Name.Attribute` | `TokenTypes.NameAttribute` |
+| `Token.Name.Builtin` | `TokenTypes.NameBuiltin` |
+| `Token.Name.Class` | `TokenTypes.NameClass` |
+| `Token.Name.Constant` | `TokenTypes.NameConstant` |
+| `Token.Name.Decorator` | `TokenTypes.NameDecorator` |
+| `Token.Name.Exception` | `TokenTypes.NameException` |
+| `Token.Name.Function` | `TokenTypes.NameFunction` |
+| `Token.Name.Label` | `TokenTypes.NameLabel` |
+| `Token.Name.Namespace` | `TokenTypes.NameNamespace` |
+| `Token.Name.Tag` | `TokenTypes.NameTag` |
+| `Token.Name.Variable` | `TokenTypes.NameVariable` |
+| `Token.Literal` | `TokenTypes.Literal` |
+| `Token.Literal.Date` | `TokenTypes.LiteralDate` |
+| `Token.Literal.String` | `TokenTypes.String` |
+| `Token.Literal.String.Backtick` | `TokenTypes.StringBacktick` |
+| `Token.Literal.String.Char` | `TokenTypes.StringChar` |
+| `Token.Literal.String.Doc` | `TokenTypes.StringDoc` |
+| `Token.Literal.String.Double` | `TokenTypes.StringDouble` |
+| `Token.Literal.String.Escape` | `TokenTypes.StringEscape` |
+| `Token.Literal.String.Heredoc` | `TokenTypes.StringHeredoc` |
+| `Token.Literal.String.Interpol` | `TokenTypes.StringInterpol` |
+| `Token.Literal.String.Other` | `TokenTypes.StringOther` |
+| `Token.Literal.String.Regex` | `TokenTypes.StringRegex` |
+| `Token.Literal.String.Single` | `TokenTypes.StringSingle` |
+| `Token.Literal.String.Symbol` | `TokenTypes.StringSymbol` |
+| `Token.Literal.Number` | `TokenTypes.Number` |
+| `Token.Literal.Number.Bin` | `TokenTypes.NumberBin` |
+| `Token.Literal.Number.Float` | `TokenTypes.NumberFloat` |
+| `Token.Literal.Number.Hex` | `TokenTypes.NumberHex` |
+| `Token.Literal.Number.Integer` | `TokenTypes.NumberInteger` |
+| `Token.Literal.Number.Oct` | `TokenTypes.NumberOct` |
+| `Token.Operator` | `TokenTypes.Operator` |
+| `Token.Operator.Word` | `TokenTypes.OperatorWord` |
+| `Token.Punctuation` | `TokenTypes.Punctuation` |
+| `Token.Comment` | `TokenTypes.Comment` |
+| `Token.Comment.Hashbang` | `TokenTypes.CommentHashbang` |
+| `Token.Comment.Multiline` | `TokenTypes.CommentMultiline` |
+| `Token.Comment.Preproc` | `TokenTypes.CommentPreproc` |
+| `Token.Comment.Single` | `TokenTypes.CommentSingle` |
+| `Token.Comment.Special` | `TokenTypes.CommentSpecial` |
+| `Token.Generic` | `TokenTypes.Generic` |
+| `Token.Generic.Deleted` | `TokenTypes.GenericDeleted` |
+| `Token.Generic.Emph` | `TokenTypes.GenericEmph` |
+| `Token.Generic.Error` | `TokenTypes.GenericError` |
+| `Token.Generic.Heading` | `TokenTypes.GenericHeading` |
+| `Token.Generic.Inserted` | `TokenTypes.GenericInserted` |
+| `Token.Generic.Output` | `TokenTypes.GenericOutput` |
+| `Token.Generic.Prompt` | `TokenTypes.GenericPrompt` |
+| `Token.Generic.Strong` | `TokenTypes.GenericStrong` |
+| `Token.Generic.Subheading` | `TokenTypes.GenericSubheading` |
+| `Token.Generic.Traceback` | `TokenTypes.GenericTraceback` |
+| `Token.Text` | `TokenTypes.Text` |
+| `Token.Text.Whitespace` | `TokenTypes.Whitespace` |
+| `Token.Error` | `TokenTypes.Error` |
+| `Token.Escape` | `TokenTypes.Escape` |
+| `Token.Other` | `TokenTypes.Other` |
 
 ### ILexer Interface
 
@@ -1770,6 +1906,14 @@ public readonly record struct Attrs(
 | Python | Stroke | Signature |
 |--------|--------|-----------|
 | `get_cwidth(char)` | `UnicodeWidth.GetWidth(char)` | `int GetWidth(char c)` |
+| `get_cwidth(string)` | `UnicodeWidth.GetWidth(string)` | `int GetWidth(string text)` |
+| N/A | `UnicodeWidth.GetWidthWithSequences(string)` | `int GetWidthWithSequences(string text)` |
+| N/A | `UnicodeWidth.JustifyLeft(string, int)` | `string JustifyLeft(string text, int width)` |
+| N/A | `UnicodeWidth.JustifyRight(string, int)` | `string JustifyRight(string text, int width)` |
+| N/A | `UnicodeWidth.Center(string, int)` | `string Center(string text, int width)` |
+| N/A | `UnicodeWidth.Wrap(string, int)` | `IReadOnlyList<string> Wrap(string text, int width)` |
+| N/A | `UnicodeWidth.Clip(string, int, int)` | `string Clip(string text, int start, int end)` |
+| N/A | `AnsiSequences.Strip(string)` | `string Strip(string text)` |
 | `suspend_to_background_supported()` | `PlatformUtils.SuspendToBackgroundSupported()` | `bool SuspendToBackgroundSupported()` |
 | `is_conemu_ansi()` | `PlatformUtils.IsConEmuAnsi()` | `bool IsConEmuAnsi()` |
 | `is_windows()` | `PlatformUtils.IsWindows` | `bool` property |

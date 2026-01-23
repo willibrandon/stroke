@@ -1,10 +1,11 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.4.0 → 1.4.1
+Version change: 1.4.1 → 1.5.0
 Modified principles:
-  - Principle IX (Adherence to Planning Documents): Added api-mapping.md requirements
-Added sections: None
+  - Principle IX (Adherence to Planning Documents): Added dependencies-plan.md requirements
+Added sections:
+  - Dependencies Plan section under Principle IX
 Removed sections: None
 Templates requiring updates:
   - .specify/templates/plan-template.md ✅ (no changes required - Constitution Check already present)
@@ -142,6 +143,14 @@ Claude MUST strictly adhere to the following planning documents during all devel
 - Helper classes (PromptSessionTestHelper, HandlerTracker, KeyCollector, OutputCapture) MUST be implemented as specified
 - TestKeys static class MUST contain all ANSI escape sequences as defined
 
+**Dependencies Plan** (`docs/dependencies-plan.md`):
+- Unicode width calculation MUST use the Wcwidth NuGet package (MIT license)
+- Syntax highlighting MUST use TextMateSharp for Pygments-like functionality (MIT license)
+- Character width caching MUST follow the patterns defined in the document
+- Token types MUST use the TokenTypes constants matching Pygments hierarchy
+- GPLv3-licensed libraries (Smdn.LibHighlightSharp, Highlight) MUST NOT be used
+- All external dependencies MUST have MIT-compatible licenses
+
 **Strict Compliance Requirements**:
 - Claude MUST NOT skip any mapped API, test, example, or documentation page
 - Claude MUST NOT rename mapped items beyond the documented conventions
@@ -185,4 +194,4 @@ All pull requests MUST verify compliance with Core Principles. Violations requir
 
 Use `CLAUDE.md` for runtime development guidance and architectural reference.
 
-**Version**: 1.4.1 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
+**Version**: 1.5.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23

@@ -112,6 +112,7 @@ Claude MUST strictly adhere to the following planning documents during all devel
 | `docs/test-mapping.md` | Python → C# test mappings | 155 tests with naming conventions |
 | `docs/examples-mapping.md` | Python → C# example mappings | 129 examples across 9 projects |
 | `docs/doc-plan.md` | Documentation strategy | 30 pages, DocFX + GitHub Pages |
+| `docs/dependencies-plan.md` | External dependencies | Wcwidth, TextMateSharp integration |
 
 **Strict Compliance Requirements**:
 - Claude MUST consult `api-mapping.md` before implementing ANY module
@@ -159,6 +160,20 @@ Documentation strategy using DocFX + GitHub Pages:
 - **10 namespace override pages** for API enrichment
 - **Auto-generated API docs** from XML comments
 - **Hosting**: `https://<username>.github.io/stroke`
+
+### Dependencies Plan (`docs/dependencies-plan.md`)
+
+External dependency strategy for Pygments and wcwidth equivalents:
+- **Wcwidth NuGet package** (v4.0.1, MIT) for Unicode character width
+- **TextMateSharp** (v1.0.70, MIT) for syntax highlighting via TextMate grammars
+- **40+ languages** supported via VS Code grammar ecosystem
+- **Character width caching** patterns matching Python Prompt Toolkit
+
+Before implementing Unicode width or syntax highlighting, Claude MUST:
+1. Consult `docs/dependencies-plan.md` for implementation strategy
+2. Use the recommended NuGet packages (Wcwidth, TextMateSharp)
+3. Follow the caching patterns defined in the document
+4. Map Pygments token types using the TokenTypes constants
 
 ## Reference Repositories
 
