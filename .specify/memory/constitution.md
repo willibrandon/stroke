@@ -1,14 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.0 → 1.2.1
-Modified principles: None
+Version change: 1.2.1 → 1.3.0
+Modified principles:
+  - Principle I (Faithful Port): Strengthened from "API shape parity where idiomatic" to "100% API match"
 Added sections: None
 Removed sections: None
-Modified sections:
-  - Technical Standards: Expanded Documentation requirement
 Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ (no changes required)
+  - .specify/templates/plan-template.md ✅ (no changes required - already references Constitution Check)
   - .specify/templates/spec-template.md ✅ (no changes required)
   - .specify/templates/tasks-template.md ✅ (no changes required)
   - .specify/templates/checklist-template.md ✅ (no changes required)
@@ -19,9 +18,34 @@ Follow-up TODOs: None
 
 ## Core Principles
 
-### I. Faithful Port
+### I. Faithful Port (100% API Fidelity)
 
-Stroke MUST maintain architectural fidelity to Python Prompt Toolkit. Every major subsystem (Document, Buffer, Screen, Renderer, Input, KeyBinding, Layout, Completion, Application) MUST have a direct counterpart in the original library. API shape parity is required where idiomatic to C#; deviations MUST be documented with rationale. The Python source at `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/` serves as the authoritative reference.
+Stroke MUST be a 100% faithful port of Python Prompt Toolkit. This is NON-NEGOTIABLE:
+
+- **Every public class** in Python Prompt Toolkit MUST have an equivalent class in Stroke
+- **Every public method** MUST be ported with matching semantics
+- **Every public property** MUST be ported with matching semantics
+- **Every public constant/enum** MUST be ported with matching values
+- **API names** MUST match the original (adjusted only for C# naming conventions: `snake_case` → `PascalCase`)
+- **Module/namespace structure** MUST mirror the original package hierarchy
+
+The Python source at `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/` serves as the authoritative reference. Before implementing ANY feature, the developer MUST:
+1. Read the corresponding Python source file(s)
+2. Identify all public APIs in that module
+3. Port each API faithfully without invention or embellishment
+
+**Forbidden behaviors**:
+- Inventing APIs that do not exist in Python Prompt Toolkit
+- Omitting APIs that exist in Python Prompt Toolkit
+- Renaming APIs beyond case convention adjustments
+- Changing method signatures beyond type-system requirements
+- Adding "improvements" or "enhancements" not present in the original
+
+Deviations from the original are permitted ONLY when:
+1. C# language constraints require adaptation (e.g., `async/await` patterns, generic type constraints)
+2. Platform differences necessitate change (e.g., file system APIs)
+
+All such deviations MUST be documented with explicit rationale.
 
 ### II. Immutability by Default
 
@@ -100,10 +124,12 @@ Tests MUST use xUnit with standard assertions. Integration and unit tests MUST i
 
 ## Development Workflow
 
-1. **Reference First**: Before implementing any feature, locate the equivalent in Python Prompt Toolkit source
-2. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
-3. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
-4. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
+1. **Reference First**: Before implementing any feature, locate the equivalent in Python Prompt Toolkit source and read it completely
+2. **API Inventory**: List all public APIs in the Python module before writing any C# code
+3. **Faithful Implementation**: Port each API exactly as defined in Python Prompt Toolkit
+4. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
+5. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
+6. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
 
 ## Governance
 
@@ -116,4 +142,4 @@ All pull requests MUST verify compliance with Core Principles. Violations requir
 
 Use `CLAUDE.md` for runtime development guidance and architectural reference.
 
-**Version**: 1.2.1 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
+**Version**: 1.3.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
