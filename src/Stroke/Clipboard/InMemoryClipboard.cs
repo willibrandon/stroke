@@ -1,4 +1,6 @@
-namespace Stroke.Core;
+using Stroke.Core;
+
+namespace Stroke.Clipboard;
 
 /// <summary>
 /// Default clipboard implementation that stores data in memory with kill ring support.

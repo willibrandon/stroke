@@ -1,3 +1,4 @@
+using Stroke.Clipboard;
 using Stroke.Core;
 using Xunit;
 

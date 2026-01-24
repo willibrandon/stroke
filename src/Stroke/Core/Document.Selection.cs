@@ -1,3 +1,5 @@
+using Stroke.Clipboard;
+
 namespace Stroke.Core;
 
 public sealed partial class Document

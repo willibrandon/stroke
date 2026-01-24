@@ -497,7 +497,7 @@ As a developer building a multi-threaded application, I need the clipboard to be
 | Decision | Resolution | Rationale |
 |----------|------------|-----------|
 | Abstract class vs Interface | Interface (`IClipboard`) | Per `docs/api-mapping.md`; cleaner composition |
-| Namespace | `Stroke.Core` | Per `docs/api-mapping.md`; consistency with ClipboardData location |
+| Namespace | `Stroke.Clipboard` | Per `docs/api-mapping.md` mapping of `prompt_toolkit.clipboard` |
 | Null text behavior | `ArgumentNullException` | .NET convention for null arguments |
 | ClipboardData type | `sealed class` (not record) | Matches existing implementation; intentional immutability |
 | Kill ring data structure | `LinkedList<ClipboardData>` | O(1) front/back operations; equivalent to Python deque |

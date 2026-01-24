@@ -1,4 +1,6 @@
-namespace Stroke.Core;
+using Stroke.Core;
+
+namespace Stroke.Clipboard;
 
 /// <summary>
 /// Clipboard implementation that stores nothing.
