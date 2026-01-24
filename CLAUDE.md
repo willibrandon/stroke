@@ -316,6 +316,8 @@ This ensures examples behave correctly in real terminal environments before mark
 
 ## Active Technologies
 - C# 13 / .NET 10 + None for Core layer (xUnit for tests) (001-project-setup-primitives)
+- C# 13 / .NET 10 + None (Core layer has zero external dependencies per Constitution III) (002-immutable-document)
+- N/A (in-memory immutable data structure) (002-immutable-document)
 
 ## Recent Changes
 - 001-project-setup-primitives: Added C# 13 / .NET 10 + None for Core layer (xUnit for tests)
