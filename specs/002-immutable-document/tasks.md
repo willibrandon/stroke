@@ -24,10 +24,10 @@
 
 **Purpose**: Project initialization and dependency type creation
 
-- [ ] T001 Create `SelectionType` enum in `src/Stroke/Core/SelectionType.cs` with values Characters, Lines, Block
-- [ ] T002 [P] Create `PasteMode` enum in `src/Stroke/Core/PasteMode.cs` with values Emacs, ViAfter, ViBefore
-- [ ] T003 [P] Create `SelectionState` class in `src/Stroke/Core/SelectionState.cs` with OriginalCursorPosition, Type, ShiftMode properties and EnterShiftMode() method
-- [ ] T004 [P] Create `ClipboardData` class in `src/Stroke/Core/ClipboardData.cs` with Text and Type properties
+- [x] T001 Create `SelectionType` enum in `src/Stroke/Core/SelectionType.cs` with values Characters, Lines, Block
+- [x] T002 [P] Create `PasteMode` enum in `src/Stroke/Core/PasteMode.cs` with values Emacs, ViAfter, ViBefore
+- [x] T003 [P] Create `SelectionState` class in `src/Stroke/Core/SelectionState.cs` with OriginalCursorPosition, Type, ShiftMode properties and EnterShiftMode() method
+- [x] T004 [P] Create `ClipboardData` class in `src/Stroke/Core/ClipboardData.cs` with Text and Type properties
 
 ---
 
@@ -37,18 +37,18 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Create `DocumentCache` internal class in `src/Stroke/Core/DocumentCache.cs` with nullable Lines (ImmutableArray<string>?) and LineIndexes (int[]?) properties
-- [ ] T006 Create core `Document` class in `src/Stroke/Core/Document.cs` with private fields (_text, _cursorPosition, _selection, _cache), constructor, and basic properties (Text, CursorPosition, Selection)
-- [ ] T007 Implement `ConditionalWeakTable<string, DocumentCache>` flyweight cache in `Document.cs` for cache sharing between instances with identical text
-- [ ] T008 Implement lazy `Lines` property in `Document.cs` that splits text on newlines and caches result in DocumentCache
-- [ ] T009 Implement lazy `LineIndexes` computation in `Document.cs` using cumulative sum algorithm for line start positions
-- [ ] T010 Implement `TranslateIndexToPosition(int index)` method in `Document.cs` using binary search (bisect) for O(log n) row/column lookup
-- [ ] T011 Implement `TranslateRowColToIndex(int row, int col)` method in `Document.cs`
-- [ ] T012 Implement `Equals` and `GetHashCode` in `Document.cs` for value equality based on text, cursor position, and selection
-- [ ] T013 Create static regex patterns in `Document.cs` for word/WORD navigation (6 patterns from Python Prompt Toolkit IC-009 through IC-012)
-- [ ] T014 Create `tests/Stroke.Tests/Core/DocumentTests.cs` with test fixture setup matching test-mapping.md structure
-- [ ] T015 [P] Test IC-016: ArgumentOutOfRangeException for invalid cursor position (negative or > text.Length) in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T016 [P] Test IC-017: null text parameter treated as empty string in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T005 Create `DocumentCache` internal class in `src/Stroke/Core/DocumentCache.cs` with nullable Lines (ImmutableArray<string>?) and LineIndexes (int[]?) properties
+- [x] T006 Create core `Document` class in `src/Stroke/Core/Document.cs` with private fields (_text, _cursorPosition, _selection, _cache), constructor, and basic properties (Text, CursorPosition, Selection)
+- [x] T007 Implement `ConditionalWeakTable<string, DocumentCache>` flyweight cache in `Document.cs` for cache sharing between instances with identical text
+- [x] T008 Implement lazy `Lines` property in `Document.cs` that splits text on newlines and caches result in DocumentCache
+- [x] T009 Implement lazy `LineIndexes` computation in `Document.cs` using cumulative sum algorithm for line start positions
+- [x] T010 Implement `TranslateIndexToPosition(int index)` method in `Document.cs` using binary search (bisect) for O(log n) row/column lookup
+- [x] T011 Implement `TranslateRowColToIndex(int row, int col)` method in `Document.cs`
+- [x] T012 Implement `Equals` and `GetHashCode` in `Document.cs` for value equality based on text, cursor position, and selection
+- [x] T013 Create static regex patterns in `Document.cs` for word/WORD navigation (6 patterns from Python Prompt Toolkit IC-009 through IC-012)
+- [x] T014 Create `tests/Stroke.Tests/Core/DocumentTests.cs` with test fixture setup matching test-mapping.md structure
+- [x] T015 [P] Test IC-016: ArgumentOutOfRangeException for invalid cursor position (negative or > text.Length) in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T016 [P] Test IC-017: null text parameter treated as empty string in `tests/Stroke.Tests/Core/DocumentTests.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -64,39 +64,39 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T017 [P] [US1] Test `CurrentChar` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns character at cursor or '\0' at end
-- [ ] T018 [P] [US1] Test `CharBeforeCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns character before cursor or '\0' at position 0
-- [ ] T019 [P] [US1] Test `TextBeforeCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns substring from start to cursor
-- [ ] T020 [P] [US1] Test `TextAfterCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns substring from cursor to end
-- [ ] T021 [P] [US1] Test `CurrentLine` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns entire current line
-- [ ] T022 [P] [US1] Test `CurrentLineBeforeCursor` and `CurrentLineAfterCursor` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T023 [P] [US1] Test `LeadingWhitespaceInCurrentLine` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T024 [P] [US1] Test `Lines` and `LineCount` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T025 [P] [US1] Test `CursorPositionRow` and `CursorPositionCol` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T026 [P] [US1] Test `IsCursorAtTheEnd` and `IsCursorAtTheEndOfLine` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T027 [P] [US1] Test `OnFirstLine` and `OnLastLine` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T028 [P] [US1] Test `LinesFromCurrent` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T029 [P] [US1] Test `EmptyLineCountAtTheEnd` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T017 [P] [US1] Test `CurrentChar` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns character at cursor or '\0' at end
+- [x] T018 [P] [US1] Test `CharBeforeCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns character before cursor or '\0' at position 0
+- [x] T019 [P] [US1] Test `TextBeforeCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns substring from start to cursor
+- [x] T020 [P] [US1] Test `TextAfterCursor` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns substring from cursor to end
+- [x] T021 [P] [US1] Test `CurrentLine` property in `tests/Stroke.Tests/Core/DocumentTests.cs` - returns entire current line
+- [x] T022 [P] [US1] Test `CurrentLineBeforeCursor` and `CurrentLineAfterCursor` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T023 [P] [US1] Test `LeadingWhitespaceInCurrentLine` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T024 [P] [US1] Test `Lines` and `LineCount` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T025 [P] [US1] Test `CursorPositionRow` and `CursorPositionCol` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T026 [P] [US1] Test `IsCursorAtTheEnd` and `IsCursorAtTheEndOfLine` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T027 [P] [US1] Test `OnFirstLine` and `OnLastLine` properties in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T028 [P] [US1] Test `LinesFromCurrent` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T029 [P] [US1] Test `EmptyLineCountAtTheEnd` property in `tests/Stroke.Tests/Core/DocumentTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T030 [US1] Implement `CurrentChar` property in `src/Stroke/Core/Document.cs` returning char at cursor or '\0'
-- [ ] T031 [US1] Implement `CharBeforeCursor` property in `src/Stroke/Core/Document.cs` returning char before cursor or '\0'
-- [ ] T032 [US1] Implement `TextBeforeCursor` property in `src/Stroke/Core/Document.cs` using substring
-- [ ] T033 [US1] Implement `TextAfterCursor` property in `src/Stroke/Core/Document.cs` using substring
-- [ ] T034 [US1] Implement `CurrentLine` property in `src/Stroke/Core/Document.cs` using Lines array and row position
-- [ ] T035 [US1] Implement `CurrentLineBeforeCursor` property in `src/Stroke/Core/Document.cs`
-- [ ] T036 [US1] Implement `CurrentLineAfterCursor` property in `src/Stroke/Core/Document.cs`
-- [ ] T037 [US1] Implement `LeadingWhitespaceInCurrentLine` property in `src/Stroke/Core/Document.cs`
-- [ ] T038 [US1] Implement `LineCount` property in `src/Stroke/Core/Document.cs`
-- [ ] T039 [US1] Implement `CursorPositionRow` property in `src/Stroke/Core/Document.cs` using TranslateIndexToPosition
-- [ ] T040 [US1] Implement `CursorPositionCol` property in `src/Stroke/Core/Document.cs` using TranslateIndexToPosition
-- [ ] T041 [US1] Implement `IsCursorAtTheEnd` property in `src/Stroke/Core/Document.cs`
-- [ ] T042 [US1] Implement `IsCursorAtTheEndOfLine` property in `src/Stroke/Core/Document.cs`
-- [ ] T043 [US1] Implement `OnFirstLine` and `OnLastLine` properties in `src/Stroke/Core/Document.cs`
-- [ ] T044 [US1] Implement `LinesFromCurrent` property in `src/Stroke/Core/Document.cs`
-- [ ] T045 [US1] Implement `EmptyLineCountAtTheEnd` property in `src/Stroke/Core/Document.cs`
-- [ ] T046 [US1] Run US1 tests and verify all pass
+- [x] T030 [US1] Implement `CurrentChar` property in `src/Stroke/Core/Document.cs` returning char at cursor or '\0'
+- [x] T031 [US1] Implement `CharBeforeCursor` property in `src/Stroke/Core/Document.cs` returning char before cursor or '\0'
+- [x] T032 [US1] Implement `TextBeforeCursor` property in `src/Stroke/Core/Document.cs` using substring
+- [x] T033 [US1] Implement `TextAfterCursor` property in `src/Stroke/Core/Document.cs` using substring
+- [x] T034 [US1] Implement `CurrentLine` property in `src/Stroke/Core/Document.cs` using Lines array and row position
+- [x] T035 [US1] Implement `CurrentLineBeforeCursor` property in `src/Stroke/Core/Document.cs`
+- [x] T036 [US1] Implement `CurrentLineAfterCursor` property in `src/Stroke/Core/Document.cs`
+- [x] T037 [US1] Implement `LeadingWhitespaceInCurrentLine` property in `src/Stroke/Core/Document.cs`
+- [x] T038 [US1] Implement `LineCount` property in `src/Stroke/Core/Document.cs`
+- [x] T039 [US1] Implement `CursorPositionRow` property in `src/Stroke/Core/Document.cs` using TranslateIndexToPosition
+- [x] T040 [US1] Implement `CursorPositionCol` property in `src/Stroke/Core/Document.cs` using TranslateIndexToPosition
+- [x] T041 [US1] Implement `IsCursorAtTheEnd` property in `src/Stroke/Core/Document.cs`
+- [x] T042 [US1] Implement `IsCursorAtTheEndOfLine` property in `src/Stroke/Core/Document.cs`
+- [x] T043 [US1] Implement `OnFirstLine` and `OnLastLine` properties in `src/Stroke/Core/Document.cs`
+- [x] T044 [US1] Implement `LinesFromCurrent` property in `src/Stroke/Core/Document.cs`
+- [x] T045 [US1] Implement `EmptyLineCountAtTheEnd` property in `src/Stroke/Core/Document.cs`
+- [x] T046 [US1] Run US1 tests and verify all pass
 
 **Checkpoint**: User Story 1 should be fully functional and testable independently
 
