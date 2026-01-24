@@ -366,6 +366,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - xUnit for testing (no mocks, no FluentAssertions per Constitution VIII)
 - C# 13 / .NET 10 + None (Stroke.Core layer has zero external dependencies) (004-clipboard-system)
 - In-memory only (no persistence) (004-clipboard-system)
+- C# 13 / .NET 10 + None (Stroke.Core layer - zero external dependencies per Constitution III) (005-auto-suggest-system)
+- N/A (in-memory only) (005-auto-suggest-system)
 
 ## Recent Changes
 - 004-clipboard-system: Added IClipboard, InMemoryClipboard (kill ring), DynamicClipboard, DummyClipboard in Stroke.Clipboard namespace (59 tests)

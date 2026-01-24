@@ -35,6 +35,8 @@ jobs:
       - name: Typos
         if: matrix.os == 'ubuntu-latest'
         uses: crate-ci/typos@master
+        with:
+          config: ./.typos.toml
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
