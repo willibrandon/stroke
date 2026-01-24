@@ -1,0 +1,9 @@
+[default.extend-identifiers]
+# Windows API naming conventions use ordinals like 2nd, 3rd, 4th
+FromLeft2ndButtonPressed = "FromLeft2ndButtonPressed"
+FromLeft3rdButtonPressed = "FromLeft3rdButtonPressed"
+FromLeft4thButtonPressed = "FromLeft4thButtonPressed"
+
+[default.extend-words]
+# Technical terms that are not typos
+nd = "nd"
