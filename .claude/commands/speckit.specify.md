@@ -36,7 +36,7 @@ Given that feature description, do this:
      - "Create a dashboard for analytics" → "analytics-dashboard"
      - "Fix payment processing timeout bug" → "fix-payment-timeout"
 
-2. **Check for existing branches before creating new one**:
+2. **Check for existing features and determine next number**:
 
    a. First, fetch all remote branches to ensure we have the latest information:
 
@@ -44,15 +44,16 @@ Given that feature description, do this:
       git fetch --all --prune
       ```
 
-   b. Find the highest feature number across all sources for the short-name:
-      - Remote branches: `git ls-remote --heads origin | grep -E 'refs/heads/[0-9]+-<short-name>$'`
-      - Local branches: `git branch | grep -E '^[* ]*[0-9]+-<short-name>$'`
-      - Specs directories: Check for directories matching `specs/[0-9]+-<short-name>`
+   b. Find the highest feature number GLOBALLY across all sources (regardless of short-name):
+      - Remote branches: `git ls-remote --heads origin | grep -oE 'refs/heads/([0-9]+)-' | grep -oE '[0-9]+'`
+      - Local branches: `git branch | grep -oE '^\*?\s*([0-9]+)-' | grep -oE '[0-9]+'`
+      - **Specs directories (CHECK THIS FIRST)**: `ls specs/ | grep -oE '^([0-9]+)-' | grep -oE '[0-9]+'`
 
    c. Determine the next available number:
       - Extract all numbers from all three sources
-      - Find the highest number N
-      - Use N+1 for the new branch number
+      - Find the highest number N across ALL features
+      - Use N+1 for the new feature number
+      - If no existing features found anywhere, start with number 1
 
    d. Run the script `.specify/scripts/bash/create-new-feature.sh --json "$ARGUMENTS"` with the calculated number and short-name:
       - Pass `--number N+1` and `--short-name "your-short-name"` along with the feature description
@@ -60,9 +61,9 @@ Given that feature description, do this:
       - PowerShell example: `.specify/scripts/bash/create-new-feature.sh --json "$ARGUMENTS" -Json -Number 5 -ShortName "user-auth" "Add user authentication"`
 
    **IMPORTANT**:
-   - Check all three sources (remote branches, local branches, specs directories) to find the highest number
-   - Only match branches/directories with the exact short-name pattern
-   - If no existing branches/directories found with this short-name, start with number 1
+   - The feature number is GLOBAL and sequential across ALL features (not per short-name)
+   - Always check the `specs/` directory first - it is the source of truth for existing feature numbers
+   - Example: If `specs/` contains `001-project-setup-primitives` and `002-immutable-document`, the next feature MUST be `003-*`
    - You must only ever run this script once per feature
    - The JSON is provided in the terminal as output - always refer to it to get the actual content you're looking for
    - The JSON output will contain BRANCH_NAME and SPEC_FILE paths
