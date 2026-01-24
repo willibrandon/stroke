@@ -40,17 +40,20 @@ This research documents design decisions for the Clipboard System implementation
 
 ### 3. Thread Safety
 
-**Decision**: No thread safety required
+**Decision**: Thread safety REQUIRED for mutable implementations (deviation from Python per Constitution XI)
 
 **Rationale**:
-- Python Prompt Toolkit does not implement thread-safe clipboard
-- Spec assumption states single-threaded UI context
-- Adding thread safety would deviate from faithful port
-- If needed later, can wrap with thread-safe decorator
+- .NET applications commonly operate in multi-threaded contexts (async/await, background workers)
+- Constitution Principle XI mandates thread safety for all mutable state
+- `InMemoryClipboard` uses `System.Threading.Lock` (.NET 9+) with `EnterScope()` pattern
+- `DummyClipboard` is stateless (inherently thread-safe)
+- `ClipboardData` is immutable (inherently thread-safe)
+- `DynamicClipboard` delegates thread safety to underlying implementation
 
-**Alternatives Considered**:
-- `ConcurrentQueue<T>` (rejected: unnecessary complexity, different semantics)
-- Lock-based synchronization (rejected: not in Python original)
+**Implementation**:
+- `System.Threading.Lock` with `EnterScope()` for automatic release
+- All public methods in `InMemoryClipboard` acquire lock
+- Individual operations are atomic; compound operations require external synchronization
 
 ### 4. Namespace Placement
 

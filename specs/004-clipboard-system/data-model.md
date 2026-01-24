@@ -210,4 +210,4 @@ State: [X, ...] (oldest removed from end)
 1. **ClipboardData already exists** - Implementation was part of earlier work
 2. **ClipboardDataTests already exist** - 17 tests covering constructor and properties
 3. **Namespace**: All types in `Stroke.Core` per api-mapping.md
-4. **Thread Safety**: Not required per spec assumptions
+4. **Thread Safety**: Required per Constitution XI - InMemoryClipboard uses System.Threading.Lock

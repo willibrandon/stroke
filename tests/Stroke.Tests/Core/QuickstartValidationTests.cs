@@ -360,4 +360,112 @@ public class QuickstartValidationTests
     }
 
     #endregion
+
+    #region Clipboard System Examples (Feature 004)
+
+    [Fact]
+    public void Quickstart_Clipboard_BasicUsage()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Store and Retrieve Text
+        IClipboard clipboard = new InMemoryClipboard();
+
+        clipboard.SetText("Hello, World!");
+
+        ClipboardData data = clipboard.GetData();
+        Assert.Equal("Hello, World!", data.Text);
+        Assert.Equal(SelectionType.Characters, data.Type);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_StoreWithSelectionType()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Store with Selection Type
+        IClipboard clipboard = new InMemoryClipboard();
+
+        clipboard.SetData(new ClipboardData("line1\nline2\n", SelectionType.Lines));
+        clipboard.SetData(new ClipboardData("ABC\nDEF\nGHI", SelectionType.Block));
+
+        ClipboardData data = clipboard.GetData();
+        Assert.Equal(SelectionType.Block, data.Type);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_KillRing()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Kill Ring (Emacs Yank-Pop)
+        IClipboard clipboard = new InMemoryClipboard();
+
+        clipboard.SetText("first");
+        clipboard.SetText("second");
+        clipboard.SetText("third");
+
+        Assert.Equal("third", clipboard.GetData().Text);
+
+        clipboard.Rotate();
+        Assert.Equal("second", clipboard.GetData().Text);
+
+        clipboard.Rotate();
+        Assert.Equal("first", clipboard.GetData().Text);
+
+        clipboard.Rotate();
+        Assert.Equal("third", clipboard.GetData().Text);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_CustomKillRingSize()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Custom Kill Ring Size
+        IClipboard clipboard = new InMemoryClipboard(maxSize: 3);
+
+        clipboard.SetText("a");
+        clipboard.SetText("b");
+        clipboard.SetText("c");
+        clipboard.SetText("d");  // "a" is dropped
+
+        // Only 3 items retained: [d, c, b]
+        Assert.Equal("d", clipboard.GetData().Text);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_InitialData()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Initial Data
+        var initialData = new ClipboardData("initial text", SelectionType.Lines);
+        IClipboard clipboard = new InMemoryClipboard(data: initialData);
+
+        Assert.Equal("initial text", clipboard.GetData().Text);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_DynamicClipboard()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Dynamic Clipboard
+        IClipboard? activeClipboard = new InMemoryClipboard();
+
+        IClipboard dynamic = new DynamicClipboard(() => activeClipboard);
+
+        dynamic.SetText("stored in InMemoryClipboard");
+
+        activeClipboard = new DummyClipboard();
+        dynamic.SetText("this is discarded");
+
+        activeClipboard = null;
+        Assert.Equal(string.Empty, dynamic.GetData().Text);
+    }
+
+    [Fact]
+    public void Quickstart_Clipboard_DummyClipboard()
+    {
+        // From specs/004-clipboard-system/quickstart.md: Dummy Clipboard
+        IClipboard clipboard = new DummyClipboard();
+
+        clipboard.SetText("ignored");
+        clipboard.SetData(new ClipboardData("also ignored", SelectionType.Lines));
+
+        ClipboardData data = clipboard.GetData();
+        Assert.Equal(string.Empty, data.Text);
+        Assert.Equal(SelectionType.Characters, data.Type);
+    }
+
+    #endregion
 }

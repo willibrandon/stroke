@@ -21,9 +21,9 @@
 
 **Note**: FR-001, FR-003, FR-004 (ClipboardData requirements) are already satisfied by existing implementation from Feature 003. ClipboardDataTests.cs provides coverage.
 
-- [ ] T001 Verify SelectionType enum exists in src/Stroke/Core/Selection/SelectionType.cs
-- [ ] T002 Verify ClipboardData class exists in src/Stroke/Core/ClipboardData.cs (satisfies FR-001, FR-003, FR-004)
-- [ ] T003 [P] Verify test project structure exists at tests/Stroke.Tests/Core/
+- [x] T001 Verify SelectionType enum exists in src/Stroke/Core/SelectionType.cs
+- [x] T002 Verify ClipboardData class exists in src/Stroke/Core/ClipboardData.cs (satisfies FR-001, FR-003, FR-004)
+- [x] T003 [P] Verify test project structure exists at tests/Stroke.Tests/Core/
 
 ---
 
@@ -33,8 +33,8 @@
 
 **⚠️ CRITICAL**: No implementation work can begin until this phase is complete
 
-- [ ] T004 Create IClipboard interface in src/Stroke/Core/IClipboard.cs with SetData, GetData, SetText (default), Rotate (default)
-- [ ] T005 Add XML documentation comments to IClipboard interface
+- [x] T004 Create IClipboard interface in src/Stroke/Core/IClipboard.cs with SetData, GetData, SetText (default), Rotate (default)
+- [x] T005 Add XML documentation comments to IClipboard interface
 
 **Checkpoint**: IClipboard interface ready - implementations can now begin in parallel
 
@@ -48,12 +48,12 @@
 
 ### Tests for User Story 1
 
-- [ ] T006 [P] [US1] Create DummyClipboardTests.cs in tests/Stroke.Tests/Core/DummyClipboardTests.cs with tests for:
+- [x] T006 [P] [US1] Create DummyClipboardTests.cs in tests/Stroke.Tests/Core/DummyClipboardTests.cs with tests for:
   - SetData is no-op
   - SetText is no-op
   - GetData returns empty ClipboardData
   - Rotate is no-op
-- [ ] T007 [P] [US1] Create InMemoryClipboardTests.cs in tests/Stroke.Tests/Core/InMemoryClipboardTests.cs with basic store/retrieve tests:
+- [x] T007 [P] [US1] Create InMemoryClipboardTests.cs in tests/Stroke.Tests/Core/InMemoryClipboardTests.cs with basic store/retrieve tests:
   - Constructor with no args creates empty clipboard
   - Constructor with initial data stores it
   - SetData stores data retrievable via GetData
@@ -65,16 +65,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [P] [US1] Create DummyClipboard sealed class in src/Stroke/Core/DummyClipboard.cs implementing IClipboard with no-op methods
-- [ ] T009 [US1] Create InMemoryClipboard sealed class in src/Stroke/Core/InMemoryClipboard.cs with:
+- [x] T008 [P] [US1] Create DummyClipboard sealed class in src/Stroke/Core/DummyClipboard.cs implementing IClipboard with no-op methods
+- [x] T009 [US1] Create InMemoryClipboard sealed class in src/Stroke/Core/InMemoryClipboard.cs with:
   - Private LinkedList<ClipboardData> _ring field
   - Private readonly Lock _lock field for thread safety
   - Constructor with optional ClipboardData and maxSize (default 60)
   - MaxSize get-only property
   - SetData that adds to front of ring
   - GetData that returns front or empty ClipboardData
-- [ ] T010 [US1] Add XML documentation comments to DummyClipboard
-- [ ] T011 [US1] Add XML documentation comments to InMemoryClipboard
+- [x] T010 [US1] Add XML documentation comments to DummyClipboard
+- [x] T011 [US1] Add XML documentation comments to InMemoryClipboard
 
 **Checkpoint**: Basic clipboard storage works - can store and retrieve ClipboardData with selection types
 
@@ -88,13 +88,13 @@
 
 ### Tests for User Story 2
 
-- [ ] T012 [P] [US2] Add kill ring tests to InMemoryClipboardTests.cs:
+- [x] T012 [P] [US2] Add kill ring tests to InMemoryClipboardTests.cs:
   - Rotate moves front item to back
   - Rotate three times on [A,B,C] returns to A
   - Rotate on empty clipboard is no-op (no exception)
   - Rotate on single item is no-op (item remains current)
   - Kill ring maintains order through multiple set/rotate operations
-- [ ] T013 [P] [US2] Add maxSize tests to InMemoryClipboardTests.cs:
+- [x] T013 [P] [US2] Add maxSize tests to InMemoryClipboardTests.cs:
   - MaxSize property returns configured value
   - Constructor with maxSize < 1 throws ArgumentOutOfRangeException
   - Ring trims oldest when exceeding maxSize
@@ -102,9 +102,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement Rotate method in InMemoryClipboard (move first to last)
-- [ ] T015 [US2] Implement kill ring trimming in SetData (RemoveLast when exceeds MaxSize)
-- [ ] T016 [US2] Add constructor validation for maxSize >= 1 (throw ArgumentOutOfRangeException)
+- [x] T014 [US2] Implement Rotate method in InMemoryClipboard (move first to last)
+- [x] T015 [US2] Implement kill ring trimming in SetData (RemoveLast when exceeds MaxSize)
+- [x] T016 [US2] Add constructor validation for maxSize >= 1 (throw ArgumentOutOfRangeException)
 
 **Checkpoint**: Emacs kill ring fully functional - can store history and cycle with Rotate
 
@@ -118,7 +118,7 @@
 
 ### Tests for User Story 5
 
-- [ ] T017 [P] [US5] Add concurrent tests to InMemoryClipboardTests.cs:
+- [x] T017 [P] [US5] Add concurrent tests to InMemoryClipboardTests.cs:
   - 10 threads concurrently calling SetData with different values - no exceptions
   - 10 threads concurrently calling GetData - all receive valid ClipboardData
   - Mixed concurrent SetData, GetData, Rotate operations - no exceptions
@@ -127,8 +127,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T018 [US5] Verify all InMemoryClipboard public methods acquire lock via using (_lock.EnterScope())
-- [ ] T019 [US5] Add thread safety XML documentation to InMemoryClipboard class
+- [x] T018 [US5] Verify all InMemoryClipboard public methods acquire lock via using (_lock.EnterScope())
+- [x] T019 [US5] Add thread safety XML documentation to InMemoryClipboard class
 
 **Checkpoint**: InMemoryClipboard is thread-safe - concurrent access works correctly
 
@@ -142,7 +142,7 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [P] [US3] Create DynamicClipboardTests.cs in tests/Stroke.Tests/Core/DynamicClipboardTests.cs with:
+- [x] T020 [P] [US3] Create DynamicClipboardTests.cs in tests/Stroke.Tests/Core/DynamicClipboardTests.cs with:
   - Constructor with null delegate throws ArgumentNullException
   - SetData delegates to underlying clipboard
   - GetData delegates to underlying clipboard
@@ -154,12 +154,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] Create DynamicClipboard sealed class in src/Stroke/Core/DynamicClipboard.cs with:
+- [x] T021 [US3] Create DynamicClipboard sealed class in src/Stroke/Core/DynamicClipboard.cs with:
   - Private readonly Func<IClipboard?> _getClipboard field
   - Constructor that validates getClipboard not null
   - Private helper method to get clipboard or fallback to DummyClipboard
   - SetData, GetData, SetText, Rotate all delegating to resolved clipboard
-- [ ] T022 [US3] Add XML documentation comments to DynamicClipboard
+- [x] T022 [US3] Add XML documentation comments to DynamicClipboard
 
 **Checkpoint**: DynamicClipboard enables runtime clipboard switching
 
@@ -173,7 +173,7 @@
 
 ### Tests for User Story 4
 
-- [ ] T023 [P] [US4] Add SetText convenience tests to existing test files:
+- [x] T023 [P] [US4] Add SetText convenience tests to existing test files:
   - InMemoryClipboard.SetText("hello") → GetData returns ("hello", Characters)
   - InMemoryClipboard.SetText("") → GetData returns ("", Characters)
   - DynamicClipboard.SetText delegates correctly
@@ -181,9 +181,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Verify IClipboard.SetText default implementation calls SetData with ClipboardData(text)
-- [ ] T025 [US4] Verify DummyClipboard.SetText overrides default to explicit no-op
-- [ ] T026 [US4] Verify DynamicClipboard.SetText overrides default to delegate
+- [x] T024 [US4] Verify IClipboard.SetText default implementation calls SetData with ClipboardData(text)
+- [x] T025 [US4] Verify DummyClipboard.SetText overrides default to explicit no-op
+- [x] T026 [US4] Verify DynamicClipboard.SetText overrides default to delegate
 
 **Checkpoint**: SetText convenience method works across all implementations
 
@@ -193,12 +193,12 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T027 Verify all public types have complete XML documentation (triple-slash comments)
-- [ ] T028 Verify no source file exceeds 1,000 LOC
-- [ ] T029 Run all tests and verify 80%+ coverage for clipboard types
-- [ ] T030 Run quickstart.md code samples manually to verify they work
-- [ ] T031 Verify all edge cases from spec.md are covered by tests
-- [ ] T032 Verify O(1) performance characteristics via code review (NFR-001, NFR-002): LinkedList.AddFirst, RemoveLast, First access
+- [x] T027 Verify all public types have complete XML documentation (triple-slash comments)
+- [x] T028 Verify no source file exceeds 1,000 LOC
+- [x] T029 Run all tests and verify 80%+ coverage for clipboard types
+- [x] T030 Run quickstart.md code samples manually to verify they work
+- [x] T031 Verify all edge cases from spec.md are covered by tests
+- [x] T032 Verify O(1) performance characteristics via code review (NFR-001, NFR-002): LinkedList.AddFirst, RemoveLast, First access
 
 ---
 
