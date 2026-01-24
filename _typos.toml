@@ -7,3 +7,9 @@ hellow = "hellow"
 
 # Test data: "hello world" cut "lo wo" -> "hel" + "rld"
 hel = "hel"
+
+[default.extend-identifiers]
+# Windows API constant names use ordinal abbreviations
+FromLeft2ndButtonPressed = "FromLeft2ndButtonPressed"
+FromLeft3rdButtonPressed = "FromLeft3rdButtonPressed"
+FromLeft4thButtonPressed = "FromLeft4thButtonPressed"
