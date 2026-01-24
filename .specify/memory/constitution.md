@@ -1,11 +1,10 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.4.1 → 1.5.0
-Modified principles:
-  - Principle IX (Adherence to Planning Documents): Added dependencies-plan.md requirements
+Version change: 1.5.0 → 1.6.0
+Modified principles: None
 Added sections:
-  - Dependencies Plan section under Principle IX
+  - Principle X: Source Code File Size Limits
 Removed sections: None
 Templates requiring updates:
   - .specify/templates/plan-template.md ✅ (no changes required - Constitution Check already present)
@@ -159,6 +158,19 @@ Claude MUST strictly adhere to the following planning documents during all devel
 - Claude MUST consult these documents before implementing any APIs, tests, examples, or documentation
 - Deviations are permitted ONLY with explicit user approval and documented rationale
 
+### X. Source Code File Size Limits
+
+Source code files MUST be kept to 1,000 lines of code (LOC) or less. This is a maintainability requirement:
+
+- **Maximum file size**: No single source file MUST exceed 1,000 LOC
+- **Proactive splitting**: When a file approaches the limit, it MUST be refactored into smaller, focused units
+- **Logical grouping**: Split files by logical responsibility (e.g., separate test files by user story, separate implementation by concern)
+- **Naming clarity**: Split files MUST have clear, descriptive names indicating their scope
+
+**Rationale**: Smaller files improve code navigation, reduce merge conflicts, enable faster comprehension, and encourage single-responsibility design. Files exceeding 1,000 LOC indicate opportunities for better modularization.
+
+**Exceptions**: Generated code or files that cannot be logically split without violating other principles may exceed this limit with documented justification.
+
 ## Technical Standards
 
 **Framework**: .NET 10+
@@ -182,6 +194,7 @@ Claude MUST strictly adhere to the following planning documents during all devel
 6. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
 7. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
 8. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
+9. **File Size Review**: Before completing any implementation, verify no source file exceeds 1,000 LOC
 
 ## Governance
 
@@ -194,4 +207,4 @@ All pull requests MUST verify compliance with Core Principles. Violations requir
 
 Use `CLAUDE.md` for runtime development guidance and architectural reference.
 
-**Version**: 1.5.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
+**Version**: 1.6.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
