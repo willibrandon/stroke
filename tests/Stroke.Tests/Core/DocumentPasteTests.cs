@@ -342,6 +342,21 @@ public class DocumentPasteTests
     }
 
     [Fact]
+    public void PasteClipboardData_ViAfterAtEndOfDocument_DoesNotThrow()
+    {
+        // Arrange - cursor at end of document (regression test for index out of range)
+        var doc = new Document("hello", cursorPosition: 5);
+        var clipboard = new ClipboardData("!", SelectionType.Characters);
+
+        // Act - should not throw ArgumentOutOfRangeException
+        var newDoc = doc.PasteClipboardData(clipboard, PasteMode.ViAfter);
+
+        // Assert
+        Assert.Equal("hello!", newDoc.Text);
+        Assert.Equal(6, newDoc.CursorPosition);
+    }
+
+    [Fact]
     public void InsertBefore_EmptyText_NoChange()
     {
         // Arrange

@@ -106,6 +106,16 @@ public sealed partial class Document
     }
 
     /// <summary>
+    /// Relative position for last non-blank character on the current line.
+    /// Used by Vi's g_ motion.
+    /// </summary>
+    /// <returns>Relative position to cursor.</returns>
+    public int LastNonBlankOfCurrentLinePosition()
+    {
+        return CurrentLine.TrimEnd().Length - CursorPositionCol - 1;
+    }
+
+    /// <summary>
     /// Return the relative cursor position for this column at the current
     /// line. (It will stay between the boundaries of the line in case of a
     /// larger number.)

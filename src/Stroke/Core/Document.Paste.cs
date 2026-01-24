@@ -30,9 +30,11 @@ public sealed partial class Document
             if (after)
             {
                 // Insert after the character at cursor position
-                newText = _text[..(_cursorPosition + 1)]
+                // Use Math.Min to handle case when cursor is at end of document
+                int insertPos = Math.Min(_cursorPosition + 1, _text.Length);
+                newText = _text[..insertPos]
                     + string.Concat(Enumerable.Repeat(data.Text, count))
-                    + _text[(_cursorPosition + 1)..];
+                    + _text[insertPos..];
             }
             else
             {

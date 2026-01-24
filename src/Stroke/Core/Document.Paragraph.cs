@@ -11,7 +11,7 @@ public sealed partial class Document
     /// <param name="matchFunc">Predicate to match lines.</param>
     /// <param name="count">Number of matching lines to find.</param>
     /// <returns>Relative line index, or null if not found.</returns>
-    private int? FindNextMatchingLine(Func<string, bool> matchFunc, int count = 1)
+    public int? FindNextMatchingLine(Func<string, bool> matchFunc, int count = 1)
     {
         int? result = null;
         var lines = Lines;
@@ -40,7 +40,7 @@ public sealed partial class Document
     /// <param name="matchFunc">Predicate to match lines.</param>
     /// <param name="count">Number of matching lines to find.</param>
     /// <returns>Relative line index (negative), or null if not found.</returns>
-    private int? FindPreviousMatchingLine(Func<string, bool> matchFunc, int count = 1)
+    public int? FindPreviousMatchingLine(Func<string, bool> matchFunc, int count = 1)
     {
         int? result = null;
         var lines = Lines;
