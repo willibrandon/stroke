@@ -368,6 +368,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - In-memory only (no persistence) (004-clipboard-system)
 - C# 13 / .NET 10 + None (Stroke.Core layer - zero external dependencies per Constitution III) (005-auto-suggest-system)
 - N/A (in-memory only) (005-auto-suggest-system)
+- N/A (in-memory only - undo stack, redo stack, working_lines) (007-mutable-buffer)
 
 ## Recent Changes
 - 006-cache-utilities: Added SimpleCache, FastDictCache, Memoization in Stroke.Core namespace (92 tests)
