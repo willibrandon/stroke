@@ -214,20 +214,24 @@ public sealed partial class Buffer
 
             _completeState = null;
 
+            // Apply completion following Python's approach:
+            // StartPosition is a relative offset (typically negative or zero)
+            // -StartPosition gives us how many chars before cursor to delete
+            var charsToDelete = -completion.StartPosition;
+            var text = _workingLines[_workingIndex];
+            var cursorPos = _cursorPosition;
+
+            // Delete characters before cursor if needed
+            if (charsToDelete > 0)
+            {
+                var deleteStart = Math.Max(0, cursorPos - charsToDelete);
+                text = text[..deleteStart] + text[cursorPos..];
+                cursorPos = deleteStart;
+            }
+
             // Insert the completion text
-            var doc = Document;
-            var startPos = completion.StartPosition;
-            var cursorPos = doc.CursorPosition;
-
-            // Text before completion start
-            var before = doc.Text[..startPos];
-
-            // Text after cursor
-            var after = doc.Text[cursorPos..];
-
-            // New text
-            var newText = before + completion.Text + after;
-            var newCursor = startPos + completion.Text.Length;
+            var newText = text[..cursorPos] + completion.Text + text[cursorPos..];
+            var newCursor = cursorPos + completion.Text.Length;
 
             _workingLines[_workingIndex] = newText;
             _cursorPosition = newCursor;

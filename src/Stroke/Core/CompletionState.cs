@@ -9,11 +9,17 @@ using CompletionItem = Stroke.Completion.Completion;
 /// Tracks the state of an active completion operation.
 /// </summary>
 /// <remarks>
+/// <para>
 /// This class is mutable despite Python's docstring saying "immutable".
 /// The Python implementation has a go_to_index method that mutates complete_index.
+/// </para>
+/// <para>
+/// Thread safety: This class is thread-safe. All mutable state access is synchronized.
+/// </para>
 /// </remarks>
 public sealed class CompletionState
 {
+    private readonly Lock _lock = new();
     private readonly List<CompletionItem> _completions;
     private int? _completeIndex;
 
@@ -46,15 +52,32 @@ public sealed class CompletionState
     /// <summary>
     /// Gets the currently selected index (null = none selected).
     /// </summary>
-    public int? CompleteIndex => _completeIndex;
+    public int? CompleteIndex
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _completeIndex;
+            }
+        }
+    }
 
     /// <summary>
     /// Gets the currently selected completion.
     /// </summary>
-    public CompletionItem? CurrentCompletion =>
-        _completeIndex.HasValue && _completeIndex.Value < _completions.Count
-            ? _completions[_completeIndex.Value]
-            : null;
+    public CompletionItem? CurrentCompletion
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _completeIndex.HasValue && _completeIndex.Value < _completions.Count
+                    ? _completions[_completeIndex.Value]
+                    : null;
+            }
+        }
+    }
 
     /// <summary>
     /// Select a completion by index.
@@ -62,10 +85,13 @@ public sealed class CompletionState
     /// <param name="index">Index to select, or null to clear selection.</param>
     public void GoToIndex(int? index)
     {
-        if (_completions.Count > 0)
+        using (_lock.EnterScope())
         {
-            Debug.Assert(index is null || (index >= 0 && index < _completions.Count));
-            _completeIndex = index;
+            if (_completions.Count > 0)
+            {
+                Debug.Assert(index is null || (index >= 0 && index < _completions.Count));
+                _completeIndex = index;
+            }
         }
     }
 
@@ -75,29 +101,38 @@ public sealed class CompletionState
     /// <returns>Tuple of (new text, new cursor position).</returns>
     public (string NewText, int NewCursorPosition) NewTextAndPosition()
     {
-        if (CurrentCompletion is not { } completion)
+        using (_lock.EnterScope())
         {
-            return (OriginalDocument.Text, OriginalDocument.CursorPosition);
+            // Get current completion within lock to ensure consistent read
+            var completion = _completeIndex.HasValue && _completeIndex.Value < _completions.Count
+                ? _completions[_completeIndex.Value]
+                : null;
+
+            if (completion is null)
+            {
+                return (OriginalDocument.Text, OriginalDocument.CursorPosition);
+            }
+
+            var text = OriginalDocument.Text;
+            var cursorPos = OriginalDocument.CursorPosition;
+
+            // StartPosition is a relative offset (typically negative or zero)
+            // -StartPosition gives us how many chars before cursor to delete
+            var charsToDelete = -completion.StartPosition;
+
+            // Delete characters before cursor if needed
+            if (charsToDelete > 0)
+            {
+                var deleteStart = Math.Max(0, cursorPos - charsToDelete);
+                text = text[..deleteStart] + text[cursorPos..];
+                cursorPos = deleteStart;
+            }
+
+            // Insert the completion text
+            var newText = text[..cursorPos] + completion.Text + text[cursorPos..];
+            var newCursorPosition = cursorPos + completion.Text.Length;
+
+            return (newText, newCursorPosition);
         }
-
-        var originalText = OriginalDocument.Text;
-        var originalCursorPosition = OriginalDocument.CursorPosition;
-
-        // Calculate the position where the completion text should be inserted
-        var startPosition = completion.StartPosition;
-
-        // Text before the completion
-        var textBefore = originalText[..startPosition];
-
-        // Text after the original cursor position
-        var textAfter = originalText[originalCursorPosition..];
-
-        // Build new text
-        var newText = textBefore + completion.Text + textAfter;
-
-        // New cursor position is at end of inserted completion text
-        var newCursorPosition = startPosition + completion.Text.Length;
-
-        return (newText, newCursorPosition);
     }
 }

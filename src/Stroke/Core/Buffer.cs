@@ -48,6 +48,7 @@ public sealed partial class Buffer : IBuffer
     private SelectionState? _selectionState;
     private int? _preferredColumn;
     private Document? _documentBeforePaste;
+    private readonly List<int> _multipleCursorPositions = [];
 
     // ════════════════════════════════════════════════════════════════════════
     // COMPLETION
@@ -336,6 +337,29 @@ public sealed partial class Buffer : IBuffer
         }
     }
 
+    /// <summary>
+    /// Gets or sets the multiple cursor positions for Vi visual-block mode.
+    /// Returns a copy of the internal list for thread safety.
+    /// </summary>
+    public IReadOnlyList<int> MultipleCursorPositions
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return [.. _multipleCursorPositions];
+            }
+        }
+        set
+        {
+            using (_lock.EnterScope())
+            {
+                _multipleCursorPositions.Clear();
+                _multipleCursorPositions.AddRange(value);
+            }
+        }
+    }
+
     /// <summary>Gets the preferred column for vertical navigation.</summary>
     public int? PreferredColumn
     {
@@ -447,6 +471,24 @@ public sealed partial class Buffer : IBuffer
     }
 
     /// <summary>
+    /// Internal helper to set cursor position with clamping and state clearing.
+    /// Must be called within lock.
+    /// </summary>
+    /// <param name="newPosition">The desired cursor position.</param>
+    private void SetCursorPositionInternal(int newPosition)
+    {
+        // Clamp to valid range
+        var textLength = _workingLines[_workingIndex].Length;
+        var clampedPosition = Math.Clamp(newPosition, 0, textLength);
+
+        if (_cursorPosition != clampedPosition)
+        {
+            _cursorPosition = clampedPosition;
+            CursorPositionChangedInternal();
+        }
+    }
+
+    /// <summary>
     /// Called when cursor position changes. Must be called within lock.
     /// </summary>
     private void CursorPositionChangedInternal()
@@ -488,6 +530,7 @@ public sealed partial class Buffer : IBuffer
             // Selection
             _selectionState = null;
             _preferredColumn = null;
+            _multipleCursorPositions.Clear();
 
             // Completion
             _completeState = null;
@@ -498,10 +541,11 @@ public sealed partial class Buffer : IBuffer
             _suggestion = null;
             _historySearchText = null;
 
-            // Working lines
+            // Working lines and history
             _workingLines.Clear();
             _workingLines.Add(document.Text);
             _workingIndex = 0;
+            _historyLoaded = false;
         }
     }
 

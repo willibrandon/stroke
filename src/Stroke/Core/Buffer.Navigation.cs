@@ -13,18 +13,34 @@ public sealed partial class Buffer
     /// Move cursor left by the specified count.
     /// </summary>
     /// <param name="count">Number of positions to move.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - state read and modification
+    /// occur within a single lock scope.
+    /// </remarks>
     public void CursorLeft(int count = 1)
     {
-        CursorPosition += Document.GetCursorLeftPosition(count);
+        using (_lock.EnterScope())
+        {
+            var delta = Document.GetCursorLeftPosition(count);
+            SetCursorPositionInternal(_cursorPosition + delta);
+        }
     }
 
     /// <summary>
     /// Move cursor right by the specified count.
     /// </summary>
     /// <param name="count">Number of positions to move.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - state read and modification
+    /// occur within a single lock scope.
+    /// </remarks>
     public void CursorRight(int count = 1)
     {
-        CursorPosition += Document.GetCursorRightPosition(count);
+        using (_lock.EnterScope())
+        {
+            var delta = Document.GetCursorRightPosition(count);
+            SetCursorPositionInternal(_cursorPosition + delta);
+        }
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -35,16 +51,23 @@ public sealed partial class Buffer
     /// Move cursor up by the specified count (for multiline edit).
     /// </summary>
     /// <param name="count">Number of lines to move.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - all state reads and modifications
+    /// occur within a single lock scope.
+    /// </remarks>
     public void CursorUp(int count = 1)
     {
-        var doc = Document;
-        var originalColumn = PreferredColumn ?? doc.CursorPositionCol;
-
-        CursorPosition += doc.GetCursorUpPosition(count, originalColumn);
-
-        // Remember the original column for the next up/down movement.
         using (_lock.EnterScope())
         {
+            var doc = Document;
+            var originalColumn = _preferredColumn ?? doc.CursorPositionCol;
+            var delta = doc.GetCursorUpPosition(count, originalColumn);
+
+            // Update cursor position (with clamping and internal state clearing)
+            SetCursorPositionInternal(_cursorPosition + delta);
+
+            // Remember the original column for the next up/down movement
+            // (must be after SetCursorPositionInternal which clears it)
             _preferredColumn = originalColumn;
         }
     }
@@ -53,16 +76,23 @@ public sealed partial class Buffer
     /// Move cursor down by the specified count (for multiline edit).
     /// </summary>
     /// <param name="count">Number of lines to move.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - all state reads and modifications
+    /// occur within a single lock scope.
+    /// </remarks>
     public void CursorDown(int count = 1)
     {
-        var doc = Document;
-        var originalColumn = PreferredColumn ?? doc.CursorPositionCol;
-
-        CursorPosition += doc.GetCursorDownPosition(count, originalColumn);
-
-        // Remember the original column for the next up/down movement.
         using (_lock.EnterScope())
         {
+            var doc = Document;
+            var originalColumn = _preferredColumn ?? doc.CursorPositionCol;
+            var delta = doc.GetCursorDownPosition(count, originalColumn);
+
+            // Update cursor position (with clamping and internal state clearing)
+            SetCursorPositionInternal(_cursorPosition + delta);
+
+            // Remember the original column for the next up/down movement
+            // (must be after SetCursorPositionInternal which clears it)
             _preferredColumn = originalColumn;
         }
     }
@@ -74,16 +104,23 @@ public sealed partial class Buffer
     /// <summary>
     /// Go to the matching bracket if at a bracket character.
     /// </summary>
+    /// <remarks>
+    /// Thread safety: This method is atomic - state read and modification
+    /// occur within a single lock scope.
+    /// </remarks>
     public void GoToMatchingBracket()
     {
-        var doc = Document;
-        var matchOffset = doc.FindMatchingBracketPosition();
-
-        // FindMatchingBracketPosition returns an offset (can be negative for backward),
-        // or 0 if not on a bracket or no match found
-        if (matchOffset != 0)
+        using (_lock.EnterScope())
         {
-            CursorPosition += matchOffset;
+            var doc = Document;
+            var matchOffset = doc.FindMatchingBracketPosition();
+
+            // FindMatchingBracketPosition returns an offset (can be negative for backward),
+            // or 0 if not on a bracket or no match found
+            if (matchOffset != 0)
+            {
+                SetCursorPositionInternal(_cursorPosition + matchOffset);
+            }
         }
     }
 
@@ -97,32 +134,41 @@ public sealed partial class Buffer
     /// </summary>
     /// <param name="count">Number of steps to move.</param>
     /// <param name="goToStartOfLineIfHistoryChanges">If true, move cursor to start of line when history changes.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - all state checks and modifications
+    /// occur within a single lock scope.
+    /// </remarks>
     public void AutoUp(int count = 1, bool goToStartOfLineIfHistoryChanges = false)
     {
-        // If in completion state, navigate completions
-        if (CompleteState != null)
+        // Use single lock scope for atomicity of compound operation
+        // (Lock is reentrant, so nested method calls that acquire lock are safe)
+        using (_lock.EnterScope())
         {
-            CompletePrevious(count);
-            return;
-        }
-
-        var doc = Document;
-
-        // If not on first line, move cursor up
-        if (doc.CursorPositionRow > 0)
-        {
-            CursorUp(count);
-            return;
-        }
-
-        // If no selection, go back in history
-        if (SelectionState == null)
-        {
-            HistoryBackward(count);
-
-            if (goToStartOfLineIfHistoryChanges)
+            // If in completion state, navigate completions
+            if (_completeState != null)
             {
-                CursorPosition += Document.GetStartOfLinePosition();
+                CompletePrevious(count);
+                return;
+            }
+
+            var doc = Document;
+
+            // If not on first line, move cursor up
+            if (doc.CursorPositionRow > 0)
+            {
+                CursorUp(count);
+                return;
+            }
+
+            // If no selection, go back in history
+            if (_selectionState == null)
+            {
+                HistoryBackward(count);
+
+                if (goToStartOfLineIfHistoryChanges)
+                {
+                    CursorPosition += Document.GetStartOfLinePosition();
+                }
             }
         }
     }
@@ -133,32 +179,41 @@ public sealed partial class Buffer
     /// </summary>
     /// <param name="count">Number of steps to move.</param>
     /// <param name="goToStartOfLineIfHistoryChanges">If true, move cursor to start of line when history changes.</param>
+    /// <remarks>
+    /// Thread safety: This method is atomic - all state checks and modifications
+    /// occur within a single lock scope.
+    /// </remarks>
     public void AutoDown(int count = 1, bool goToStartOfLineIfHistoryChanges = false)
     {
-        // If in completion state, navigate completions
-        if (CompleteState != null)
+        // Use single lock scope for atomicity of compound operation
+        // (Lock is reentrant, so nested method calls that acquire lock are safe)
+        using (_lock.EnterScope())
         {
-            CompleteNext(count);
-            return;
-        }
-
-        var doc = Document;
-
-        // If not on last line, move cursor down
-        if (doc.CursorPositionRow < doc.LineCount - 1)
-        {
-            CursorDown(count);
-            return;
-        }
-
-        // If no selection, go forward in history
-        if (SelectionState == null)
-        {
-            HistoryForward(count);
-
-            if (goToStartOfLineIfHistoryChanges)
+            // If in completion state, navigate completions
+            if (_completeState != null)
             {
-                CursorPosition += Document.GetStartOfLinePosition();
+                CompleteNext(count);
+                return;
+            }
+
+            var doc = Document;
+
+            // If not on last line, move cursor down
+            if (doc.CursorPositionRow < doc.LineCount - 1)
+            {
+                CursorDown(count);
+                return;
+            }
+
+            // If no selection, go forward in history
+            if (_selectionState == null)
+            {
+                HistoryForward(count);
+
+                if (goToStartOfLineIfHistoryChanges)
+                {
+                    CursorPosition += Document.GetStartOfLinePosition();
+                }
             }
         }
     }

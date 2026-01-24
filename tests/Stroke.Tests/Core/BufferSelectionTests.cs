@@ -491,4 +491,66 @@ public class BufferSelectionTests
     }
 
     #endregion
+
+    #region MultipleCursorPositions Tests
+
+    [Fact]
+    public void MultipleCursorPositions_DefaultsToEmpty()
+    {
+        // Arrange & Act
+        var buffer = new Buffer();
+
+        // Assert
+        Assert.Empty(buffer.MultipleCursorPositions);
+    }
+
+    [Fact]
+    public void MultipleCursorPositions_CanBeSet()
+    {
+        // Arrange
+        var buffer = new Buffer();
+        var positions = new List<int> { 0, 5, 10 };
+
+        // Act
+        buffer.MultipleCursorPositions = positions;
+
+        // Assert
+        Assert.Equal(3, buffer.MultipleCursorPositions.Count);
+        Assert.Equal(0, buffer.MultipleCursorPositions[0]);
+        Assert.Equal(5, buffer.MultipleCursorPositions[1]);
+        Assert.Equal(10, buffer.MultipleCursorPositions[2]);
+    }
+
+    [Fact]
+    public void MultipleCursorPositions_ReturnsDefensiveCopy()
+    {
+        // Arrange
+        var buffer = new Buffer();
+        buffer.MultipleCursorPositions = [1, 2, 3];
+
+        // Act - get the list twice
+        var first = buffer.MultipleCursorPositions;
+        var second = buffer.MultipleCursorPositions;
+
+        // Assert - different instances (defensive copy)
+        Assert.NotSame(first, second);
+        Assert.Equal(first, second);
+    }
+
+    [Fact]
+    public void MultipleCursorPositions_ClearedOnReset()
+    {
+        // Arrange
+        var buffer = new Buffer();
+        buffer.MultipleCursorPositions = [1, 2, 3];
+        Assert.Equal(3, buffer.MultipleCursorPositions.Count);
+
+        // Act
+        buffer.Reset();
+
+        // Assert
+        Assert.Empty(buffer.MultipleCursorPositions);
+    }
+
+    #endregion
 }

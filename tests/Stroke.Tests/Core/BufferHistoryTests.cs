@@ -532,6 +532,29 @@ public class BufferHistoryTests
         Assert.Contains("to save", strings);
     }
 
+    [Fact]
+    public void Reset_AllowsHistoryToBeReloaded()
+    {
+        // Arrange - load history once
+        var history = new InMemoryHistory();
+        history.AppendString("entry1");
+        var buffer = new Buffer(history: history, document: new Document("initial"));
+        buffer.LoadHistoryIfNotYetLoaded();
+
+        // Add more history after initial load
+        history.AppendString("entry2");
+
+        // Act - reset should allow history to be reloaded
+        buffer.Reset(new Document("after reset"));
+        buffer.LoadHistoryIfNotYetLoaded();
+
+        // Navigate back - should see entry2 (the newest entry added after initial load)
+        buffer.HistoryBackward();
+
+        // Assert - history was reloaded and includes entry2
+        Assert.Equal("entry2", buffer.Text);
+    }
+
     #endregion
 
     #region YankNthArg Tests
