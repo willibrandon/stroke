@@ -35,10 +35,23 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `FastDictCache<TKey, TValue>` with auto-population on miss (default size: 1M)
   - `Memoization` for function result caching (1/2/3-arg overloads)
   - Thread-safe operations
+- **Buffer Class** — Mutable wrapper with undo/redo stack
+  - Text editing (insert, delete, newline, join lines, swap characters)
+  - Undo/redo operations with state restoration
+  - Cursor navigation (left, right, up, down, bracket matching)
+  - History navigation with optional prefix-based filtering
+  - Selection operations (character, line, block selection types)
+  - Clipboard integration (Emacs, Vi-before, Vi-after paste modes)
+  - Completion state management for autocompletion
+  - Text transformation (lines, regions, current line)
+  - Read-only mode with bypass option
+  - Validation support (sync and async)
+  - Auto-suggest integration
+  - External editor support
+  - Thread-safe operations (87% test coverage)
 
 ### Up Next
 
-- **Buffer Class** — Mutable wrapper with undo/redo stack
 - **Screen & Renderer** — Sparse screen buffer with differential updates
 
 ## Requirements

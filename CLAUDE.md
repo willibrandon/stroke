@@ -371,6 +371,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only - undo stack, redo stack, working_lines) (007-mutable-buffer)
 
 ## Recent Changes
+- 007-mutable-buffer: Added Buffer class as mutable wrapper for Document with undo/redo, navigation, history, selection, clipboard, completion, validation, auto-suggest, and external editor support (148 tasks, 87% coverage)
 - 006-cache-utilities: Added SimpleCache, FastDictCache, Memoization in Stroke.Core namespace (92 tests)
 - 005-auto-suggest-system: Added AutoSuggest with history-based suggestions in Stroke.Core namespace
 - 004-clipboard-system: Added IClipboard, InMemoryClipboard (kill ring), DynamicClipboard, DummyClipboard in Stroke.Clipboard namespace (59 tests)
