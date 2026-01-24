@@ -19,10 +19,10 @@ Most types already exist - this feature focuses on filling gaps:
 
 | Component | Status | Gap |
 |-----------|--------|-----|
-| SelectionType enum | ✅ Complete | Needs dedicated tests |
-| PasteMode enum | ✅ Complete | Needs dedicated tests |
-| SelectionState class | ⚠️ Partial | Missing ToString() |
-| SelectionState tests | ⚠️ Partial | Missing ToString() tests |
+| SelectionType enum | ✅ Complete | ✅ Tests added |
+| PasteMode enum | ✅ Complete | ✅ Tests added |
+| SelectionState class | ✅ Complete | ✅ ToString() implemented |
+| SelectionState tests | ✅ Complete | ✅ Full coverage |
 
 ---
 
@@ -30,8 +30,8 @@ Most types already exist - this feature focuses on filling gaps:
 
 **Purpose**: No setup needed - project structure exists, types exist
 
-- [ ] T001 Verify project builds: `dotnet build src/Stroke/Stroke.csproj`
-- [ ] T002 Verify existing tests pass: `dotnet test tests/Stroke.Tests/`
+- [x] T001 Verify project builds: `dotnet build src/Stroke/Stroke.csproj`
+- [x] T002 Verify existing tests pass: `dotnet test tests/Stroke.Tests/`
 
 **Checkpoint**: Baseline validation complete
 
@@ -53,8 +53,8 @@ Most types already exist - this feature focuses on filling gaps:
 
 ### Tests for User Stories 1 & 2
 
-- [ ] T003 [P] [US2] Create SelectionTypeTests.cs with enum value tests in `tests/Stroke.Tests/Core/SelectionTypeTests.cs`
-- [ ] T004 [P] [US1] Add boundary tests for OriginalCursorPosition (int.MinValue, int.MaxValue, negative) in `tests/Stroke.Tests/Core/SelectionStateTests.cs`
+- [x] T003 [P] [US2] Create SelectionTypeTests.cs with enum value tests in `tests/Stroke.Tests/Core/SelectionTypeTests.cs`
+- [x] T004 [P] [US1] Add boundary tests for OriginalCursorPosition (int.MinValue, int.MaxValue, negative) in `tests/Stroke.Tests/Core/SelectionStateTests.cs`
 
 ### Implementation for User Stories 1 & 2
 
@@ -72,7 +72,7 @@ Most types already exist - this feature focuses on filling gaps:
 
 ### Tests for User Story 3
 
-- [ ] T005 [P] [US3] Create PasteModeTests.cs with enum value tests in `tests/Stroke.Tests/Core/PasteModeTests.cs`
+- [x] T005 [P] [US3] Create PasteModeTests.cs with enum value tests in `tests/Stroke.Tests/Core/PasteModeTests.cs`
 
 ### Implementation for User Story 3
 
@@ -92,7 +92,7 @@ Most types already exist - this feature focuses on filling gaps:
 
 **Note**: Tests already exist in SelectionStateTests.cs
 
-- [ ] T006 [US4] Verify existing ShiftMode tests cover idempotency requirement (EnterShiftMode_CalledMultipleTimes_RemainsTrue)
+- [x] T006 [US4] Verify existing ShiftMode tests cover idempotency requirement (EnterShiftMode_CalledMultipleTimes_RemainsTrue)
 
 ### Implementation for User Story 4
 
@@ -110,7 +110,7 @@ Most types already exist - this feature focuses on filling gaps:
 
 ### Tests for User Story 5
 
-- [ ] T007 [US5] Add ToString() tests to `tests/Stroke.Tests/Core/SelectionStateTests.cs`:
+- [x] T007 [US5] Add ToString() tests to `tests/Stroke.Tests/Core/SelectionStateTests.cs`:
   - ToString_WithDefaultValues_ReturnsExpectedFormat
   - ToString_WithPosition_IncludesPosition
   - ToString_WithLinesType_IncludesType
@@ -119,7 +119,7 @@ Most types already exist - this feature focuses on filling gaps:
 
 ### Implementation for User Story 5
 
-- [ ] T008 [US5] Add ToString() override to `src/Stroke/Core/SelectionState.cs`:
+- [x] T008 [US5] Add ToString() override to `src/Stroke/Core/SelectionState.cs`:
   ```csharp
   public override string ToString() =>
       $"SelectionState(OriginalCursorPosition={OriginalCursorPosition}, Type={Type})";
@@ -137,8 +137,8 @@ Most types already exist - this feature focuses on filling gaps:
 
 ### Verification for User Story 6
 
-- [ ] T009 [US6] Verify SelectionState is declared `sealed` in `src/Stroke/Core/SelectionState.cs` (already true - line 6)
-- [ ] T010 [US6] Add compile-time verification test in `tests/Stroke.Tests/Core/SelectionStateTests.cs` using reflection to assert IsSealed
+- [x] T009 [US6] Verify SelectionState is declared `sealed` in `src/Stroke/Core/SelectionState.cs` (already true - line 6)
+- [x] T010 [US6] Add compile-time verification test in `tests/Stroke.Tests/Core/SelectionStateTests.cs` using reflection to assert IsSealed
 
 **Checkpoint**: Sealed constraint verified
 
@@ -148,10 +148,10 @@ Most types already exist - this feature focuses on filling gaps:
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T011 Run all tests and verify pass: `dotnet test tests/Stroke.Tests/`
-- [ ] T012 Verify code coverage meets 80% project-wide target (per Constitution VIII); selection types should achieve ~100% given simplicity
-- [ ] T013 Validate quickstart.md examples compile and run correctly
-- [ ] T014 Update research.md to mark ToString() as implemented
+- [x] T011 Run all tests and verify pass: `dotnet test tests/Stroke.Tests/`
+- [x] T012 Verify code coverage meets 80% project-wide target (per Constitution VIII); selection types should achieve ~100% given simplicity
+- [x] T013 Validate quickstart.md examples compile and run correctly
+- [x] T014 Update research.md to mark ToString() as implemented
 
 ---
 

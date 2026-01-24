@@ -58,12 +58,12 @@ specs/003-selection-system/
 src/Stroke/Core/
 ├── SelectionType.cs     # ✅ EXISTS - Enum with Characters, Lines, Block
 ├── PasteMode.cs         # ✅ EXISTS - Enum with Emacs, ViAfter, ViBefore
-└── SelectionState.cs    # ⚠️ EXISTS - Missing ToString() override
+└── SelectionState.cs    # ✅ COMPLETE - ToString() implemented
 
 tests/Stroke.Tests/Core/
-├── SelectionTypeTests.cs    # 🆕 CREATE - Dedicated enum tests
-├── PasteModeTests.cs        # 🆕 CREATE - Dedicated enum tests
-└── SelectionStateTests.cs   # ✅ EXISTS - Add ToString() tests
+├── SelectionTypeTests.cs    # ✅ CREATED - 15 enum tests
+├── PasteModeTests.cs        # ✅ CREATED - 15 enum tests
+└── SelectionStateTests.cs   # ✅ UPDATED - Added ToString() + boundary + sealed tests
 ```
 
 **Structure Decision**: Existing Stroke.Core namespace, single library project structure.
@@ -74,10 +74,10 @@ tests/Stroke.Tests/Core/
 |-----------|--------|-----|
 | SelectionType enum | ✅ Complete | None |
 | PasteMode enum | ✅ Complete | None |
-| SelectionState class | ⚠️ Partial | Missing ToString() override |
-| SelectionType tests | ⚠️ Missing | No dedicated test file |
-| PasteMode tests | ⚠️ Missing | No dedicated test file |
-| SelectionState tests | ⚠️ Partial | Missing ToString() tests |
+| SelectionState class | ✅ Complete | None |
+| SelectionType tests | ✅ Complete | None |
+| PasteMode tests | ✅ Complete | None |
+| SelectionState tests | ✅ Complete | None |
 
 ## Required Changes
 

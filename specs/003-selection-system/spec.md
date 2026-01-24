@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-selection-system`
 **Created**: 2026-01-23
-**Status**: Draft
+**Status**: Complete
 **Input**: User description: "Implement the selection data structures that represent text selection state, types, and paste modes."
 
 ## Reference

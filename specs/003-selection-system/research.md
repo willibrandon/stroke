@@ -25,7 +25,7 @@
 | `SelectionState.type` | `SelectionState.Type` | ✅ Implemented |
 | `SelectionState.shift_mode` | `SelectionState.ShiftMode` | ✅ Implemented |
 | `SelectionState.enter_shift_mode()` | `SelectionState.EnterShiftMode()` | ✅ Implemented |
-| `SelectionState.__repr__()` | `SelectionState.ToString()` | ⚠️ Missing |
+| `SelectionState.__repr__()` | `SelectionState.ToString()` | ✅ Implemented |
 
 ### Decisions
 

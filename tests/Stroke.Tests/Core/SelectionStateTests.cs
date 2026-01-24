@@ -123,6 +123,50 @@ public class SelectionStateTests
 
     #endregion
 
+    #region Boundary Tests (T004 - US1)
+
+    [Fact]
+    public void Constructor_WithNegativePosition_AcceptsValue()
+    {
+        // Arrange & Act
+        var state = new SelectionState(originalCursorPosition: -1);
+
+        // Assert - negative positions are valid per spec (matching Python behavior)
+        Assert.Equal(-1, state.OriginalCursorPosition);
+    }
+
+    [Fact]
+    public void Constructor_WithIntMinValue_AcceptsValue()
+    {
+        // Arrange & Act
+        var state = new SelectionState(originalCursorPosition: int.MinValue);
+
+        // Assert - boundary value is valid
+        Assert.Equal(int.MinValue, state.OriginalCursorPosition);
+    }
+
+    [Fact]
+    public void Constructor_WithIntMaxValue_AcceptsValue()
+    {
+        // Arrange & Act
+        var state = new SelectionState(originalCursorPosition: int.MaxValue);
+
+        // Assert - boundary value is valid
+        Assert.Equal(int.MaxValue, state.OriginalCursorPosition);
+    }
+
+    [Fact]
+    public void Constructor_WithLargeNegativePosition_AcceptsValue()
+    {
+        // Arrange & Act
+        var state = new SelectionState(originalCursorPosition: -1000000);
+
+        // Assert
+        Assert.Equal(-1000000, state.OriginalCursorPosition);
+    }
+
+    #endregion
+
     #region SelectionType Enum Tests
 
     [Theory]
@@ -136,6 +180,104 @@ public class SelectionStateTests
 
         // Assert
         Assert.Equal(type, state.Type);
+    }
+
+    #endregion
+
+    #region ToString Tests (T007 - US5)
+
+    [Fact]
+    public void ToString_WithDefaultValues_ReturnsExpectedFormat()
+    {
+        // Arrange
+        var state = new SelectionState();
+
+        // Act
+        var result = state.ToString();
+
+        // Assert
+        Assert.Equal("SelectionState(OriginalCursorPosition=0, Type=Characters)", result);
+    }
+
+    [Fact]
+    public void ToString_WithPosition_IncludesPosition()
+    {
+        // Arrange
+        var state = new SelectionState(originalCursorPosition: 42);
+
+        // Act
+        var result = state.ToString();
+
+        // Assert
+        Assert.Equal("SelectionState(OriginalCursorPosition=42, Type=Characters)", result);
+    }
+
+    [Fact]
+    public void ToString_WithLinesType_IncludesType()
+    {
+        // Arrange
+        var state = new SelectionState(originalCursorPosition: 10, type: SelectionType.Lines);
+
+        // Act
+        var result = state.ToString();
+
+        // Assert - matches FR-007 format
+        Assert.Equal("SelectionState(OriginalCursorPosition=10, Type=Lines)", result);
+    }
+
+    [Fact]
+    public void ToString_WithBlockType_IncludesType()
+    {
+        // Arrange
+        var state = new SelectionState(originalCursorPosition: 5, type: SelectionType.Block);
+
+        // Act
+        var result = state.ToString();
+
+        // Assert
+        Assert.Equal("SelectionState(OriginalCursorPosition=5, Type=Block)", result);
+    }
+
+    [Fact]
+    public void ToString_DoesNotIncludeShiftMode()
+    {
+        // Arrange
+        var state = new SelectionState(originalCursorPosition: 100, type: SelectionType.Lines);
+        state.EnterShiftMode(); // ShiftMode is true
+
+        // Act
+        var result = state.ToString();
+
+        // Assert - ShiftMode is not included per spec (matching Python's __repr__)
+        Assert.Equal("SelectionState(OriginalCursorPosition=100, Type=Lines)", result);
+        Assert.DoesNotContain("ShiftMode", result);
+    }
+
+    [Fact]
+    public void ToString_WithNegativePosition_IncludesNegativePosition()
+    {
+        // Arrange
+        var state = new SelectionState(originalCursorPosition: -50);
+
+        // Act
+        var result = state.ToString();
+
+        // Assert
+        Assert.Equal("SelectionState(OriginalCursorPosition=-50, Type=Characters)", result);
+    }
+
+    #endregion
+
+    #region Sealed Class Tests (T010 - US6)
+
+    [Fact]
+    public void SelectionState_IsSealed()
+    {
+        // Act
+        var type = typeof(SelectionState);
+
+        // Assert - FR-009 requires sealed class
+        Assert.True(type.IsSealed);
     }
 
     #endregion
