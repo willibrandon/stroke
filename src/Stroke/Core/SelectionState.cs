@@ -38,4 +38,11 @@ public sealed class SelectionState
     /// Enter shift selection mode.
     /// </summary>
     public void EnterShiftMode() => ShiftMode = true;
+
+    /// <summary>
+    /// Returns a string representation of the selection state.
+    /// </summary>
+    /// <returns>A string in the format: SelectionState(OriginalCursorPosition={value}, Type={type}).</returns>
+    public override string ToString() =>
+        $"SelectionState(OriginalCursorPosition={OriginalCursorPosition}, Type={Type})";
 }
