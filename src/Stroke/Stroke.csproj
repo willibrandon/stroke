@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Stroke</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Cross-platform terminal UI framework - .NET port of Python Prompt Toolkit</Description>
+    <Authors>willibrandon</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+</Project>

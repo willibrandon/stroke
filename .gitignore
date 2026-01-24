@@ -1,2 +1,33 @@
 # MCP configuration file
 .mcp.json
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+packages/
+*.nupkg
+*.snupkg
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Build outputs
+publish/
+artifacts/
