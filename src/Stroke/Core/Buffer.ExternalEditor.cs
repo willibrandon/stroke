@@ -106,7 +106,8 @@ public sealed partial class Buffer
             {
                 // Ignore cleanup errors
             }
-        });
+        }
+        );
     }
 
     /// <summary>
@@ -169,7 +170,8 @@ public sealed partial class Buffer
             {
                 // Ignore cleanup errors
             }
-        });
+        }
+        );
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using Stroke.Core;
 using Stroke.History;
 using Xunit;
 
@@ -407,10 +408,9 @@ public class BufferNavigationTests
     [Fact]
     public void AutoUp_WithSelection_DoesNotCallHistory()
     {
-        // Arrange - on first line with selection
-        // Create a document with selection state already set
-        var selection = new Stroke.Core.SelectionState(0, Stroke.Core.SelectionType.Characters);
-        var buffer = new Buffer(document: new Document("hello", cursorPosition: 3, selection: selection));
+        // Arrange - on first line with selection, use fresh empty history
+        var selection = new SelectionState(0, SelectionType.Characters);
+        var buffer = new Buffer(history: new InMemoryHistory(), document: new Document("hello", cursorPosition: 3, selection: selection));
 
         // Act
         buffer.AutoUp();
@@ -469,7 +469,7 @@ public class BufferNavigationTests
     {
         // Arrange - on last line with selection
         // Create a document with selection state already set
-        var selection = new Stroke.Core.SelectionState(0, Stroke.Core.SelectionType.Characters);
+        var selection = new SelectionState(0, SelectionType.Characters);
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 3, selection: selection));
 
         // Act
