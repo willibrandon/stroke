@@ -370,6 +370,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only) (005-auto-suggest-system)
 
 ## Recent Changes
+- 006-cache-utilities: Added SimpleCache, FastDictCache, Memoization in Stroke.Core namespace (92 tests)
+- 005-auto-suggest-system: Added AutoSuggest with history-based suggestions in Stroke.Core namespace
 - 004-clipboard-system: Added IClipboard, InMemoryClipboard (kill ring), DynamicClipboard, DummyClipboard in Stroke.Clipboard namespace (59 tests)
 - 003-selection-system: Added SelectionState, SelectionType, PasteMode types with ToString() and tests (45 tests)
 - 002-immutable-document: Added immutable Document class with full text cursor model (310 tests)
