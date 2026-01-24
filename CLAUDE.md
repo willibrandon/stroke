@@ -329,9 +329,9 @@ Claude SHOULD use TUI Driver to verify the 129 examples from `docs/examples-mapp
 This ensures examples behave correctly in real terminal environments before marking implementation complete.
 
 ## Active Technologies
-- C# 13 / .NET 10 + None for Core layer (xUnit for tests) (001-project-setup-primitives)
-- C# 13 / .NET 10 + None (Core layer has zero external dependencies per Constitution III) (002-immutable-document)
-- N/A (in-memory immutable data structure) (002-immutable-document)
+- C# 13 / .NET 10 + None for Core layer (xUnit for tests)
+- xUnit for testing (no mocks, no FluentAssertions per Constitution VIII)
 
 ## Recent Changes
-- 001-project-setup-primitives: Added C# 13 / .NET 10 + None for Core layer (xUnit for tests)
+- 002-immutable-document: Added immutable Document class with full text cursor model (310 tests)
+- 001-project-setup-primitives: Added project structure, primitives (Point, Size, WritePosition), CI/CD
