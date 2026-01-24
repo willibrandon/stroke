@@ -34,21 +34,11 @@ public sealed class ThreadedAutoSuggestTests
         var callingThreadId = Environment.CurrentManagedThreadId;
         int? executionThreadId = null;
 
-        // Callback captures thread ID then sleeps to keep work running
-        var inner = new ThreadCapturingAutoSuggest(id =>
-        {
-            executionThreadId = id;
-            Thread.Sleep(100); // Keep work running while calling thread is busy
-        });
+        var inner = new ThreadCapturingAutoSuggest(id => executionThreadId = id);
         var threaded = new ThreadedAutoSuggest(inner);
 
-        // Act - Start async work without awaiting immediately
-        var task = threaded.GetSuggestionAsync(buffer, buffer.Document);
-
-        // Keep calling thread busy so ThreadPool must use a different thread
-        Thread.Sleep(50);
-
-        await task;
+        // Act
+        await threaded.GetSuggestionAsync(buffer, buffer.Document);
 
         // Assert - Execution thread should be different from calling thread
         Assert.NotNull(executionThreadId);

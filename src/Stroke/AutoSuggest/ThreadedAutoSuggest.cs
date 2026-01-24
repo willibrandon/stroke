@@ -40,11 +40,18 @@ public sealed class ThreadedAutoSuggest : IAutoSuggest
 
     /// <inheritdoc />
     /// <remarks>
-    /// Executes wrapped provider's sync method on thread pool via Task.Run.
+    /// Executes wrapped provider's sync method on a dedicated background thread.
+    /// Uses <c>TaskCreationOptions.LongRunning</c> to guarantee execution on a new thread,
+    /// matching Python's behavior where <c>run_in_executor</c> always uses a thread
+    /// different from the event loop thread.
     /// If wrapped provider throws, exception is captured and re-thrown when awaited.
     /// </remarks>
     public async ValueTask<Suggestion?> GetSuggestionAsync(IBuffer buffer, Document document)
     {
-        return await Task.Run(() => _autoSuggest.GetSuggestion(buffer, document)).ConfigureAwait(false);
+        return await Task.Factory.StartNew(
+            () => _autoSuggest.GetSuggestion(buffer, document),
+            CancellationToken.None,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default).ConfigureAwait(false);
     }
 }
