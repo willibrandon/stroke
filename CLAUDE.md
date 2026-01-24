@@ -331,8 +331,8 @@ This ensures examples behave correctly in real terminal environments before mark
 ## Active Technologies
 - C# 13 / .NET 10 + None for Core layer (xUnit for tests)
 - xUnit for testing (no mocks, no FluentAssertions per Constitution VIII)
-- C# 13 / .NET 10 + None (core types only) (003-selection-system)
 
 ## Recent Changes
+- 003-selection-system: Added SelectionState, SelectionType, PasteMode types with ToString() and tests (45 tests)
 - 002-immutable-document: Added immutable Document class with full text cursor model (310 tests)
 - 001-project-setup-primitives: Added project structure, primitives (Point, Size, WritePosition), CI/CD

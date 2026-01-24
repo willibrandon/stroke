@@ -10,6 +10,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 - **Project Setup** — Solution structure, .NET 10 configuration, CI/CD pipeline
 - **Core Primitives** — `Point`, `Size`, `WritePosition` value types
+- **Selection System** — `SelectionState`, `SelectionType`, `PasteMode` for tracking text selections
 - **Document Class** — Immutable text buffer with cursor position and selection state
   - Text access (before/after cursor, current line, lines collection)
   - Line/column navigation with row/col translation
