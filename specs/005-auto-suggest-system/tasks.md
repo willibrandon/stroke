@@ -25,10 +25,10 @@
 
 **Purpose**: Create stub interfaces and foundational types that all implementations depend on
 
-- [ ] T001 Create `IHistory` stub interface in `src/Stroke/History/IHistory.cs` per data-model.md
-- [ ] T002 Create `IBuffer` stub interface in `src/Stroke/Core/IBuffer.cs` per data-model.md
-- [ ] T003 [P] Create `Suggestion` record type in `src/Stroke/AutoSuggest/Suggestion.cs` with `Text` property and `ToString()` per FR-001 to FR-003
-- [ ] T004 [P] Create `IAutoSuggest` interface in `src/Stroke/AutoSuggest/IAutoSuggest.cs` with exact signatures per FR-004 to FR-007
+- [x] T001 Create `IHistory` stub interface in `src/Stroke/History/IHistory.cs` per data-model.md
+- [x] T002 Create `IBuffer` stub interface in `src/Stroke/Core/IBuffer.cs` per data-model.md
+- [x] T003 [P] Create `Suggestion` record type in `src/Stroke/AutoSuggest/Suggestion.cs` with `Text` property and `ToString()` per FR-001 to FR-003
+- [x] T004 [P] Create `IAutoSuggest` interface in `src/Stroke/AutoSuggest/IAutoSuggest.cs` with exact signatures per FR-004 to FR-007
 
 **Checkpoint**: Foundation ready - stub interfaces and core types exist
 
@@ -40,9 +40,9 @@
 
 **⚠️ CRITICAL**: No user story tests can run until this phase is complete
 
-- [ ] T005 Create `TestHistory` test helper implementing `IHistory` in `tests/Stroke.Tests/AutoSuggest/Helpers/TestHistory.cs` per research.md
-- [ ] T006 [P] Create `TestBuffer` test helper implementing `IBuffer` in `tests/Stroke.Tests/AutoSuggest/Helpers/TestBuffer.cs` per research.md
-- [ ] T007 [P] Create `SuggestionTests` in `tests/Stroke.Tests/AutoSuggest/SuggestionTests.cs` covering record equality, `ToString()`, null text validation
+- [x] T005 Create `TestHistory` test helper implementing `IHistory` in `tests/Stroke.Tests/AutoSuggest/Helpers/TestHistory.cs` per research.md
+- [x] T006 [P] Create `TestBuffer` test helper implementing `IBuffer` in `tests/Stroke.Tests/AutoSuggest/Helpers/TestBuffer.cs` per research.md
+- [x] T007 [P] Create `SuggestionTests` in `tests/Stroke.Tests/AutoSuggest/SuggestionTests.cs` covering record equality, `ToString()`, null text validation
 
 **Checkpoint**: Test infrastructure ready - user story implementation can now begin
 
@@ -58,7 +58,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T008 [US1] Create `AutoSuggestFromHistoryTests` in `tests/Stroke.Tests/AutoSuggest/AutoSuggestFromHistoryTests.cs` covering:
+- [x] T008 [US1] Create `AutoSuggestFromHistoryTests` in `tests/Stroke.Tests/AutoSuggest/AutoSuggestFromHistoryTests.cs` covering:
   - Exact prefix match returns suffix as suggestion (acceptance scenario 1)
   - Most recent matching entry wins (acceptance scenario 2)
   - Empty/whitespace input returns null (acceptance scenario 3)
@@ -70,8 +70,8 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement `AutoSuggestFromHistory` in `src/Stroke/AutoSuggest/AutoSuggestFromHistory.cs` per FR-008 to FR-014 and data-model.md algorithm
-- [ ] T010 [US1] Add XML documentation with thread safety remarks per Thread Safety section
+- [x] T009 [US1] Implement `AutoSuggestFromHistory` in `src/Stroke/AutoSuggest/AutoSuggestFromHistory.cs` per FR-008 to FR-014 and data-model.md algorithm
+- [x] T010 [US1] Add XML documentation with thread safety remarks per Thread Safety section
 
 **Checkpoint**: User Story 1 complete - history-based suggestions work independently
 
@@ -87,15 +87,15 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US2] Create `DummyAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/DummyAutoSuggestTests.cs` covering:
+- [x] T011 [P] [US2] Create `DummyAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/DummyAutoSuggestTests.cs` covering:
   - `GetSuggestion` always returns null
   - `GetSuggestionAsync` always returns null
   - Thread-safe for concurrent access
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] Implement `DummyAutoSuggest` in `src/Stroke/AutoSuggest/DummyAutoSuggest.cs` per FR-023 and data-model.md
-- [ ] T013 [US2] Add XML documentation with thread safety remarks
+- [x] T012 [US2] Implement `DummyAutoSuggest` in `src/Stroke/AutoSuggest/DummyAutoSuggest.cs` per FR-023 and data-model.md
+- [x] T013 [US2] Add XML documentation with thread safety remarks
 
 **Checkpoint**: User Story 2 complete - custom providers can implement `IAutoSuggest`
 
@@ -111,7 +111,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T014 [US3] Create `ConditionalAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/ConditionalAutoSuggestTests.cs` covering:
+- [x] T014 [US3] Create `ConditionalAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/ConditionalAutoSuggestTests.cs` covering:
   - True condition allows suggestions (acceptance scenario 1)
   - False condition returns null without calling wrapped provider (acceptance scenario 2)
   - Dynamic condition changes affect results (acceptance scenario 3)
@@ -120,8 +120,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Implement `ConditionalAutoSuggest` in `src/Stroke/AutoSuggest/ConditionalAutoSuggest.cs` per FR-015 to FR-018 and data-model.md
-- [ ] T016 [US3] Add XML documentation with thread safety remarks
+- [x] T015 [US3] Implement `ConditionalAutoSuggest` in `src/Stroke/AutoSuggest/ConditionalAutoSuggest.cs` per FR-015 to FR-018 and data-model.md
+- [x] T016 [US3] Add XML documentation with thread safety remarks
 
 **Checkpoint**: User Story 3 complete - conditional suggestions work independently
 
@@ -137,7 +137,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T017 [US4] Create `DynamicAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/DynamicAutoSuggestTests.cs` covering:
+- [x] T017 [US4] Create `DynamicAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/DynamicAutoSuggestTests.cs` covering:
   - Delegates to returned provider (acceptance scenario 1)
   - Provider switch affects subsequent suggestions (acceptance scenario 2)
   - Null provider falls back to `DummyAutoSuggest` (acceptance scenario 3)
@@ -147,8 +147,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T018 [US4] Implement `DynamicAutoSuggest` in `src/Stroke/AutoSuggest/DynamicAutoSuggest.cs` per FR-019 to FR-022 and data-model.md
-- [ ] T019 [US4] Add XML documentation with thread safety remarks
+- [x] T018 [US4] Implement `DynamicAutoSuggest` in `src/Stroke/AutoSuggest/DynamicAutoSuggest.cs` per FR-019 to FR-022 and data-model.md
+- [x] T019 [US4] Add XML documentation with thread safety remarks
 
 **Checkpoint**: User Story 4 complete - dynamic provider selection works independently
 
@@ -164,7 +164,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T020 [US5] Create `ThreadedAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/ThreadedAutoSuggestTests.cs` covering:
+- [x] T020 [US5] Create `ThreadedAutoSuggestTests` in `tests/Stroke.Tests/AutoSuggest/ThreadedAutoSuggestTests.cs` covering:
   - Async executes on different thread (acceptance scenario 1)
   - Sync executes on current thread (acceptance scenario 2)
   - Method returns immediately for slow provider (acceptance scenario 3, 10ms threshold)
@@ -174,8 +174,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T021 [US5] Implement `ThreadedAutoSuggest` in `src/Stroke/AutoSuggest/ThreadedAutoSuggest.cs` per FR-024 to FR-027 and data-model.md
-- [ ] T022 [US5] Add XML documentation with thread safety remarks
+- [x] T021 [US5] Implement `ThreadedAutoSuggest` in `src/Stroke/AutoSuggest/ThreadedAutoSuggest.cs` per FR-024 to FR-027 and data-model.md
+- [x] T022 [US5] Add XML documentation with thread safety remarks
 
 **Checkpoint**: User Story 5 complete - background execution works independently
 
@@ -185,10 +185,10 @@
 
 **Purpose**: Performance validation, quickstart verification, final quality checks
 
-- [ ] T023 Create performance benchmark test in `tests/Stroke.Tests/AutoSuggest/AutoSuggestPerformanceTests.cs` validating SC-001 (1ms for 10,000 history entries)
-- [ ] T024 [P] Create `QuickstartValidationTests` in `tests/Stroke.Tests/AutoSuggest/QuickstartValidationTests.cs` verifying all quickstart.md examples compile and run
-- [ ] T025 [P] Verify test coverage meets 80% target per SC-004 using `dotnet test --collect:"XPlat Code Coverage"`
-- [ ] T026 Final code review ensuring all XML documentation includes thread safety remarks per spec Thread Safety section
+- [x] T023 Create performance benchmark test in `tests/Stroke.Tests/AutoSuggest/AutoSuggestPerformanceTests.cs` validating SC-001 (1ms for 10,000 history entries)
+- [x] T024 [P] Create `QuickstartValidationTests` in `tests/Stroke.Tests/AutoSuggest/QuickstartValidationTests.cs` verifying all quickstart.md examples compile and run
+- [x] T025 [P] Verify test coverage meets 80% target per SC-004 using `dotnet test --collect:"XPlat Code Coverage"` (Result: 93.28% line, 89.75% branch)
+- [x] T026 Final code review ensuring all XML documentation includes thread safety remarks per spec Thread Safety section
 
 ---
 
