@@ -122,6 +122,19 @@ Claude MUST strictly adhere to the following planning documents during all devel
 - Claude MUST NOT skip, rename, or reorganize mapped items
 - Deviations require explicit user approval
 
+### X. Source Code File Size Limits
+
+Source code files MUST be kept to 1,000 lines of code (LOC) or less:
+
+- **Maximum file size**: No single source file MUST exceed 1,000 LOC
+- **Proactive splitting**: When a file approaches the limit, refactor into smaller, focused units
+- **Logical grouping**: Split files by responsibility (e.g., separate test files by user story)
+- **Naming clarity**: Split files MUST have clear, descriptive names indicating their scope
+
+**Rationale**: Smaller files improve navigation, reduce merge conflicts, and encourage single-responsibility design.
+
+**Exceptions**: Generated code or files that cannot be logically split may exceed this limit with documented justification.
+
 ## Planning Documents
 
 ### API Mapping (`docs/api-mapping.md`)
@@ -240,6 +253,7 @@ The complete specification is in `docs/design.md` (~65K tokens). It contains:
 4. **Design Review**: Complex subsystems require written design in `/docs/` before implementation
 5. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
 6. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
+7. **File Size Review**: Before completing any implementation, verify no source file exceeds 1,000 LOC
 
 ## Technical Standards
 

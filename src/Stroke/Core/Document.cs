@@ -12,7 +12,7 @@ namespace Stroke.Core;
 /// This class is usually instantiated by a Buffer object, and accessed as the
 /// Document property of that class.
 /// </remarks>
-public sealed class Document : IEquatable<Document>
+public sealed partial class Document : IEquatable<Document>
 {
     #region Static Fields - Word Navigation Regex Patterns
 

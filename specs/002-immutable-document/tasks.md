@@ -110,27 +110,27 @@
 
 ### Tests for User Story 2
 
-- [ ] T047 [P] [US2] Test `FindNextWordBeginning` with WORD=false in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T048 [P] [US2] Test `FindNextWordBeginning` with WORD=true in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T049 [P] [US2] Test `FindNextWordEnding` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T050 [P] [US2] Test `FindPreviousWordBeginning` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T051 [P] [US2] Test `FindPreviousWordEnding` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T052 [P] [US2] Test `GetWordBeforeCursor` with whitespace and custom pattern in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T053 [P] [US2] Test `GetWordUnderCursor` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T054 [P] [US2] Test `FindStartOfPreviousWord` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T055 [P] [US2] Test `FindBoundariesOfCurrentWord` with include leading/trailing whitespace options in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T047 [P] [US2] Test `FindNextWordBeginning` with WORD=false in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T048 [P] [US2] Test `FindNextWordBeginning` with WORD=true in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T049 [P] [US2] Test `FindNextWordEnding` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T050 [P] [US2] Test `FindPreviousWordBeginning` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T051 [P] [US2] Test `FindPreviousWordEnding` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T052 [P] [US2] Test `GetWordBeforeCursor` with whitespace and custom pattern in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T053 [P] [US2] Test `GetWordUnderCursor` with both WORD modes in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T054 [P] [US2] Test `FindStartOfPreviousWord` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T055 [P] [US2] Test `FindBoundariesOfCurrentWord` with include leading/trailing whitespace options in `tests/Stroke.Tests/Core/DocumentTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T056 [US2] Implement `FindNextWordBeginning(int count, bool WORD)` in `src/Stroke/Core/Document.cs` using regex patterns
-- [ ] T057 [US2] Implement `FindNextWordEnding(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
-- [ ] T058 [US2] Implement `FindPreviousWordBeginning(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
-- [ ] T059 [US2] Implement `FindPreviousWordEnding(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
-- [ ] T060 [US2] Implement `GetWordBeforeCursor(bool WORD, Regex? pattern)` in `src/Stroke/Core/Document.cs`
-- [ ] T061 [US2] Implement `GetWordUnderCursor(bool WORD)` in `src/Stroke/Core/Document.cs`
-- [ ] T062 [US2] Implement `FindStartOfPreviousWord(int count, bool WORD, Regex? pattern)` in `src/Stroke/Core/Document.cs`
-- [ ] T063 [US2] Implement `FindBoundariesOfCurrentWord(bool WORD, bool includeLeading, bool includeTrailing)` in `src/Stroke/Core/Document.cs`
-- [ ] T064 [US2] Run US2 tests and verify all pass
+- [x] T056 [US2] Implement `FindNextWordBeginning(int count, bool WORD)` in `src/Stroke/Core/Document.cs` using regex patterns
+- [x] T057 [US2] Implement `FindNextWordEnding(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
+- [x] T058 [US2] Implement `FindPreviousWordBeginning(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
+- [x] T059 [US2] Implement `FindPreviousWordEnding(int count, bool WORD)` in `src/Stroke/Core/Document.cs`
+- [x] T060 [US2] Implement `GetWordBeforeCursor(bool WORD, Regex? pattern)` in `src/Stroke/Core/Document.cs`
+- [x] T061 [US2] Implement `GetWordUnderCursor(bool WORD)` in `src/Stroke/Core/Document.cs`
+- [x] T062 [US2] Implement `FindStartOfPreviousWord(int count, bool WORD, Regex? pattern)` in `src/Stroke/Core/Document.cs`
+- [x] T063 [US2] Implement `FindBoundariesOfCurrentWord(bool WORD, bool includeLeading, bool includeTrailing)` in `src/Stroke/Core/Document.cs`
+- [x] T064 [US2] Run US2 tests and verify all pass
 
 **Checkpoint**: User Story 2 should be fully functional and testable independently
 
@@ -144,28 +144,28 @@
 
 ### Tests for User Story 3
 
-- [ ] T065 [P] [US3] Test `GetCursorLeftPosition(count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T066 [P] [US3] Test `GetCursorRightPosition(count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T067 [P] [US3] Test `GetCursorUpPosition(count, preferredColumn)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T068 [P] [US3] Test `GetCursorDownPosition(count, preferredColumn)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T069 [P] [US3] Test `GetStartOfLinePosition(afterWhitespace)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T070 [P] [US3] Test `GetEndOfLinePosition()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T071 [P] [US3] Test `GetStartOfDocumentPosition()` and `GetEndOfDocumentPosition()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T072 [P] [US3] Test `GetColumnCursorPosition(column)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T073 [P] [US3] Test EC-012 edge case: preferred column exceeds line length in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T065 [P] [US3] Test `GetCursorLeftPosition(count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T066 [P] [US3] Test `GetCursorRightPosition(count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T067 [P] [US3] Test `GetCursorUpPosition(count, preferredColumn)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T068 [P] [US3] Test `GetCursorDownPosition(count, preferredColumn)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T069 [P] [US3] Test `GetStartOfLinePosition(afterWhitespace)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T070 [P] [US3] Test `GetEndOfLinePosition()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T071 [P] [US3] Test `GetStartOfDocumentPosition()` and `GetEndOfDocumentPosition()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T072 [P] [US3] Test `GetColumnCursorPosition(column)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T073 [P] [US3] Test EC-012 edge case: preferred column exceeds line length in `tests/Stroke.Tests/Core/DocumentTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T074 [US3] Implement `GetCursorLeftPosition(int count)` in `src/Stroke/Core/Document.cs`
-- [ ] T075 [US3] Implement `GetCursorRightPosition(int count)` in `src/Stroke/Core/Document.cs`
-- [ ] T076 [US3] Implement `GetCursorUpPosition(int count, int? preferredColumn)` in `src/Stroke/Core/Document.cs`
-- [ ] T077 [US3] Implement `GetCursorDownPosition(int count, int? preferredColumn)` in `src/Stroke/Core/Document.cs`
-- [ ] T078 [US3] Implement `GetStartOfLinePosition(bool afterWhitespace)` in `src/Stroke/Core/Document.cs`
-- [ ] T079 [US3] Implement `GetEndOfLinePosition()` in `src/Stroke/Core/Document.cs`
-- [ ] T080 [US3] Implement `GetStartOfDocumentPosition()` in `src/Stroke/Core/Document.cs`
-- [ ] T081 [US3] Implement `GetEndOfDocumentPosition()` in `src/Stroke/Core/Document.cs`
-- [ ] T082 [US3] Implement `GetColumnCursorPosition(int column)` in `src/Stroke/Core/Document.cs`
-- [ ] T083 [US3] Run US3 tests and verify all pass
+- [x] T074 [US3] Implement `GetCursorLeftPosition(int count)` in `src/Stroke/Core/Document.cs`
+- [x] T075 [US3] Implement `GetCursorRightPosition(int count)` in `src/Stroke/Core/Document.cs`
+- [x] T076 [US3] Implement `GetCursorUpPosition(int count, int? preferredColumn)` in `src/Stroke/Core/Document.cs`
+- [x] T077 [US3] Implement `GetCursorDownPosition(int count, int? preferredColumn)` in `src/Stroke/Core/Document.cs`
+- [x] T078 [US3] Implement `GetStartOfLinePosition(bool afterWhitespace)` in `src/Stroke/Core/Document.cs`
+- [x] T079 [US3] Implement `GetEndOfLinePosition()` in `src/Stroke/Core/Document.cs`
+- [x] T080 [US3] Implement `GetStartOfDocumentPosition()` in `src/Stroke/Core/Document.cs`
+- [x] T081 [US3] Implement `GetEndOfDocumentPosition()` in `src/Stroke/Core/Document.cs`
+- [x] T082 [US3] Implement `GetColumnCursorPosition(int column)` in `src/Stroke/Core/Document.cs`
+- [x] T083 [US3] Run US3 tests and verify all pass
 
 **Checkpoint**: User Story 3 should be fully functional and testable independently
 
@@ -179,20 +179,20 @@
 
 ### Tests for User Story 4
 
-- [ ] T084 [P] [US4] Test `Find(sub, inCurrentLine, includeCurrentPosition, ignoreCase, count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T085 [P] [US4] Test `Find` with case-insensitive option in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T086 [P] [US4] Test `FindBackwards(sub, inCurrentLine, ignoreCase, count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T087 [P] [US4] Test `FindAll(sub, ignoreCase)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T088 [P] [US4] Test `HasMatchAtCurrentPosition(sub)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T089 [P] [US4] Test edge cases: empty pattern, not found, at end of document in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T084 [P] [US4] Test `Find(sub, inCurrentLine, includeCurrentPosition, ignoreCase, count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T085 [P] [US4] Test `Find` with case-insensitive option in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T086 [P] [US4] Test `FindBackwards(sub, inCurrentLine, ignoreCase, count)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T087 [P] [US4] Test `FindAll(sub, ignoreCase)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T088 [P] [US4] Test `HasMatchAtCurrentPosition(sub)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T089 [P] [US4] Test edge cases: empty pattern, not found, at end of document in `tests/Stroke.Tests/Core/DocumentTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T090 [US4] Implement `Find(string sub, bool inCurrentLine, bool includeCurrentPosition, bool ignoreCase, int count)` in `src/Stroke/Core/Document.cs`
-- [ ] T091 [US4] Implement `FindBackwards(string sub, bool inCurrentLine, bool ignoreCase, int count)` in `src/Stroke/Core/Document.cs`
-- [ ] T092 [US4] Implement `FindAll(string sub, bool ignoreCase)` in `src/Stroke/Core/Document.cs`
-- [ ] T093 [US4] Implement `HasMatchAtCurrentPosition(string sub)` in `src/Stroke/Core/Document.cs`
-- [ ] T094 [US4] Run US4 tests and verify all pass
+- [x] T090 [US4] Implement `Find(string sub, bool inCurrentLine, bool includeCurrentPosition, bool ignoreCase, int count)` in `src/Stroke/Core/Document.cs`
+- [x] T091 [US4] Implement `FindBackwards(string sub, bool inCurrentLine, bool ignoreCase, int count)` in `src/Stroke/Core/Document.cs`
+- [x] T092 [US4] Implement `FindAll(string sub, bool ignoreCase)` in `src/Stroke/Core/Document.cs`
+- [x] T093 [US4] Implement `HasMatchAtCurrentPosition(string sub)` in `src/Stroke/Core/Document.cs`
+- [x] T094 [US4] Run US4 tests and verify all pass
 
 **Checkpoint**: User Story 4 should be fully functional and testable independently
 
@@ -206,22 +206,22 @@
 
 ### Tests for User Story 5
 
-- [ ] T095 [P] [US5] Test `SelectionRange()` for CHARACTERS selection in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T096 [P] [US5] Test `SelectionRanges()` for LINES selection in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T097 [P] [US5] Test `SelectionRanges()` for BLOCK selection in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T098 [P] [US5] Test `SelectionRangeAtLine(row)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T099 [P] [US5] Test `CutSelection()` returns new Document and ClipboardData in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T100 [P] [US5] Test selection edge cases: no selection, cursor before origin in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T095 [P] [US5] Test `SelectionRange()` for CHARACTERS selection in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
+- [x] T096 [P] [US5] Test `SelectionRanges()` for LINES selection in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
+- [x] T097 [P] [US5] Test `SelectionRanges()` for BLOCK selection in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
+- [x] T098 [P] [US5] Test `SelectionRangeAtLine(row)` in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
+- [x] T099 [P] [US5] Test `CutSelection()` returns new Document and ClipboardData in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
+- [x] T100 [P] [US5] Test selection edge cases: no selection, cursor before origin in `tests/Stroke.Tests/Core/DocumentSelectionTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T101 [US5] Implement `SelectionRange()` in `src/Stroke/Core/Document.cs` returning (Start, End) tuple
-- [ ] T102 [US5] Implement `SelectionRanges()` in `src/Stroke/Core/Document.cs` for CHARACTERS type
-- [ ] T103 [US5] Implement `SelectionRanges()` for LINES type in `src/Stroke/Core/Document.cs`
-- [ ] T104 [US5] Implement `SelectionRanges()` for BLOCK type in `src/Stroke/Core/Document.cs`
-- [ ] T105 [US5] Implement `SelectionRangeAtLine(int row)` in `src/Stroke/Core/Document.cs`
-- [ ] T106 [US5] Implement `CutSelection()` in `src/Stroke/Core/Document.cs` returning (Document, ClipboardData) tuple
-- [ ] T107 [US5] Run US5 tests and verify all pass
+- [x] T101 [US5] Implement `SelectionRange()` in `src/Stroke/Core/Document.cs` returning (From, To) tuple
+- [x] T102 [US5] Implement `SelectionRanges()` in `src/Stroke/Core/Document.cs` for CHARACTERS type
+- [x] T103 [US5] Implement `SelectionRanges()` for LINES type in `src/Stroke/Core/Document.cs`
+- [x] T104 [US5] Implement `SelectionRanges()` for BLOCK type in `src/Stroke/Core/Document.cs`
+- [x] T105 [US5] Implement `SelectionRangeAtLine(int row)` in `src/Stroke/Core/Document.cs`
+- [x] T106 [US5] Implement `CutSelection()` in `src/Stroke/Core/Document.cs` returning (Document, ClipboardData) tuple
+- [x] T107 [US5] Run US5 tests and verify all pass
 
 **Checkpoint**: User Story 5 should be fully functional and testable independently
 
@@ -235,19 +235,19 @@
 
 ### Tests for User Story 6
 
-- [ ] T108 [P] [US6] Test `FindMatchingBracketPosition()` for each bracket type (), [], {}, <> in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T109 [P] [US6] Test `FindMatchingBracketPosition()` with nested brackets in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T110 [P] [US6] Test `FindEnclosingBracketLeft(openBracket, closeBracket)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T111 [P] [US6] Test `FindEnclosingBracketRight(openBracket, closeBracket)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T112 [P] [US6] Test edge cases: unmatched, no enclosing, mixed types in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T108 [P] [US6] Test `FindMatchingBracketPosition()` for each bracket type (), [], {}, <> in `tests/Stroke.Tests/Core/DocumentBracketTests.cs`
+- [x] T109 [P] [US6] Test `FindMatchingBracketPosition()` with nested brackets in `tests/Stroke.Tests/Core/DocumentBracketTests.cs`
+- [x] T110 [P] [US6] Test `FindEnclosingBracketLeft(openBracket, closeBracket)` in `tests/Stroke.Tests/Core/DocumentBracketTests.cs`
+- [x] T111 [P] [US6] Test `FindEnclosingBracketRight(openBracket, closeBracket)` in `tests/Stroke.Tests/Core/DocumentBracketTests.cs`
+- [x] T112 [P] [US6] Test edge cases: unmatched, no enclosing, mixed types in `tests/Stroke.Tests/Core/DocumentBracketTests.cs`
 
 ### Implementation for User Story 6
 
-- [ ] T113 [US6] Implement bracket pair mapping (static readonly dictionary) in `src/Stroke/Core/Document.cs`
-- [ ] T114 [US6] Implement `FindMatchingBracketPosition()` in `src/Stroke/Core/Document.cs` with nesting support
-- [ ] T115 [US6] Implement `FindEnclosingBracketLeft(char openBracket, char closeBracket)` in `src/Stroke/Core/Document.cs`
-- [ ] T116 [US6] Implement `FindEnclosingBracketRight(char openBracket, char closeBracket)` in `src/Stroke/Core/Document.cs`
-- [ ] T117 [US6] Run US6 tests and verify all pass
+- [x] T113 [US6] Implement bracket pair mapping (static readonly dictionary) in `src/Stroke/Core/Document.cs`
+- [x] T114 [US6] Implement `FindMatchingBracketPosition()` in `src/Stroke/Core/Document.cs` with nesting support
+- [x] T115 [US6] Implement `FindEnclosingBracketLeft(char openBracket, char closeBracket)` in `src/Stroke/Core/Document.cs`
+- [x] T116 [US6] Implement `FindEnclosingBracketRight(char openBracket, char closeBracket)` in `src/Stroke/Core/Document.cs`
+- [x] T117 [US6] Run US6 tests and verify all pass
 
 **Checkpoint**: User Story 6 should be fully functional and testable independently
 
@@ -261,22 +261,22 @@
 
 ### Tests for User Story 7
 
-- [ ] T118 [P] [US7] Test `PasteClipboardData` with CHARACTERS type and Emacs mode in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T119 [P] [US7] Test `PasteClipboardData` with LINES type and ViBefore mode in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T120 [P] [US7] Test `PasteClipboardData` with LINES type and ViAfter mode in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T121 [P] [US7] Test `PasteClipboardData` with BLOCK type in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T122 [P] [US7] Test `PasteClipboardData` with count parameter in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T123 [P] [US7] Test `InsertBefore(text)` and `InsertAfter(text)` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T124 [P] [US7] Test paste edge cases: count=0, empty clipboard in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T118 [P] [US7] Test `PasteClipboardData` with CHARACTERS type and Emacs mode in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T119 [P] [US7] Test `PasteClipboardData` with LINES type and ViBefore mode in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T120 [P] [US7] Test `PasteClipboardData` with LINES type and ViAfter mode in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T121 [P] [US7] Test `PasteClipboardData` with BLOCK type in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T122 [P] [US7] Test `PasteClipboardData` with count parameter in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T123 [P] [US7] Test `InsertBefore(text)` and `InsertAfter(text)` in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
+- [x] T124 [P] [US7] Test paste edge cases: count=0, empty clipboard in `tests/Stroke.Tests/Core/DocumentPasteTests.cs`
 
 ### Implementation for User Story 7
 
-- [ ] T125 [US7] Implement `PasteClipboardData` for CHARACTERS type in `src/Stroke/Core/Document.cs`
-- [ ] T126 [US7] Implement `PasteClipboardData` for LINES type in `src/Stroke/Core/Document.cs`
-- [ ] T127 [US7] Implement `PasteClipboardData` for BLOCK type in `src/Stroke/Core/Document.cs`
-- [ ] T128 [US7] Implement `InsertBefore(string text)` in `src/Stroke/Core/Document.cs`
-- [ ] T129 [US7] Implement `InsertAfter(string text)` in `src/Stroke/Core/Document.cs`
-- [ ] T130 [US7] Run US7 tests and verify all pass
+- [x] T125 [US7] Implement `PasteClipboardData` for CHARACTERS type in `src/Stroke/Core/Document.cs`
+- [x] T126 [US7] Implement `PasteClipboardData` for LINES type in `src/Stroke/Core/Document.cs`
+- [x] T127 [US7] Implement `PasteClipboardData` for BLOCK type in `src/Stroke/Core/Document.cs`
+- [x] T128 [US7] Implement `InsertBefore(string text)` in `src/Stroke/Core/Document.cs`
+- [x] T129 [US7] Implement `InsertAfter(string text)` in `src/Stroke/Core/Document.cs`
+- [x] T130 [US7] Run US7 tests and verify all pass
 
 **Checkpoint**: User Story 7 should be fully functional and testable independently
 
@@ -290,16 +290,16 @@
 
 ### Tests for User Story 8
 
-- [ ] T131 [P] [US8] Test `StartOfParagraph()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T132 [P] [US8] Test `EndOfParagraph()` in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T133 [P] [US8] Test paragraph navigation with single paragraph in `tests/Stroke.Tests/Core/DocumentTests.cs`
-- [ ] T134 [P] [US8] Test paragraph navigation with trailing empty lines in `tests/Stroke.Tests/Core/DocumentTests.cs`
+- [x] T131 [P] [US8] Test `StartOfParagraph()` in `tests/Stroke.Tests/Core/DocumentParagraphTests.cs`
+- [x] T132 [P] [US8] Test `EndOfParagraph()` in `tests/Stroke.Tests/Core/DocumentParagraphTests.cs`
+- [x] T133 [P] [US8] Test paragraph navigation with single paragraph in `tests/Stroke.Tests/Core/DocumentParagraphTests.cs`
+- [x] T134 [P] [US8] Test paragraph navigation with trailing empty lines in `tests/Stroke.Tests/Core/DocumentParagraphTests.cs`
 
 ### Implementation for User Story 8
 
-- [ ] T135 [US8] Implement `StartOfParagraph()` in `src/Stroke/Core/Document.cs`
-- [ ] T136 [US8] Implement `EndOfParagraph()` in `src/Stroke/Core/Document.cs`
-- [ ] T137 [US8] Run US8 tests and verify all pass
+- [x] T135 [US8] Implement `StartOfParagraph()` in `src/Stroke/Core/Document.cs`
+- [x] T136 [US8] Implement `EndOfParagraph()` in `src/Stroke/Core/Document.cs`
+- [x] T137 [US8] Run US8 tests and verify all pass
 
 **Checkpoint**: User Story 8 should be fully functional and testable independently
 
