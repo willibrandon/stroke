@@ -29,17 +29,20 @@ public sealed partial class Buffer
     {
         ArgumentNullException.ThrowIfNull(completions);
 
+        CompletionState result;
         using (_lock.EnterScope())
         {
             _completeState = new CompletionState(
                 originalDocument: Document,
                 completions: completions);
 
-            // Trigger event. This should eventually invalidate the layout.
-            ThreadPool.QueueUserWorkItem(_ => OnCompletionsChanged?.Invoke(this));
-
-            return _completeState;
+            result = _completeState;
         }
+
+        // Trigger event outside lock
+        OnCompletionsChanged?.Invoke(this);
+
+        return result;
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -54,6 +57,7 @@ public sealed partial class Buffer
     /// <param name="disableWrapAround">If true, don't wrap around at the end.</param>
     public void CompleteNext(int count = 1, bool disableWrapAround = false)
     {
+        bool textChanged;
         using (_lock.EnterScope())
         {
             if (_completeState == null)
@@ -87,7 +91,12 @@ public sealed partial class Buffer
                 index = Math.Min(completionsCount - 1, _completeState.CompleteIndex.Value + count);
             }
 
-            GoToCompletionInternal(index);
+            textChanged = GoToCompletionInternal(index);
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -99,6 +108,7 @@ public sealed partial class Buffer
     /// <param name="disableWrapAround">If true, don't wrap around at the beginning.</param>
     public void CompletePrevious(int count = 1, bool disableWrapAround = false)
     {
+        bool textChanged;
         using (_lock.EnterScope())
         {
             if (_completeState == null)
@@ -132,7 +142,12 @@ public sealed partial class Buffer
                 index = Math.Max(0, _completeState.CompleteIndex.Value - count);
             }
 
-            GoToCompletionInternal(index);
+            textChanged = GoToCompletionInternal(index);
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -142,21 +157,28 @@ public sealed partial class Buffer
     /// <param name="index">The index to select, or null to clear selection.</param>
     public void GoToCompletion(int? index)
     {
+        bool textChanged;
         using (_lock.EnterScope())
         {
-            GoToCompletionInternal(index);
+            textChanged = GoToCompletionInternal(index);
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
     /// <summary>
     /// Internal implementation for go to completion (must be called within lock).
+    /// Returns true if text changed.
     /// </summary>
-    private void GoToCompletionInternal(int? index)
+    private bool GoToCompletionInternal(int? index)
     {
         // Must be called within lock
         if (_completeState == null)
         {
-            return;
+            return false;
         }
 
         // Set new completion
@@ -166,15 +188,17 @@ public sealed partial class Buffer
         // Set text/cursor position
         var (newText, newCursorPosition) = state.NewTextAndPosition();
 
-        // Update document (this will clear complete_state via TextChangedInternal)
+        // Update document
         _workingLines[_workingIndex] = newText;
         _cursorPosition = newCursorPosition;
 
-        // Fire text changed event
-        TextChangedInternal();
+        // Clear state (but don't fire events - caller will do that)
+        ClearTextChangeState();
 
         // Restore the complete_state (changing text/cursor position clears it)
         _completeState = state;
+
+        return true;
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -186,13 +210,19 @@ public sealed partial class Buffer
     /// </summary>
     public void CancelCompletion()
     {
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             if (_completeState != null)
             {
-                GoToCompletionInternal(null);
+                textChanged = GoToCompletionInternal(null);
                 _completeState = null;
             }
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -235,7 +265,10 @@ public sealed partial class Buffer
 
             _workingLines[_workingIndex] = newText;
             _cursorPosition = newCursor;
-            TextChangedInternal();
+            ClearTextChangeState();
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
     }
 }

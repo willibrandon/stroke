@@ -47,8 +47,11 @@ public sealed partial class Buffer
                 {
                     _workingLines[_workingIndex] = text;
                     _cursorPosition = text.Length;
-                    TextChangedInternal();
+                    ClearTextChangeState();
                 }
+
+                // Fire event outside lock
+                OnTextChanged?.Invoke(this);
 
                 // Accept the input
                 if (validateAndHandle)

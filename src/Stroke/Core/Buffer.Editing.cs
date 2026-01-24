@@ -61,16 +61,18 @@ public sealed partial class Buffer
             _cursorPosition = newCursorPosition;
 
             // Handle state changes
-            TextChangedInternal();
+            ClearTextChangeState();
 
             // Reset history search text
             _historySearchText = null;
         }
 
-        // Fire 'on_text_insert' event (outside lock to avoid deadlocks)
+        // Fire events outside lock
+        OnTextChanged?.Invoke(this);
+
         if (fireEvent)
         {
-            ThreadPool.QueueUserWorkItem(_ => OnTextInsert?.Invoke(this));
+            OnTextInsert?.Invoke(this);
 
             // Only complete when "complete_while_typing" is enabled
             if (CompleteWhileTyping)
@@ -107,6 +109,7 @@ public sealed partial class Buffer
             throw new EditReadOnlyBufferException();
         }
 
+        string deleted;
         using (_lock.EnterScope())
         {
             var text = _workingLines[_workingIndex];
@@ -117,17 +120,20 @@ public sealed partial class Buffer
                 return "";
             }
 
-            var deleted = text[cursorPos..Math.Min(cursorPos + count, text.Length)];
+            deleted = text[cursorPos..Math.Min(cursorPos + count, text.Length)];
             var newText = text[..cursorPos] + text[(cursorPos + deleted.Length)..];
 
             _workingLines[_workingIndex] = newText;
-            TextChangedInternal();
+            ClearTextChangeState();
 
             // Reset history search text
             _historySearchText = null;
-
-            return deleted;
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
+
+        return deleted;
     }
 
     /// <summary>
@@ -147,6 +153,7 @@ public sealed partial class Buffer
             throw new EditReadOnlyBufferException();
         }
 
+        string deleted;
         using (_lock.EnterScope())
         {
             var text = _workingLines[_workingIndex];
@@ -158,19 +165,22 @@ public sealed partial class Buffer
             }
 
             var deleteStart = Math.Max(0, cursorPos - count);
-            var deleted = text[deleteStart..cursorPos];
+            deleted = text[deleteStart..cursorPos];
             var newText = text[..deleteStart] + text[cursorPos..];
             var newCursorPosition = cursorPos - deleted.Length;
 
             _workingLines[_workingIndex] = newText;
             _cursorPosition = newCursorPosition;
-            TextChangedInternal();
+            ClearTextChangeState();
 
             // Reset history search text
             _historySearchText = null;
-
-            return deleted;
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
+
+        return deleted;
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -245,8 +255,11 @@ public sealed partial class Buffer
             var newText = text[..cursorPos] + separator + textAfter;
 
             _workingLines[_workingIndex] = newText;
-            TextChangedInternal();
+            ClearTextChangeState();
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -284,8 +297,11 @@ public sealed partial class Buffer
             _workingLines[_workingIndex] = newText;
             _cursorPosition = Math.Max(0, newCursorPosition);
             _selectionState = null;
-            TextChangedInternal();
+            ClearTextChangeState();
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -298,6 +314,7 @@ public sealed partial class Buffer
             throw new EditReadOnlyBufferException();
         }
 
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             var text = _workingLines[_workingIndex];
@@ -310,8 +327,15 @@ public sealed partial class Buffer
                 var newText = text[..(cursorPos - 2)] + b + a + text[cursorPos..];
 
                 _workingLines[_workingIndex] = newText;
-                TextChangedInternal();
+                ClearTextChangeState();
+                textChanged = true;
             }
+        }
+
+        // Fire event outside lock
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -379,8 +403,11 @@ public sealed partial class Buffer
             var newText = text[..a] + transformCallback(text[a..b]) + text[b..];
 
             _workingLines[_workingIndex] = newText;
-            TextChangedInternal();
+            ClearTextChangeState();
         }
+
+        // Fire event outside lock
+        OnTextChanged?.Invoke(this);
     }
 
     /// <summary>
@@ -405,6 +432,7 @@ public sealed partial class Buffer
             throw new EditReadOnlyBufferException();
         }
 
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             var text = _workingLines[_workingIndex];
@@ -421,7 +449,14 @@ public sealed partial class Buffer
             var newText = text[..clampedFrom] + transformCallback(text[clampedFrom..clampedTo]) + text[clampedTo..];
 
             _workingLines[_workingIndex] = newText;
-            TextChangedInternal();
+            ClearTextChangeState();
+            textChanged = true;
+        }
+
+        // Fire event outside lock
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -460,16 +495,22 @@ public sealed partial class Buffer
                 var doc = Document;
                 var suggestion = await AutoSuggest.GetSuggestionAsync(this, doc).ConfigureAwait(false);
 
+                bool shouldFireEvent = false;
                 using (_lock.EnterScope())
                 {
                     // Only set suggestion if document hasn't changed
                     if (_workingLines[_workingIndex] == doc.Text && _cursorPosition == doc.CursorPosition)
                     {
                         _suggestion = suggestion;
+                        shouldFireEvent = true;
                     }
                 }
 
-                ThreadPool.QueueUserWorkItem(_ => OnSuggestionSet?.Invoke(this));
+                // Fire event outside lock (already in async context, no need for ThreadPool)
+                if (shouldFireEvent)
+                {
+                    OnSuggestionSet?.Invoke(this);
+                }
             }
         }
         finally

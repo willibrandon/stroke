@@ -19,10 +19,16 @@ public sealed partial class Buffer
     /// </remarks>
     public void CursorLeft(int count = 1)
     {
+        bool cursorChanged;
         using (_lock.EnterScope())
         {
             var delta = Document.GetCursorLeftPosition(count);
-            SetCursorPositionInternal(_cursorPosition + delta);
+            cursorChanged = SetCursorPositionInternal(_cursorPosition + delta);
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 
@@ -36,10 +42,16 @@ public sealed partial class Buffer
     /// </remarks>
     public void CursorRight(int count = 1)
     {
+        bool cursorChanged;
         using (_lock.EnterScope())
         {
             var delta = Document.GetCursorRightPosition(count);
-            SetCursorPositionInternal(_cursorPosition + delta);
+            cursorChanged = SetCursorPositionInternal(_cursorPosition + delta);
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 
@@ -57,6 +69,7 @@ public sealed partial class Buffer
     /// </remarks>
     public void CursorUp(int count = 1)
     {
+        bool cursorChanged;
         using (_lock.EnterScope())
         {
             var doc = Document;
@@ -64,11 +77,16 @@ public sealed partial class Buffer
             var delta = doc.GetCursorUpPosition(count, originalColumn);
 
             // Update cursor position (with clamping and internal state clearing)
-            SetCursorPositionInternal(_cursorPosition + delta);
+            cursorChanged = SetCursorPositionInternal(_cursorPosition + delta);
 
             // Remember the original column for the next up/down movement
             // (must be after SetCursorPositionInternal which clears it)
             _preferredColumn = originalColumn;
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 
@@ -82,6 +100,7 @@ public sealed partial class Buffer
     /// </remarks>
     public void CursorDown(int count = 1)
     {
+        bool cursorChanged;
         using (_lock.EnterScope())
         {
             var doc = Document;
@@ -89,11 +108,16 @@ public sealed partial class Buffer
             var delta = doc.GetCursorDownPosition(count, originalColumn);
 
             // Update cursor position (with clamping and internal state clearing)
-            SetCursorPositionInternal(_cursorPosition + delta);
+            cursorChanged = SetCursorPositionInternal(_cursorPosition + delta);
 
             // Remember the original column for the next up/down movement
             // (must be after SetCursorPositionInternal which clears it)
             _preferredColumn = originalColumn;
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 
@@ -110,6 +134,7 @@ public sealed partial class Buffer
     /// </remarks>
     public void GoToMatchingBracket()
     {
+        bool cursorChanged = false;
         using (_lock.EnterScope())
         {
             var doc = Document;
@@ -119,8 +144,13 @@ public sealed partial class Buffer
             // or 0 if not on a bracket or no match found
             if (matchOffset != 0)
             {
-                SetCursorPositionInternal(_cursorPosition + matchOffset);
+                cursorChanged = SetCursorPositionInternal(_cursorPosition + matchOffset);
             }
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 

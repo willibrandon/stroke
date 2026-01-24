@@ -94,13 +94,19 @@ public sealed partial class Buffer
     /// <param name="index">The history index to go to.</param>
     public void GoToHistory(int index)
     {
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             if (index >= 0 && index < _workingLines.Count)
             {
-                SetWorkingIndex(index);
+                textChanged = SetWorkingIndex(index);
                 _cursorPosition = _workingLines[_workingIndex].Length;
             }
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -112,6 +118,7 @@ public sealed partial class Buffer
     {
         LoadHistoryIfNotYetLoaded();
 
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             SetHistorySearch();
@@ -123,7 +130,7 @@ public sealed partial class Buffer
             {
                 if (HistoryMatches(i))
                 {
-                    SetWorkingIndex(i);
+                    textChanged = SetWorkingIndex(i) || textChanged;
                     count--;
                     foundSomething = true;
                 }
@@ -140,6 +147,11 @@ public sealed partial class Buffer
                 _cursorPosition = _workingLines[_workingIndex].Length;
             }
         }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
+        }
     }
 
     /// <summary>
@@ -150,6 +162,7 @@ public sealed partial class Buffer
     {
         LoadHistoryIfNotYetLoaded();
 
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             SetHistorySearch();
@@ -161,7 +174,7 @@ public sealed partial class Buffer
             {
                 if (HistoryMatches(i))
                 {
-                    SetWorkingIndex(i);
+                    textChanged = SetWorkingIndex(i) || textChanged;
                     count--;
                     foundSomething = true;
                 }
@@ -179,12 +192,18 @@ public sealed partial class Buffer
                 _cursorPosition += Document.GetEndOfLinePosition();
             }
         }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
+        }
     }
 
     /// <summary>
     /// Set the working index and handle state changes.
+    /// Returns true if text changed.
     /// </summary>
-    private void SetWorkingIndex(int value)
+    private bool SetWorkingIndex(int value)
     {
         // Must be called within lock
         if (_workingIndex != value)
@@ -196,8 +215,10 @@ public sealed partial class Buffer
             _cursorPosition = 0;
 
             // Clear state on index change
-            TextChangedInternal();
+            ClearTextChangeState();
+            return true;
         }
+        return false;
     }
 
     // ════════════════════════════════════════════════════════════════════════

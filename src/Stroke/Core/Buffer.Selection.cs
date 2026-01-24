@@ -72,25 +72,41 @@ public sealed partial class Buffer
     /// </summary>
     private ClipboardData CopySelectionInternal(bool cut)
     {
+        bool textChanged = false;
+        bool cursorChanged = false;
+        ClipboardData clipboardData;
+
         using (_lock.EnterScope())
         {
             var doc = Document;
-            var (newDocument, clipboardData) = doc.CutSelection();
+            (var newDocument, clipboardData) = doc.CutSelection();
 
             if (cut)
             {
-                SetDocumentInternal(newDocument);
+                (textChanged, cursorChanged) = SetDocumentInternal(newDocument);
             }
 
             _selectionState = null;
-            return clipboardData;
         }
+
+        // Fire events outside lock
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
+        }
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
+        }
+
+        return clipboardData;
     }
 
     /// <summary>
     /// Set document without acquiring lock (for internal use when lock is already held).
+    /// Returns (textChanged, cursorChanged) so caller can fire events outside lock.
     /// </summary>
-    private void SetDocumentInternal(Document value)
+    private (bool TextChanged, bool CursorChanged) SetDocumentInternal(Document value)
     {
         // Must be called within lock
         var oldText = _workingLines[_workingIndex];
@@ -109,17 +125,19 @@ public sealed partial class Buffer
             _cursorPosition = Math.Clamp(value.CursorPosition, 0, value.Text.Length);
         }
 
-        // Handle change events
+        // Handle state clearing
         if (textChanged)
         {
-            TextChangedInternal();
+            ClearTextChangeState();
             _historySearchText = null;
         }
 
         if (cursorChanged)
         {
-            CursorPositionChangedInternal();
+            ClearCursorChangeState();
         }
+
+        return (textChanged, cursorChanged);
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -136,16 +154,29 @@ public sealed partial class Buffer
     {
         ArgumentNullException.ThrowIfNull(data);
 
+        bool textChanged;
+        bool cursorChanged;
+
         using (_lock.EnterScope())
         {
             var originalDocument = Document;
 
             var newDocument = originalDocument.PasteClipboardData(data, pasteMode, count);
-            SetDocumentInternal(newDocument);
+            (textChanged, cursorChanged) = SetDocumentInternal(newDocument);
 
             // Remember original document for kill ring rotation.
             // This assignment should come at the end because SetDocumentInternal will clear it.
             _documentBeforePaste = originalDocument;
+        }
+
+        // Fire events outside lock
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
+        }
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 }

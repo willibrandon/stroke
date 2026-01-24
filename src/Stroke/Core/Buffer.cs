@@ -242,6 +242,8 @@ public sealed partial class Buffer : IBuffer
         }
         set
         {
+            bool textChanged = false;
+
             using (_lock.EnterScope())
             {
                 // Ensure cursor position remains within the size of the text
@@ -260,11 +262,18 @@ public sealed partial class Buffer : IBuffer
                 if (oldText != value)
                 {
                     _workingLines[_workingIndex] = value;
-                    TextChangedInternal();
+                    ClearTextChangeState();
+                    textChanged = true;
 
                     // Reset history search text
                     _historySearchText = null;
                 }
+            }
+
+            // Fire event outside lock to avoid deadlocks
+            if (textChanged)
+            {
+                OnTextChanged?.Invoke(this);
             }
         }
     }
@@ -281,6 +290,8 @@ public sealed partial class Buffer : IBuffer
         }
         set
         {
+            bool cursorChanged = false;
+
             using (_lock.EnterScope())
             {
                 // Clamp to valid range
@@ -290,8 +301,15 @@ public sealed partial class Buffer : IBuffer
                 if (_cursorPosition != newPosition)
                 {
                     _cursorPosition = newPosition;
-                    CursorPositionChangedInternal();
+                    ClearCursorChangeState();
+                    cursorChanged = true;
                 }
+            }
+
+            // Fire event outside lock to avoid deadlocks
+            if (cursorChanged)
+            {
+                OnCursorPositionChanged?.Invoke(this);
             }
         }
     }
@@ -452,9 +470,10 @@ public sealed partial class Buffer : IBuffer
     // ════════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Called when text changes. Must be called within lock.
+    /// Clears state related to text changes. Must be called within lock.
+    /// Does NOT fire events - caller must fire OnTextChanged outside the lock.
     /// </summary>
-    private void TextChangedInternal()
+    private void ClearTextChangeState()
     {
         // Remove any validation errors and complete state
         _validationError = null;
@@ -465,17 +484,16 @@ public sealed partial class Buffer : IBuffer
         _selectionState = null;
         _suggestion = null;
         _preferredColumn = null;
-
-        // Fire 'on_text_changed' event (outside lock to avoid deadlocks)
-        ThreadPool.QueueUserWorkItem(_ => OnTextChanged?.Invoke(this));
     }
 
     /// <summary>
     /// Internal helper to set cursor position with clamping and state clearing.
     /// Must be called within lock.
+    /// Returns true if cursor changed (caller should fire OnCursorPositionChanged outside lock).
     /// </summary>
     /// <param name="newPosition">The desired cursor position.</param>
-    private void SetCursorPositionInternal(int newPosition)
+    /// <returns>True if cursor position changed.</returns>
+    private bool SetCursorPositionInternal(int newPosition)
     {
         // Clamp to valid range
         var textLength = _workingLines[_workingIndex].Length;
@@ -484,14 +502,17 @@ public sealed partial class Buffer : IBuffer
         if (_cursorPosition != clampedPosition)
         {
             _cursorPosition = clampedPosition;
-            CursorPositionChangedInternal();
+            ClearCursorChangeState();
+            return true;
         }
+        return false;
     }
 
     /// <summary>
-    /// Called when cursor position changes. Must be called within lock.
+    /// Clears state related to cursor changes. Must be called within lock.
+    /// Does NOT fire events - caller must fire OnCursorPositionChanged outside the lock.
     /// </summary>
-    private void CursorPositionChangedInternal()
+    private void ClearCursorChangeState()
     {
         // Remove any complete state
         _completeState = null;
@@ -500,9 +521,6 @@ public sealed partial class Buffer : IBuffer
 
         // Unset preferred_column
         _preferredColumn = null;
-
-        // Fire 'on_cursor_position_changed' event (outside lock to avoid deadlocks)
-        ThreadPool.QueueUserWorkItem(_ => OnCursorPositionChanged?.Invoke(this));
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -552,6 +570,9 @@ public sealed partial class Buffer : IBuffer
     /// <summary>Set document with optional readonly bypass.</summary>
     public void SetDocument(Document value, bool bypassReadonly = false)
     {
+        bool textChanged;
+        bool cursorChanged;
+
         using (_lock.EnterScope())
         {
             // Don't allow editing of read-only buffers
@@ -563,8 +584,8 @@ public sealed partial class Buffer : IBuffer
             var oldText = _workingLines[_workingIndex];
             var oldCursor = _cursorPosition;
 
-            var textChanged = oldText != value.Text;
-            var cursorChanged = oldCursor != value.CursorPosition;
+            textChanged = oldText != value.Text;
+            cursorChanged = oldCursor != value.CursorPosition;
 
             if (textChanged)
             {
@@ -576,17 +597,28 @@ public sealed partial class Buffer : IBuffer
                 _cursorPosition = Math.Clamp(value.CursorPosition, 0, value.Text.Length);
             }
 
-            // Handle change events
+            // Handle state clearing
             if (textChanged)
             {
-                TextChangedInternal();
+                ClearTextChangeState();
                 _historySearchText = null;
             }
 
             if (cursorChanged)
             {
-                CursorPositionChangedInternal();
+                ClearCursorChangeState();
             }
+        }
+
+        // Fire events outside lock to avoid deadlocks
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
+        }
+
+        if (cursorChanged)
+        {
+            OnCursorPositionChanged?.Invoke(this);
         }
     }
 

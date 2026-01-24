@@ -55,6 +55,7 @@ public sealed partial class Buffer
     /// </summary>
     public void Undo()
     {
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             // Pop from the undo-stack until we find a text that is different from
@@ -75,10 +76,16 @@ public sealed partial class Buffer
                     _workingLines[_workingIndex] = text;
                     _cursorPosition = Math.Clamp(pos, 0, text.Length);
 
-                    TextChangedInternal();
+                    ClearTextChangeState();
+                    textChanged = true;
                     break;
                 }
             }
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 
@@ -91,6 +98,7 @@ public sealed partial class Buffer
     /// </summary>
     public void Redo()
     {
+        bool textChanged = false;
         using (_lock.EnterScope())
         {
             if (_redoStack.Count > 0)
@@ -116,8 +124,14 @@ public sealed partial class Buffer
                 _workingLines[_workingIndex] = text;
                 _cursorPosition = Math.Clamp(pos, 0, text.Length);
 
-                TextChangedInternal();
+                ClearTextChangeState();
+                textChanged = true;
             }
+        }
+
+        if (textChanged)
+        {
+            OnTextChanged?.Invoke(this);
         }
     }
 }
