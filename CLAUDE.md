@@ -313,3 +313,9 @@ Claude SHOULD use TUI Driver to verify the 129 examples from `docs/examples-mapp
 5. Test edge cases (resize, special keys, wide characters)
 
 This ensures examples behave correctly in real terminal environments before marking implementation complete.
+
+## Active Technologies
+- C# 13 / .NET 10 + None for Core layer (xUnit for tests) (001-project-setup-primitives)
+
+## Recent Changes
+- 001-project-setup-primitives: Added C# 13 / .NET 10 + None for Core layer (xUnit for tests)
