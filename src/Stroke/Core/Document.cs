@@ -190,7 +190,7 @@ public sealed partial class Document : IEquatable<Document>
         {
             if (_cache.Lines is null)
             {
-                _cache.Lines = [.._text.Split('\n')];
+                _cache.Lines = [.. _text.Split('\n')];
             }
             return _cache.Lines.Value;
         }
