@@ -309,15 +309,15 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T138 [P] Add XML documentation comments to all public members in `src/Stroke/Core/Document.cs`
-- [ ] T139 [P] Add XML documentation comments to all public members in `src/Stroke/Core/SelectionState.cs`
-- [ ] T140 [P] Add XML documentation comments to all public members in `src/Stroke/Core/ClipboardData.cs`
-- [ ] T141 Create `tests/Stroke.Tests/Core/SelectionStateTests.cs` with unit tests for SelectionState
-- [ ] T142 Create `tests/Stroke.Tests/Core/ClipboardDataTests.cs` with unit tests for ClipboardData
-- [ ] T143 Test flyweight cache sharing (SC-002): verify 1000 Documents with identical text share one cache
-- [ ] T144 Test lazy computation (SC-003): verify accessing only CursorPosition doesn't trigger line parsing
-- [ ] T145 Run full test suite and verify 80% code coverage target (SC-006)
-- [ ] T146 Run quickstart.md validation scenarios
+- [x] T138 [P] Add XML documentation comments to all public members in `src/Stroke/Core/Document.cs`
+- [x] T139 [P] Add XML documentation comments to all public members in `src/Stroke/Core/SelectionState.cs`
+- [x] T140 [P] Add XML documentation comments to all public members in `src/Stroke/Core/ClipboardData.cs`
+- [x] T141 Create `tests/Stroke.Tests/Core/SelectionStateTests.cs` with unit tests for SelectionState
+- [x] T142 Create `tests/Stroke.Tests/Core/ClipboardDataTests.cs` with unit tests for ClipboardData
+- [x] T143 Test flyweight cache sharing (SC-002): verify 1000 Documents with identical text share one cache
+- [x] T144 Test lazy computation (SC-003): verify accessing only CursorPosition doesn't trigger line parsing
+- [x] T145 Run full test suite and verify 80% code coverage target (SC-006)
+- [x] T146 Run quickstart.md validation scenarios
 
 ---
 
