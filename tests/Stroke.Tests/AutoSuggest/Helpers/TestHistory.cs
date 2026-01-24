@@ -15,9 +15,17 @@ internal sealed class TestHistory : IHistory
     /// <inheritdoc />
     public IReadOnlyList<string> GetStrings() => _strings;
 
-    /// <summary>
-    /// Appends a string to the history.
-    /// </summary>
-    /// <param name="value">The string to append.</param>
+    /// <inheritdoc />
     public void AppendString(string value) => _strings.Add(value);
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<string> LoadAsync()
+    {
+        foreach (var s in _strings)
+        {
+            yield return s;
+        }
+
+        await Task.CompletedTask;
+    }
 }

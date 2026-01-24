@@ -2,6 +2,9 @@ using Stroke.Clipboard;
 using Stroke.Core;
 using Xunit;
 
+// Use alias to avoid ambiguity with System.Buffer
+using Buffer = Stroke.Core.Buffer;
+
 namespace Stroke.Tests.Core;
 
 /// <summary>
@@ -466,6 +469,473 @@ public class QuickstartValidationTests
         ClipboardData data = clipboard.GetData();
         Assert.Equal(string.Empty, data.Text);
         Assert.Equal(SelectionType.Characters, data.Type);
+    }
+
+    #endregion
+
+    #region Buffer Examples (Feature 007)
+
+    [Fact]
+    public void Quickstart_Buffer_QuickExample()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: Quick Example
+        var buffer = new Buffer();
+
+        buffer.InsertText("Hello ");
+        buffer.InsertText("World");
+        Assert.Equal("Hello World", buffer.Text);
+
+        Document doc = buffer.Document;
+        Assert.Equal("Hello World", doc.TextBeforeCursor);
+
+        buffer.SaveToUndoStack();
+        buffer.InsertText("!");
+        Assert.Equal("Hello World!", buffer.Text);
+
+        buffer.Undo();
+        Assert.Equal("Hello World", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_DocumentProperty()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 1. Document Property
+        var buffer = new Buffer(document: new Document("Initial text", cursorPosition: 7));
+
+        Document doc = buffer.Document;
+        Assert.Equal("Initial text", doc.Text);
+        Assert.Equal(7, doc.CursorPosition);
+        Assert.Equal("Initial", doc.TextBeforeCursor);
+        Assert.Equal(" text", doc.TextAfterCursor);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_TextEditing()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 2. Text Editing
+        var buffer = new Buffer();
+
+        buffer.InsertText("Hello");
+        Assert.Equal("Hello", buffer.Text);
+
+        buffer.InsertText("X", overwrite: true);
+        Assert.Equal("HelloX", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_Delete()
+    {
+        var buffer = new Buffer(document: new Document("HelloWorld", cursorPosition: 5));
+
+        buffer.Delete(count: 3);
+        Assert.Equal("Hellold", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_DeleteBeforeCursor()
+    {
+        var buffer = new Buffer(document: new Document("HelloWorld", cursorPosition: 5));
+
+        buffer.DeleteBeforeCursor(count: 1);
+        Assert.Equal("HellWorld", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_TransformLines()
+    {
+        var buffer = new Buffer(document: new Document("hello\nworld", cursorPosition: 0));
+
+        // TransformLines returns the transformed text but doesn't modify the buffer
+        var transformed = buffer.TransformLines(
+            Enumerable.Range(0, 2),
+            line => line.ToUpperInvariant()
+        );
+
+        Assert.Equal("HELLO\nWORLD", transformed);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_TransformRegion()
+    {
+        var buffer = new Buffer(document: new Document("HELLO world", cursorPosition: 0));
+
+        buffer.TransformRegion(from: 0, to: 5, text => text.ToLower());
+
+        Assert.Equal("hello world", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_CursorNavigation()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 3. Cursor Navigation
+        var buffer = new Buffer(document: new Document("Line 1\nLine 2\nLine 3", cursorPosition: 0));
+
+        buffer.CursorRight(count: 3);
+        Assert.Equal(3, buffer.CursorPosition);
+
+        buffer.CursorLeft(count: 1);
+        Assert.Equal(2, buffer.CursorPosition);
+
+        buffer.CursorDown(count: 1);
+        buffer.CursorUp(count: 1);
+
+        // Should be back on first line
+        Assert.True(buffer.Document.OnFirstLine);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_AutoUpDown()
+    {
+        var buffer = new Buffer(document: new Document("Line 1\nLine 2", cursorPosition: 0));
+
+        buffer.AutoDown();  // Move to next line
+        buffer.AutoUp();    // Move back to first line
+
+        Assert.NotNull(buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_UndoRedo()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 4. Undo/Redo
+        var buffer = new Buffer();
+
+        buffer.InsertText("First");
+        buffer.SaveToUndoStack();
+
+        buffer.InsertText(" Second");
+        buffer.SaveToUndoStack();
+
+        buffer.InsertText(" Third");
+        Assert.Equal("First Second Third", buffer.Text);
+
+        buffer.Undo();
+        Assert.Equal("First Second", buffer.Text);
+
+        buffer.Undo();
+        Assert.Equal("First", buffer.Text);
+
+        buffer.Redo();
+        Assert.Equal("First Second", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_HistoryNavigation()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 5. History Navigation
+        var history = new History.InMemoryHistory();
+        history.AppendString("ls -la");
+        history.AppendString("cd /home");
+        history.AppendString("pwd");
+
+        var buffer = new Buffer(history: history);
+        buffer.LoadHistoryIfNotYetLoaded();
+
+        buffer.HistoryBackward();
+        Assert.Equal("pwd", buffer.Text);
+
+        buffer.HistoryBackward();
+        Assert.Equal("cd /home", buffer.Text);
+
+        buffer.HistoryBackward();
+        Assert.Equal("ls -la", buffer.Text);
+
+        buffer.HistoryForward();
+        Assert.Equal("cd /home", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_HistorySearch()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 5. History Navigation - prefix search
+        var history = new History.InMemoryHistory();
+        history.AppendString("ls -la");
+        history.AppendString("cd /home");
+        history.AppendString("pwd");
+
+        var searchBuffer = new Buffer(
+            history: history,
+            enableHistorySearch: () => true
+        );
+        searchBuffer.LoadHistoryIfNotYetLoaded();
+
+        searchBuffer.InsertText("cd");
+        searchBuffer.HistoryBackward();
+
+        Assert.Equal("cd /home", searchBuffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_SelectionAndClipboard()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 6. Selection and Clipboard
+        var buffer = new Buffer(document: new Document("Hello World", cursorPosition: 0));
+
+        buffer.StartSelection(SelectionType.Characters);
+        buffer.CursorRight(5);
+
+        ClipboardData copied = buffer.CopySelection();
+        Assert.Equal("Hello", copied.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_CutSelection()
+    {
+        var buffer = new Buffer(document: new Document("Hello World", cursorPosition: 0));
+
+        buffer.StartSelection(SelectionType.Characters);
+        buffer.CursorRight(5);
+
+        ClipboardData cut = buffer.CutSelection();
+        Assert.Equal("Hello", cut.Text);
+        Assert.Equal(" World", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_PasteClipboardData()
+    {
+        var buffer = new Buffer(document: new Document("Hello World", cursorPosition: 0));
+
+        buffer.StartSelection(SelectionType.Characters);
+        buffer.CursorRight(5);
+        ClipboardData copied = buffer.CopySelection();
+        buffer.ExitSelection();
+
+        buffer.CursorPosition = buffer.Text.Length;
+        buffer.PasteClipboardData(copied);
+
+        Assert.EndsWith("Hello", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_PasteModes()
+    {
+        var data = new ClipboardData("X", SelectionType.Characters);
+
+        var buffer1 = new Buffer();
+        buffer1.PasteClipboardData(data, PasteMode.Emacs);
+        Assert.Equal("X", buffer1.Text);
+
+        var lineData = new ClipboardData("line\n", SelectionType.Lines);
+        var buffer2 = new Buffer(document: new Document("existing"));
+        buffer2.PasteClipboardData(lineData, PasteMode.ViAfter);
+        Assert.Contains("line", buffer2.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_PasteWithCount()
+    {
+        var buffer = new Buffer();
+        var data = new ClipboardData("X", SelectionType.Characters);
+
+        buffer.PasteClipboardData(data, count: 3);
+        Assert.Equal("XXX", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_Completion()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 7. Completion
+        var completions = new List<Completion.Completion>
+        {
+            new("hello", StartPosition: 0),
+            new("help", StartPosition: 0),
+            new("helmet", StartPosition: 0)
+        };
+
+        var buffer = new Buffer();
+        buffer.InsertText("hel");
+        buffer.SetCompletions(completions);
+
+        Assert.NotNull(buffer.CompleteState);
+
+        buffer.CompleteNext();
+        buffer.CompletePrevious();
+        buffer.GoToCompletion(2);
+
+        if (buffer.CompleteState?.CurrentCompletion is { } completion)
+        {
+            buffer.ApplyCompletion(completion);
+        }
+
+        Assert.NotNull(buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_CancelCompletion()
+    {
+        var completions = new List<Completion.Completion>
+        {
+            new("hello", StartPosition: 0)
+        };
+
+        var buffer = new Buffer();
+        buffer.InsertText("hel");
+        buffer.SetCompletions(completions);
+
+        buffer.CancelCompletion();
+        Assert.Null(buffer.CompleteState);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_Validation()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 8. Validation
+        var buffer = new Buffer();
+        buffer.InsertText("some text");
+
+        bool isValid = buffer.Validate();
+        Assert.True(isValid);
+
+        Assert.Equal(ValidationState.Valid, buffer.ValidationState);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_ReadOnlyMode()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 9. Read-Only Mode
+        var readOnlyBuffer = new Buffer(readOnly: () => true);
+
+        Assert.Throws<EditReadOnlyBufferException>(() =>
+        {
+            readOnlyBuffer.InsertText("test");
+        });
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_BypassReadonly()
+    {
+        var readOnlyBuffer = new Buffer(readOnly: () => true);
+
+        readOnlyBuffer.SetDocument(new Document("new content"), bypassReadonly: true);
+
+        Assert.Equal("new content", readOnlyBuffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_Events()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: 10. Events
+        // Note: Events are fired asynchronously on ThreadPool
+        var textChangedSignal = new ManualResetEventSlim(false);
+        var cursorChangedSignal = new ManualResetEventSlim(false);
+
+        var buffer = new Buffer(
+            onTextChanged: b => textChangedSignal.Set(),
+            onCursorPositionChanged: b => cursorChangedSignal.Set()
+        );
+
+        // InsertText triggers OnTextChanged (and also OnCursorPositionChanged as cursor moves)
+        buffer.InsertText("test");
+        Assert.True(textChangedSignal.Wait(TimeSpan.FromSeconds(5)), "OnTextChanged not fired");
+
+        // Reset cursor signal since InsertText also moves cursor
+        cursorChangedSignal.Reset();
+
+        // CursorPosition setter triggers OnCursorPositionChanged
+        buffer.CursorPosition = 0;
+        Assert.True(cursorChangedSignal.Wait(TimeSpan.FromSeconds(5)), "OnCursorPositionChanged not fired");
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_ThreadSafety()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: Thread Safety
+        var buffer = new Buffer();
+
+        Parallel.For(0, 10, i =>
+        {
+            buffer.InsertText($"Item {i} ");
+        });
+
+        Assert.NotEmpty(buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_ReplStyleInput()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: REPL-Style Input
+        var history = new History.InMemoryHistory();
+        var buffer = new Buffer(
+            history: history,
+            enableHistorySearch: () => true,
+            multiline: () => false
+        );
+
+        buffer.InsertText("git status");
+
+        if (buffer.Validate())
+        {
+            buffer.AppendToHistory();
+            string command = buffer.Text;
+            buffer.Reset();
+
+            Assert.Equal("git status", command);
+            Assert.Equal("", buffer.Text);
+        }
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_MultilineEditor()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: Multiline Editor
+        var buffer = new Buffer(
+            multiline: () => true,
+            completeWhileTyping: () => true,
+            validateWhileTyping: () => true
+        );
+
+        buffer.InsertText("def hello():");
+        buffer.Newline(copyMargin: true);
+        buffer.InsertText("    pass");
+
+        Assert.Contains("\n", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_InsertLineAboveBelow()
+    {
+        var buffer = new Buffer(document: new Document("middle", cursorPosition: 3));
+
+        buffer.InsertLineAbove(copyMargin: false);
+        Assert.StartsWith("\n", buffer.Text);
+
+        buffer = new Buffer(document: new Document("middle", cursorPosition: 3));
+        buffer.InsertLineBelow(copyMargin: false);
+        Assert.Contains("\n", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_BufferOperationsIndent()
+    {
+        // From specs/007-mutable-buffer/quickstart.md: BufferOperations
+        var buffer = new Buffer(document: new Document("hello\nworld", cursorPosition: 0));
+
+        BufferOperations.Indent(buffer, fromRow: 0, toRow: 2, count: 1);
+
+        Assert.StartsWith("    ", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_BufferOperationsUnindent()
+    {
+        var buffer = new Buffer(document: new Document("    hello\n    world", cursorPosition: 0));
+
+        BufferOperations.Unindent(buffer, fromRow: 0, toRow: 2, count: 1);
+
+        Assert.Equal("hello\nworld", buffer.Text);
+    }
+
+    [Fact]
+    public void Quickstart_Buffer_BufferOperationsReshapeText()
+    {
+        var buffer = new Buffer(document: new Document("hello world this is a very long line", cursorPosition: 0));
+        buffer.TextWidth = 20;
+
+        BufferOperations.ReshapeText(buffer, fromRow: 0, toRow: 0);
+
+        var lines = buffer.Text.Split('\n');
+        Assert.True(lines.Length > 1);
     }
 
     #endregion

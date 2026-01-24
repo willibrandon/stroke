@@ -14,4 +14,16 @@ public interface IHistory
     /// </summary>
     /// <returns>Read-only list of history entries, oldest first.</returns>
     IReadOnlyList<string> GetStrings();
+
+    /// <summary>
+    /// Append a string to history.
+    /// </summary>
+    /// <param name="text">The text to append.</param>
+    void AppendString(string text);
+
+    /// <summary>
+    /// Load history entries asynchronously.
+    /// </summary>
+    /// <returns>Async enumerable of history entries.</returns>
+    IAsyncEnumerable<string> LoadAsync();
 }

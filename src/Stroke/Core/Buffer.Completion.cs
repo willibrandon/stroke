@@ -1,0 +1,237 @@
+namespace Stroke.Core;
+
+// Use alias to avoid namespace conflict with Stroke.Completion namespace
+using CompletionItem = Stroke.Completion.Completion;
+
+/// <summary>
+/// Buffer partial class containing completion operations.
+/// </summary>
+public sealed partial class Buffer
+{
+    // ════════════════════════════════════════════════════════════════════════
+    // COMPLETION STATE
+    // ════════════════════════════════════════════════════════════════════════
+
+    // Note: _completeState is declared in Buffer.cs
+    // private CompletionState? _completeState;
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SET COMPLETIONS
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Start completions. (Generate list of completions and initialize.)
+    /// By default, no completion will be selected.
+    /// </summary>
+    /// <param name="completions">The list of completions to set.</param>
+    /// <returns>The new completion state.</returns>
+    public CompletionState SetCompletions(IReadOnlyList<CompletionItem> completions)
+    {
+        ArgumentNullException.ThrowIfNull(completions);
+
+        using (_lock.EnterScope())
+        {
+            _completeState = new CompletionState(
+                originalDocument: Document,
+                completions: completions);
+
+            // Trigger event. This should eventually invalidate the layout.
+            ThreadPool.QueueUserWorkItem(_ => OnCompletionsChanged?.Invoke(this));
+
+            return _completeState;
+        }
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // COMPLETION NAVIGATION
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Browse to the next completions.
+    /// (Does nothing if there are no completions.)
+    /// </summary>
+    /// <param name="count">Number of completions to advance.</param>
+    /// <param name="disableWrapAround">If true, don't wrap around at the end.</param>
+    public void CompleteNext(int count = 1, bool disableWrapAround = false)
+    {
+        using (_lock.EnterScope())
+        {
+            if (_completeState == null)
+            {
+                return;
+            }
+
+            var completionsCount = _completeState.Completions.Count;
+            if (completionsCount == 0)
+            {
+                return;
+            }
+
+            int? index;
+
+            if (_completeState.CompleteIndex == null)
+            {
+                index = 0;
+            }
+            else if (_completeState.CompleteIndex == completionsCount - 1)
+            {
+                index = null;
+
+                if (disableWrapAround)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                index = Math.Min(completionsCount - 1, _completeState.CompleteIndex.Value + count);
+            }
+
+            GoToCompletionInternal(index);
+        }
+    }
+
+    /// <summary>
+    /// Browse to the previous completions.
+    /// (Does nothing if there are no completions.)
+    /// </summary>
+    /// <param name="count">Number of completions to go back.</param>
+    /// <param name="disableWrapAround">If true, don't wrap around at the beginning.</param>
+    public void CompletePrevious(int count = 1, bool disableWrapAround = false)
+    {
+        using (_lock.EnterScope())
+        {
+            if (_completeState == null)
+            {
+                return;
+            }
+
+            var completionsCount = _completeState.Completions.Count;
+            if (completionsCount == 0)
+            {
+                return;
+            }
+
+            int? index;
+
+            if (_completeState.CompleteIndex == 0)
+            {
+                index = null;
+
+                if (disableWrapAround)
+                {
+                    return;
+                }
+            }
+            else if (_completeState.CompleteIndex == null)
+            {
+                index = completionsCount - 1;
+            }
+            else
+            {
+                index = Math.Max(0, _completeState.CompleteIndex.Value - count);
+            }
+
+            GoToCompletionInternal(index);
+        }
+    }
+
+    /// <summary>
+    /// Select a completion from the list of current completions.
+    /// </summary>
+    /// <param name="index">The index to select, or null to clear selection.</param>
+    public void GoToCompletion(int? index)
+    {
+        using (_lock.EnterScope())
+        {
+            GoToCompletionInternal(index);
+        }
+    }
+
+    /// <summary>
+    /// Internal implementation for go to completion (must be called within lock).
+    /// </summary>
+    private void GoToCompletionInternal(int? index)
+    {
+        // Must be called within lock
+        if (_completeState == null)
+        {
+            return;
+        }
+
+        // Set new completion
+        var state = _completeState;
+        state.GoToIndex(index);
+
+        // Set text/cursor position
+        var (newText, newCursorPosition) = state.NewTextAndPosition();
+
+        // Update document (this will clear complete_state via TextChangedInternal)
+        _workingLines[_workingIndex] = newText;
+        _cursorPosition = newCursorPosition;
+
+        // Fire text changed event
+        TextChangedInternal();
+
+        // Restore the complete_state (changing text/cursor position clears it)
+        _completeState = state;
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // CANCEL/APPLY COMPLETION
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Cancel completion, go back to the original text.
+    /// </summary>
+    public void CancelCompletion()
+    {
+        using (_lock.EnterScope())
+        {
+            if (_completeState != null)
+            {
+                GoToCompletionInternal(null);
+                _completeState = null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Insert a given completion.
+    /// </summary>
+    /// <param name="completion">The completion to apply.</param>
+    public void ApplyCompletion(CompletionItem completion)
+    {
+        ArgumentNullException.ThrowIfNull(completion);
+
+        using (_lock.EnterScope())
+        {
+            // If there was already a completion active, cancel that one
+            if (_completeState != null)
+            {
+                GoToCompletionInternal(null);
+            }
+
+            _completeState = null;
+
+            // Insert the completion text
+            var doc = Document;
+            var startPos = completion.StartPosition;
+            var cursorPos = doc.CursorPosition;
+
+            // Text before completion start
+            var before = doc.Text[..startPos];
+
+            // Text after cursor
+            var after = doc.Text[cursorPos..];
+
+            // New text
+            var newText = before + completion.Text + after;
+            var newCursor = startPos + completion.Text.Length;
+
+            _workingLines[_workingIndex] = newText;
+            _cursorPosition = newCursor;
+            TextChangedInternal();
+        }
+    }
+}

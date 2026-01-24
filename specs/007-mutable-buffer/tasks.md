@@ -16,18 +16,18 @@
 
 **Purpose**: Create supporting types and stubs required by Buffer
 
-- [ ] T001 [P] Create ValidationState enum in src/Stroke/Core/ValidationState.cs
-- [ ] T002 [P] Create EditReadOnlyBufferException in src/Stroke/Core/EditReadOnlyBufferException.cs
-- [ ] T003 [P] Create SearchDirection enum in src/Stroke/Core/SearchDirection.cs
-- [ ] T004 [P] Create SearchState class in src/Stroke/Core/SearchState.cs
-- [ ] T005 [P] Create YankNthArgState class in src/Stroke/Core/YankNthArgState.cs
-- [ ] T006 [P] Create CompletionState class in src/Stroke/Core/CompletionState.cs
-- [ ] T007 [P] Create stub ICompleter interface in src/Stroke/Completion/ICompleter.cs
-- [ ] T008 [P] Create stub Completion record in src/Stroke/Completion/Completion.cs
-- [ ] T009 [P] Create stub CompleteEvent record in src/Stroke/Completion/CompleteEvent.cs
-- [ ] T010 [P] Create stub IValidator interface in src/Stroke/Validation/IValidator.cs
-- [ ] T011 [P] Create stub ValidationError class in src/Stroke/Validation/ValidationError.cs
-- [ ] T012 Extend IHistory interface with AppendString method in src/Stroke/History/IHistory.cs
+- [x] T001 [P] Create ValidationState enum in src/Stroke/Core/ValidationState.cs
+- [x] T002 [P] Create EditReadOnlyBufferException in src/Stroke/Core/EditReadOnlyBufferException.cs
+- [x] T003 [P] Create SearchDirection enum in src/Stroke/Core/SearchDirection.cs
+- [x] T004 [P] Create SearchState class in src/Stroke/Core/SearchState.cs
+- [x] T005 [P] Create YankNthArgState class in src/Stroke/Core/YankNthArgState.cs
+- [x] T006 [P] Create CompletionState class in src/Stroke/Core/CompletionState.cs
+- [x] T007 [P] Create stub ICompleter interface in src/Stroke/Completion/ICompleter.cs
+- [x] T008 [P] Create stub Completion record in src/Stroke/Completion/Completion.cs
+- [x] T009 [P] Create stub CompleteEvent record in src/Stroke/Completion/CompleteEvent.cs
+- [x] T010 [P] Create stub IValidator interface in src/Stroke/Validation/IValidator.cs
+- [x] T011 [P] Create stub ValidationError class in src/Stroke/Validation/ValidationError.cs
+- [x] T012 Extend IHistory interface with AppendString method in src/Stroke/History/IHistory.cs
 
 ---
 
@@ -37,13 +37,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T013 Create Buffer.cs with constructor, configuration properties, and thread-safe lock in src/Stroke/Core/Buffer.cs
-- [ ] T014 Implement Document property with FastDictCache<(string, int, SelectionState?), Document> in src/Stroke/Core/Buffer.cs
-- [ ] T015 Implement Text property with thread-safe get/set and read-only check in src/Stroke/Core/Buffer.cs
-- [ ] T016 Implement CursorPosition property with clamping and thread safety in src/Stroke/Core/Buffer.cs
-- [ ] T017 Implement all Buffer events (OnTextChanged, OnTextInsert, OnCursorPositionChanged, OnCompletionsChanged, OnSuggestionSet) in src/Stroke/Core/Buffer.cs
-- [ ] T018 Implement Reset and SetDocument methods in src/Stroke/Core/Buffer.cs
-- [ ] T019 [P] Create BufferTests.cs with constructor and property tests in tests/Stroke.Tests/Core/BufferTests.cs
+- [x] T013 Create Buffer.cs with constructor, configuration properties, and thread-safe lock in src/Stroke/Core/Buffer.cs
+- [x] T014 Implement Document property with SimpleCache<(string, int, SelectionState?), Document> in src/Stroke/Core/Buffer.cs
+- [x] T015 Implement Text property with thread-safe get/set and read-only check in src/Stroke/Core/Buffer.cs
+- [x] T016 Implement CursorPosition property with clamping and thread safety in src/Stroke/Core/Buffer.cs
+- [x] T017 Implement all Buffer events (OnTextChanged, OnTextInsert, OnCursorPositionChanged, OnCompletionsChanged, OnSuggestionSet) in src/Stroke/Core/Buffer.cs
+- [x] T018 Implement Reset and SetDocument methods in src/Stroke/Core/Buffer.cs
+- [x] T019 [P] Create BufferTests.cs with constructor and property tests in tests/Stroke.Tests/Core/BufferTests.cs
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -57,18 +57,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Create Buffer.Editing.cs partial class file in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T021 [US1] Implement InsertText method with overwrite mode support in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T022 [US1] Implement Delete method (delete after cursor) in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T023 [US1] Implement DeleteBeforeCursor method in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T024 [US1] Implement Newline method with copyMargin option in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T025 [US1] Implement InsertLineAbove and InsertLineBelow methods in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T026 [US1] Implement JoinNextLine and JoinSelectedLines methods in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T027 [US1] Implement SwapCharactersBeforeCursor method in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T028 [P] [US1] Create BufferEditingTests.cs in tests/Stroke.Tests/Core/BufferEditingTests.cs
-- [ ] T029 [US1] Add tests for InsertText at various positions in tests/Stroke.Tests/Core/BufferEditingTests.cs
-- [ ] T030 [US1] Add tests for Delete and DeleteBeforeCursor in tests/Stroke.Tests/Core/BufferEditingTests.cs
-- [ ] T031 [US1] Add tests for Newline, InsertLineAbove/Below in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T020 [US1] Create Buffer.Editing.cs partial class file in src/Stroke/Core/Buffer.Editing.cs
+- [x] T021 [US1] Implement InsertText method with overwrite mode support in src/Stroke/Core/Buffer.Editing.cs
+- [x] T022 [US1] Implement Delete method (delete after cursor) in src/Stroke/Core/Buffer.Editing.cs
+- [x] T023 [US1] Implement DeleteBeforeCursor method in src/Stroke/Core/Buffer.Editing.cs
+- [x] T024 [US1] Implement Newline method with copyMargin option in src/Stroke/Core/Buffer.Editing.cs
+- [x] T025 [US1] Implement InsertLineAbove and InsertLineBelow methods in src/Stroke/Core/Buffer.Editing.cs
+- [x] T026 [US1] Implement JoinNextLine and JoinSelectedLines methods in src/Stroke/Core/Buffer.Editing.cs
+- [x] T027 [US1] Implement SwapCharactersBeforeCursor method in src/Stroke/Core/Buffer.Editing.cs
+- [x] T028 [P] [US1] Create BufferEditingTests.cs in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T029 [US1] Add tests for InsertText at various positions in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T030 [US1] Add tests for Delete and DeleteBeforeCursor in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T031 [US1] Add tests for Newline, InsertLineAbove/Below in tests/Stroke.Tests/Core/BufferEditingTests.cs
 
 **Checkpoint**: Buffer can insert and delete text at cursor position
 
@@ -82,16 +82,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T032 [US2] Create Buffer.UndoRedo.cs partial class file in src/Stroke/Core/Buffer.UndoRedo.cs
-- [ ] T033 [US2] Implement _undoStack and _redoStack as List<(string, int)> in src/Stroke/Core/Buffer.UndoRedo.cs
-- [ ] T034 [US2] Implement SaveToUndoStack method with duplicate detection in src/Stroke/Core/Buffer.UndoRedo.cs
-- [ ] T035 [US2] Implement Undo method with state restoration in src/Stroke/Core/Buffer.UndoRedo.cs
-- [ ] T036 [US2] Implement Redo method with state restoration in src/Stroke/Core/Buffer.UndoRedo.cs
-- [ ] T037 [US2] Clear redo stack on new edits in InsertText and Delete methods
-- [ ] T038 [P] [US2] Create BufferUndoRedoTests.cs in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
-- [ ] T039 [US2] Add tests for SaveToUndoStack in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
-- [ ] T040 [US2] Add tests for Undo chain in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
-- [ ] T041 [US2] Add tests for Redo and redo stack clearing in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
+- [x] T032 [US2] Create Buffer.UndoRedo.cs partial class file in src/Stroke/Core/Buffer.UndoRedo.cs
+- [x] T033 [US2] Implement _undoStack and _redoStack as List<(string, int)> in src/Stroke/Core/Buffer.UndoRedo.cs
+- [x] T034 [US2] Implement SaveToUndoStack method with duplicate detection in src/Stroke/Core/Buffer.UndoRedo.cs
+- [x] T035 [US2] Implement Undo method with state restoration in src/Stroke/Core/Buffer.UndoRedo.cs
+- [x] T036 [US2] Implement Redo method with state restoration in src/Stroke/Core/Buffer.UndoRedo.cs
+- [x] T037 [US2] Clear redo stack on new edits in InsertText and Delete methods (handled by SaveToUndoStack)
+- [x] T038 [P] [US2] Create BufferUndoRedoTests.cs in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
+- [x] T039 [US2] Add tests for SaveToUndoStack in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
+- [x] T040 [US2] Add tests for Undo chain in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
+- [x] T041 [US2] Add tests for Redo and redo stack clearing in tests/Stroke.Tests/Core/BufferUndoRedoTests.cs
 
 **Checkpoint**: Buffer supports full undo/redo functionality
 
@@ -105,16 +105,16 @@
 
 ### Implementation for User Story 3
 
-- [ ] T042 [US3] Create Buffer.Navigation.cs partial class file in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T043 [US3] Implement CursorLeft method with boundary checks in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T044 [US3] Implement CursorRight method with boundary checks in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T045 [US3] Implement CursorUp method with preferred column tracking in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T046 [US3] Implement CursorDown method with preferred column tracking in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T047 [US3] Implement GoToMatchingBracket method in src/Stroke/Core/Buffer.Navigation.cs
-- [ ] T048 [P] [US3] Create BufferNavigationTests.cs in tests/Stroke.Tests/Core/BufferNavigationTests.cs
-- [ ] T049 [US3] Add tests for CursorLeft/Right with boundaries in tests/Stroke.Tests/Core/BufferNavigationTests.cs
-- [ ] T050 [US3] Add tests for CursorUp/Down in multiline text in tests/Stroke.Tests/Core/BufferNavigationTests.cs
-- [ ] T051 [US3] Add tests for preferred column preservation in tests/Stroke.Tests/Core/BufferNavigationTests.cs
+- [x] T042 [US3] Create Buffer.Navigation.cs partial class file in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T043 [US3] Implement CursorLeft method with boundary checks in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T044 [US3] Implement CursorRight method with boundary checks in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T045 [US3] Implement CursorUp method with preferred column tracking in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T046 [US3] Implement CursorDown method with preferred column tracking in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T047 [US3] Implement GoToMatchingBracket method in src/Stroke/Core/Buffer.Navigation.cs
+- [x] T048 [P] [US3] Create BufferNavigationTests.cs in tests/Stroke.Tests/Core/BufferNavigationTests.cs
+- [x] T049 [US3] Add tests for CursorLeft/Right with boundaries in tests/Stroke.Tests/Core/BufferNavigationTests.cs
+- [x] T050 [US3] Add tests for CursorUp/Down in multiline text in tests/Stroke.Tests/Core/BufferNavigationTests.cs
+- [x] T051 [US3] Add tests for preferred column preservation in tests/Stroke.Tests/Core/BufferNavigationTests.cs
 
 **Checkpoint**: Buffer supports full cursor navigation including multiline
 
@@ -128,18 +128,18 @@
 
 ### Implementation for User Story 4
 
-- [ ] T052 [US4] Create Buffer.History.cs partial class file in src/Stroke/Core/Buffer.History.cs
-- [ ] T053 [US4] Implement _workingLines as List<string> and _workingIndex (FR-025) in src/Stroke/Core/Buffer.History.cs
-- [ ] T054 [US4] Implement LoadHistoryIfNotYetLoaded method in src/Stroke/Core/Buffer.History.cs
-- [ ] T055 [US4] Implement HistoryBackward method with optional prefix filtering in src/Stroke/Core/Buffer.History.cs
-- [ ] T056 [US4] Implement HistoryForward method with optional prefix filtering in src/Stroke/Core/Buffer.History.cs
-- [ ] T057 [US4] Implement GoToHistory method in src/Stroke/Core/Buffer.History.cs
-- [ ] T058 [US4] Implement AppendToHistory method in src/Stroke/Core/Buffer.History.cs
-- [ ] T059 [US4] Implement AutoUp and AutoDown methods (FR-031: completion, cursor, or history) in src/Stroke/Core/Buffer.Navigation.cs (note: depends on US3 navigation methods T042-T047)
-- [ ] T060 [P] [US4] Create BufferHistoryTests.cs in tests/Stroke.Tests/Core/BufferHistoryTests.cs
-- [ ] T061 [US4] Add tests for history backward/forward navigation in tests/Stroke.Tests/Core/BufferHistoryTests.cs
-- [ ] T062 [US4] Add tests for enable_history_search prefix filtering in tests/Stroke.Tests/Core/BufferHistoryTests.cs
-- [ ] T063 [US4] Add tests for AutoUp/AutoDown behavior in tests/Stroke.Tests/Core/BufferHistoryTests.cs
+- [x] T052 [US4] Create Buffer.History.cs partial class file in src/Stroke/Core/Buffer.History.cs
+- [x] T053 [US4] Implement _workingLines as List<string> and _workingIndex (FR-025) in src/Stroke/Core/Buffer.History.cs
+- [x] T054 [US4] Implement LoadHistoryIfNotYetLoaded method in src/Stroke/Core/Buffer.History.cs
+- [x] T055 [US4] Implement HistoryBackward method with optional prefix filtering in src/Stroke/Core/Buffer.History.cs
+- [x] T056 [US4] Implement HistoryForward method with optional prefix filtering in src/Stroke/Core/Buffer.History.cs
+- [x] T057 [US4] Implement GoToHistory method in src/Stroke/Core/Buffer.History.cs
+- [x] T058 [US4] Implement AppendToHistory method in src/Stroke/Core/Buffer.History.cs
+- [x] T059 [US4] Implement AutoUp and AutoDown methods (FR-031: completion, cursor, or history) in src/Stroke/Core/Buffer.Navigation.cs (note: depends on US3 navigation methods T042-T047)
+- [x] T060 [P] [US4] Create BufferHistoryTests.cs in tests/Stroke.Tests/Core/BufferHistoryTests.cs
+- [x] T061 [US4] Add tests for history backward/forward navigation in tests/Stroke.Tests/Core/BufferHistoryTests.cs
+- [x] T062 [US4] Add tests for enable_history_search prefix filtering in tests/Stroke.Tests/Core/BufferHistoryTests.cs
+- [x] T063 [US4] Add tests for AutoUp/AutoDown behavior in tests/Stroke.Tests/Core/BufferHistoryTests.cs
 
 **Checkpoint**: Buffer supports history navigation with optional prefix search
 
@@ -153,16 +153,16 @@
 
 ### Implementation for User Story 5
 
-- [ ] T064 [US5] Create Buffer.Selection.cs partial class file in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T065 [US5] Implement _selectionState field and SelectionState property in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T066 [US5] Implement StartSelection method for Characters, Lines, Block types in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T067 [US5] Implement CopySelection method returning ClipboardData in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T068 [US5] Implement CutSelection method returning ClipboardData in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T069 [US5] Implement ExitSelection method in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T070 [P] [US5] Create BufferSelectionTests.cs in tests/Stroke.Tests/Core/BufferSelectionTests.cs
-- [ ] T071 [US5] Add tests for character selection in tests/Stroke.Tests/Core/BufferSelectionTests.cs
-- [ ] T072 [US5] Add tests for line selection in tests/Stroke.Tests/Core/BufferSelectionTests.cs
-- [ ] T073 [US5] Add tests for copy and cut operations in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T064 [US5] Create Buffer.Selection.cs partial class file in src/Stroke/Core/Buffer.Selection.cs
+- [x] T065 [US5] Implement _selectionState field and SelectionState property in src/Stroke/Core/Buffer.Selection.cs
+- [x] T066 [US5] Implement StartSelection method for Characters, Lines, Block types in src/Stroke/Core/Buffer.Selection.cs
+- [x] T067 [US5] Implement CopySelection method returning ClipboardData in src/Stroke/Core/Buffer.Selection.cs
+- [x] T068 [US5] Implement CutSelection method returning ClipboardData in src/Stroke/Core/Buffer.Selection.cs
+- [x] T069 [US5] Implement ExitSelection method in src/Stroke/Core/Buffer.Selection.cs
+- [x] T070 [P] [US5] Create BufferSelectionTests.cs in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T071 [US5] Add tests for character selection in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T072 [US5] Add tests for line selection in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T073 [US5] Add tests for copy and cut operations in tests/Stroke.Tests/Core/BufferSelectionTests.cs
 
 **Checkpoint**: Buffer supports text selection with all selection types
 
@@ -178,14 +178,14 @@
 
 ### Implementation for User Story 6
 
-- [ ] T074 [US6] Implement PasteClipboardData method with Emacs mode in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T075 [US6] Implement PasteClipboardData Vi-before mode in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T076 [US6] Implement PasteClipboardData Vi-after mode in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T077 [US6] Implement paste count parameter (paste N times) in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T078 [US6] Track _documentBeforePaste for kill ring rotation in src/Stroke/Core/Buffer.Selection.cs
-- [ ] T079 [US6] Add tests for Emacs paste mode in tests/Stroke.Tests/Core/BufferSelectionTests.cs
-- [ ] T080 [US6] Add tests for Vi-before and Vi-after paste modes in tests/Stroke.Tests/Core/BufferSelectionTests.cs
-- [ ] T081 [US6] Add tests for paste with count parameter in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T074 [US6] Implement PasteClipboardData method with Emacs mode in src/Stroke/Core/Buffer.Selection.cs
+- [x] T075 [US6] Implement PasteClipboardData Vi-before mode in src/Stroke/Core/Buffer.Selection.cs
+- [x] T076 [US6] Implement PasteClipboardData Vi-after mode in src/Stroke/Core/Buffer.Selection.cs
+- [x] T077 [US6] Implement paste count parameter (paste N times) in src/Stroke/Core/Buffer.Selection.cs
+- [x] T078 [US6] Track _documentBeforePaste for kill ring rotation in src/Stroke/Core/Buffer.Selection.cs
+- [x] T079 [US6] Add tests for Emacs paste mode in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T080 [US6] Add tests for Vi-before and Vi-after paste modes in tests/Stroke.Tests/Core/BufferSelectionTests.cs
+- [x] T081 [US6] Add tests for paste with count parameter in tests/Stroke.Tests/Core/BufferSelectionTests.cs
 
 **Checkpoint**: Buffer supports all clipboard paste operations
 
@@ -199,18 +199,18 @@
 
 ### Implementation for User Story 7
 
-- [ ] T082 [US7] Create Buffer.Completion.cs partial class file in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T083 [US7] Implement _completeState field and CompleteState property in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T084 [US7] Implement StartCompletion method with async SemaphoreSlim pattern in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T085 [US7] Implement CompleteNext and CompletePrevious methods in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T086 [US7] Implement GoToCompletion method in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T087 [US7] Implement CancelCompletion method (revert to original) in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T088 [US7] Implement ApplyCompletion method in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T089 [US7] Implement SetCompletions and StartHistoryLinesCompletion methods in src/Stroke/Core/Buffer.Completion.cs
-- [ ] T090 [P] [US7] Create BufferCompletionTests.cs in tests/Stroke.Tests/Core/BufferCompletionTests.cs
-- [ ] T091 [US7] Add tests for completion navigation in tests/Stroke.Tests/Core/BufferCompletionTests.cs
-- [ ] T092 [US7] Add tests for completion cancel and apply in tests/Stroke.Tests/Core/BufferCompletionTests.cs
-- [ ] T093 [P] [US7] Create CompletionStateTests.cs in tests/Stroke.Tests/Core/CompletionStateTests.cs
+- [x] T082 [US7] Create Buffer.Completion.cs partial class file in src/Stroke/Core/Buffer.Completion.cs
+- [x] T083 [US7] Implement _completeState field and CompleteState property in src/Stroke/Core/Buffer.Completion.cs
+- [x] T084 [US7] Implement StartCompletion method with async SemaphoreSlim pattern in src/Stroke/Core/Buffer.Completion.cs
+- [x] T085 [US7] Implement CompleteNext and CompletePrevious methods in src/Stroke/Core/Buffer.Completion.cs
+- [x] T086 [US7] Implement GoToCompletion method in src/Stroke/Core/Buffer.Completion.cs
+- [x] T087 [US7] Implement CancelCompletion method (revert to original) in src/Stroke/Core/Buffer.Completion.cs
+- [x] T088 [US7] Implement ApplyCompletion method in src/Stroke/Core/Buffer.Completion.cs
+- [x] T089 [US7] Implement SetCompletions and StartHistoryLinesCompletion methods in src/Stroke/Core/Buffer.Completion.cs
+- [x] T090 [P] [US7] Create BufferCompletionTests.cs in tests/Stroke.Tests/Core/BufferCompletionTests.cs
+- [x] T091 [US7] Add tests for completion navigation in tests/Stroke.Tests/Core/BufferCompletionTests.cs
+- [x] T092 [US7] Add tests for completion cancel and apply in tests/Stroke.Tests/Core/BufferCompletionTests.cs
+- [x] T093 [P] [US7] Create CompletionStateTests.cs in tests/Stroke.Tests/Core/CompletionStateTests.cs
 
 **Checkpoint**: Buffer supports full completion state management
 
@@ -224,12 +224,12 @@
 
 ### Implementation for User Story 8
 
-- [ ] T094 [US8] Implement TransformLines method in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T095 [US8] Implement TransformCurrentLine method in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T096 [US8] Implement TransformRegion method in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T097 [US8] Add tests for TransformLines in tests/Stroke.Tests/Core/BufferEditingTests.cs
-- [ ] T098 [US8] Add tests for TransformCurrentLine in tests/Stroke.Tests/Core/BufferEditingTests.cs
-- [ ] T099 [US8] Add tests for TransformRegion in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T094 [US8] Implement TransformLines method in src/Stroke/Core/Buffer.Editing.cs
+- [x] T095 [US8] Implement TransformCurrentLine method in src/Stroke/Core/Buffer.Editing.cs
+- [x] T096 [US8] Implement TransformRegion method in src/Stroke/Core/Buffer.Editing.cs
+- [x] T097 [US8] Add tests for TransformLines in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T098 [US8] Add tests for TransformCurrentLine in tests/Stroke.Tests/Core/BufferEditingTests.cs
+- [x] T099 [US8] Add tests for TransformRegion in tests/Stroke.Tests/Core/BufferEditingTests.cs
 
 **Checkpoint**: Buffer supports text transformations
 
@@ -243,11 +243,11 @@
 
 ### Implementation for User Story 9
 
-- [ ] T100 [US9] Add ReadOnly Func<bool> property to Buffer constructor in src/Stroke/Core/Buffer.cs
-- [ ] T101 [US9] Add read-only checks to all editing methods in src/Stroke/Core/Buffer.Editing.cs
-- [ ] T102 [US9] Implement bypass_readonly parameter in SetDocument in src/Stroke/Core/Buffer.cs
-- [ ] T103 [US9] Add tests for read-only mode exception in tests/Stroke.Tests/Core/BufferTests.cs
-- [ ] T104 [US9] Add tests for bypass_readonly in tests/Stroke.Tests/Core/BufferTests.cs
+- [x] T100 [US9] Add ReadOnly Func<bool> property to Buffer constructor in src/Stroke/Core/Buffer.cs
+- [x] T101 [US9] Add read-only checks to all editing methods in src/Stroke/Core/Buffer.Editing.cs
+- [x] T102 [US9] Implement bypass_readonly parameter in SetDocument in src/Stroke/Core/Buffer.cs
+- [x] T103 [US9] Add tests for read-only mode exception in tests/Stroke.Tests/Core/BufferTests.cs
+- [x] T104 [US9] Add tests for bypass_readonly in tests/Stroke.Tests/Core/BufferTests.cs
 
 **Checkpoint**: Buffer enforces read-only mode correctly
 
@@ -261,14 +261,14 @@
 
 ### Implementation for User Story 10
 
-- [ ] T105 [US10] Create Buffer.Validation.cs partial class file in src/Stroke/Core/Buffer.Validation.cs
-- [ ] T106 [US10] Implement _validationState and _validationError fields in src/Stroke/Core/Buffer.Validation.cs
-- [ ] T107 [US10] Implement Validate method (synchronous) in src/Stroke/Core/Buffer.Validation.cs
-- [ ] T108 [US10] Implement ValidateAndHandle method in src/Stroke/Core/Buffer.Validation.cs
-- [ ] T109 [US10] Implement async validation with SemaphoreSlim pattern for validate_while_typing in src/Stroke/Core/Buffer.Validation.cs
-- [ ] T110 [P] [US10] Create BufferValidationTests.cs in tests/Stroke.Tests/Core/BufferValidationTests.cs
-- [ ] T111 [US10] Add tests for synchronous validation in tests/Stroke.Tests/Core/BufferValidationTests.cs
-- [ ] T112 [US10] Add tests for validation state transitions in tests/Stroke.Tests/Core/BufferValidationTests.cs
+- [x] T105 [US10] Create Buffer.Validation.cs partial class file in src/Stroke/Core/Buffer.Validation.cs
+- [x] T106 [US10] Implement _validationState and _validationError fields in src/Stroke/Core/Buffer.Validation.cs
+- [x] T107 [US10] Implement Validate method (synchronous) in src/Stroke/Core/Buffer.Validation.cs
+- [x] T108 [US10] Implement ValidateAndHandle method in src/Stroke/Core/Buffer.Validation.cs
+- [x] T109 [US10] Implement async validation with SemaphoreSlim pattern for validate_while_typing in src/Stroke/Core/Buffer.Validation.cs
+- [x] T110 [P] [US10] Create BufferValidationTests.cs in tests/Stroke.Tests/Core/BufferValidationTests.cs
+- [x] T111 [US10] Add tests for synchronous validation in tests/Stroke.Tests/Core/BufferValidationTests.cs
+- [x] T112 [US10] Add tests for validation state transitions in tests/Stroke.Tests/Core/BufferValidationTests.cs
 
 **Checkpoint**: Buffer supports input validation
 
@@ -282,11 +282,11 @@
 
 ### Implementation for User Story 11
 
-- [ ] T113 [US11] Implement _suggestion field and Suggestion property in src/Stroke/Core/Buffer.cs
-- [ ] T114 [US11] Implement async suggestion retrieval with SemaphoreSlim pattern in src/Stroke/Core/Buffer.cs
-- [ ] T115 [US11] Trigger suggestion on text change when auto-suggest is configured in src/Stroke/Core/Buffer.cs
-- [ ] T116 [US11] Fire OnSuggestionSet event when suggestion changes in src/Stroke/Core/Buffer.cs
-- [ ] T117 [US11] Add tests for auto-suggest integration in tests/Stroke.Tests/Core/BufferTests.cs
+- [x] T113 [US11] Implement _suggestion field and Suggestion property in src/Stroke/Core/Buffer.cs
+- [x] T114 [US11] Implement async suggestion retrieval with SemaphoreSlim pattern in src/Stroke/Core/Buffer.cs
+- [x] T115 [US11] Trigger suggestion on text change when auto-suggest is configured in src/Stroke/Core/Buffer.cs
+- [x] T116 [US11] Fire OnSuggestionSet event when suggestion changes in src/Stroke/Core/Buffer.cs
+- [x] T117 [US11] Add tests for auto-suggest integration in tests/Stroke.Tests/Core/BufferTests.cs
 
 **Checkpoint**: Buffer integrates with auto-suggest system
 
@@ -300,12 +300,12 @@
 
 ### Implementation for User Story 12
 
-- [ ] T118 [US12] Create Buffer.ExternalEditor.cs partial class file in src/Stroke/Core/Buffer.ExternalEditor.cs
-- [ ] T119 [US12] Implement OpenInEditorAsync method in src/Stroke/Core/Buffer.ExternalEditor.cs
-- [ ] T120 [US12] Implement editor detection (VISUAL, EDITOR, fallback paths) in src/Stroke/Core/Buffer.ExternalEditor.cs
-- [ ] T121 [US12] Implement temp file creation with TempfileSuffix in src/Stroke/Core/Buffer.ExternalEditor.cs
-- [ ] T122 [US12] Add read-only check to OpenInEditorAsync in src/Stroke/Core/Buffer.ExternalEditor.cs
-- [ ] T123 [US12] Add tests for external editor integration in tests/Stroke.Tests/Core/BufferTests.cs
+- [x] T118 [US12] Create Buffer.ExternalEditor.cs partial class file in src/Stroke/Core/Buffer.ExternalEditor.cs
+- [x] T119 [US12] Implement OpenInEditorAsync method in src/Stroke/Core/Buffer.ExternalEditor.cs
+- [x] T120 [US12] Implement editor detection (VISUAL, EDITOR, fallback paths) in src/Stroke/Core/Buffer.ExternalEditor.cs
+- [x] T121 [US12] Implement temp file creation with TempfileSuffix in src/Stroke/Core/Buffer.ExternalEditor.cs
+- [x] T122 [US12] Add read-only check to OpenInEditorAsync in src/Stroke/Core/Buffer.ExternalEditor.cs
+- [x] T123 [US12] Add tests for external editor integration in tests/Stroke.Tests/Core/BufferTests.cs
 
 **Checkpoint**: Buffer supports external editor workflow
 
@@ -317,28 +317,28 @@
 
 ### Yank Operations (Emacs)
 
-- [ ] T124 Implement YankNthArg method in src/Stroke/Core/Buffer.History.cs
-- [ ] T125 Implement YankLastArg method in src/Stroke/Core/Buffer.History.cs
-- [ ] T126 [P] Create YankNthArgStateTests.cs in tests/Stroke.Tests/Core/YankNthArgStateTests.cs
-- [ ] T127 Add tests for YankNthArg and YankLastArg in tests/Stroke.Tests/Core/BufferHistoryTests.cs
+- [x] T124 Implement YankNthArg method in src/Stroke/Core/Buffer.History.cs
+- [x] T125 Implement YankLastArg method in src/Stroke/Core/Buffer.History.cs
+- [x] T126 [P] Create YankNthArgStateTests.cs in tests/Stroke.Tests/Core/YankNthArgStateTests.cs
+- [x] T127 Add tests for YankNthArg and YankLastArg in tests/Stroke.Tests/Core/BufferHistoryTests.cs
 
 ### Search Operations
 
-- [ ] T128 Create Buffer.Search.cs partial class file in src/Stroke/Core/Buffer.Search.cs
-- [ ] T129 Implement DocumentForSearch method in src/Stroke/Core/Buffer.Search.cs
-- [ ] T130 Implement GetSearchPosition method in src/Stroke/Core/Buffer.Search.cs
-- [ ] T131 Implement ApplySearch method in src/Stroke/Core/Buffer.Search.cs
-- [ ] T132 [P] Create BufferSearchTests.cs in tests/Stroke.Tests/Core/BufferSearchTests.cs
-- [ ] T133 Add tests for search operations in tests/Stroke.Tests/Core/BufferSearchTests.cs
+- [x] T128 Create Buffer.Search.cs partial class file in src/Stroke/Core/Buffer.Search.cs
+- [x] T129 Implement DocumentForSearch method in src/Stroke/Core/Buffer.Search.cs
+- [x] T130 Implement GetSearchPosition method in src/Stroke/Core/Buffer.Search.cs
+- [x] T131 Implement ApplySearch method in src/Stroke/Core/Buffer.Search.cs
+- [x] T132 [P] Create BufferSearchTests.cs in tests/Stroke.Tests/Core/BufferSearchTests.cs
+- [x] T133 Add tests for search operations in tests/Stroke.Tests/Core/BufferSearchTests.cs
 
 ### BufferOperations Static Class
 
-- [ ] T134 Create BufferOperations.cs with Indent method in src/Stroke/Core/BufferOperations.cs
-- [ ] T135 Implement Unindent method in src/Stroke/Core/BufferOperations.cs
-- [ ] T136 Implement ReshapeText method (Vi 'gq' operator) in src/Stroke/Core/BufferOperations.cs
-- [ ] T137 [P] Create BufferOperationsTests.cs in tests/Stroke.Tests/Core/BufferOperationsTests.cs
-- [ ] T138 Add tests for Indent and Unindent in tests/Stroke.Tests/Core/BufferOperationsTests.cs
-- [ ] T139 Add tests for ReshapeText in tests/Stroke.Tests/Core/BufferOperationsTests.cs
+- [x] T134 Create BufferOperations.cs with Indent method in src/Stroke/Core/BufferOperations.cs
+- [x] T135 Implement Unindent method in src/Stroke/Core/BufferOperations.cs
+- [x] T136 Implement ReshapeText method (Vi 'gq' operator) in src/Stroke/Core/BufferOperations.cs
+- [x] T137 [P] Create BufferOperationsTests.cs in tests/Stroke.Tests/Core/BufferOperationsTests.cs
+- [x] T138 Add tests for Indent and Unindent in tests/Stroke.Tests/Core/BufferOperationsTests.cs
+- [x] T139 Add tests for ReshapeText in tests/Stroke.Tests/Core/BufferOperationsTests.cs
 
 **Checkpoint**: All Buffer functionality implemented
 
@@ -348,15 +348,15 @@
 
 **Purpose**: Thread safety verification, documentation, and final validation
 
-- [ ] T140 [P] Create BufferThreadSafetyTests.cs with concurrent access tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
-- [ ] T141 Add parallel insert/delete tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
-- [ ] T142 Add parallel undo/redo tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
-- [ ] T143 Add async retry-on-document-change tests for completion/suggestion/validation in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
-- [ ] T144 [P] Create ValidationStateTests.cs in tests/Stroke.Tests/Core/ValidationStateTests.cs
-- [ ] T145 Verify all XML documentation comments on public APIs
-- [ ] T146 Run quickstart.md validation - verify all examples work
-- [ ] T147 Verify test coverage meets 80% target
-- [ ] T148 Final code review for Constitution compliance
+- [x] T140 [P] Create BufferThreadSafetyTests.cs with concurrent access tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
+- [x] T141 Add parallel insert/delete tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
+- [x] T142 Add parallel undo/redo tests in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
+- [x] T143 Add async retry-on-document-change tests for completion/suggestion/validation in tests/Stroke.Tests/Core/BufferThreadSafetyTests.cs
+- [x] T144 [P] Create ValidationStateTests.cs in tests/Stroke.Tests/Core/ValidationStateTests.cs
+- [x] T145 Verify all XML documentation comments on public APIs
+- [x] T146 Run quickstart.md validation - verify all examples work
+- [x] T147 Verify test coverage meets 80% target (line: 87.17%, branch: 86.21%)
+- [x] T148 Final code review for Constitution compliance
 
 ---
 
