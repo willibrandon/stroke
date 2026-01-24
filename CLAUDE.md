@@ -135,6 +135,38 @@ Source code files MUST be kept to 1,000 lines of code (LOC) or less:
 
 **Exceptions**: Generated code or files that cannot be logically split may exceed this limit with documented justification.
 
+### XI. Thread Safety by Default
+
+All Stroke implementations with mutable state MUST be thread-safe. This is a documented deviation from Python Prompt Toolkit, which assumes single-threaded execution:
+
+**Rationale**: .NET applications commonly operate in multi-threaded contexts (async/await, background workers, parallel processing). Defensive thread safety prevents subtle concurrency bugs and makes Stroke suitable for real-world .NET usage patterns.
+
+**Requirements**:
+- **Mutable classes**: All classes with mutable state MUST use appropriate synchronization
+- **Preferred lock type**: Use `System.Threading.Lock` (.NET 9+) with the `EnterScope()` pattern for automatic release
+- **Immutable types**: Immutable types (e.g., `Document`, `ClipboardData`) are inherently thread-safe and require no synchronization
+- **Stateless types**: Stateless types (e.g., `DummyClipboard`) are inherently thread-safe and require no synchronization
+- **Atomicity scope**: Individual operations MUST be atomic; compound operations (e.g., read-modify-write sequences) require external synchronization by the caller
+
+**Implementation Pattern**:
+```csharp
+public sealed class SomeStatefulClass
+{
+    private readonly Lock _lock = new();
+    private SomeState _state;
+
+    public void MutateState(SomeValue value)
+    {
+        using (_lock.EnterScope())
+        {
+            _state = ComputeNewState(value);
+        }
+    }
+}
+```
+
+**Documentation**: All thread-safe classes MUST document their thread safety guarantees in XML documentation comments.
+
 ## Planning Documents
 
 ### API Mapping (`docs/api-mapping.md`)
@@ -254,6 +286,7 @@ The complete specification is in `docs/design.md` (~65K tokens). It contains:
 5. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
 6. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
 7. **File Size Review**: Before completing any implementation, verify no source file exceeds 1,000 LOC
+8. **Thread Safety Review**: For classes with mutable state, verify thread safety implementation and add concurrent tests
 
 ## Technical Standards
 
@@ -331,6 +364,8 @@ This ensures examples behave correctly in real terminal environments before mark
 ## Active Technologies
 - C# 13 / .NET 10 + None for Core layer (xUnit for tests)
 - xUnit for testing (no mocks, no FluentAssertions per Constitution VIII)
+- C# 13 / .NET 10 + None (Stroke.Core layer has zero external dependencies) (004-clipboard-system)
+- In-memory only (no persistence) (004-clipboard-system)
 
 ## Recent Changes
 - 003-selection-system: Added SelectionState, SelectionType, PasteMode types with ToString() and tests (45 tests)

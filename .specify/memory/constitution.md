@@ -1,13 +1,13 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.5.0 → 1.6.0
+Version change: 1.6.0 → 1.7.0
 Modified principles: None
 Added sections:
-  - Principle X: Source Code File Size Limits
+  - Principle XI: Thread Safety by Default
 Removed sections: None
 Templates requiring updates:
-  - .specify/templates/plan-template.md ✅ (no changes required - Constitution Check already present)
+  - .specify/templates/plan-template.md ✅ (no changes required - Constitution Check dynamically reads principles)
   - .specify/templates/spec-template.md ✅ (no changes required)
   - .specify/templates/tasks-template.md ✅ (no changes required)
   - .specify/templates/checklist-template.md ✅ (no changes required)
@@ -44,6 +44,7 @@ The Python source at `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolki
 Deviations from the original are permitted ONLY when:
 1. C# language constraints require adaptation (e.g., `async/await` patterns, generic type constraints)
 2. Platform differences necessitate change (e.g., file system APIs)
+3. Thread safety requirements mandate synchronization (see Principle XI)
 
 All such deviations MUST be documented with explicit rationale.
 
@@ -171,6 +172,49 @@ Source code files MUST be kept to 1,000 lines of code (LOC) or less. This is a m
 
 **Exceptions**: Generated code or files that cannot be logically split without violating other principles may exceed this limit with documented justification.
 
+### XI. Thread Safety by Default
+
+All Stroke implementations with mutable state MUST be thread-safe. This is a documented deviation from Python Prompt Toolkit, which assumes single-threaded execution:
+
+**Rationale**: .NET applications commonly operate in multi-threaded contexts (async/await, background workers, parallel processing). Defensive thread safety prevents subtle concurrency bugs and makes Stroke suitable for real-world .NET usage patterns.
+
+**Requirements**:
+- **Mutable classes**: All classes with mutable state MUST use appropriate synchronization
+- **Preferred lock type**: Use `System.Threading.Lock` (.NET 9+) with the `EnterScope()` pattern for automatic release
+- **Immutable types**: Immutable types (e.g., `Document`, `ClipboardData`) are inherently thread-safe and require no synchronization
+- **Stateless types**: Stateless types (e.g., `DummyClipboard`) are inherently thread-safe and require no synchronization
+- **Atomicity scope**: Individual operations MUST be atomic; compound operations (e.g., read-modify-write sequences) require external synchronization by the caller
+
+**Implementation Pattern**:
+```csharp
+public sealed class SomeStatefulClass
+{
+    private readonly Lock _lock = new();
+    private SomeState _state;
+
+    public void MutateState(SomeValue value)
+    {
+        using (_lock.EnterScope())
+        {
+            // Thread-safe mutation
+            _state = ComputeNewState(value);
+        }
+    }
+
+    public SomeState GetState()
+    {
+        using (_lock.EnterScope())
+        {
+            return _state;
+        }
+    }
+}
+```
+
+**Documentation**: All thread-safe classes MUST document their thread safety guarantees in XML documentation comments. Classes that delegate thread safety to underlying implementations MUST document this dependency.
+
+**Testing**: Thread safety MUST be verified with concurrent stress tests (10+ threads, 1000+ operations) that complete without exceptions or data corruption.
+
 ## Technical Standards
 
 **Framework**: .NET 10+
@@ -195,6 +239,7 @@ Source code files MUST be kept to 1,000 lines of code (LOC) or less. This is a m
 7. **Incremental Delivery**: Features MUST be deliverable in independently testable increments
 8. **Constitution Check**: Implementation plans MUST verify compliance with all Core Principles before proceeding
 9. **File Size Review**: Before completing any implementation, verify no source file exceeds 1,000 LOC
+10. **Thread Safety Review**: For classes with mutable state, verify thread safety implementation and add concurrent tests
 
 ## Governance
 
@@ -207,4 +252,4 @@ All pull requests MUST verify compliance with Core Principles. Violations requir
 
 Use `CLAUDE.md` for runtime development guidance and architectural reference.
 
-**Version**: 1.6.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23
+**Version**: 1.7.0 | **Ratified**: 2026-01-23 | **Last Amended**: 2026-01-23

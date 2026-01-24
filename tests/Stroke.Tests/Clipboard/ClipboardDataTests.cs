@@ -1,7 +1,8 @@
+using Stroke.Clipboard;
 using Stroke.Core;
 using Xunit;
 
-namespace Stroke.Tests.Core;
+namespace Stroke.Tests.Clipboard;
 
 /// <summary>
 /// Tests for ClipboardData class (Phase 11 - T142).
