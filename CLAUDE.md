@@ -368,6 +368,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - In-memory only (no persistence) (004-clipboard-system)
 
 ## Recent Changes
+- 004-clipboard-system: Added IClipboard, InMemoryClipboard (kill ring), DynamicClipboard, DummyClipboard in Stroke.Clipboard namespace (59 tests)
 - 003-selection-system: Added SelectionState, SelectionType, PasteMode types with ToString() and tests (45 tests)
 - 002-immutable-document: Added immutable Document class with full text cursor model (310 tests)
 - 001-project-setup-primitives: Added project structure, primitives (Point, Size, WritePosition), CI/CD

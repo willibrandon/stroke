@@ -21,6 +21,12 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Paragraph navigation
   - Bracket matching
   - Flyweight caching for memory efficiency
+- **Clipboard System** — Text storage with Emacs-style kill ring
+  - `IClipboard` interface with SetData, GetData, SetText, Rotate
+  - `InMemoryClipboard` with configurable kill ring size (default 60)
+  - `DynamicClipboard` for runtime clipboard switching
+  - `DummyClipboard` for disabled clipboard scenarios
+  - Thread-safe operations
 
 ### Up Next
 
