@@ -25,12 +25,12 @@
 
 **Purpose**: Initialize .NET 10 solution structure per FR-001 to FR-004
 
-- [ ] T001 Create directory structure: `src/Stroke/Core/Primitives/` and `tests/Stroke.Tests/Core/Primitives/`
-- [ ] T002 Create `Directory.Build.props` at repository root with .NET 10, C# 13, nullable enable, warnings as errors
-- [ ] T003 Create `Directory.Packages.props` at repository root with central package management and xUnit dependencies
-- [ ] T004 Create `src/Stroke/Stroke.csproj` with NuGet metadata and documentation file generation
-- [ ] T005 Create `tests/Stroke.Tests/Stroke.Tests.csproj` with xUnit references and project reference
-- [ ] T006 Create `Stroke.sln` and add both projects
+- [x] T001 Create directory structure: `src/Stroke/Core/Primitives/` and `tests/Stroke.Tests/Core/Primitives/`
+- [x] T002 Create `Directory.Build.props` at repository root with .NET 10, C# 13, nullable enable, warnings as errors
+- [x] T003 Create `Directory.Packages.props` at repository root with central package management and xUnit dependencies
+- [x] T004 Create `src/Stroke/Stroke.csproj` with NuGet metadata and documentation file generation
+- [x] T005 Create `tests/Stroke.Tests/Stroke.Tests.csproj` with xUnit references and project reference
+- [x] T006 Create `Stroke.sln` and add both projects
 
 **Checkpoint**: Solution builds with `dotnet build` (zero errors, zero warnings)
 
@@ -44,9 +44,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Create placeholder `src/Stroke/Core/Primitives/Point.cs` with minimal stub (empty record struct)
-- [ ] T008 [US1] Create placeholder `src/Stroke/Core/Primitives/Size.cs` with minimal stub (empty record struct)
-- [ ] T009 [US1] Verify `dotnet build` succeeds with zero errors and zero warnings
+- [x] T007 [US1] Create placeholder `src/Stroke/Core/Primitives/Point.cs` with minimal stub (empty record struct)
+- [x] T008 [US1] Create placeholder `src/Stroke/Core/Primitives/Size.cs` with minimal stub (empty record struct)
+- [x] T009 [US1] Verify `dotnet build` succeeds with zero errors and zero warnings
 
 **Checkpoint**: US1 acceptance scenarios 1-3 pass - solution compiles, tests pass
 
@@ -60,23 +60,23 @@
 
 ### Tests for User Story 2
 
-- [ ] T010 [P] [US2] Create `tests/Stroke.Tests/Core/Primitives/PointTests.cs` with test class scaffold and using statements
-- [ ] T011 [P] [US2] Add test `Constructor_SetsCoordinates` verifying Point(5, 10).X == 5 and .Y == 10
-- [ ] T012 [P] [US2] Add test `Zero_ReturnsOrigin` verifying Point.Zero.X == 0 and .Y == 0
-- [ ] T013 [P] [US2] Add test `Offset_ReturnsNewPoint` verifying Point(10, 20).Offset(5, -3) == Point(15, 17)
-- [ ] T014 [P] [US2] Add test `AdditionOperator_AddsComponents` verifying Point(3, 4) + Point(1, 2) == Point(4, 6)
-- [ ] T015 [P] [US2] Add test `SubtractionOperator_SubtractsComponents` verifying Point(5, 7) - Point(2, 3) == Point(3, 4)
-- [ ] T016 [P] [US2] Add test `Equality_ValueSemantics` verifying Point(5, 10) == Point(5, 10)
-- [ ] T017 [P] [US2] Add test `Deconstruction_ExtractsComponents` verifying var (x, y) = Point(3, 4) yields x=3, y=4
-- [ ] T018 [P] [US2] Add test `WithExpression_CreatesModifiedCopy` verifying Point(3, 4) with { X = 10 } == Point(10, 4)
-- [ ] T019 [P] [US2] Add test `NegativeCoordinates_Allowed` verifying Point(-5, -10) is valid
-- [ ] T020 [P] [US2] Add test `IntegerOverflow_WrapsWithoutException` verifying Point(int.MaxValue, 0).Offset(1, 0) wraps per unchecked arithmetic
+- [x] T010 [P] [US2] Create `tests/Stroke.Tests/Core/Primitives/PointTests.cs` with test class scaffold and using statements
+- [x] T011 [P] [US2] Add test `Constructor_SetsCoordinates` verifying Point(5, 10).X == 5 and .Y == 10
+- [x] T012 [P] [US2] Add test `Zero_ReturnsOrigin` verifying Point.Zero.X == 0 and .Y == 0
+- [x] T013 [P] [US2] Add test `Offset_ReturnsNewPoint` verifying Point(10, 20).Offset(5, -3) == Point(15, 17)
+- [x] T014 [P] [US2] Add test `AdditionOperator_AddsComponents` verifying Point(3, 4) + Point(1, 2) == Point(4, 6)
+- [x] T015 [P] [US2] Add test `SubtractionOperator_SubtractsComponents` verifying Point(5, 7) - Point(2, 3) == Point(3, 4)
+- [x] T016 [P] [US2] Add test `Equality_ValueSemantics` verifying Point(5, 10) == Point(5, 10)
+- [x] T017 [P] [US2] Add test `Deconstruction_ExtractsComponents` verifying var (x, y) = Point(3, 4) yields x=3, y=4
+- [x] T018 [P] [US2] Add test `WithExpression_CreatesModifiedCopy` verifying Point(3, 4) with { X = 10 } == Point(10, 4)
+- [x] T019 [P] [US2] Add test `NegativeCoordinates_Allowed` verifying Point(-5, -10) is valid
+- [x] T020 [P] [US2] Add test `IntegerOverflow_WrapsWithoutException` verifying Point(int.MaxValue, 0).Offset(1, 0) wraps per unchecked arithmetic
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Implement full `Point` record struct in `src/Stroke/Core/Primitives/Point.cs` per data-model.md
-- [ ] T022 [US2] Add XML documentation to Point type, constructor parameters, all properties and methods with Python PTK reference in remarks (FR-015)
-- [ ] T023 [US2] Verify all Point tests pass with `dotnet test --filter "FullyQualifiedName~PointTests"`
+- [x] T021 [US2] Implement full `Point` record struct in `src/Stroke/Core/Primitives/Point.cs` per data-model.md
+- [x] T022 [US2] Add XML documentation to Point type, constructor parameters, all properties and methods with Python PTK reference in remarks (FR-015)
+- [x] T023 [US2] Verify all Point tests pass with `dotnet test --filter "FullyQualifiedName~PointTests"`
 
 **Checkpoint**: US2 acceptance scenarios 1-8 pass - Point fully functional
 
@@ -90,24 +90,24 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Create `tests/Stroke.Tests/Core/Primitives/SizeTests.cs` with test class scaffold and using statements
-- [ ] T025 [P] [US3] Add test `Constructor_SetsDimensions` verifying Size(24, 80).Rows == 24 and .Columns == 80
-- [ ] T026 [P] [US3] Add test `Zero_ReturnsZeroSize` verifying Size.Zero.Rows == 0 and .Columns == 0
-- [ ] T027 [P] [US3] Add test `HeightWidth_AliasRowsColumns` verifying Size(24, 80).Height == 24 and .Width == 80
-- [ ] T028 [P] [US3] Add test `IsEmpty_ZeroRows_ReturnsTrue` verifying Size(0, 80).IsEmpty == true
-- [ ] T029 [P] [US3] Add test `IsEmpty_ZeroColumns_ReturnsTrue` verifying Size(24, 0).IsEmpty == true
-- [ ] T030 [P] [US3] Add test `IsEmpty_PositiveDimensions_ReturnsFalse` verifying Size(24, 80).IsEmpty == false
-- [ ] T031 [P] [US3] Add test `IsEmpty_NegativeRows_ReturnsTrue` verifying Size(-1, 80).IsEmpty == true
-- [ ] T032 [P] [US3] Add test `IsEmpty_NegativeColumns_ReturnsTrue` verifying Size(24, -1).IsEmpty == true
-- [ ] T033 [P] [US3] Add test `Equality_ValueSemantics` verifying Size(24, 80) == Size(24, 80)
-- [ ] T034 [P] [US3] Add test `Deconstruction_ExtractsComponents` verifying var (rows, cols) = Size(24, 80) yields rows=24, cols=80
-- [ ] T035 [P] [US3] Add test `ZeroSize_IsEmpty_ReturnsTrue` verifying Size.Zero.IsEmpty == true
+- [x] T024 [P] [US3] Create `tests/Stroke.Tests/Core/Primitives/SizeTests.cs` with test class scaffold and using statements
+- [x] T025 [P] [US3] Add test `Constructor_SetsDimensions` verifying Size(24, 80).Rows == 24 and .Columns == 80
+- [x] T026 [P] [US3] Add test `Zero_ReturnsZeroSize` verifying Size.Zero.Rows == 0 and .Columns == 0
+- [x] T027 [P] [US3] Add test `HeightWidth_AliasRowsColumns` verifying Size(24, 80).Height == 24 and .Width == 80
+- [x] T028 [P] [US3] Add test `IsEmpty_ZeroRows_ReturnsTrue` verifying Size(0, 80).IsEmpty == true
+- [x] T029 [P] [US3] Add test `IsEmpty_ZeroColumns_ReturnsTrue` verifying Size(24, 0).IsEmpty == true
+- [x] T030 [P] [US3] Add test `IsEmpty_PositiveDimensions_ReturnsFalse` verifying Size(24, 80).IsEmpty == false
+- [x] T031 [P] [US3] Add test `IsEmpty_NegativeRows_ReturnsTrue` verifying Size(-1, 80).IsEmpty == true
+- [x] T032 [P] [US3] Add test `IsEmpty_NegativeColumns_ReturnsTrue` verifying Size(24, -1).IsEmpty == true
+- [x] T033 [P] [US3] Add test `Equality_ValueSemantics` verifying Size(24, 80) == Size(24, 80)
+- [x] T034 [P] [US3] Add test `Deconstruction_ExtractsComponents` verifying var (rows, cols) = Size(24, 80) yields rows=24, cols=80
+- [x] T035 [P] [US3] Add test `ZeroSize_IsEmpty_ReturnsTrue` verifying Size.Zero.IsEmpty == true
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Implement full `Size` record struct in `src/Stroke/Core/Primitives/Size.cs` per data-model.md
-- [ ] T037 [US3] Add XML documentation to Size type, constructor parameters, all properties with Python PTK reference in remarks (FR-015)
-- [ ] T038 [US3] Verify all Size tests pass with `dotnet test --filter "FullyQualifiedName~SizeTests"`
+- [x] T036 [US3] Implement full `Size` record struct in `src/Stroke/Core/Primitives/Size.cs` per data-model.md
+- [x] T037 [US3] Add XML documentation to Size type, constructor parameters, all properties with Python PTK reference in remarks (FR-015)
+- [x] T038 [US3] Verify all Size tests pass with `dotnet test --filter "FullyQualifiedName~SizeTests"`
 
 **Checkpoint**: US3 acceptance scenarios 1-8 pass - Size fully functional
 
@@ -117,12 +117,12 @@
 
 **Purpose**: Final validation and coverage verification
 
-- [ ] T039 Verify full test suite passes with `dotnet test` (100% pass rate)
-- [ ] T040 Verify zero compiler warnings with `dotnet build`
-- [ ] T041 Verify XML documentation generates without warnings (SC-004)
-- [ ] T042 Run `dotnet test --collect:"XPlat Code Coverage"` and verify >= 80% **line coverage** per SC-005 (coverlet default measures line coverage)
-- [ ] T043 Complete API Fidelity Verification Checklist in spec.md (SC-003)
-- [ ] T044 Run quickstart.md validation checklist
+- [x] T039 Verify full test suite passes with `dotnet test` (100% pass rate)
+- [x] T040 Verify zero compiler warnings with `dotnet build`
+- [x] T041 Verify XML documentation generates without warnings (SC-004)
+- [x] T042 Run `dotnet test --collect:"XPlat Code Coverage"` and verify >= 80% **line coverage** per SC-005 (coverlet default measures line coverage)
+- [x] T043 Complete API Fidelity Verification Checklist in spec.md (SC-003)
+- [x] T044 Run quickstart.md validation checklist
 
 ---
 

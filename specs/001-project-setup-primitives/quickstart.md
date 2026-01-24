@@ -273,9 +273,9 @@ dotnet test
 
 ## Verification Checklist
 
-- [ ] `dotnet build` succeeds with zero warnings
-- [ ] `dotnet test` passes all tests
-- [ ] Point has X, Y, Zero, Offset, +, - as specified
-- [ ] Size has Rows, Columns, Height, Width, Zero, IsEmpty as specified
-- [ ] All public types have XML documentation
-- [ ] No external dependencies in Stroke.csproj (except implicit framework)
+- [x] `dotnet build` succeeds with zero warnings
+- [x] `dotnet test` passes all tests
+- [x] Point has X, Y, Zero, Offset, +, - as specified
+- [x] Size has Rows, Columns, Height, Width, Zero, IsEmpty as specified
+- [x] All public types have XML documentation
+- [x] No external dependencies in Stroke.csproj (except implicit framework)

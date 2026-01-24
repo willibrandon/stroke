@@ -215,14 +215,14 @@ All Python-to-C# name translations MUST follow these rules:
 
 To verify SC-003, confirm:
 
-- [ ] `Point` type exists in `Stroke.Core.Primitives` namespace
-- [ ] `Point.X` property exists and returns `int`
-- [ ] `Point.Y` property exists and returns `int`
-- [ ] `Size` type exists in `Stroke.Core.Primitives` namespace
-- [ ] `Size.Rows` property exists and returns `int`
-- [ ] `Size.Columns` property exists and returns `int`
-- [ ] No Python APIs from `__all__` are missing
-- [ ] All C# additions are in the documented additions table
+- [x] `Point` type exists in `Stroke.Core.Primitives` namespace
+- [x] `Point.X` property exists and returns `int`
+- [x] `Point.Y` property exists and returns `int`
+- [x] `Size` type exists in `Stroke.Core.Primitives` namespace
+- [x] `Size.Rows` property exists and returns `int`
+- [x] `Size.Columns` property exists and returns `int`
+- [x] No Python APIs from `__all__` are missing
+- [x] All C# additions are in the documented additions table
 
 ## Assumptions
 
