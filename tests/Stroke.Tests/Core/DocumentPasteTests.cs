@@ -113,7 +113,7 @@ public class DocumentPasteTests
     }
 
     [Fact]
-    public void PasteClipboardData_LinesWithCount_InsertsMulitpleLines()
+    public void PasteClipboardData_LinesWithCount_InsertsMultipleLines()
     {
         // Arrange - cursor on first line
         var doc = new Document("line1\nline2", cursorPosition: 0);
