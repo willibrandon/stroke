@@ -1,3 +1,6 @@
+# Typos configuration
+# https://github.com/crate-ci/typos
+
 [default.extend-identifiers]
 # Windows API naming conventions use ordinals like 2nd, 3rd, 4th
 FromLeft2ndButtonPressed = "FromLeft2ndButtonPressed"
@@ -11,3 +14,7 @@ nd = "nd"
 ommit = "ommit"
 # Test data: result of deleting a character from "hello"
 helo = "helo"
+# Test data: "helloworld" with cursor at position 5, ViAfter inserts X after 'w'
+hellow = "hellow"
+# Test data: "hello world" cut "lo wo" -> "hel" + "rld"
+hel = "hel"
