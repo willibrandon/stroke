@@ -77,34 +77,66 @@ public sealed class ThreadedCompleter : CompleterBase
             FullMode = BoundedChannelFullMode.Wait
         });
 
-        // Start background task to produce completions using the thread pool.
-        // This matches Python's run_in_executor(None, ...) which uses the default executor.
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                foreach (var completion in _completer.GetCompletions(document, completeEvent))
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
+        // Get the enumerator and write the first completion synchronously.
+        // This ensures at least one item is available immediately, avoiding the latency
+        // of waiting for the background thread to start. This matches Python's behavior
+        // where get_nowait() is tried first before awaiting.
+        var enumerator = _completer.GetCompletions(document, completeEvent).GetEnumerator();
+        var hasMore = false;
 
-                    // WriteAsync may block if channel is full (backpressure)
-                    channel.Writer.WriteAsync(new CompletionOrException(completion), cancellationToken)
-                        .AsTask().GetAwaiter().GetResult();
+        try
+        {
+            if (enumerator.MoveNext())
+            {
+                channel.Writer.TryWrite(new CompletionOrException(enumerator.Current));
+                hasMore = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            channel.Writer.TryWrite(new CompletionOrException(ex));
+            channel.Writer.Complete();
+            enumerator.Dispose();
+            hasMore = false;
+        }
+
+        if (hasMore)
+        {
+            // Start background task to produce remaining completions.
+            // Use LongRunning to get a dedicated thread (avoids thread pool starvation for slow completers).
+            _ = Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            break;
+                        }
+
+                        // WriteAsync may block if channel is full (backpressure)
+                        channel.Writer.WriteAsync(new CompletionOrException(enumerator.Current), cancellationToken)
+                            .AsTask().GetAwaiter().GetResult();
+                    }
                 }
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException)
-            {
-                // Write the exception to the channel so it can be re-thrown on the reader side
-                channel.Writer.TryWrite(new CompletionOrException(ex));
-            }
-            finally
-            {
-                channel.Writer.Complete();
-            }
-        }, cancellationToken);
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    // Write the exception to the channel so it can be re-thrown on the reader side
+                    channel.Writer.TryWrite(new CompletionOrException(ex));
+                }
+                finally
+                {
+                    enumerator.Dispose();
+                    channel.Writer.Complete();
+                }
+            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        }
+        else
+        {
+            // No completions or error already written, just complete the channel
+            channel.Writer.TryComplete();
+        }
 
         // Consume completions from the channel.
         // Note: ReadAllAsync's inner TryRead loop doesn't check cancellation between buffered items,
