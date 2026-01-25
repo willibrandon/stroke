@@ -373,6 +373,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - File system for `FileHistory`, in-memory for others (008-history-system)
 - C# 13 / .NET 10 + Stroke.Core (Document class) (009-validation-system)
 - N/A (stateless validation) (009-validation-system)
+- C# 13 / .NET 10 + Stroke.Core (Document, Buffer) - zero external dependencies per Constitution III (010-search-system)
+- N/A (in-memory state only) (010-search-system)
 
 ## Recent Changes
 - 009-validation-system: Added IValidator interface with ValidatorBase, DummyValidator, ConditionalValidator, DynamicValidator, ThreadedValidator implementations (142 tests, 100% coverage)
