@@ -369,8 +369,11 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + None (Stroke.Core layer - zero external dependencies per Constitution III) (005-auto-suggest-system)
 - N/A (in-memory only) (005-auto-suggest-system)
 - N/A (in-memory only - undo stack, redo stack, working_lines) (007-mutable-buffer)
+- C# 13 / .NET 10 + None (Stroke.History is part of Stroke.Core layer) (008-history-system)
+- File system for `FileHistory`, in-memory for others (008-history-system)
 
 ## Recent Changes
+- 008-history-system: Added IHistory interface with InMemoryHistory, FileHistory, ThreadedHistory, DummyHistory implementations (119 tests, >90% coverage)
 - 007-mutable-buffer: Added Buffer class as mutable wrapper for Document with undo/redo, navigation, history, selection, clipboard, completion, validation, auto-suggest, and external editor support (148 tasks, 87% coverage)
 - 006-cache-utilities: Added SimpleCache, FastDictCache, Memoization in Stroke.Core namespace (92 tests)
 - 005-auto-suggest-system: Added AutoSuggest with history-based suggestions in Stroke.Core namespace

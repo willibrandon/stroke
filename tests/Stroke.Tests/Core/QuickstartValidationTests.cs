@@ -1,5 +1,6 @@
 using Stroke.Clipboard;
 using Stroke.Core;
+using Stroke.History;
 using Xunit;
 
 // Use alias to avoid ambiguity with System.Buffer
@@ -623,7 +624,7 @@ public class QuickstartValidationTests
     public void Quickstart_Buffer_HistoryNavigation()
     {
         // From specs/007-mutable-buffer/quickstart.md: 5. History Navigation
-        var history = new History.InMemoryHistory();
+        var history = new InMemoryHistory();
         history.AppendString("ls -la");
         history.AppendString("cd /home");
         history.AppendString("pwd");
@@ -648,7 +649,7 @@ public class QuickstartValidationTests
     public void Quickstart_Buffer_HistorySearch()
     {
         // From specs/007-mutable-buffer/quickstart.md: 5. History Navigation - prefix search
-        var history = new History.InMemoryHistory();
+        var history = new InMemoryHistory();
         history.AppendString("ls -la");
         history.AppendString("cd /home");
         history.AppendString("pwd");
@@ -855,7 +856,7 @@ public class QuickstartValidationTests
     public void Quickstart_Buffer_ReplStyleInput()
     {
         // From specs/007-mutable-buffer/quickstart.md: REPL-Style Input
-        var history = new History.InMemoryHistory();
+        var history = new InMemoryHistory();
         var buffer = new Buffer(
             history: history,
             enableHistorySearch: () => true,
