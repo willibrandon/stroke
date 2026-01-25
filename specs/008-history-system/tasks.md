@@ -21,9 +21,9 @@
 
 **Purpose**: Project initialization and interface/base class foundation
 
-- [ ] T001 Update IHistory interface with LoadHistoryStrings and StoreString methods in src/Stroke/History/IHistory.cs
-- [ ] T002 Create HistoryBase abstract class with caching (_loaded, _loadedStrings) in src/Stroke/History/HistoryBase.cs
-- [ ] T003 Create test project directory structure at tests/Stroke.Tests/History/
+- [x] T001 Update IHistory interface with LoadHistoryStrings and StoreString methods in src/Stroke/History/IHistory.cs
+- [x] T002 Create HistoryBase abstract class with caching (_loaded, _loadedStrings) in src/Stroke/History/HistoryBase.cs
+- [x] T003 Create test project directory structure at tests/Stroke.Tests/History/
 
 ---
 
@@ -33,11 +33,11 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Implement HistoryBase.LoadAsync with caching logic (yields newest-first) in src/Stroke/History/HistoryBase.cs
-- [ ] T005 Implement HistoryBase.GetStrings (returns oldest-first by reversing cache) in src/Stroke/History/HistoryBase.cs
-- [ ] T006 Implement HistoryBase.AppendString (inserts at index 0, calls StoreString) in src/Stroke/History/HistoryBase.cs
-- [ ] T007 Add thread safety with Lock to HistoryBase._loaded and _loadedStrings in src/Stroke/History/HistoryBase.cs
-- [ ] T008 [P] Create HistoryBaseTests validating caching and ordering behavior in tests/Stroke.Tests/History/HistoryBaseTests.cs
+- [x] T004 Implement HistoryBase.LoadAsync with caching logic (yields newest-first) in src/Stroke/History/HistoryBase.cs
+- [x] T005 Implement HistoryBase.GetStrings (returns oldest-first by reversing cache) in src/Stroke/History/HistoryBase.cs
+- [x] T006 Implement HistoryBase.AppendString (inserts at index 0, calls StoreString) in src/Stroke/History/HistoryBase.cs
+- [x] T007 Add thread safety with Lock to HistoryBase._loaded and _loadedStrings in src/Stroke/History/HistoryBase.cs
+- [x] T008 [P] Create HistoryBaseTests validating caching and ordering behavior in tests/Stroke.Tests/History/HistoryBaseTests.cs
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -51,20 +51,20 @@
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Create InMemoryHistoryTests with basic append/get tests in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
-- [ ] T010 [P] [US1] Add test for pre-populated constructor (history_strings parameter) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
-- [ ] T011 [P] [US1] Add test for loading order (LoadAsync yields newest-first) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
-- [ ] T012 [P] [US1] Add thread safety concurrent access test (10+ threads, 1000+ operations) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
+- [x] T009 [P] [US1] Create InMemoryHistoryTests with basic append/get tests in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
+- [x] T010 [P] [US1] Add test for pre-populated constructor (history_strings parameter) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
+- [x] T011 [P] [US1] Add test for loading order (LoadAsync yields newest-first) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
+- [x] T012 [P] [US1] Add thread safety concurrent access test (10+ threads, 1000+ operations) in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Refactor InMemoryHistory to extend HistoryBase in src/Stroke/History/InMemoryHistory.cs
-- [ ] T014 [US1] Rename _history to _storage and change to oldest-first storage order in src/Stroke/History/InMemoryHistory.cs
-- [ ] T015 [US1] Add pre-population constructor InMemoryHistory(IEnumerable<string>? historyStrings) in src/Stroke/History/InMemoryHistory.cs
-- [ ] T016 [US1] Implement LoadHistoryStrings to yield _storage in reverse (newest-first) in src/Stroke/History/InMemoryHistory.cs
-- [ ] T017 [US1] Implement StoreString to add to _storage (oldest-first) in src/Stroke/History/InMemoryHistory.cs
-- [ ] T018 [US1] Remove redundant GetStrings/AppendString/LoadAsync (use HistoryBase implementations) in src/Stroke/History/InMemoryHistory.cs
-- [ ] T019 [US1] Add XML documentation matching Python PTK semantics in src/Stroke/History/InMemoryHistory.cs
+- [x] T013 [US1] Refactor InMemoryHistory to extend HistoryBase in src/Stroke/History/InMemoryHistory.cs
+- [x] T014 [US1] Rename _history to _storage and change to oldest-first storage order in src/Stroke/History/InMemoryHistory.cs
+- [x] T015 [US1] Add pre-population constructor InMemoryHistory(IEnumerable<string>? historyStrings) in src/Stroke/History/InMemoryHistory.cs
+- [x] T016 [US1] Implement LoadHistoryStrings to yield _storage in reverse (newest-first) in src/Stroke/History/InMemoryHistory.cs
+- [x] T017 [US1] Implement StoreString to add to _storage (oldest-first) in src/Stroke/History/InMemoryHistory.cs
+- [x] T018 [US1] Remove redundant GetStrings/AppendString/LoadAsync (use HistoryBase implementations) in src/Stroke/History/InMemoryHistory.cs
+- [x] T019 [US1] Add XML documentation matching Python PTK semantics in src/Stroke/History/InMemoryHistory.cs
 
 **Checkpoint**: InMemoryHistory fully functional and independently testable
 
@@ -78,29 +78,29 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Create FileHistoryTests with basic file operations in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T021 [P] [US2] Add test for file format (# timestamp, + prefix) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T022 [P] [US2] Add test for multi-line entries (each line gets + prefix) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T023 [P] [US2] Add test for UTF-8 encoding with replacement for invalid sequences in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T024 [P] [US2] Add test for non-existent file (creates on first write) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T025 [P] [US2] Add test for corrupted/malformed entries (ignores bad lines) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T026 [P] [US2] Add test for cross-session persistence (reload yields previous entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T027 [P] [US2] Add thread safety concurrent file access test in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T080 [P] [US2] Add test for DirectoryNotFoundException when parent directory missing in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T081 [P] [US2] Add test for IOException propagation on read-only file system in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T086 [P] [US2] Add test for timestamp format matches Python datetime exactly (YYYY-MM-DD HH:MM:SS.ffffff) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T020 [P] [US2] Create FileHistoryTests with basic file operations in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T021 [P] [US2] Add test for file format (# timestamp, + prefix) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T022 [P] [US2] Add test for multi-line entries (each line gets + prefix) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T023 [P] [US2] Add test for UTF-8 encoding with replacement for invalid sequences in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T024 [P] [US2] Add test for non-existent file (creates on first write) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T025 [P] [US2] Add test for corrupted/malformed entries (ignores bad lines) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T026 [P] [US2] Add test for cross-session persistence (reload yields previous entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T027 [P] [US2] Add thread safety concurrent file access test in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T080 [P] [US2] Add test for DirectoryNotFoundException when parent directory missing in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T081 [P] [US2] Add test for IOException propagation on read-only file system in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T086 [P] [US2] Add test for timestamp format matches Python datetime exactly (YYYY-MM-DD HH:MM:SS.ffffff) in tests/Stroke.Tests/History/FileHistoryTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Create FileHistory class extending HistoryBase in src/Stroke/History/FileHistory.cs
-- [ ] T029 [US2] Add _filename field and Filename property in src/Stroke/History/FileHistory.cs
-- [ ] T030 [US2] Add constructor FileHistory(string filename) with null validation in src/Stroke/History/FileHistory.cs
-- [ ] T031 [US2] Implement LoadHistoryStrings with file parsing (+ prefix, # comments) in src/Stroke/History/FileHistory.cs
-- [ ] T032 [US2] Implement StoreString with timestamp comment and + prefix format in src/Stroke/History/FileHistory.cs
-- [ ] T033 [US2] Handle multi-line entries (split by newline, prefix each line with +) in src/Stroke/History/FileHistory.cs
-- [ ] T034 [US2] Add UTF-8 encoding with DecoderFallback.ReplacementFallback in src/Stroke/History/FileHistory.cs
-- [ ] T035 [US2] Add thread safety Lock around file operations in src/Stroke/History/FileHistory.cs
-- [ ] T036 [US2] Add XML documentation in src/Stroke/History/FileHistory.cs
+- [x] T028 [US2] Create FileHistory class extending HistoryBase in src/Stroke/History/FileHistory.cs
+- [x] T029 [US2] Add _filename field and Filename property in src/Stroke/History/FileHistory.cs
+- [x] T030 [US2] Add constructor FileHistory(string filename) with null validation in src/Stroke/History/FileHistory.cs
+- [x] T031 [US2] Implement LoadHistoryStrings with file parsing (+ prefix, # comments) in src/Stroke/History/FileHistory.cs
+- [x] T032 [US2] Implement StoreString with timestamp comment and + prefix format in src/Stroke/History/FileHistory.cs
+- [x] T033 [US2] Handle multi-line entries (split by newline, prefix each line with +) in src/Stroke/History/FileHistory.cs
+- [x] T034 [US2] Add UTF-8 encoding with DecoderFallback.ReplacementFallback in src/Stroke/History/FileHistory.cs
+- [x] T035 [US2] Add thread safety Lock around file operations in src/Stroke/History/FileHistory.cs
+- [x] T036 [US2] Add XML documentation in src/Stroke/History/FileHistory.cs
 
 **Checkpoint**: FileHistory fully functional with byte-for-byte PTK format compatibility
 
@@ -114,32 +114,32 @@
 
 ### Tests for User Story 3
 
-- [ ] T037 [P] [US3] Create ThreadedHistoryTests with basic wrapper tests in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T038 [P] [US3] Add test for background thread creation on first LoadAsync in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T039 [P] [US3] Add test for progressive streaming (items yielded as they load) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T040 [P] [US3] Add test for 100ms first-item availability (SC-003) using Stopwatch and artificial delay in wrapped history in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T041 [P] [US3] Add test for AppendString before load completes in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T042 [P] [US3] Add test for multiple concurrent LoadAsync calls in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T043 [P] [US3] Add test for delegation to wrapped history (LoadHistoryStrings, StoreString) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T082 [P] [US3] Add test for daemon thread (IsBackground = true) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
-- [ ] T083 [P] [US3] Add test for cache reset when load starts (AppendString before any LoadAsync, then LoadAsync reloads from backend) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T037 [P] [US3] Create ThreadedHistoryTests with basic wrapper tests in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T038 [P] [US3] Add test for background thread creation on first LoadAsync in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T039 [P] [US3] Add test for progressive streaming (items yielded as they load) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T040 [P] [US3] Add test for 100ms first-item availability (SC-003) using Stopwatch and artificial delay in wrapped history in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T041 [P] [US3] Add test for AppendString before load completes in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T042 [P] [US3] Add test for multiple concurrent LoadAsync calls in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T043 [P] [US3] Add test for delegation to wrapped history (LoadHistoryStrings, StoreString) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T082 [P] [US3] Add test for daemon thread (IsBackground = true) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [x] T083 [P] [US3] Add test for cache reset when load starts (AppendString before any LoadAsync, then LoadAsync reloads from backend) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T044 [US3] Create ThreadedHistory class implementing IHistory in src/Stroke/History/ThreadedHistory.cs
-- [ ] T045 [US3] Add _history, _loadThread, _lock, _stringLoadEvents fields in src/Stroke/History/ThreadedHistory.cs
-- [ ] T046 [US3] Add _loaded and _loadedStrings fields for caching (matches HistoryBase pattern) in src/Stroke/History/ThreadedHistory.cs
-- [ ] T047 [US3] Add constructor ThreadedHistory(IHistory history) with null validation in src/Stroke/History/ThreadedHistory.cs
-- [ ] T048 [US3] Add History property to access wrapped instance in src/Stroke/History/ThreadedHistory.cs
-- [ ] T049 [US3] Implement LoadHistoryStrings delegating to _history.LoadHistoryStrings() in src/Stroke/History/ThreadedHistory.cs
-- [ ] T050 [US3] Implement StoreString delegating to _history.StoreString() in src/Stroke/History/ThreadedHistory.cs
-- [ ] T051 [US3] Implement background thread loader (spawns on first LoadAsync) in src/Stroke/History/ThreadedHistory.cs
-- [ ] T052 [US3] Implement progressive streaming via ManualResetEventSlim signaling in src/Stroke/History/ThreadedHistory.cs
-- [ ] T053 [US3] Implement LoadAsync with event-based waiting for new items in src/Stroke/History/ThreadedHistory.cs
-- [ ] T054 [US3] Implement GetStrings returning cache (oldest-first) in src/Stroke/History/ThreadedHistory.cs
-- [ ] T055 [US3] Implement AppendString (insert at index 0, call StoreString) in src/Stroke/History/ThreadedHistory.cs
-- [ ] T056 [US3] Add thread safety with Lock for all mutable state in src/Stroke/History/ThreadedHistory.cs
-- [ ] T057 [US3] Add XML documentation in src/Stroke/History/ThreadedHistory.cs
+- [x] T044 [US3] Create ThreadedHistory class implementing IHistory in src/Stroke/History/ThreadedHistory.cs
+- [x] T045 [US3] Add _history, _loadThread, _lock, _stringLoadEvents fields in src/Stroke/History/ThreadedHistory.cs
+- [x] T046 [US3] Add _loaded and _loadedStrings fields for caching (matches HistoryBase pattern) in src/Stroke/History/ThreadedHistory.cs
+- [x] T047 [US3] Add constructor ThreadedHistory(IHistory history) with null validation in src/Stroke/History/ThreadedHistory.cs
+- [x] T048 [US3] Add History property to access wrapped instance in src/Stroke/History/ThreadedHistory.cs
+- [x] T049 [US3] Implement LoadHistoryStrings delegating to _history.LoadHistoryStrings() in src/Stroke/History/ThreadedHistory.cs
+- [x] T050 [US3] Implement StoreString delegating to _history.StoreString() in src/Stroke/History/ThreadedHistory.cs
+- [x] T051 [US3] Implement background thread loader (spawns on first LoadAsync) in src/Stroke/History/ThreadedHistory.cs
+- [x] T052 [US3] Implement progressive streaming via ManualResetEventSlim signaling in src/Stroke/History/ThreadedHistory.cs
+- [x] T053 [US3] Implement LoadAsync with event-based waiting for new items in src/Stroke/History/ThreadedHistory.cs
+- [x] T054 [US3] Implement GetStrings returning cache (oldest-first) in src/Stroke/History/ThreadedHistory.cs
+- [x] T055 [US3] Implement AppendString (insert at index 0, call StoreString) in src/Stroke/History/ThreadedHistory.cs
+- [x] T056 [US3] Add thread safety with Lock for all mutable state in src/Stroke/History/ThreadedHistory.cs
+- [x] T057 [US3] Add XML documentation in src/Stroke/History/ThreadedHistory.cs
 
 **Checkpoint**: ThreadedHistory provides non-blocking background loading
 
@@ -153,21 +153,21 @@
 
 ### Tests for User Story 4
 
-- [ ] T058 [P] [US4] Create DummyHistoryTests with no-op verification in tests/Stroke.Tests/History/DummyHistoryTests.cs
-- [ ] T059 [P] [US4] Add test for AppendString no-op behavior in tests/Stroke.Tests/History/DummyHistoryTests.cs
-- [ ] T060 [P] [US4] Add test for GetStrings returns empty list in tests/Stroke.Tests/History/DummyHistoryTests.cs
-- [ ] T061 [P] [US4] Add test for LoadAsync yields nothing in tests/Stroke.Tests/History/DummyHistoryTests.cs
-- [ ] T062 [P] [US4] Add test for StoreString no-op behavior in tests/Stroke.Tests/History/DummyHistoryTests.cs
+- [x] T058 [P] [US4] Create DummyHistoryTests with no-op verification in tests/Stroke.Tests/History/DummyHistoryTests.cs
+- [x] T059 [P] [US4] Add test for AppendString no-op behavior in tests/Stroke.Tests/History/DummyHistoryTests.cs
+- [x] T060 [P] [US4] Add test for GetStrings returns empty list in tests/Stroke.Tests/History/DummyHistoryTests.cs
+- [x] T061 [P] [US4] Add test for LoadAsync yields nothing in tests/Stroke.Tests/History/DummyHistoryTests.cs
+- [x] T062 [P] [US4] Add test for StoreString no-op behavior in tests/Stroke.Tests/History/DummyHistoryTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T063 [US4] Create DummyHistory class implementing IHistory directly in src/Stroke/History/DummyHistory.cs
-- [ ] T064 [US4] Implement LoadHistoryStrings returning empty enumerable in src/Stroke/History/DummyHistory.cs
-- [ ] T065 [US4] Implement StoreString as no-op in src/Stroke/History/DummyHistory.cs
-- [ ] T066 [US4] Implement AppendString as no-op (direct IHistory implementation, independent of HistoryBase) in src/Stroke/History/DummyHistory.cs
-- [ ] T067 [US4] Implement GetStrings returning empty list in src/Stroke/History/DummyHistory.cs
-- [ ] T068 [US4] Implement LoadAsync yielding nothing in src/Stroke/History/DummyHistory.cs
-- [ ] T069 [US4] Add XML documentation noting stateless/thread-safe nature in src/Stroke/History/DummyHistory.cs
+- [x] T063 [US4] Create DummyHistory class implementing IHistory directly in src/Stroke/History/DummyHistory.cs
+- [x] T064 [US4] Implement LoadHistoryStrings returning empty enumerable in src/Stroke/History/DummyHistory.cs
+- [x] T065 [US4] Implement StoreString as no-op in src/Stroke/History/DummyHistory.cs
+- [x] T066 [US4] Implement AppendString as no-op (direct IHistory implementation, independent of HistoryBase) in src/Stroke/History/DummyHistory.cs
+- [x] T067 [US4] Implement GetStrings returning empty list in src/Stroke/History/DummyHistory.cs
+- [x] T068 [US4] Implement LoadAsync yielding nothing in src/Stroke/History/DummyHistory.cs
+- [x] T069 [US4] Add XML documentation noting stateless/thread-safe nature in src/Stroke/History/DummyHistory.cs
 
 **Checkpoint**: DummyHistory provides privacy-mode history
 
@@ -179,28 +179,28 @@
 
 ### Integration Tests
 
-- [ ] T070 [P] Create HistoryIntegrationTests for cross-implementation scenarios in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
-- [ ] T071 [P] Add test for ThreadedHistory wrapping FileHistory in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
-- [ ] T072 [P] Add test for ThreadedHistory wrapping InMemoryHistory in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
-- [ ] T073 [P] Add format compatibility test (read Python PTK-written file) in tests/Stroke.Tests/History/FileHistoryFormatTests.cs
+- [x] T070 [P] Create HistoryIntegrationTests for cross-implementation scenarios in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
+- [x] T071 [P] Add test for ThreadedHistory wrapping FileHistory in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
+- [x] T072 [P] Add test for ThreadedHistory wrapping InMemoryHistory in tests/Stroke.Tests/History/HistoryIntegrationTests.cs
+- [x] T073 [P] Add format compatibility test (read Python PTK-written file) in tests/Stroke.Tests/History/FileHistoryFormatTests.cs
 
 ### Edge Cases
 
-- [ ] T074 Add FileHistory test for empty file behavior in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T075 Add FileHistory test for file with only comments (no entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
-- [ ] T076 Add InMemoryHistory test for Empty singleton behavior in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
-- [ ] T076b Add test for multiple LoadAsync calls (verify caching, no backend re-read) in tests/Stroke.Tests/History/HistoryBaseTests.cs
+- [x] T074 Add FileHistory test for empty file behavior in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T075 Add FileHistory test for file with only comments (no entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [x] T076 Add InMemoryHistory test for Empty singleton behavior in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
+- [x] T076b Add test for multiple LoadAsync calls (verify caching, no backend re-read) in tests/Stroke.Tests/History/HistoryBaseTests.cs
 
 ### Validation (Null Handling)
 
-- [ ] T084 [P] Add test for AppendString(null) throws ArgumentNullException in tests/Stroke.Tests/History/HistoryBaseTests.cs
-- [ ] T085 [P] Add test for StoreString(null) throws ArgumentNullException (all implementations) in tests/Stroke.Tests/History/HistoryBaseTests.cs
+- [x] T084 [P] Add test for AppendString(null) throws ArgumentNullException in tests/Stroke.Tests/History/HistoryBaseTests.cs
+- [x] T085 [P] Add test for StoreString(null) throws ArgumentNullException (all implementations) in tests/Stroke.Tests/History/HistoryBaseTests.cs
 
 ### Validation
 
-- [ ] T077 Run quickstart.md examples as integration tests in tests/Stroke.Tests/History/QuickstartValidationTests.cs
-- [ ] T078 Verify 80% test coverage target (SC-005) using dotnet test --collect:"XPlat Code Coverage"
-- [ ] T079 Verify all XML documentation complete and accurate across all History classes
+- [x] T077 Run quickstart.md examples as integration tests in tests/Stroke.Tests/History/QuickstartValidationTests.cs
+- [x] T078 Verify 80% test coverage target (SC-005) using dotnet test --collect:"XPlat Code Coverage"
+- [x] T079 Verify all XML documentation complete and accurate across all History classes
 
 ---
 
