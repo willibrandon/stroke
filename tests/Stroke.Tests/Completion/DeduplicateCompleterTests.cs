@@ -67,7 +67,7 @@ public sealed class DeduplicateCompleterTests
 
         Assert.Single(completions);
         // The first occurrence should be kept
-        Assert.Contains("First", completions[0].DisplayText.ToPlainText());
+        Assert.Contains("First", completions[0].DisplayText);
     }
 
     #endregion

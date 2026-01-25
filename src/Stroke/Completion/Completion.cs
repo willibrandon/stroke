@@ -83,20 +83,32 @@ public sealed record Completion
     }
 
     /// <summary>
-    /// Gets the display text for this completion.
+    /// Gets the display text as plain text.
     /// </summary>
     /// <value>
-    /// Returns <see cref="Display"/> if set; otherwise returns <see cref="Text"/>.
+    /// Returns <see cref="Display"/> converted to plain text if set; otherwise returns <see cref="Text"/>.
     /// </value>
-    public AnyFormattedText DisplayText => Display ?? Text;
+    /// <remarks>
+    /// This property matches Python's <c>display_text</c> which calls <c>fragment_list_to_text(self.display)</c>.
+    /// For the formatted version, access <see cref="Display"/> directly.
+    /// </remarks>
+    public string DisplayText => Display is not null
+        ? FormattedTextUtils.ToPlainText(Display.Value)
+        : Text;
 
     /// <summary>
-    /// Gets the display meta text for this completion.
+    /// Gets the display meta text as plain text.
     /// </summary>
     /// <value>
-    /// Returns <see cref="DisplayMeta"/> if set; otherwise returns <see cref="AnyFormattedText.Empty"/>.
+    /// Returns <see cref="DisplayMeta"/> converted to plain text if set; otherwise returns an empty string.
     /// </value>
-    public AnyFormattedText DisplayMetaText => DisplayMeta ?? AnyFormattedText.Empty;
+    /// <remarks>
+    /// This property matches Python's <c>display_meta_text</c> which calls <c>fragment_list_to_text(self.display_meta)</c>.
+    /// For the formatted version, access <see cref="DisplayMeta"/> directly.
+    /// </remarks>
+    public string DisplayMetaText => DisplayMeta is not null
+        ? FormattedTextUtils.ToPlainText(DisplayMeta.Value)
+        : "";
 
     /// <summary>
     /// Creates a new completion with an adjusted start position.

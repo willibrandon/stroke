@@ -73,14 +73,14 @@ public sealed class CompletionTests
     }
 
     [Fact]
-    public void DisplayText_WhenDisplayIsSet_ReturnsDisplay()
+    public void DisplayText_WhenDisplayIsSet_ReturnsDisplayAsPlainText()
     {
         AnyFormattedText display = "custom display";
         var completion = new CompletionItem("text", display: display);
 
         var displayText = completion.DisplayText;
 
-        Assert.Equal("custom display", displayText.ToPlainText());
+        Assert.Equal("custom display", displayText);
     }
 
     [Fact]
@@ -90,28 +90,28 @@ public sealed class CompletionTests
 
         var displayText = completion.DisplayText;
 
-        Assert.Equal("text", displayText.ToPlainText());
+        Assert.Equal("text", displayText);
     }
 
     [Fact]
-    public void DisplayMetaText_WhenDisplayMetaIsSet_ReturnsDisplayMeta()
+    public void DisplayMetaText_WhenDisplayMetaIsSet_ReturnsDisplayMetaAsPlainText()
     {
         AnyFormattedText meta = "meta info";
         var completion = new CompletionItem("text", displayMeta: meta);
 
         var metaText = completion.DisplayMetaText;
 
-        Assert.Equal("meta info", metaText.ToPlainText());
+        Assert.Equal("meta info", metaText);
     }
 
     [Fact]
-    public void DisplayMetaText_WhenDisplayMetaIsNull_ReturnsEmpty()
+    public void DisplayMetaText_WhenDisplayMetaIsNull_ReturnsEmptyString()
     {
         var completion = new CompletionItem("text");
 
         var metaText = completion.DisplayMetaText;
 
-        Assert.True(metaText.IsEmpty);
+        Assert.Equal("", metaText);
     }
 
     [Fact]
@@ -163,7 +163,7 @@ public sealed class CompletionTests
     }
 
     [Fact]
-    public void Display_WithFormattedText_WorksCorrectly()
+    public void Display_WithFormattedText_ReturnsPlainText()
     {
         var ft = new FText([
             new StyleAndTextTuple("bold", "hello"),
@@ -174,7 +174,7 @@ public sealed class CompletionTests
 
         var displayText = completion.DisplayText;
 
-        Assert.Equal("hello world", displayText.ToPlainText());
+        Assert.Equal("hello world", displayText);
     }
 
     [Fact]
@@ -191,7 +191,7 @@ public sealed class CompletionTests
 
         Assert.Equal(0, callCount);
 
-        var displayText = completion.DisplayText.ToPlainText();
+        var displayText = completion.DisplayText;
 
         Assert.Equal(1, callCount);
         Assert.Equal("lazy display", displayText);

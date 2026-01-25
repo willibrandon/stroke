@@ -52,8 +52,8 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "fil");
 
         Assert.Equal(2, completions.Count);
-        Assert.Contains(completions, c => c.DisplayText.ToPlainText() == "file1.txt");
-        Assert.Contains(completions, c => c.DisplayText.ToPlainText() == "file2.txt");
+        Assert.Contains(completions, c => c.DisplayText == "file1.txt");
+        Assert.Contains(completions, c => c.DisplayText == "file2.txt");
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "sub");
 
         Assert.Equal(2, completions.Count);
-        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText.ToPlainText()));
+        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText));
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "");
 
         Assert.Equal(2, completions.Count);
-        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText.ToPlainText()));
+        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText));
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "subdir1");
 
         Assert.Single(completions);
-        Assert.Equal("subdir1/", completions[0].DisplayText.ToPlainText());
+        Assert.Equal("subdir1/", completions[0].DisplayText);
     }
 
     #endregion
@@ -153,7 +153,7 @@ public sealed class PathCompleterTests : IDisposable
 
         // 2 txt files + 2 directories (filter doesn't apply to dirs)
         Assert.Equal(4, completions.Count);
-        Assert.DoesNotContain(completions, c => c.DisplayText.ToPlainText() == "readme.md");
+        Assert.DoesNotContain(completions, c => c.DisplayText == "readme.md");
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public sealed class PathCompleterTests : IDisposable
 
         // Only directories should remain
         Assert.Equal(2, completions.Count);
-        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText.ToPlainText()));
+        Assert.All(completions, c => Assert.EndsWith("/", c.DisplayText));
     }
 
     #endregion
@@ -211,7 +211,7 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "subdir1/");
 
         Assert.Single(completions);
-        Assert.Equal("nested.txt", completions[0].DisplayText.ToPlainText());
+        Assert.Equal("nested.txt", completions[0].DisplayText);
     }
 
     [Fact]
@@ -222,7 +222,7 @@ public sealed class PathCompleterTests : IDisposable
         var completions = GetCompletions(completer, "subdir1/nes");
 
         Assert.Single(completions);
-        Assert.Contains("nested", completions[0].DisplayText.ToPlainText());
+        Assert.Contains("nested", completions[0].DisplayText);
     }
 
     #endregion
@@ -337,7 +337,7 @@ public sealed class PathCompleterTests : IDisposable
 
         var completions = GetCompletions(completer, "");
 
-        var displayTexts = completions.Select(c => c.DisplayText.ToPlainText()).ToList();
+        var displayTexts = completions.Select(c => c.DisplayText).ToList();
         var sorted = displayTexts.OrderBy(x => x).ToList();
 
         Assert.Equal(sorted, displayTexts);

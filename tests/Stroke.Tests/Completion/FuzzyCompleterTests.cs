@@ -120,11 +120,9 @@ public sealed class FuzzyCompleterTests
         var completions = GetCompletions(fuzzy, "oar");
 
         Assert.Single(completions);
-        var display = completions[0].DisplayText;
-
-        // The display should be styled FormattedText, not just plain string
-        var plainText = display.ToPlainText();
-        Assert.Equal("leopard", plainText);
+        // DisplayText returns plain text; Display property has the styled FormattedText
+        var displayText = completions[0].DisplayText;
+        Assert.Equal("leopard", displayText);
     }
 
     [Fact]

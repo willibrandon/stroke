@@ -243,7 +243,7 @@ public sealed class WordCompleterTests
 
         Assert.Single(completions);
         Assert.Equal("git", completions[0].Text);
-        Assert.Equal("Git VCS", completions[0].DisplayText.ToPlainText());
+        Assert.Equal("Git VCS", completions[0].DisplayText);
     }
 
     [Fact]
@@ -256,7 +256,7 @@ public sealed class WordCompleterTests
 
         Assert.Single(completions);
         Assert.Equal("svn", completions[0].Text);
-        Assert.Equal("svn", completions[0].DisplayText.ToPlainText()); // Falls back to text
+        Assert.Equal("svn", completions[0].DisplayText); // Falls back to text
     }
 
     [Fact]
@@ -272,11 +272,11 @@ public sealed class WordCompleterTests
         var completions = GetCompletions(completer, "g");
 
         Assert.Single(completions);
-        Assert.Equal("version control", completions[0].DisplayMetaText.ToPlainText());
+        Assert.Equal("version control", completions[0].DisplayMetaText);
     }
 
     [Fact]
-    public void GetCompletions_MetaDict_MissingEntry_ReturnsEmpty()
+    public void GetCompletions_MetaDict_MissingEntry_ReturnsEmptyString()
     {
         var metaDict = new Dictionary<string, AnyFormattedText> { ["git"] = "vcs" };
         var completer = new WordCompleter(["git", "svn"], metaDict: metaDict);
@@ -284,7 +284,7 @@ public sealed class WordCompleterTests
         var completions = GetCompletions(completer, "s");
 
         Assert.Single(completions);
-        Assert.True(completions[0].DisplayMetaText.IsEmpty);
+        Assert.Equal("", completions[0].DisplayMetaText);
     }
 
     #endregion
