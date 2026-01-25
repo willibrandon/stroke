@@ -18,3 +18,5 @@ helo = "helo"
 hellow = "hellow"
 # Test data: "hello world" cut "lo wo" -> "hel" + "rld"
 hel = "hel"
+# Technical term: plural of IEnumerable (multiple enumerable objects)
+enumerables = "enumerables"

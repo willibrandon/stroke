@@ -226,7 +226,13 @@ public sealed partial class Document
         {
             if (i + 1 == count)
             {
-                return -match.Groups[1].Index - match.Groups[1].Length;
+                // Use Group[1] if it exists and succeeded (for patterns with capturing groups
+                // like the default word patterns), otherwise fall back to the full match
+                // (Group[0]) for patterns without capturing groups.
+                var group = match.Groups.Count > 1 && match.Groups[1].Success
+                    ? match.Groups[1]
+                    : match.Groups[0];
+                return -group.Index - group.Length;
             }
             i++;
         }

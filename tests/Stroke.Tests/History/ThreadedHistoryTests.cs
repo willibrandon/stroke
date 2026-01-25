@@ -16,6 +16,8 @@ public sealed class ThreadedHistoryTests
     {
         private readonly List<string> _items;
         private readonly TimeSpan _delayPerItem;
+        private readonly SemaphoreSlim? _itemYieldedSignal;
+        private readonly SemaphoreSlim? _proceedSignal;
 
         public SlowHistory(IEnumerable<string> items, TimeSpan delayPerItem)
         {
@@ -23,13 +25,41 @@ public sealed class ThreadedHistoryTests
             _delayPerItem = delayPerItem;
         }
 
+        /// <summary>
+        /// Creates a SlowHistory with synchronization signals for deterministic testing.
+        /// </summary>
+        /// <param name="items">History items.</param>
+        /// <param name="itemYieldedSignal">Signal released after yielding first item.</param>
+        /// <param name="proceedSignal">Signal to wait for before yielding second item.</param>
+        public SlowHistory(
+            IEnumerable<string> items,
+            SemaphoreSlim itemYieldedSignal,
+            SemaphoreSlim proceedSignal)
+        {
+            _items = items.ToList();
+            _delayPerItem = TimeSpan.Zero;
+            _itemYieldedSignal = itemYieldedSignal;
+            _proceedSignal = proceedSignal;
+        }
+
         public override IEnumerable<string> LoadHistoryStrings()
         {
             // Return newest-first (reverse order)
             for (int i = _items.Count - 1; i >= 0; i--)
             {
-                Thread.Sleep(_delayPerItem);
+                if (_delayPerItem > TimeSpan.Zero)
+                {
+                    Thread.Sleep(_delayPerItem);
+                }
+
                 yield return _items[i];
+
+                // After first item, signal and wait for proceed
+                if (i == _items.Count - 1 && _itemYieldedSignal != null && _proceedSignal != null)
+                {
+                    _itemYieldedSignal.Release();
+                    _proceedSignal.Wait(TimeSpan.FromSeconds(5));
+                }
             }
         }
 
@@ -157,10 +187,14 @@ public sealed class ThreadedHistoryTests
     [Fact]
     public async Task AppendString_BeforeLoadCompletes_ItemImmediatelyVisible()
     {
-        // Arrange - slow history
+        // Arrange - use synchronization to ensure deterministic ordering
+        using var itemYieldedSignal = new SemaphoreSlim(0);
+        using var proceedSignal = new SemaphoreSlim(0);
+
         var slowHistory = new SlowHistory(
             ["old1", "old2"],
-            TimeSpan.FromMilliseconds(100));
+            itemYieldedSignal,
+            proceedSignal);
         var threaded = new ThreadedHistory(slowHistory);
 
         // Start loading in background
@@ -174,9 +208,14 @@ public sealed class ThreadedHistoryTests
             return items;
         });
 
-        // Wait a bit then append
-        await Task.Delay(50);
+        // Wait for first item to be yielded (guarantees loading is in progress)
+        await itemYieldedSignal.WaitAsync(TimeSpan.FromSeconds(5));
+
+        // Append while loading is in progress
         threaded.AppendString("new_item");
+
+        // Allow loading to proceed
+        proceedSignal.Release();
 
         // Wait for load to complete
         var loadedItems = await loadTask;

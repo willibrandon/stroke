@@ -1,10 +1,12 @@
 using Stroke.Clipboard;
+using Stroke.Completion;
 using Stroke.Core;
 using Stroke.History;
 using Xunit;
 
 // Use alias to avoid ambiguity with System.Buffer
 using Buffer = Stroke.Core.Buffer;
+using CompletionItem = Stroke.Completion.Completion;
 
 namespace Stroke.Tests.Core;
 
@@ -737,11 +739,11 @@ public class QuickstartValidationTests
     public void Quickstart_Buffer_Completion()
     {
         // From specs/007-mutable-buffer/quickstart.md: 7. Completion
-        var completions = new List<Completion.Completion>
+        var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: 0),
-            new("help", StartPosition: 0),
-            new("helmet", StartPosition: 0)
+            new("hello", startPosition: 0),
+            new("help", startPosition: 0),
+            new("helmet", startPosition: 0)
         };
 
         var buffer = new Buffer();
@@ -765,9 +767,9 @@ public class QuickstartValidationTests
     [Fact]
     public void Quickstart_Buffer_CancelCompletion()
     {
-        var completions = new List<Completion.Completion>
+        var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: 0)
+            new("hello", startPosition: 0)
         };
 
         var buffer = new Buffer();
