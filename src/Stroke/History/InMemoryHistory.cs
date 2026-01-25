@@ -13,7 +13,8 @@ namespace Stroke.History;
 /// is in newest-first order per <see cref="HistoryBase"/> contract.
 /// </para>
 /// <para>
-/// This mirrors Python Prompt Toolkit's <c>InMemoryHistory</c> class exactly.
+/// This mirrors Python Prompt Toolkit's <c>InMemoryHistory</c> class.
+/// The <see cref="Empty"/> property is a .NET-idiomatic addition (see remarks on that property).
 /// </para>
 /// </remarks>
 public sealed class InMemoryHistory : HistoryBase
@@ -25,8 +26,14 @@ public sealed class InMemoryHistory : HistoryBase
     /// Gets the singleton empty history instance.
     /// </summary>
     /// <remarks>
-    /// This instance should be used for read-only empty history scenarios.
-    /// Do not append to this instance.
+    /// <para>
+    /// <b>.NET-idiomatic deviation:</b> This property does not exist in Python Prompt Toolkit.
+    /// It follows the .NET pattern of <c>Array.Empty&lt;T&gt;()</c> and <c>ImmutableArray&lt;T&gt;.Empty</c>
+    /// to avoid allocations when an empty history instance is needed.
+    /// </para>
+    /// <para>
+    /// This instance is shared and should not be mutated via <see cref="HistoryBase.AppendString"/>.
+    /// </para>
     /// </remarks>
     public static InMemoryHistory Empty { get; } = new();
 
