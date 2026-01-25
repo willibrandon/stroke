@@ -24,9 +24,9 @@
 
 **Purpose**: Extend existing stubs and create test infrastructure
 
-- [ ] T001 Create test project structure in tests/Stroke.Tests/Validation/
-- [ ] T002 [P] Update ValidationError with default parameters and ToString() override (format: `ValidationError(CursorPosition={0}, Message="{1}")`) in src/Stroke/Validation/ValidationError.cs
-- [ ] T003 [P] Add XML documentation to IValidator.Validate and ValidateAsync for ArgumentNullException in src/Stroke/Validation/IValidator.cs
+- [x] T001 Create test project structure in tests/Stroke.Tests/Validation/
+- [x] T002 [P] Update ValidationError with default parameters and ToString() override (format: `ValidationError(CursorPosition={0}, Message="{1}")`) in src/Stroke/Validation/ValidationError.cs
+- [x] T003 [P] Add XML documentation to IValidator.Validate and ValidateAsync for ArgumentNullException in src/Stroke/Validation/IValidator.cs
 
 ---
 
@@ -36,9 +36,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create ValidatorBase abstract class with FromCallable factory in src/Stroke/Validation/ValidatorBase.cs
-- [ ] T005 Create internal FromCallableValidator class in src/Stroke/Validation/ValidatorBase.cs
-- [ ] T006 [P] Write ValidationError unit tests in tests/Stroke.Tests/Validation/ValidationErrorTests.cs
+- [x] T004 Create ValidatorBase abstract class with FromCallable factory in src/Stroke/Validation/ValidatorBase.cs
+- [x] T005 Create internal FromCallableValidator class in src/Stroke/Validation/ValidatorBase.cs
+- [x] T006 [P] Write ValidationError unit tests in tests/Stroke.Tests/Validation/ValidationErrorTests.cs
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -54,15 +54,15 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T007 [P] [US1] Write FromCallable validator tests for boolean function in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
-- [ ] T008 [P] [US1] Write FromCallable tests for moveCursorToEnd parameter in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
-- [ ] T009 [P] [US1] Write FromCallable tests for null parameter handling in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
+- [x] T007 [P] [US1] Write FromCallable validator tests for boolean function in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
+- [x] T008 [P] [US1] Write FromCallable tests for moveCursorToEnd parameter in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
+- [x] T009 [P] [US1] Write FromCallable tests for null parameter handling in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement FromCallable with boolean validation function in src/Stroke/Validation/ValidatorBase.cs
-- [ ] T011 [US1] Implement cursor positioning logic (moveCursorToEnd) in src/Stroke/Validation/ValidatorBase.cs
-- [ ] T012 [US1] Add ArgumentNullException for null validateFunc in src/Stroke/Validation/ValidatorBase.cs
+- [x] T010 [US1] Implement FromCallable with boolean validation function in src/Stroke/Validation/ValidatorBase.cs
+- [x] T011 [US1] Implement cursor positioning logic (moveCursorToEnd) in src/Stroke/Validation/ValidatorBase.cs
+- [x] T012 [US1] Add ArgumentNullException for null validateFunc in src/Stroke/Validation/ValidatorBase.cs
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -78,11 +78,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T013 [P] [US2] Write tests for Action<Document> overload of FromCallable in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
+- [x] T013 [P] [US2] Write tests for Action<Document> overload of FromCallable in tests/Stroke.Tests/Validation/ValidatorFromCallableTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement FromCallable Action<Document> overload in src/Stroke/Validation/ValidatorBase.cs
+- [x] T014 [US2] Implement FromCallable Action<Document> overload in src/Stroke/Validation/ValidatorBase.cs
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -96,11 +96,11 @@
 
 ### Tests for User Story 3
 
-- [ ] T015 [P] [US3] Write DummyValidator unit tests in tests/Stroke.Tests/Validation/DummyValidatorTests.cs
+- [x] T015 [P] [US3] Write DummyValidator unit tests in tests/Stroke.Tests/Validation/DummyValidatorTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Create DummyValidator class in src/Stroke/Validation/DummyValidator.cs
+- [x] T016 [US3] Create DummyValidator class in src/Stroke/Validation/DummyValidator.cs
 
 **Checkpoint**: DummyValidator fully functional
 
@@ -114,16 +114,16 @@
 
 ### Tests for User Story 4
 
-- [ ] T017 [P] [US4] Write ConditionalValidator tests for filter=true scenario in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
-- [ ] T018 [P] [US4] Write ConditionalValidator tests for filter=false scenario in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
-- [ ] T019 [P] [US4] Write ConditionalValidator tests for null parameter handling in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
-- [ ] T020 [P] [US4] Write ConditionalValidator tests for filter exception propagation in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
+- [x] T017 [P] [US4] Write ConditionalValidator tests for filter=true scenario in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
+- [x] T018 [P] [US4] Write ConditionalValidator tests for filter=false scenario in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
+- [x] T019 [P] [US4] Write ConditionalValidator tests for null parameter handling in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
+- [x] T020 [P] [US4] Write ConditionalValidator tests for filter exception propagation in tests/Stroke.Tests/Validation/ConditionalValidatorTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T021 [US4] Create ConditionalValidator class in src/Stroke/Validation/ConditionalValidator.cs
-- [ ] T022 [US4] Implement filter-based delegation logic in src/Stroke/Validation/ConditionalValidator.cs
-- [ ] T023 [US4] Add ArgumentNullException for null validator or filter in src/Stroke/Validation/ConditionalValidator.cs
+- [x] T021 [US4] Create ConditionalValidator class in src/Stroke/Validation/ConditionalValidator.cs
+- [x] T022 [US4] Implement filter-based delegation logic in src/Stroke/Validation/ConditionalValidator.cs
+- [x] T023 [US4] Add ArgumentNullException for null validator or filter in src/Stroke/Validation/ConditionalValidator.cs
 
 **Checkpoint**: ConditionalValidator fully functional
 
@@ -137,16 +137,16 @@
 
 ### Tests for User Story 5
 
-- [ ] T024 [P] [US5] Write DynamicValidator tests for normal operation in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
-- [ ] T025 [P] [US5] Write DynamicValidator tests for null return (DummyValidator fallback) in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
-- [ ] T026 [P] [US5] Write DynamicValidator tests for null getValidator parameter in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
-- [ ] T027 [P] [US5] Write DynamicValidator tests for getter exception propagation in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
+- [x] T024 [P] [US5] Write DynamicValidator tests for normal operation in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
+- [x] T025 [P] [US5] Write DynamicValidator tests for null return (DummyValidator fallback) in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
+- [x] T026 [P] [US5] Write DynamicValidator tests for null getValidator parameter in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
+- [x] T027 [P] [US5] Write DynamicValidator tests for getter exception propagation in tests/Stroke.Tests/Validation/DynamicValidatorTests.cs
 
 ### Implementation for User Story 5
 
-- [ ] T028 [US5] Create DynamicValidator class in src/Stroke/Validation/DynamicValidator.cs
-- [ ] T029 [US5] Implement dynamic dispatch with null fallback in src/Stroke/Validation/DynamicValidator.cs
-- [ ] T030 [US5] Add ArgumentNullException for null getValidator in src/Stroke/Validation/DynamicValidator.cs
+- [x] T028 [US5] Create DynamicValidator class in src/Stroke/Validation/DynamicValidator.cs
+- [x] T029 [US5] Implement dynamic dispatch with null fallback in src/Stroke/Validation/DynamicValidator.cs
+- [x] T030 [US5] Add ArgumentNullException for null getValidator in src/Stroke/Validation/DynamicValidator.cs
 
 **Checkpoint**: DynamicValidator fully functional
 
@@ -160,18 +160,18 @@
 
 ### Tests for User Story 6
 
-- [ ] T031 [P] [US6] Write ThreadedValidator tests for async execution in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
-- [ ] T032 [P] [US6] Write ThreadedValidator tests for sync Validate delegation in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
-- [ ] T033 [P] [US6] Write ThreadedValidator tests for exception propagation in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
-- [ ] T034 [P] [US6] Write ThreadedValidator tests for null validator parameter in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
-- [ ] T035 [P] [US6] Write ThreadedValidator concurrent stress tests (10+ threads, 1000+ operations) in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
+- [x] T031 [P] [US6] Write ThreadedValidator tests for async execution in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
+- [x] T032 [P] [US6] Write ThreadedValidator tests for sync Validate delegation in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
+- [x] T033 [P] [US6] Write ThreadedValidator tests for exception propagation in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
+- [x] T034 [P] [US6] Write ThreadedValidator tests for null validator parameter in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
+- [x] T035 [P] [US6] Write ThreadedValidator concurrent stress tests (10+ threads, 1000+ operations) in tests/Stroke.Tests/Validation/ThreadedValidatorTests.cs
 
 ### Implementation for User Story 6
 
-- [ ] T036 [US6] Create ThreadedValidator class in src/Stroke/Validation/ThreadedValidator.cs
-- [ ] T037 [US6] Implement Task.Run with ConfigureAwait(false) in ValidateAsync in src/Stroke/Validation/ThreadedValidator.cs
-- [ ] T038 [US6] Implement synchronous Validate delegation in src/Stroke/Validation/ThreadedValidator.cs
-- [ ] T039 [US6] Add ArgumentNullException for null validator in src/Stroke/Validation/ThreadedValidator.cs
+- [x] T036 [US6] Create ThreadedValidator class in src/Stroke/Validation/ThreadedValidator.cs
+- [x] T037 [US6] Implement Task.Run with ConfigureAwait(false) in ValidateAsync in src/Stroke/Validation/ThreadedValidator.cs
+- [x] T038 [US6] Implement synchronous Validate delegation in src/Stroke/Validation/ThreadedValidator.cs
+- [x] T039 [US6] Add ArgumentNullException for null validator in src/Stroke/Validation/ThreadedValidator.cs
 
 **Checkpoint**: ThreadedValidator fully functional with verified thread safety
 
@@ -181,11 +181,11 @@
 
 **Purpose**: Quality improvements affecting multiple user stories
 
-- [ ] T040 [P] Add thread safety concurrent stress tests for all validator types in tests/Stroke.Tests/Validation/
-- [ ] T041 [P] Verify XML documentation complete on all public types per Constitution, ValueTask usage per NFR-001, sealed classes per NFR-004, and technical conventions TC-001 to TC-005 in src/Stroke/Validation/
-- [ ] T042 [P] Run all validation tests and verify 80%+ coverage
-- [ ] T043 Run quickstart.md examples as integration tests
-- [ ] T044 Update api-mapping.md §prompt_toolkit.validation with completion status
+- [x] T040 [P] Add thread safety concurrent stress tests for all validator types in tests/Stroke.Tests/Validation/
+- [x] T041 [P] Verify XML documentation complete on all public types per Constitution, ValueTask usage per NFR-001, sealed classes per NFR-004, and technical conventions TC-001 to TC-005 in src/Stroke/Validation/
+- [x] T042 [P] Run all validation tests and verify 80%+ coverage
+- [x] T043 Run quickstart.md examples as integration tests
+- [x] T044 Update api-mapping.md §prompt_toolkit.validation with completion status
 
 ---
 

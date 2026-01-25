@@ -183,8 +183,8 @@ try
 }
 catch (ValidationError error)
 {
-    // Move cursor to error position
-    var newDocument = document.WithCursorPosition(error.CursorPosition);
+    // Move cursor to error position by creating new document
+    var newDocument = new Document(document.Text, cursorPosition: error.CursorPosition);
 
     // Display error message to user
     ShowError(error.Message);
