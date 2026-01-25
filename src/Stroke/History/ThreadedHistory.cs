@@ -221,16 +221,21 @@ public sealed class ThreadedHistory : IHistory
     /// </summary>
     private void LoadThreadProc()
     {
+        List<string> itemsAppendedBeforeLoad = [];
+        HashSet<string> loadedFromBackend = [];
+
         try
         {
-            // Reset cache at start of load (handles case where AppendString was called before load)
+            // Capture items appended before load started (they're newest)
             using (_lock.EnterScope())
             {
+                itemsAppendedBeforeLoad = [.. _loadedStrings];
                 _loadedStrings = [];
             }
 
             foreach (var item in _history.LoadHistoryStrings())
             {
+                loadedFromBackend.Add(item);
                 using (_lock.EnterScope())
                 {
                     _loadedStrings.Add(item);
@@ -242,6 +247,17 @@ public sealed class ThreadedHistory : IHistory
         {
             using (_lock.EnterScope())
             {
+                // Prepend items appended before load that weren't in the backend snapshot
+                // (items already in backend were loaded above, so skip them to avoid duplicates)
+                var itemsToPreserve = itemsAppendedBeforeLoad
+                    .Where(item => !loadedFromBackend.Contains(item))
+                    .ToList();
+
+                if (itemsToPreserve.Count > 0)
+                {
+                    _loadedStrings.InsertRange(0, itemsToPreserve);
+                }
+
                 _loaded = true;
                 SignalAllEvents();
             }
