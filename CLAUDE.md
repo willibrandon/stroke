@@ -375,6 +375,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless validation) (009-validation-system)
 - C# 13 / .NET 10 + Stroke.Core (Document, Buffer) - zero external dependencies per Constitution III (010-search-system)
 - N/A (in-memory state only) (010-search-system)
+- C# 13 / .NET 10 + None (Stroke.Input layer - zero external dependencies per Constitution III) (011-keys-enum)
+- N/A (enum values and static readonly data only) (011-keys-enum)
 
 ## Recent Changes
 - 010-search-system: Enhanced SearchState with thread-safe properties, Invert(), ToString(); added SearchOperations static class stubs (41 tests, 100%/80% coverage)
