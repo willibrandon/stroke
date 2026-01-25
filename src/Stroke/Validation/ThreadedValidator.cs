@@ -73,8 +73,9 @@ public sealed class ThreadedValidator : ValidatorBase
     /// </exception>
     /// <remarks>
     /// <para>
-    /// Validation runs on a thread pool thread via Task.Run.
-    /// This ensures the calling thread is not blocked during validation.
+    /// Validation runs on a dedicated background thread via TaskCreationOptions.LongRunning.
+    /// This ensures the calling thread is not blocked during validation and guarantees
+    /// execution on a separate thread (unlike Task.Run which may reuse the calling thread).
     /// </para>
     /// <para>
     /// Exceptions from the wrapped validator (including <see cref="ValidationError"/>)
@@ -85,6 +86,13 @@ public sealed class ThreadedValidator : ValidatorBase
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        await Task.Run(() => Validator.Validate(document)).ConfigureAwait(false);
+        // Use LongRunning to create a dedicated thread rather than using the thread pool.
+        // Task.Run() may reuse the calling thread under certain conditions (e.g., when
+        // called from a thread pool thread on a system with limited cores).
+        await Task.Factory.StartNew(
+            () => Validator.Validate(document),
+            CancellationToken.None,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default).ConfigureAwait(false);
     }
 }
