@@ -220,8 +220,17 @@ public sealed class ThreadedHistory : IHistory
     /// <summary>
     /// Start the background loading thread.
     /// </summary>
+    /// <remarks>
+    /// Sets _loading = true before starting the thread to eliminate the race window
+    /// between thread creation and LoadThreadProc execution. This ensures any
+    /// AppendString calls after this method returns will go to _pendingAppends.
+    /// Must be called while holding _lock.
+    /// </remarks>
     private void StartLoadThread()
     {
+        // Set _loading here (while caller holds lock) to eliminate race window
+        // between thread start and LoadThreadProc setting _loading
+        _loading = true;
         _loadThread = new Thread(LoadThreadProc)
         {
             IsBackground = true, // Daemon thread - doesn't prevent app exit
@@ -240,10 +249,10 @@ public sealed class ThreadedHistory : IHistory
 
         try
         {
-            // Mark loading started and capture items appended before load
+            // Capture items appended before load started
+            // Note: _loading was already set to true by StartLoadThread while holding the lock
             using (_lock.EnterScope())
             {
-                _loading = true;
                 itemsAppendedBeforeLoad = [.. _loadedStrings];
                 _loadedStrings = [];
             }
