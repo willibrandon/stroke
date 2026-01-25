@@ -24,6 +24,10 @@ public interface ICompleter
     /// </summary>
     /// <param name="document">The current document.</param>
     /// <param name="completeEvent">Event describing how completion was triggered.</param>
+    /// <param name="cancellationToken">Token to cancel the async operation.</param>
     /// <returns>Async enumerable of completions.</returns>
-    IAsyncEnumerable<Completion> GetCompletionsAsync(Document document, CompleteEvent completeEvent);
+    IAsyncEnumerable<Completion> GetCompletionsAsync(
+        Document document,
+        CompleteEvent completeEvent,
+        CancellationToken cancellationToken = default);
 }

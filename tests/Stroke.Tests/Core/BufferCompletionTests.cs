@@ -22,9 +22,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3),
-            new("helicopter", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3),
+            new("helicopter", startPosition: -3)
         };
 
         // Act
@@ -41,7 +41,7 @@ public class BufferCompletionTests
     {
         // Arrange
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completions = new List<CompletionItem> { new("hello", StartPosition: -3) };
+        var completions = new List<CompletionItem> { new("hello", startPosition: -3) };
 
         // Act
         buffer.SetCompletions(completions);
@@ -77,8 +77,8 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3)
         };
         buffer.SetCompletions(completions);
 
@@ -97,9 +97,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3),
-            new("helicopter", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3),
+            new("helicopter", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // Select first
@@ -119,8 +119,8 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // 0
@@ -141,8 +141,8 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // 0
@@ -163,10 +163,10 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("a", StartPosition: -3),
-            new("b", StartPosition: -3),
-            new("c", StartPosition: -3),
-            new("d", StartPosition: -3)
+            new("a", startPosition: -3),
+            new("b", startPosition: -3),
+            new("c", startPosition: -3),
+            new("d", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // Select first
@@ -200,9 +200,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3),
-            new("helicopter", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3),
+            new("helicopter", startPosition: -3)
         };
         buffer.SetCompletions(completions);
 
@@ -221,9 +221,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3),
-            new("helicopter", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3),
+            new("helicopter", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // 0
@@ -244,8 +244,8 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // Select first (0)
@@ -265,8 +265,8 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // 0
@@ -289,9 +289,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3),
-            new("help", StartPosition: -3),
-            new("helicopter", StartPosition: -3)
+            new("hello", startPosition: -3),
+            new("help", startPosition: -3),
+            new("helicopter", startPosition: -3)
         };
         buffer.SetCompletions(completions);
 
@@ -310,7 +310,7 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
         var completions = new List<CompletionItem>
         {
-            new("hello", StartPosition: -3)
+            new("hello", startPosition: -3)
         };
         buffer.SetCompletions(completions);
         buffer.CompleteNext(); // Select first
@@ -333,7 +333,7 @@ public class BufferCompletionTests
     {
         // Arrange
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completions = new List<CompletionItem> { new("hello", StartPosition: -3) };
+        var completions = new List<CompletionItem> { new("hello", startPosition: -3) };
         buffer.SetCompletions(completions);
         buffer.CompleteNext();
         Assert.Equal("hello", buffer.Text);
@@ -364,9 +364,9 @@ public class BufferCompletionTests
     [Fact]
     public void ApplyCompletion_InsertsCompletionText()
     {
-        // Arrange - StartPosition: -3 means replace the 3 chars before cursor
+        // Arrange - startPosition: -3 means replace the 3 chars before cursor
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completion = new CompletionItem("hello", StartPosition: -3);
+        var completion = new CompletionItem("hello", startPosition: -3);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -379,14 +379,14 @@ public class BufferCompletionTests
     [Fact]
     public void ApplyCompletion_ClearsCompletionState()
     {
-        // Arrange - StartPosition: -3 means replace the 3 chars before cursor
+        // Arrange - startPosition: -3 means replace the 3 chars before cursor
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completions = new List<CompletionItem> { new("hello", StartPosition: -3) };
+        var completions = new List<CompletionItem> { new("hello", startPosition: -3) };
         buffer.SetCompletions(completions);
         buffer.CompleteNext();
 
         // Act
-        buffer.ApplyCompletion(new CompletionItem("helper", StartPosition: -3));
+        buffer.ApplyCompletion(new CompletionItem("helper", startPosition: -3));
 
         // Assert
         Assert.Null(buffer.CompleteState);
@@ -396,9 +396,9 @@ public class BufferCompletionTests
     [Fact]
     public void ApplyCompletion_PreservesTextAfterCursor()
     {
-        // Arrange - StartPosition: -3 means replace the 3 chars before cursor
+        // Arrange - startPosition: -3 means replace the 3 chars before cursor
         var buffer = new Buffer(document: new Document("hel world", cursorPosition: 3));
-        var completion = new CompletionItem("hello", StartPosition: -3);
+        var completion = new CompletionItem("hello", startPosition: -3);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -410,9 +410,9 @@ public class BufferCompletionTests
     [Fact]
     public void ApplyCompletion_WithZeroStartPosition_InsertsAtCursor()
     {
-        // Arrange - StartPosition: 0 means insert at cursor without deleting
+        // Arrange - startPosition: 0 means insert at cursor without deleting
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completion = new CompletionItem("lo", StartPosition: 0);
+        var completion = new CompletionItem("lo", startPosition: 0);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -426,9 +426,9 @@ public class BufferCompletionTests
     public void ApplyCompletion_WithNegativeStartPosition_ReplacesTextBeforeCursor()
     {
         // Arrange - user typed "hel" and completion replaces it with "hello"
-        // StartPosition: -3 means replace the 3 characters before cursor
+        // startPosition: -3 means replace the 3 characters before cursor
         var buffer = new Buffer(document: new Document("hel", cursorPosition: 3));
-        var completion = new CompletionItem("hello", StartPosition: -3);
+        var completion = new CompletionItem("hello", startPosition: -3);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -443,7 +443,7 @@ public class BufferCompletionTests
     {
         // Arrange - user typed "hel world" with cursor after "hel"
         var buffer = new Buffer(document: new Document("hel world", cursorPosition: 3));
-        var completion = new CompletionItem("hello", StartPosition: -3);
+        var completion = new CompletionItem("hello", startPosition: -3);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -457,9 +457,9 @@ public class BufferCompletionTests
     public void ApplyCompletion_WithNegativeStartPosition_PartialReplacement()
     {
         // Arrange - user typed "print(" and completion for function
-        // StartPosition: -1 means replace just the "(" character
+        // startPosition: -1 means replace just the "(" character
         var buffer = new Buffer(document: new Document("print(", cursorPosition: 6));
-        var completion = new CompletionItem("(x)", StartPosition: -1);
+        var completion = new CompletionItem("(x)", startPosition: -1);
 
         // Act
         buffer.ApplyCompletion(completion);
@@ -480,9 +480,9 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("pr", cursorPosition: 2));
         var completions = new List<CompletionItem>
         {
-            new("print", StartPosition: -2),
-            new("private", StartPosition: -2),
-            new("process", StartPosition: -2)
+            new("print", startPosition: -2),
+            new("private", startPosition: -2),
+            new("process", startPosition: -2)
         };
         buffer.SetCompletions(completions);
 
@@ -509,11 +509,11 @@ public class BufferCompletionTests
     {
         // Arrange - user types "sys" and completions are based on that
         var buffer = new Buffer(document: new Document("import sys", cursorPosition: 10));
-        // Completions replace "sys" (3 chars before cursor, so StartPosition: -3)
+        // Completions replace "sys" (3 chars before cursor, so startPosition: -3)
         var completions = new List<CompletionItem>
         {
-            new("system", StartPosition: -3),
-            new("syslog", StartPosition: -3)
+            new("system", startPosition: -3),
+            new("syslog", startPosition: -3)
         };
         buffer.SetCompletions(completions);
 
@@ -535,11 +535,11 @@ public class BufferCompletionTests
         var buffer = new Buffer(document: new Document("test", cursorPosition: 4));
         var completions = new List<CompletionItem>
         {
-            new("test1", StartPosition: -4),
-            new("test2", StartPosition: -4),
-            new("test3", StartPosition: -4),
-            new("test4", StartPosition: -4),
-            new("test5", StartPosition: -4)
+            new("test1", startPosition: -4),
+            new("test2", startPosition: -4),
+            new("test3", startPosition: -4),
+            new("test4", startPosition: -4),
+            new("test5", startPosition: -4)
         };
         var iterations = 30;
         var barrier = new Barrier(4);
@@ -591,11 +591,11 @@ public class BufferCompletionTests
         // Arrange
         var completions = new List<CompletionItem>
         {
-            new("item1", StartPosition: -2),
-            new("item2", StartPosition: -2),
-            new("item3", StartPosition: -2),
-            new("item4", StartPosition: -2),
-            new("item5", StartPosition: -2)
+            new("item1", startPosition: -2),
+            new("item2", startPosition: -2),
+            new("item3", startPosition: -2),
+            new("item4", startPosition: -2),
+            new("item5", startPosition: -2)
         };
         var state = new CompletionState(
             originalDocument: new Document("ab", cursorPosition: 2),

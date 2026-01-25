@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Stroke.Core;
 
 namespace Stroke.Completion;
@@ -24,7 +25,10 @@ public sealed class DummyCompleter : ICompleter
     }
 
     /// <inheritdoc />
-    public async IAsyncEnumerable<Completion> GetCompletionsAsync(Document document, CompleteEvent completeEvent)
+    public async IAsyncEnumerable<Completion> GetCompletionsAsync(
+        Document document,
+        CompleteEvent completeEvent,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         await Task.CompletedTask;
         yield break;

@@ -198,9 +198,9 @@ public class BufferThreadSafetyTests
         // Arrange
         var completions = new List<Stroke.Completion.Completion>
         {
-            new Stroke.Completion.Completion("option1", StartPosition: 0),
-            new Stroke.Completion.Completion("option2", StartPosition: 0),
-            new Stroke.Completion.Completion("option3", StartPosition: 0)
+            new Stroke.Completion.Completion("option1", startPosition: 0),
+            new Stroke.Completion.Completion("option2", startPosition: 0),
+            new Stroke.Completion.Completion("option3", startPosition: 0)
         };
         var buffer = new Buffer(document: new Document("test"));
 
