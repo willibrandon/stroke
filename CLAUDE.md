@@ -371,6 +371,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only - undo stack, redo stack, working_lines) (007-mutable-buffer)
 - C# 13 / .NET 10 + None (Stroke.History is part of Stroke.Core layer) (008-history-system)
 - File system for `FileHistory`, in-memory for others (008-history-system)
+- C# 13 / .NET 10 + Stroke.Core (Document class) (009-validation-system)
+- N/A (stateless validation) (009-validation-system)
 
 ## Recent Changes
 - 008-history-system: Added IHistory interface with InMemoryHistory, FileHistory, ThreadedHistory, DummyHistory implementations (119 tests, >90% coverage)
