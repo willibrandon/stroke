@@ -56,9 +56,8 @@ public abstract class HistoryBase : IHistory
         using (_lock.EnterScope())
         {
             _loadedStrings.Insert(0, value);
+            StoreString(value);
         }
-
-        StoreString(value);
     }
 
     /// <summary>

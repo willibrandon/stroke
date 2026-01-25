@@ -1962,16 +1962,19 @@ public class Event<TEventArgs>
 
 ## Module: prompt_toolkit.validation
 
+**Status: ✅ Implemented (Feature 009)**
+
 ### Classes
 
-| Python | Stroke | Notes |
-|--------|--------|-------|
-| `Validator` | `IValidator` | Interface (abstract in Python) |
-| `ValidationError` | `ValidationError` | Validation failure |
-| `ThreadedValidator` | `ThreadedValidator` | Threaded wrapper |
-| `DummyValidator` | `DummyValidator` | No-op validator |
-| `DynamicValidator` | `DynamicValidator` | Dynamic wrapper |
-| `ConditionalValidator` | `ConditionalValidator` | Conditional wrapper |
+| Python | Stroke | Notes | Status |
+|--------|--------|-------|--------|
+| `Validator` | `IValidator` + `ValidatorBase` | Interface + abstract base | ✅ |
+| `ValidationError` | `ValidationError` | Validation failure exception | ✅ |
+| `ThreadedValidator` | `ThreadedValidator` | Background thread wrapper | ✅ |
+| `DummyValidator` | `DummyValidator` | Null-object validator | ✅ |
+| `DynamicValidator` | `DynamicValidator` | Dynamic dispatch wrapper | ✅ |
+| `ConditionalValidator` | `ConditionalValidator` | Conditional wrapper | ✅ |
+| `_ValidatorFromCallable` | `FromCallableValidator` (internal) | Factory-created validator | ✅ |
 
 ### ValidationError Class
 
@@ -1987,15 +1990,16 @@ class ValidationError(Exception):
 
 ```csharp
 // Stroke
-public class ValidationError : Exception
+public sealed class ValidationError : Exception
 {
     public ValidationError(int cursorPosition = 0, string message = "");
     public int CursorPosition { get; }
     public override string Message { get; }
+    public override string ToString(); // Format: ValidationError(CursorPosition={0}, Message="{1}")
 }
 ```
 
-### IValidator Interface
+### IValidator Interface + ValidatorBase
 
 ```python
 # Python
@@ -2008,14 +2012,53 @@ class Validator(ABC):
 ```
 
 ```csharp
-// Stroke
+// Stroke - Interface
 public interface IValidator
 {
     void Validate(Document document); // Throws ValidationError on failure
-    Task ValidateAsync(Document document);
+    ValueTask ValidateAsync(Document document); // ValueTask for hot path optimization
+}
 
-    static IValidator FromCallable(Action<Document> validateFunc, ...);
-    static IValidator FromCallable(Func<Document, bool> validateFunc, string errorMessage, ...);
+// Stroke - Abstract base class
+public abstract class ValidatorBase : IValidator
+{
+    public abstract void Validate(Document document);
+    public virtual ValueTask ValidateAsync(Document document); // Default: calls Validate synchronously
+
+    // Factory methods (from_callable equivalent)
+    public static IValidator FromCallable(Func<string, bool> validateFunc, string errorMessage = "Invalid input", bool moveCursorToEnd = false);
+    public static IValidator FromCallable(Action<Document> validateFunc);
+}
+```
+
+### Decorator Validators
+
+```csharp
+// ThreadedValidator - runs validation in background thread
+public sealed class ThreadedValidator : ValidatorBase
+{
+    public ThreadedValidator(IValidator validator);
+    public IValidator Validator { get; }
+}
+
+// ConditionalValidator - applies validation conditionally
+public sealed class ConditionalValidator : ValidatorBase
+{
+    public ConditionalValidator(IValidator validator, Func<bool> filter);
+    public IValidator Validator { get; }
+    public Func<bool> Filter { get; }
+}
+
+// DynamicValidator - retrieves validator dynamically
+public sealed class DynamicValidator : ValidatorBase
+{
+    public DynamicValidator(Func<IValidator?> getValidator);
+    public Func<IValidator?> GetValidator { get; }
+}
+
+// DummyValidator - accepts all input
+public sealed class DummyValidator : ValidatorBase
+{
 }
 ```
 
