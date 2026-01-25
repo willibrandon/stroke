@@ -24,11 +24,11 @@
 
 **Purpose**: Verify existing infrastructure and prepare test files
 
-- [ ] T001 Verify SearchDirection enum exists at src/Stroke/Core/SearchDirection.cs
-- [ ] T002 Verify existing SearchState stub at src/Stroke/Core/SearchState.cs
-- [ ] T003 Create tests/Stroke.Tests/Core/SearchStateTests.cs with test class scaffold
-- [ ] T004 [P] Create tests/Stroke.Tests/Core/SearchStateThreadingTests.cs with test class scaffold
-- [ ] T005 [P] Create tests/Stroke.Tests/Core/SearchOperationsTests.cs with test class scaffold
+- [x] T001 Verify SearchDirection enum exists at src/Stroke/Core/SearchDirection.cs
+- [x] T002 Verify existing SearchState stub at src/Stroke/Core/SearchState.cs
+- [x] T003 Create tests/Stroke.Tests/Core/SearchStateTests.cs with test class scaffold
+- [x] T004 [P] Create tests/Stroke.Tests/Core/SearchStateThreadingTests.cs with test class scaffold
+- [x] T005 [P] Create tests/Stroke.Tests/Core/SearchOperationsTests.cs with test class scaffold
 
 ---
 
@@ -38,12 +38,12 @@
 
 **⚠️ CRITICAL**: SearchState enhancement blocks all user stories
 
-- [ ] T006 Add Lock field and private backing fields to src/Stroke/Core/SearchState.cs (migration from stub)
-- [ ] T007 Add constructor parameter `Func<bool>? ignoreCase = null` to SearchState
-- [ ] T008 Implement thread-safe Text property with Lock in src/Stroke/Core/SearchState.cs
-- [ ] T009 [P] Implement thread-safe Direction property with Lock in src/Stroke/Core/SearchState.cs
-- [ ] T010 [P] Implement thread-safe IgnoreCaseFilter property with Lock in src/Stroke/Core/SearchState.cs
-- [ ] T011 Implement thread-safe IgnoreCase() method with Lock in src/Stroke/Core/SearchState.cs
+- [x] T006 Add Lock field and private backing fields to src/Stroke/Core/SearchState.cs (migration from stub)
+- [x] T007 Add constructor parameter `Func<bool>? ignoreCase = null` to SearchState
+- [x] T008 Implement thread-safe Text property with Lock in src/Stroke/Core/SearchState.cs
+- [x] T009 [P] Implement thread-safe Direction property with Lock in src/Stroke/Core/SearchState.cs
+- [x] T010 [P] Implement thread-safe IgnoreCaseFilter property with Lock in src/Stroke/Core/SearchState.cs
+- [x] T011 Implement thread-safe IgnoreCase() method with Lock in src/Stroke/Core/SearchState.cs
 
 **Checkpoint**: Foundation ready - SearchState is thread-safe, user story implementation can begin
 
@@ -59,18 +59,18 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T012 [P] [US1] Test SearchState constructor defaults in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T013 [P] [US1] Test SearchState constructor with all parameters in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T014 [P] [US1] Test IgnoreCase() returns false when filter is null in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T015 [P] [US1] Test IgnoreCase() returns filter result when filter set in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T016 [P] [US1] Test Text property null handling (converts to empty string) in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T016a [P] [US1] Test SearchState supports 10,000 character search pattern (SC-007) in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T012 [P] [US1] Test SearchState constructor defaults in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T013 [P] [US1] Test SearchState constructor with all parameters in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T014 [P] [US1] Test IgnoreCase() returns false when filter is null in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T015 [P] [US1] Test IgnoreCase() returns filter result when filter set in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T016 [P] [US1] Test Text property null handling (converts to empty string) in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T016a [P] [US1] Test SearchState supports 10,000 character search pattern (SC-007) in tests/Stroke.Tests/Core/SearchStateTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] Review IgnoreCase() implementation against US1.3 acceptance scenario (case-insensitive search) in src/Stroke/Core/SearchState.cs
-- [ ] T018 [US1] Add XML documentation for SearchState class and all members
-- [ ] T019 [US1] Run tests and verify all US1 tests pass
+- [x] T017 [US1] Review IgnoreCase() implementation against US1.3 acceptance scenario (case-insensitive search) in src/Stroke/Core/SearchState.cs
+- [x] T018 [US1] Add XML documentation for SearchState class and all members
+- [x] T019 [US1] Run tests and verify all US1 tests pass
 
 **Checkpoint**: User Story 1 complete - Basic text search functionality works independently
 
@@ -84,17 +84,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Test Invert() from Forward to Backward in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T021 [P] [US2] Test Invert() from Backward to Forward in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T022 [P] [US2] Test Invert() preserves Text property in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T023 [P] [US2] Test Invert() preserves IgnoreCaseFilter delegate in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T024 [P] [US2] Test Invert() returns NEW instance (not same reference) in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T024a [P] [US2] Test Invert() allocates exactly one new SearchState object (SC-008) in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T020 [P] [US2] Test Invert() from Forward to Backward in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T021 [P] [US2] Test Invert() from Backward to Forward in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T022 [P] [US2] Test Invert() preserves Text property in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T023 [P] [US2] Test Invert() preserves IgnoreCaseFilter delegate in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T024 [P] [US2] Test Invert() returns NEW instance (not same reference) in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T024a [P] [US2] Test Invert() allocates exactly one new SearchState object (SC-008) in tests/Stroke.Tests/Core/SearchStateTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T025 [US2] Implement Invert() method returning new SearchState with reversed direction in src/Stroke/Core/SearchState.cs
-- [ ] T026 [US2] Run tests and verify all US2 tests pass
+- [x] T025 [US2] Implement Invert() method returning new SearchState with reversed direction in src/Stroke/Core/SearchState.cs
+- [x] T026 [US2] Run tests and verify all US2 tests pass
 
 **Checkpoint**: User Story 2 complete - Bidirectional search via Invert() works independently
 
@@ -108,13 +108,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T027 [P] [US3] Test incremental Text property updates ("a" → "ap" → "apr") in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T028 [P] [US3] Test IgnoreCaseFilter runtime evaluation (toggle behavior) in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T027 [P] [US3] Test incremental Text property updates ("a" → "ap" → "apr") in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T028 [P] [US3] Test IgnoreCaseFilter runtime evaluation (toggle behavior) in tests/Stroke.Tests/Core/SearchStateTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Confirm Text property setter allows incremental updates (tested by T027/T028) in src/Stroke/Core/SearchState.cs
-- [ ] T030 [US3] Run tests and verify all US3 tests pass
+- [x] T029 [US3] Confirm Text property setter allows incremental updates (tested by T027/T028) in src/Stroke/Core/SearchState.cs
+- [x] T030 [US3] Run tests and verify all US3 tests pass
 
 **Checkpoint**: User Story 3 complete - Incremental search property updates work independently
 
@@ -128,19 +128,19 @@
 
 ### Tests for User Story 4
 
-- [ ] T031 [P] [US4] Test StartSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
-- [ ] T032 [P] [US4] Test StopSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
-- [ ] T033 [P] [US4] Test DoIncrementalSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
-- [ ] T034 [P] [US4] Test AcceptSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
+- [x] T031 [P] [US4] Test StartSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
+- [x] T032 [P] [US4] Test StopSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
+- [x] T033 [P] [US4] Test DoIncrementalSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
+- [x] T034 [P] [US4] Test AcceptSearch throws NotImplementedException in tests/Stroke.Tests/Core/SearchOperationsTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T035 [US4] Create src/Stroke/Core/SearchOperations.cs static class with XML documentation (includes GetReverseSearchLinks() private stub per FR-010)
-- [ ] T036 [US4] Implement StartSearch stub throwing NotImplementedException with dependency note
-- [ ] T037 [P] [US4] Implement StopSearch stub throwing NotImplementedException with dependency note
-- [ ] T038 [P] [US4] Implement DoIncrementalSearch stub throwing NotImplementedException with dependency note
-- [ ] T039 [P] [US4] Implement AcceptSearch stub throwing NotImplementedException with dependency note
-- [ ] T040 [US4] Run tests and verify all US4 tests pass
+- [x] T035 [US4] Create src/Stroke/Core/SearchOperations.cs static class with XML documentation (includes GetReverseSearchLinks() private stub per FR-010)
+- [x] T036 [US4] Implement StartSearch stub throwing NotImplementedException with dependency note
+- [x] T037 [P] [US4] Implement StopSearch stub throwing NotImplementedException with dependency note
+- [x] T038 [P] [US4] Implement DoIncrementalSearch stub throwing NotImplementedException with dependency note
+- [x] T039 [P] [US4] Implement AcceptSearch stub throwing NotImplementedException with dependency note
+- [x] T040 [US4] Run tests and verify all US4 tests pass
 
 **Checkpoint**: User Story 4 complete - SearchOperations stubs available, document pending dependencies
 
@@ -154,8 +154,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T041 [US5] Add XML doc comments to SearchOperations noting Vi mode requirements (FR-011)
-- [ ] T042 [US5] Verify doc comments mention Feature 35 dependency
+- [x] T041 [US5] Add XML doc comments to SearchOperations noting Vi mode requirements (FR-011)
+- [x] T042 [US5] Verify doc comments mention Feature 35 dependency
 
 **Checkpoint**: User Story 5 complete - Vi mode requirements documented
 
@@ -169,17 +169,17 @@
 
 ### Tests for User Story 6
 
-- [ ] T043 [P] [US6] Test concurrent Text property access (10 threads, 1000 ops) in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
-- [ ] T044 [P] [US6] Test concurrent Direction property access (10 threads, 1000 ops) in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
-- [ ] T045 [P] [US6] Test concurrent IgnoreCaseFilter property access in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
-- [ ] T046 [P] [US6] Test concurrent Invert() calls return consistent snapshots in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
-- [ ] T047 [P] [US6] Test concurrent IgnoreCase() while IgnoreCaseFilter changes in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
-- [ ] T048 [US6] Test no torn reads on string Text property in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T043 [P] [US6] Test concurrent Text property access (10 threads, 1000 ops) in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T044 [P] [US6] Test concurrent Direction property access (10 threads, 1000 ops) in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T045 [P] [US6] Test concurrent IgnoreCaseFilter property access in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T046 [P] [US6] Test concurrent Invert() calls return consistent snapshots in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T047 [P] [US6] Test concurrent IgnoreCase() while IgnoreCaseFilter changes in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
+- [x] T048 [US6] Test no torn reads on string Text property in tests/Stroke.Tests/Core/SearchStateThreadingTests.cs
 
 ### Implementation for User Story 6
 
-- [ ] T049 [US6] Review Lock pattern against NFR-001 to NFR-008 (atomic ops, EnterScope pattern) - verified by T043-T048
-- [ ] T050 [US6] Run threading tests and verify all US6 tests pass
+- [x] T049 [US6] Review Lock pattern against NFR-001 to NFR-008 (atomic ops, EnterScope pattern) - verified by T043-T048
+- [x] T050 [US6] Run threading tests and verify all US6 tests pass
 
 **Checkpoint**: User Story 6 complete - Thread safety verified with stress tests
 
@@ -193,14 +193,14 @@
 
 ### Tests for ToString
 
-- [ ] T051 [P] Test ToString() output format matches spec in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T052 [P] Test ToString() with null IgnoreCaseFilter shows ignoreCase=False in tests/Stroke.Tests/Core/SearchStateTests.cs
-- [ ] T053 [P] Test ToString() with IgnoreCaseFilter=() => true shows ignoreCase=True in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T051 [P] Test ToString() output format matches spec in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T052 [P] Test ToString() with null IgnoreCaseFilter shows ignoreCase=False in tests/Stroke.Tests/Core/SearchStateTests.cs
+- [x] T053 [P] Test ToString() with IgnoreCaseFilter=() => true shows ignoreCase=True in tests/Stroke.Tests/Core/SearchStateTests.cs
 
 ### Implementation for ToString
 
-- [ ] T054 Implement ToString() override in src/Stroke/Core/SearchState.cs with format: `SearchState("{Text}", direction={Direction}, ignoreCase={IgnoreCase()})`
-- [ ] T055 Run ToString tests and verify all pass
+- [x] T054 Implement ToString() override in src/Stroke/Core/SearchState.cs with format: `SearchState("{Text}", direction={Direction}, ignoreCase={IgnoreCase()})`
+- [x] T055 Run ToString tests and verify all pass
 
 **Checkpoint**: ToString() complete - Debug representation available
 
@@ -210,13 +210,13 @@
 
 **Purpose**: Final validation and cross-cutting improvements
 
-- [ ] T056 Verify 80% test coverage for SearchState (SC-005)
-- [ ] T057 Verify 80% test coverage for SearchOperations (SC-005)
-- [ ] T058 Run all search tests to confirm green suite
-- [ ] T059 Verify no file exceeds 1000 LOC (Constitution X)
-- [ ] T060 Verify XML documentation complete for all public members
-- [ ] T061 Run quickstart.md code examples mentally or via test to validate documentation
-- [ ] T062 Update src/Stroke/Core/SearchState.cs remarks to remove "stub" reference
+- [x] T056 Verify 80% test coverage for SearchState (SC-005)
+- [x] T057 Verify 80% test coverage for SearchOperations (SC-005)
+- [x] T058 Run all search tests to confirm green suite
+- [x] T059 Verify no file exceeds 1000 LOC (Constitution X)
+- [x] T060 Verify XML documentation complete for all public members
+- [x] T061 Run quickstart.md code examples mentally or via test to validate documentation
+- [x] T062 Update src/Stroke/Core/SearchState.cs remarks to remove "stub" reference
 
 ---
 

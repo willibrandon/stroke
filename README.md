@@ -64,6 +64,13 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `DynamicValidator` for runtime validator switching
   - `ThreadedValidator` for background thread validation
   - Thread-safe operations (100% test coverage)
+- **Search System** — Text search state and operations
+  - `SearchDirection` enum (Forward, Backward)
+  - `SearchState` mutable query object with thread-safe properties
+  - `Invert()` method for direction reversal (returns new instance)
+  - `IgnoreCaseFilter` delegate for runtime case sensitivity
+  - `SearchOperations` static class (stubs until Layout/Application features)
+  - Thread-safe operations (100% SearchState coverage)
 
 ### Up Next
 
