@@ -27,8 +27,10 @@ public sealed class ThreadedHistory : IHistory
     private readonly IHistory _history;
     private readonly Lock _lock = new();
     private Thread? _loadThread;
+    private bool _loading;
     private bool _loaded;
     private List<string> _loadedStrings = [];
+    private readonly List<string> _pendingAppends = [];
     private readonly List<ManualResetEventSlim> _stringLoadEvents = [];
 
     /// <summary>
@@ -88,7 +90,15 @@ public sealed class ThreadedHistory : IHistory
 
         using (_lock.EnterScope())
         {
-            _loadedStrings.Insert(0, value);
+            if (_loading)
+            {
+                // During loading, collect appends separately to avoid index shifting
+                _pendingAppends.Add(value);
+            }
+            else
+            {
+                _loadedStrings.Insert(0, value);
+            }
             SignalAllEvents();
         }
 
@@ -146,7 +156,9 @@ public sealed class ThreadedHistory : IHistory
                 }
             }
 
-            int yieldedCount = 0;
+            // Use content-based tracking to handle prepending correctly
+            // (when items are inserted at front, indices shift but content doesn't)
+            var yieldedSet = new HashSet<string>();
 
             while (true)
             {
@@ -162,12 +174,14 @@ public sealed class ThreadedHistory : IHistory
                     isLoaded = _loaded;
                 }
 
-                // Yield any new items
-                while (yieldedCount < currentStrings.Count)
+                // Yield any new items not yet yielded
+                foreach (var item in currentStrings)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    yield return currentStrings[yieldedCount];
-                    yieldedCount++;
+                    if (yieldedSet.Add(item))
+                    {
+                        yield return item;
+                    }
                 }
 
                 // If loading is complete, we're done
@@ -226,9 +240,10 @@ public sealed class ThreadedHistory : IHistory
 
         try
         {
-            // Capture items appended before load started (they're newest)
+            // Mark loading started and capture items appended before load
             using (_lock.EnterScope())
             {
+                _loading = true;
                 itemsAppendedBeforeLoad = [.. _loadedStrings];
                 _loadedStrings = [];
             }
@@ -258,6 +273,20 @@ public sealed class ThreadedHistory : IHistory
                     _loadedStrings.InsertRange(0, itemsToPreserve);
                 }
 
+                // Prepend items that were appended during loading (newest first)
+                // These go at the front since they're the most recent
+                if (_pendingAppends.Count > 0)
+                {
+                    // Reverse because _pendingAppends has oldest-first order
+                    // (each append added to end), but we need newest-first
+                    for (int i = _pendingAppends.Count - 1; i >= 0; i--)
+                    {
+                        _loadedStrings.Insert(0, _pendingAppends[i]);
+                    }
+                    _pendingAppends.Clear();
+                }
+
+                _loading = false;
                 _loaded = true;
                 SignalAllEvents();
             }
