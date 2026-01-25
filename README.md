@@ -49,6 +49,13 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Auto-suggest integration
   - External editor support
   - Thread-safe operations (87% test coverage)
+- **History System** — Command history storage with multiple backends
+  - `IHistory` interface with load/store/append operations
+  - `InMemoryHistory` for session-only storage
+  - `FileHistory` for persistent file-backed storage (Python PTK format)
+  - `ThreadedHistory` wrapper for background loading
+  - `DummyHistory` for privacy/disabled scenarios
+  - Thread-safe operations (>90% test coverage)
 
 ### Up Next
 
