@@ -71,6 +71,27 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `IgnoreCaseFilter` delegate for runtime case sensitivity
   - `SearchOperations` static class (stubs until Layout/Application features)
   - Thread-safe operations (100% SearchState coverage)
+- **Keys Enum** — Input key definitions
+  - `Keys` enum with 151 key values matching Python Prompt Toolkit
+  - Control keys, function keys, navigation keys, special keys
+- **Completion System** — Autocompletion with 12 completers
+  - `ICompleter` interface with sync and async completion
+  - `CompleterBase` abstract class with default implementations
+  - `Completion` record with text, display, meta, and start position
+  - `CompleteEvent` record for completion trigger context
+  - `WordCompleter` for word list completion with prefix/middle matching
+  - `PathCompleter` for filesystem path completion
+  - `FuzzyCompleter` for fuzzy character-in-order matching
+  - `FuzzyWordCompleter` convenience wrapper
+  - `DeduplicateCompleter` for removing duplicate completions
+  - `MergeCompleter` for combining multiple completers
+  - `ThreadedCompleter` for background thread completion
+  - `DummyCompleter` null-object pattern for disabled completion
+  - `NestedCompleter` for context-sensitive hierarchical completion
+  - `ExecutableCompleter` for system executable completion
+  - `ConditionalCompleter` for filter-based conditional completion
+  - `DynamicCompleter` for runtime completer switching
+  - Thread-safe operations (>80% test coverage)
 
 ### Up Next
 
@@ -85,6 +106,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 ```bash
 dotnet build
 dotnet test
+```
+
+## Benchmarks
+
+Performance benchmarks using BenchmarkDotNet:
+
+```bash
+dotnet run -c Release --project benchmarks/Stroke.Benchmarks
 ```
 
 ## License

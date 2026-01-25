@@ -380,6 +380,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless completion - completers may access filesystem for PathCompleter) (012-completion-system)
 
 ## Recent Changes
+- 012-completion-system: Added ICompleter interface with 12 completers (WordCompleter, PathCompleter, FuzzyCompleter, FuzzyWordCompleter, DeduplicateCompleter, MergeCompleter, ThreadedCompleter, DummyCompleter, NestedCompleter, ExecutableCompleter, ConditionalCompleter, DynamicCompleter), Completion record, CompleteEvent record (267 tests, >80% coverage); added Stroke.Benchmarks project
+- 011-keys-enum: Added Keys enum with 151 key values from Python Prompt Toolkit
 - 010-search-system: Enhanced SearchState with thread-safe properties, Invert(), ToString(); added SearchOperations static class stubs (41 tests, 100%/80% coverage)
 - 009-validation-system: Added IValidator interface with ValidatorBase, DummyValidator, ConditionalValidator, DynamicValidator, ThreadedValidator implementations (142 tests, 100% coverage)
 - 008-history-system: Added IHistory interface with InMemoryHistory, FileHistory, ThreadedHistory, DummyHistory implementations (119 tests, >90% coverage)

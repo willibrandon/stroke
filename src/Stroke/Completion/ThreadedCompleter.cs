@@ -77,9 +77,9 @@ public sealed class ThreadedCompleter : CompleterBase
             FullMode = BoundedChannelFullMode.Wait
         });
 
-        // Start background task to produce completions.
-        // Use LongRunning to get a dedicated thread immediately (avoids thread pool scheduling latency).
-        _ = Task.Factory.StartNew(() =>
+        // Start background task to produce completions using the thread pool.
+        // This matches Python's run_in_executor(None, ...) which uses the default executor.
+        _ = Task.Run(() =>
         {
             try
             {
@@ -104,7 +104,7 @@ public sealed class ThreadedCompleter : CompleterBase
             {
                 channel.Writer.Complete();
             }
-        }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        }, cancellationToken);
 
         // Consume completions from the channel.
         // Note: ReadAllAsync's inner TryRead loop doesn't check cancellation between buffered items,

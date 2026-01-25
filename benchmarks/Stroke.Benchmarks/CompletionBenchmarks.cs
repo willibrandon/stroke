@@ -1,9 +1,61 @@
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Loggers;
 using Stroke.Completion;
 using Stroke.Core;
 
 namespace Stroke.Benchmarks;
+
+/// <summary>
+/// Logger that filters out the "Failed to set up high priority" message on macOS/Linux.
+/// </summary>
+public sealed class FilteringConsoleLogger : ILogger
+{
+    private readonly ILogger _inner = ConsoleLogger.Default;
+
+    public string Id => _inner.Id;
+    public int Priority => _inner.Priority;
+
+    public void Write(LogKind logKind, string text)
+    {
+        if (!text.Contains("Failed to set up high priority"))
+            _inner.Write(logKind, text);
+    }
+
+    public void WriteLine() => _inner.WriteLine();
+
+    public void WriteLine(LogKind logKind, string text)
+    {
+        if (!text.Contains("Failed to set up high priority"))
+            _inner.WriteLine(logKind, text);
+    }
+
+    public void Flush() => _inner.Flush();
+}
+
+/// <summary>
+/// Config that suppresses the high priority permission warning.
+/// </summary>
+public class StrokeBenchmarkConfig : ManualConfig
+{
+    public StrokeBenchmarkConfig()
+    {
+        // Use all defaults except replace the console logger with our filtering version
+        foreach (var logger in DefaultConfig.Instance.GetLoggers())
+        {
+            if (logger is ConsoleLogger)
+                AddLogger(new FilteringConsoleLogger());
+            else
+                AddLogger(logger);
+        }
+        AddColumnProvider(DefaultConfig.Instance.GetColumnProviders().ToArray());
+        AddExporter(DefaultConfig.Instance.GetExporters().ToArray());
+        AddAnalyser(DefaultConfig.Instance.GetAnalysers().ToArray());
+        AddValidator(DefaultConfig.Instance.GetValidators().ToArray());
+        // Jobs are specified via [SimpleJob] attributes on the benchmark classes
+    }
+}
 
 /// <summary>
 /// Benchmarks for the completion system per Constitution VIII and spec requirements.
