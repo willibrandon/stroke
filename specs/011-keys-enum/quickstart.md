@@ -111,7 +111,7 @@ bool isValid = allKeys.Contains("c-a");  // true
 bool invalid = allKeys.Contains("foo");   // false
 
 // Count available keys
-int count = allKeys.Count;  // 143
+int count = allKeys.Count;  // 151
 ```
 
 ## Alias Resolution

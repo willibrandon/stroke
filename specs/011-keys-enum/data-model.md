@@ -10,7 +10,7 @@
 
 **Definition**: Enumeration of all key press types for key bindings, providing compile-time safety.
 
-**Values**: 143 primary key values organized by category:
+**Values**: 151 primary key values organized by category:
 
 | Category | Values | Count |
 |----------|--------|-------|
@@ -44,8 +44,8 @@ Keys.SIGINT        → "<sigint>"
 ```
 
 **Validation Rules**:
-- V1: All 143 values MUST have unique integer backing values
-- V2: All 143 values MUST have unique canonical string representations
+- V1: All 151 values MUST have unique integer backing values
+- V2: All 151 values MUST have unique canonical string representations
 - V3: String representations MUST match Python Prompt Toolkit exactly
 
 ---
@@ -148,14 +148,14 @@ Keys.SIGINT        → "<sigint>"
 **Type**: `IReadOnlyDictionary<Keys, string>`
 **Purpose**: O(1) enum-to-string conversion
 **Initialization**: Static constructor, populated from hardcoded mappings
-**Size**: 143 entries
+**Size**: 151 entries
 
 ### S2: ParseKey Lookup Dictionary
 
 **Type**: `Dictionary<string, Keys>` with `StringComparer.OrdinalIgnoreCase`
 **Purpose**: O(1) case-insensitive string-to-enum conversion
 **Initialization**: Static constructor, inverted from S1
-**Size**: 143 entries
+**Size**: 151 entries
 
 ### S3: Alias Map Dictionary
 
@@ -169,7 +169,7 @@ Keys.SIGINT        → "<sigint>"
 **Type**: `IReadOnlyList<string>`
 **Purpose**: Enumerate all canonical key strings (matches Python `ALL_KEYS`)
 **Initialization**: Static constructor, built from S1 values
-**Size**: 143 entries (excludes aliases)
+**Size**: 151 entries (excludes aliases)
 
 ---
 

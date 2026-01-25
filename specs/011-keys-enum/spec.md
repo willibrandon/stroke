@@ -19,7 +19,7 @@ A developer wants to register key bindings in their terminal application using s
 
 1. **Given** a Keys enum with all key values defined, **When** a developer registers `Keys.ControlC` as a binding, **Then** the binding correctly identifies Ctrl+C key presses
 2. **Given** a Keys enum value like `Keys.Enter`, **When** it is compared or converted to its string representation, **Then** it returns `"c-m"` (the canonical form)
-3. **Given** the Keys enum, **When** a developer uses IDE autocomplete, **Then** all 143 key values are discoverable with their descriptions
+3. **Given** the Keys enum, **When** a developer uses IDE autocomplete, **Then** all 151 key values are discoverable with their descriptions
 
 ---
 
@@ -84,7 +84,7 @@ A developer building a key binding UI or documentation generator needs to enumer
 
 ### Functional Requirements
 
-- **FR-001**: System MUST provide a `Keys` enum containing all key values from Python Prompt Toolkit's `keys.py` module (143 primary keys)
+- **FR-001**: System MUST provide a `Keys` enum containing all key values from Python Prompt Toolkit's `keys.py` module (151 primary keys)
 - **FR-002**: System MUST provide a `ToKeyString()` extension method that converts any `Keys` value to its canonical string representation (e.g., `Keys.ControlA` → `"c-a"`)
 - **FR-003**: System MUST provide a `ParseKey()` method that converts a key string to its corresponding `Keys` value, returning null for invalid strings
 - **FR-004**: System MUST support case-insensitive key string parsing
@@ -139,8 +139,8 @@ The `KeyAliasMap.Aliases` dictionary MUST contain:
 
 ### Measurable Outcomes
 
-- **SC-001**: All 143 primary Keys enum values match Python Prompt Toolkit's keys.py exactly in name and string representation
-- **SC-002**: Parsing any of the 143 canonical key strings returns the correct Keys enum value
+- **SC-001**: All 151 primary Keys enum values match Python Prompt Toolkit's keys.py exactly in name and string representation
+- **SC-002**: Parsing any of the 151 canonical key strings returns the correct Keys enum value
 - **SC-003**: Parsing any of the 8 alias strings returns the correct Keys enum value
 - **SC-004**: Round-trip conversion (enum → string → enum) succeeds for all Keys values
 - **SC-005**: Unit test coverage achieves at least 80% for all Keys-related types
