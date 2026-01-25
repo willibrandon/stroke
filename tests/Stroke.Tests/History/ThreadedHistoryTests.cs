@@ -39,6 +39,52 @@ public sealed class ThreadedHistoryTests
         }
     }
 
+    /// <summary>
+    /// A history that signals when loading starts and waits for permission to continue.
+    /// Used for deterministic testing of concurrent append during load.
+    /// </summary>
+    private sealed class SynchronizedHistory : HistoryBase
+    {
+        private readonly List<string> _items;
+        private readonly ManualResetEventSlim _loadStarted = new(false);
+        private readonly ManualResetEventSlim _canContinue = new(false);
+
+        public SynchronizedHistory(IEnumerable<string> items)
+        {
+            _items = items.ToList();
+        }
+
+        /// <summary>
+        /// Signals when LoadHistoryStrings has started iterating.
+        /// </summary>
+        public ManualResetEventSlim LoadStarted => _loadStarted;
+
+        /// <summary>
+        /// Set this to allow LoadHistoryStrings to continue yielding items.
+        /// </summary>
+        public ManualResetEventSlim CanContinue => _canContinue;
+
+        public override IEnumerable<string> LoadHistoryStrings()
+        {
+            // Signal that loading has started
+            _loadStarted.Set();
+
+            // Wait for permission to continue
+            _canContinue.Wait();
+
+            // Return newest-first (reverse order)
+            for (int i = _items.Count - 1; i >= 0; i--)
+            {
+                yield return _items[i];
+            }
+        }
+
+        public override void StoreString(string value)
+        {
+            _items.Add(value);
+        }
+    }
+
     // T037: Basic wrapper tests
 
     [Fact]
@@ -157,11 +203,9 @@ public sealed class ThreadedHistoryTests
     [Fact]
     public async Task AppendString_BeforeLoadCompletes_ItemImmediatelyVisible()
     {
-        // Arrange - slow history
-        var slowHistory = new SlowHistory(
-            ["old1", "old2"],
-            TimeSpan.FromMilliseconds(100));
-        var threaded = new ThreadedHistory(slowHistory);
+        // Arrange - use synchronized history to guarantee append happens during load
+        var syncHistory = new SynchronizedHistory(["old1", "old2"]);
+        var threaded = new ThreadedHistory(syncHistory);
 
         // Start loading in background
         var loadTask = Task.Run(async () =>
@@ -174,9 +218,14 @@ public sealed class ThreadedHistoryTests
             return items;
         });
 
-        // Wait a bit then append
-        await Task.Delay(50);
+        // Wait for load thread to actually start (deterministic, not timing-based)
+        syncHistory.LoadStarted.Wait(TimeSpan.FromSeconds(5));
+
+        // Now we're guaranteed to be in the loading state - append the item
         threaded.AppendString("new_item");
+
+        // Allow loading to continue and complete
+        syncHistory.CanContinue.Set();
 
         // Wait for load to complete
         var loadedItems = await loadTask;
