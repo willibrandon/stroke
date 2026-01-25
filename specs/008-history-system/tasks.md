@@ -86,6 +86,9 @@
 - [ ] T025 [P] [US2] Add test for corrupted/malformed entries (ignores bad lines) in tests/Stroke.Tests/History/FileHistoryTests.cs
 - [ ] T026 [P] [US2] Add test for cross-session persistence (reload yields previous entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
 - [ ] T027 [P] [US2] Add thread safety concurrent file access test in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [ ] T080 [P] [US2] Add test for DirectoryNotFoundException when parent directory missing in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [ ] T081 [P] [US2] Add test for IOException propagation on read-only file system in tests/Stroke.Tests/History/FileHistoryTests.cs
+- [ ] T086 [P] [US2] Add test for timestamp format matches Python datetime exactly (YYYY-MM-DD HH:MM:SS.ffffff) in tests/Stroke.Tests/History/FileHistoryTests.cs
 
 ### Implementation for User Story 2
 
@@ -118,6 +121,8 @@
 - [ ] T041 [P] [US3] Add test for AppendString before load completes in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
 - [ ] T042 [P] [US3] Add test for multiple concurrent LoadAsync calls in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
 - [ ] T043 [P] [US3] Add test for delegation to wrapped history (LoadHistoryStrings, StoreString) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [ ] T082 [P] [US3] Add test for daemon thread (IsBackground = true) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
+- [ ] T083 [P] [US3] Add test for cache reset when load starts (AppendString before any LoadAsync, then LoadAsync reloads from backend) in tests/Stroke.Tests/History/ThreadedHistoryTests.cs
 
 ### Implementation for User Story 3
 
@@ -185,6 +190,11 @@
 - [ ] T075 Add FileHistory test for file with only comments (no entries) in tests/Stroke.Tests/History/FileHistoryTests.cs
 - [ ] T076 Add InMemoryHistory test for Empty singleton behavior in tests/Stroke.Tests/History/InMemoryHistoryTests.cs
 - [ ] T076b Add test for multiple LoadAsync calls (verify caching, no backend re-read) in tests/Stroke.Tests/History/HistoryBaseTests.cs
+
+### Validation (Null Handling)
+
+- [ ] T084 [P] Add test for AppendString(null) throws ArgumentNullException in tests/Stroke.Tests/History/HistoryBaseTests.cs
+- [ ] T085 [P] Add test for StoreString(null) throws ArgumentNullException (all implementations) in tests/Stroke.Tests/History/HistoryBaseTests.cs
 
 ### Validation
 
@@ -280,15 +290,15 @@ With multiple developers:
 
 | Metric | Value |
 |--------|-------|
-| **Total Tasks** | 80 |
+| **Total Tasks** | 87 |
 | **Phase 1 (Setup)** | 3 tasks |
 | **Phase 2 (Foundational)** | 5 tasks |
 | **Phase 3 (US1 - InMemory)** | 11 tasks (4 tests, 7 impl) |
-| **Phase 4 (US2 - FileHistory)** | 17 tasks (8 tests, 9 impl) |
-| **Phase 5 (US3 - Threaded)** | 21 tasks (7 tests, 14 impl) |
+| **Phase 4 (US2 - FileHistory)** | 20 tasks (11 tests, 9 impl) |
+| **Phase 5 (US3 - Threaded)** | 23 tasks (9 tests, 14 impl) |
 | **Phase 6 (US4 - Dummy)** | 12 tasks (5 tests, 7 impl) |
-| **Phase 7 (Polish)** | 11 tasks |
-| **Parallel Opportunities** | 42 tasks marked [P] |
+| **Phase 7 (Polish)** | 13 tasks |
+| **Parallel Opportunities** | 49 tasks marked [P] |
 | **MVP Scope** | Phases 1-3 (19 tasks) |
 
 ---
