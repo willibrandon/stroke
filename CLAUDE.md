@@ -375,6 +375,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless validation) (009-validation-system)
 
 ## Recent Changes
+- 009-validation-system: Added IValidator interface with ValidatorBase, DummyValidator, ConditionalValidator, DynamicValidator, ThreadedValidator implementations (142 tests, 100% coverage)
 - 008-history-system: Added IHistory interface with InMemoryHistory, FileHistory, ThreadedHistory, DummyHistory implementations (119 tests, >90% coverage)
 - 007-mutable-buffer: Added Buffer class as mutable wrapper for Document with undo/redo, navigation, history, selection, clipboard, completion, validation, auto-suggest, and external editor support (148 tasks, 87% coverage)
 - 006-cache-utilities: Added SimpleCache, FastDictCache, Memoization in Stroke.Core namespace (92 tests)

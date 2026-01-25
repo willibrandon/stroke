@@ -56,6 +56,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ThreadedHistory` wrapper for background loading
   - `DummyHistory` for privacy/disabled scenarios
   - Thread-safe operations (>90% test coverage)
+- **Validation System** — Input validation with error positioning
+  - `IValidator` interface with sync and async validation
+  - `ValidatorBase` abstract class with `FromCallable` factory
+  - `DummyValidator` null-object pattern for disabled validation
+  - `ConditionalValidator` for filter-based conditional validation
+  - `DynamicValidator` for runtime validator switching
+  - `ThreadedValidator` for background thread validation
+  - Thread-safe operations (100% test coverage)
 
 ### Up Next
 
