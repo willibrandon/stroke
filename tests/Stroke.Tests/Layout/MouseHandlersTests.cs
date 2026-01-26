@@ -1,5 +1,6 @@
 using Stroke.Core.Primitives;
 using Stroke.Input;
+using Stroke.KeyBinding;
 using Stroke.Layout;
 using Xunit;
 
@@ -10,6 +11,18 @@ namespace Stroke.Tests.Layout;
 /// </summary>
 public class MouseHandlersTests
 {
+    // Helper: A dummy MouseEvent for invoking handlers
+    private static readonly MouseEvent DummyEvent = new(
+        new Point(0, 0), MouseEventType.MouseDown, MouseButton.Left, MouseModifiers.None);
+
+    // Helper: Verify handler is the default (returns NotImplemented)
+    private static void AssertIsDefaultHandler(Func<MouseEvent, NotImplementedOrNone> handler)
+    {
+        Assert.NotNull(handler);
+        var result = handler(DummyEvent);
+        Assert.Same(NotImplementedOrNone.NotImplemented, result);
+    }
+
     // T022: Basic tests - set handler, get handler, returns same handler
     [Fact]
     public void SetMouseHandlerForRange_AndGetHandler_ReturnsSameHandler()
@@ -44,37 +57,37 @@ public class MouseHandlersTests
     }
 
     [Fact]
-    public void SetMouseHandlerForRange_PositionAtMaxBound_ReturnsNull()
+    public void SetMouseHandlerForRange_PositionAtMaxBound_ReturnsDefaultHandler()
     {
         var handlers = new MouseHandlers();
         NotImplementedOrNone TestHandler(MouseEvent e) => NotImplementedOrNone.None;
 
         handlers.SetMouseHandlerForRange(0, 10, 0, 10, TestHandler);
 
-        // Max bounds are exclusive
-        Assert.Null(handlers.GetHandler(10, 5));
-        Assert.Null(handlers.GetHandler(5, 10));
-        Assert.Null(handlers.GetHandler(10, 10));
+        // Max bounds are exclusive - should return default handler
+        AssertIsDefaultHandler(handlers.GetHandler(10, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 10));
+        AssertIsDefaultHandler(handlers.GetHandler(10, 10));
     }
 
-    // T023: GetHandler returning null when no handler registered
+    // T023: GetHandler returning default handler when no handler registered
     [Fact]
-    public void GetHandler_NoHandlerRegistered_ReturnsNull()
+    public void GetHandler_NoHandlerRegistered_ReturnsDefaultHandler()
     {
         var handlers = new MouseHandlers();
 
         var result = handlers.GetHandler(5, 5);
 
-        Assert.Null(result);
+        AssertIsDefaultHandler(result);
     }
 
     [Fact]
-    public void GetHandler_EmptyHandlers_ReturnsNull()
+    public void GetHandler_EmptyHandlers_ReturnsDefaultHandler()
     {
         var handlers = new MouseHandlers();
 
-        Assert.Null(handlers.GetHandler(0, 0));
-        Assert.Null(handlers.GetHandler(100, 100));
+        AssertIsDefaultHandler(handlers.GetHandler(0, 0));
+        AssertIsDefaultHandler(handlers.GetHandler(100, 100));
     }
 
     // T024: Clear removes all handlers
@@ -82,16 +95,17 @@ public class MouseHandlersTests
     public void Clear_RemovesAllHandlers()
     {
         var handlers = new MouseHandlers();
-        NotImplementedOrNone TestHandler(MouseEvent e) => NotImplementedOrNone.None;
+        Func<MouseEvent, NotImplementedOrNone> testHandler = _ => NotImplementedOrNone.None;
 
-        handlers.SetMouseHandlerForRange(0, 10, 0, 10, TestHandler);
-        Assert.NotNull(handlers.GetHandler(5, 5));
+        handlers.SetMouseHandlerForRange(0, 10, 0, 10, testHandler);
+        Assert.Same(testHandler, handlers.GetHandler(5, 5));
 
         handlers.Clear();
 
-        Assert.Null(handlers.GetHandler(5, 5));
-        Assert.Null(handlers.GetHandler(0, 0));
-        Assert.Null(handlers.GetHandler(9, 9));
+        // After clear, all positions return default handler
+        AssertIsDefaultHandler(handlers.GetHandler(5, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(0, 0));
+        AssertIsDefaultHandler(handlers.GetHandler(9, 9));
     }
 
     [Fact]
@@ -104,7 +118,7 @@ public class MouseHandlersTests
         handlers.Clear();
         handlers.Clear(); // Second clear should not throw
 
-        Assert.Null(handlers.GetHandler(5, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 5));
     }
 
     // T025: Overlapping regions - newer handler replaces previous
@@ -144,7 +158,7 @@ public class MouseHandlersTests
         // xMin == xMax means zero width
         handlers.SetMouseHandlerForRange(5, 5, 0, 10, TestHandler);
 
-        Assert.Null(handlers.GetHandler(5, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 5));
     }
 
     [Fact]
@@ -156,7 +170,7 @@ public class MouseHandlersTests
         // yMin == yMax means zero height
         handlers.SetMouseHandlerForRange(0, 10, 5, 5, TestHandler);
 
-        Assert.Null(handlers.GetHandler(5, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 5));
     }
 
     [Fact]
@@ -167,40 +181,40 @@ public class MouseHandlersTests
 
         // xMin > xMax is invalid
         handlers.SetMouseHandlerForRange(10, 5, 0, 10, TestHandler);
-        Assert.Null(handlers.GetHandler(7, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(7, 5));
 
         // yMin > yMax is invalid
         handlers.SetMouseHandlerForRange(0, 10, 10, 5, TestHandler);
-        Assert.Null(handlers.GetHandler(5, 7));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 7));
     }
 
-    // T027: Out-of-bounds coordinates (returns null, no exception)
+    // T027: Out-of-bounds coordinates (returns default handler, no exception)
     [Fact]
-    public void GetHandler_LargePositiveCoordinates_ReturnsNull()
+    public void GetHandler_LargePositiveCoordinates_ReturnsDefaultHandler()
     {
         var handlers = new MouseHandlers();
         NotImplementedOrNone TestHandler(MouseEvent e) => NotImplementedOrNone.None;
 
         handlers.SetMouseHandlerForRange(0, 10, 0, 10, TestHandler);
 
-        // Far outside registered region
-        Assert.Null(handlers.GetHandler(1000, 1000));
-        Assert.Null(handlers.GetHandler(int.MaxValue, int.MaxValue));
+        // Far outside registered region - returns default handler
+        AssertIsDefaultHandler(handlers.GetHandler(1000, 1000));
+        AssertIsDefaultHandler(handlers.GetHandler(int.MaxValue, int.MaxValue));
     }
 
-    // T028: Negative coordinates (returns null, no exception)
+    // T028: Negative coordinates (returns default handler, no exception)
     [Fact]
-    public void GetHandler_NegativeCoordinates_ReturnsNull()
+    public void GetHandler_NegativeCoordinates_ReturnsDefaultHandler()
     {
         var handlers = new MouseHandlers();
         NotImplementedOrNone TestHandler(MouseEvent e) => NotImplementedOrNone.None;
 
         handlers.SetMouseHandlerForRange(0, 10, 0, 10, TestHandler);
 
-        Assert.Null(handlers.GetHandler(-1, 5));
-        Assert.Null(handlers.GetHandler(5, -1));
-        Assert.Null(handlers.GetHandler(-1, -1));
-        Assert.Null(handlers.GetHandler(int.MinValue, int.MinValue));
+        AssertIsDefaultHandler(handlers.GetHandler(-1, 5));
+        AssertIsDefaultHandler(handlers.GetHandler(5, -1));
+        AssertIsDefaultHandler(handlers.GetHandler(-1, -1));
+        AssertIsDefaultHandler(handlers.GetHandler(int.MinValue, int.MinValue));
     }
 
     [Fact]
@@ -214,7 +228,7 @@ public class MouseHandlersTests
 
         Assert.NotNull(handlers.GetHandler(-3, -3));
         Assert.NotNull(handlers.GetHandler(-1, -1));
-        Assert.Null(handlers.GetHandler(0, 0)); // Max bound is exclusive
+        AssertIsDefaultHandler(handlers.GetHandler(0, 0)); // Max bound is exclusive
     }
 
     // T029: Position (0,0) handler works normally
@@ -241,9 +255,9 @@ public class MouseHandlersTests
 
         // Only (0,0) should be set
         Assert.NotNull(handlers.GetHandler(0, 0));
-        Assert.Null(handlers.GetHandler(0, 1));
-        Assert.Null(handlers.GetHandler(1, 0));
-        Assert.Null(handlers.GetHandler(1, 1));
+        AssertIsDefaultHandler(handlers.GetHandler(0, 1));
+        AssertIsDefaultHandler(handlers.GetHandler(1, 0));
+        AssertIsDefaultHandler(handlers.GetHandler(1, 1));
     }
 
     // T030: ArgumentNullException when handler is null
@@ -322,10 +336,10 @@ public class MouseHandlersTests
         handlers.SetMouseHandlerForRange(5, 6, 3, 4, TestHandler);
 
         Assert.NotNull(handlers.GetHandler(5, 3));
-        Assert.Null(handlers.GetHandler(4, 3));
-        Assert.Null(handlers.GetHandler(6, 3));
-        Assert.Null(handlers.GetHandler(5, 2));
-        Assert.Null(handlers.GetHandler(5, 4));
+        AssertIsDefaultHandler(handlers.GetHandler(4, 3));
+        AssertIsDefaultHandler(handlers.GetHandler(6, 3));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 2));
+        AssertIsDefaultHandler(handlers.GetHandler(5, 4));
     }
 
     [Fact]
@@ -340,7 +354,34 @@ public class MouseHandlersTests
 
         Assert.Same(handler1, handlers.GetHandler(5, 5));
         Assert.Same(handler2, handlers.GetHandler(25, 25));
-        Assert.Null(handlers.GetHandler(15, 15));
+        AssertIsDefaultHandler(handlers.GetHandler(15, 15));
+    }
+
+    // Test default handler behavior matches Python's defaultdict pattern
+    [Fact]
+    public void GetHandler_UnregisteredPosition_ReturnsCallableThatReturnsNotImplemented()
+    {
+        var handlers = new MouseHandlers();
+
+        // Python: mouse_handlers[y][x] always returns a callable (dummy_callback if not set)
+        // dummy_callback returns NotImplemented
+        var handler = handlers.GetHandler(999, 999);
+
+        Assert.NotNull(handler);
+        var result = handler(DummyEvent);
+        Assert.Same(NotImplementedOrNone.NotImplemented, result);
+    }
+
+    [Fact]
+    public void GetHandler_AlwaysReturnsCallable_NeverNull()
+    {
+        var handlers = new MouseHandlers();
+
+        // Test various positions - all should return a callable
+        Assert.NotNull(handlers.GetHandler(0, 0));
+        Assert.NotNull(handlers.GetHandler(-100, -100));
+        Assert.NotNull(handlers.GetHandler(int.MaxValue, int.MaxValue));
+        Assert.NotNull(handlers.GetHandler(int.MinValue, int.MinValue));
     }
 
     [Fact]

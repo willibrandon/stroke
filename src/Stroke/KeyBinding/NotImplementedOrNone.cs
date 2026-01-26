@@ -1,12 +1,12 @@
-namespace Stroke.Layout;
+namespace Stroke.KeyBinding;
 
 /// <summary>
-/// Return value from mouse handlers.
+/// Return value from key binding and mouse handlers.
 /// Used to indicate whether the event was handled or should bubble up.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Equivalent to Python Prompt Toolkit's <c>NotImplementedOrNone</c> pattern in <c>prompt_toolkit.layout.mouse_handlers</c>.
+/// Equivalent to Python Prompt Toolkit's <c>NotImplementedOrNone</c> in <c>prompt_toolkit.key_binding.key_bindings</c>.
 /// </para>
 /// <para>
 /// Handlers return <see cref="NotImplemented"/> to signal the event was not handled and should bubble up

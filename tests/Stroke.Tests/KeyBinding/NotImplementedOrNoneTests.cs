@@ -1,7 +1,7 @@
-using Stroke.Layout;
+using Stroke.KeyBinding;
 using Xunit;
 
-namespace Stroke.Tests.Layout;
+namespace Stroke.Tests.KeyBinding;
 
 /// <summary>
 /// Tests for <see cref="NotImplementedOrNone"/> abstract class.

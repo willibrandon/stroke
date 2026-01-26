@@ -1,4 +1,5 @@
 using Stroke.Input;
+using Stroke.KeyBinding;
 
 namespace Stroke.Layout;
 
@@ -31,6 +32,15 @@ public sealed class MouseHandlers
     // Map y (row) to x (column) to handler
     // Matches Python's defaultdict(lambda: defaultdict(...)) pattern
     private readonly Dictionary<int, Dictionary<int, Func<MouseEvent, NotImplementedOrNone>>> _handlers = new();
+
+    /// <summary>
+    /// Default handler returned for positions without a registered handler.
+    /// Returns <see cref="NotImplementedOrNone.NotImplemented"/> to signal event was not handled.
+    /// </summary>
+    /// <remarks>
+    /// Matches Python's <c>dummy_callback</c> which returns <c>NotImplemented</c>.
+    /// </remarks>
+    private static NotImplementedOrNone DummyHandler(MouseEvent e) => NotImplementedOrNone.NotImplemented;
 
     /// <summary>
     /// Set a mouse handler for a rectangular region.
@@ -89,15 +99,15 @@ public sealed class MouseHandlers
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Returns null if no handler is registered at the specified position.
-    /// This includes positions with negative coordinates or coordinates outside
-    /// all registered regions.
+    /// Returns a handler for any position. If no handler is registered at the specified
+    /// position, returns a default handler that returns <see cref="NotImplementedOrNone.NotImplemented"/>.
+    /// This matches Python's <c>defaultdict</c> behavior where accessing any position always returns a callable.
     /// </para>
     /// </remarks>
     /// <param name="x">X coordinate (column).</param>
     /// <param name="y">Y coordinate (row).</param>
-    /// <returns>The handler at the position, or null if none is registered.</returns>
-    public Func<MouseEvent, NotImplementedOrNone>? GetHandler(int x, int y)
+    /// <returns>The handler at the position, or a default handler if none is registered.</returns>
+    public Func<MouseEvent, NotImplementedOrNone> GetHandler(int x, int y)
     {
         using (_lock.EnterScope())
         {
@@ -106,7 +116,7 @@ public sealed class MouseHandlers
                 return handler;
             }
 
-            return null;
+            return DummyHandler;
         }
     }
 
@@ -115,7 +125,7 @@ public sealed class MouseHandlers
     /// </summary>
     /// <remarks>
     /// Removes all registered handlers. After calling this method,
-    /// <see cref="GetHandler"/> will return null for all positions.
+    /// <see cref="GetHandler"/> will return the default handler for all positions.
     /// </remarks>
     public void Clear()
     {

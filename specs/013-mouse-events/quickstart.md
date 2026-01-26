@@ -16,7 +16,7 @@ This feature provides the mouse event system for Stroke, enabling terminal appli
 | `MouseModifiers` | `Stroke.Input` | [Flags] enum: None, Shift, Alt, Control |
 | `MouseEvent` | `Stroke.Input` | Immutable record struct for event data |
 | `MouseHandlers` | `Stroke.Layout` | 2D grid of mouse event handlers |
-| `NotImplementedOrNone` | `Stroke.Layout` | Handler return type for event bubbling |
+| `NotImplementedOrNone` | `Stroke.KeyBinding` | Handler return type for event bubbling |
 
 ## Basic Usage
 
@@ -51,6 +51,7 @@ if ((scrollEvent.Modifiers & MouseModifiers.Shift) != 0)
 
 ```csharp
 using Stroke.Layout;
+using Stroke.KeyBinding;
 using Stroke.Input;
 
 var handlers = new MouseHandlers();
@@ -65,16 +66,17 @@ NotImplementedOrNone HandleMouseEvent(MouseEvent e)
 // Register for a rectangular region (x: 0-79, y: 0-23)
 handlers.SetMouseHandlerForRange(0, 80, 0, 24, HandleMouseEvent);
 
-// Retrieve handler at a position
+// Retrieve handler at a position - always returns a callable (never null)
 var handler = handlers.GetHandler(10, 5);
-if (handler != null)
+var result = handler(clickEvent);
+if (ReferenceEquals(result, NotImplementedOrNone.NotImplemented))
 {
-    var result = handler(clickEvent);
-    if (result is NotImplementedOrNone.NotImplemented)
-    {
-        // Event not handled, bubble up
-    }
+    // Event not handled, bubble up
 }
+
+// Unregistered positions return a default handler that returns NotImplemented
+var defaultHandler = handlers.GetHandler(999, 999);
+var defaultResult = defaultHandler(clickEvent); // Returns NotImplemented
 ```
 
 ### Event Bubbling Pattern
@@ -105,7 +107,9 @@ src/Stroke/Input/
 └── MouseEvent.cs
 
 src/Stroke/Layout/
-├── MouseHandlers.cs
+└── MouseHandlers.cs
+
+src/Stroke/KeyBinding/
 └── NotImplementedOrNone.cs
 ```
 
@@ -119,7 +123,9 @@ tests/Stroke.Tests/Input/
 └── MouseEventTests.cs
 
 tests/Stroke.Tests/Layout/
-├── MouseHandlersTests.cs
+└── MouseHandlersTests.cs
+
+tests/Stroke.Tests/KeyBinding/
 └── NotImplementedOrNoneTests.cs
 ```
 
