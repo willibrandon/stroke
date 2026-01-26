@@ -92,6 +92,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ConditionalCompleter` for filter-based conditional completion
   - `DynamicCompleter` for runtime completer switching
   - Thread-safe operations (>80% test coverage)
+- **Mouse Events** — Mouse input handling for terminal UI
+  - `MouseEventType` enum (MouseUp, MouseDown, ScrollUp, ScrollDown, MouseMove)
+  - `MouseButton` enum (Left, Middle, Right, None, Unknown)
+  - `MouseModifiers` [Flags] enum (Shift, Alt, Control)
+  - `MouseEvent` immutable record struct with position, type, button, modifiers
+  - `MouseHandlers` 2D handler grid with O(1) lookup (sparse dictionary storage)
+  - `NotImplementedOrNone` for event bubbling pattern
+  - Thread-safe operations (100% test coverage)
 
 ### Up Next
 

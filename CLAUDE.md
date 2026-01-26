@@ -382,6 +382,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory data structures only) (013-mouse-events)
 
 ## Recent Changes
+- 013-mouse-events: Added mouse event system with MouseEventType enum (5 values), MouseButton enum (5 values), MouseModifiers [Flags] enum, MouseEvent record struct, MouseHandlers class (thread-safe with Lock), NotImplementedOrNone abstract class for event bubbling (106 tests, 100% coverage)
 - 012-completion-system: Added ICompleter interface with 12 completers (WordCompleter, PathCompleter, FuzzyCompleter, FuzzyWordCompleter, DeduplicateCompleter, MergeCompleter, ThreadedCompleter, DummyCompleter, NestedCompleter, ExecutableCompleter, ConditionalCompleter, DynamicCompleter), Completion record, CompleteEvent record (267 tests, >80% coverage); added Stroke.Benchmarks project
 - 011-keys-enum: Added Keys enum with 151 key values from Python Prompt Toolkit
 - 010-search-system: Enhanced SearchState with thread-safe properties, Invert(), ToString(); added SearchOperations static class stubs (41 tests, 100%/80% coverage)
