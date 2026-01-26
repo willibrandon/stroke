@@ -71,7 +71,7 @@ public sealed class HistoryBaseTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -90,7 +90,7 @@ public sealed class HistoryBaseTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -107,8 +107,8 @@ public sealed class HistoryBaseTests
         history.PrePopulateBackend(["item1", "item2"]);
 
         // Act
-        await foreach (var _ in history.LoadAsync()) { }
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Assert - LoadHistoryStrings should only be called once
         Assert.Equal(1, history.LoadHistoryStringsCallCount);
@@ -135,7 +135,7 @@ public sealed class HistoryBaseTests
         history.PrePopulateBackend(["oldest", "middle", "newest"]);
 
         // Trigger load
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act
         var strings = history.GetStrings();
@@ -150,14 +150,14 @@ public sealed class HistoryBaseTests
         // Arrange
         var history = new TestHistory();
         history.PrePopulateBackend(["old1", "old2"]);
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act
         history.AppendString("new_entry");
 
         // Assert - new entry appears at front when loading (newest-first)
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -194,7 +194,7 @@ public sealed class HistoryBaseTests
         // Arrange
         var history = new TestHistory();
         history.PrePopulateBackend(["item1", "item2", "item3"]);
-        var cts = new CancellationTokenSource();
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
 
         // Act
         var items = new List<string>();
@@ -222,14 +222,14 @@ public sealed class HistoryBaseTests
         history.PrePopulateBackend(["existing"]);
 
         // First load
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Append new item
         history.AppendString("appended");
 
         // Act - second load should include appended item from cache
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -249,6 +249,7 @@ public sealed class HistoryBaseTests
 
         // Act - multiple threads doing concurrent operations
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -267,13 +268,13 @@ public sealed class HistoryBaseTests
                     }
                     else
                     {
-                        await foreach (var _ in history.LoadAsync())
+                        await foreach (var _ in history.LoadAsync(ct))
                         {
                             // Just iterate
                         }
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -299,7 +300,7 @@ public sealed class HistoryBaseTests
         // Act - call LoadAsync multiple times
         for (int i = 0; i < 10; i++)
         {
-            await foreach (var _ in history.LoadAsync()) { }
+            await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
         }
 
         // Assert - LoadHistoryStrings should only be called once (first load)

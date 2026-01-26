@@ -76,7 +76,7 @@ public sealed class PerformanceTests
 
         // JIT warmup: Run once to compile all async code paths.
         // This ensures we measure steady-state performance, not JIT compilation time.
-        await foreach (var _ in threadedCompleter.GetCompletionsAsync(document, completeEvent))
+        await foreach (var _ in threadedCompleter.GetCompletionsAsync(document, completeEvent, TestContext.Current.CancellationToken))
         {
             break;
         }
@@ -85,7 +85,7 @@ public sealed class PerformanceTests
         var sw = Stopwatch.StartNew();
         long firstCompletionTime = -1;
 
-        await foreach (var completion in threadedCompleter.GetCompletionsAsync(document, completeEvent))
+        await foreach (var completion in threadedCompleter.GetCompletionsAsync(document, completeEvent, TestContext.Current.CancellationToken))
         {
             if (firstCompletionTime < 0)
             {

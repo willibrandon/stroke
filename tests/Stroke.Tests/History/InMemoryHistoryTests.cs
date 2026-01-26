@@ -106,7 +106,7 @@ public sealed class InMemoryHistoryTests
 
         // Act - trigger load
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -151,7 +151,7 @@ public sealed class InMemoryHistoryTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -168,7 +168,7 @@ public sealed class InMemoryHistoryTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -185,13 +185,13 @@ public sealed class InMemoryHistoryTests
 
         // Act
         var firstLoad = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             firstLoad.Add(item);
         }
 
         var secondLoad = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             secondLoad.Add(item);
         }
@@ -212,6 +212,7 @@ public sealed class InMemoryHistoryTests
 
         // Act - multiple threads appending and reading
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -230,8 +231,8 @@ public sealed class InMemoryHistoryTests
                 }
 
                 // Also test LoadAsync
-                await foreach (var _ in history.LoadAsync()) { }
-            }));
+                await foreach (var _ in history.LoadAsync(ct)) { }
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -254,6 +255,7 @@ public sealed class InMemoryHistoryTests
 
         // Act
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -272,16 +274,16 @@ public sealed class InMemoryHistoryTests
                             _ = history.GetStrings();
                             break;
                         case 2:
-                            await foreach (var _ in history.LoadAsync()) { }
+                            await foreach (var _ in history.LoadAsync(ct)) { }
                             break;
                     }
                     Interlocked.Increment(ref operationCount);
                 }
-            }));
+            }, ct));
         }
 
         // Should complete without deadlocks
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         await Task.WhenAll(tasks);
 
         // Assert
@@ -320,7 +322,7 @@ public sealed class InMemoryHistoryTests
     {
         // Arrange
         var history = new InMemoryHistory(Enumerable.Range(1, 100).Select(i => $"item_{i}"));
-        var cts = new CancellationTokenSource();
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
 
         // Act
         var items = new List<string>();

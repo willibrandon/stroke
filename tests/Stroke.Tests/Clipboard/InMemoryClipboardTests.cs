@@ -291,6 +291,7 @@ public sealed class InMemoryClipboardTests
     {
         var clipboard = new InMemoryClipboard();
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
 
         // 10 threads concurrently calling SetData
         for (int i = 0; i < 10; i++)
@@ -302,7 +303,7 @@ public sealed class InMemoryClipboardTests
                 {
                     clipboard.SetData(new ClipboardData($"thread{threadId}-{j}"));
                 }
-            }));
+            }, ct));
         }
 
         // Should complete without exceptions
@@ -317,6 +318,7 @@ public sealed class InMemoryClipboardTests
 
         var results = new System.Collections.Concurrent.ConcurrentBag<ClipboardData>();
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
 
         // 10 threads concurrently calling GetData
         for (int i = 0; i < 10; i++)
@@ -328,7 +330,7 @@ public sealed class InMemoryClipboardTests
                     var data = clipboard.GetData();
                     results.Add(data);
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -343,6 +345,7 @@ public sealed class InMemoryClipboardTests
     {
         var clipboard = new InMemoryClipboard();
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
 
         // Mixed SetData, GetData, Rotate operations
         for (int i = 0; i < 10; i++)
@@ -365,7 +368,7 @@ public sealed class InMemoryClipboardTests
                             break;
                     }
                 }
-            }));
+            }, ct));
         }
 
         // Should complete without exceptions
@@ -379,6 +382,7 @@ public sealed class InMemoryClipboardTests
         var clipboard = new InMemoryClipboard(maxSize: 100);
         var tasks = new List<Task>();
         var operationCount = 0;
+        var ct = TestContext.Current.CancellationToken;
 
         for (int i = 0; i < 15; i++) // 15 threads
         {
@@ -404,7 +408,7 @@ public sealed class InMemoryClipboardTests
                     }
                     Interlocked.Increment(ref operationCount);
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);

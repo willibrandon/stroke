@@ -457,6 +457,7 @@ public class BufferSelectionTests
         var barrier = new Barrier(3);
 
         // Act - concurrent selection operations
+        var ct = TestContext.Current.CancellationToken;
         var startTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -464,7 +465,7 @@ public class BufferSelectionTests
             {
                 buffer.StartSelection();
             }
-        });
+        }, ct);
 
         var exitTask = Task.Run(() =>
         {
@@ -473,7 +474,7 @@ public class BufferSelectionTests
             {
                 buffer.ExitSelection();
             }
-        });
+        }, ct);
 
         var copyTask = Task.Run(() =>
         {
@@ -484,7 +485,7 @@ public class BufferSelectionTests
                 buffer.CursorPosition = (i % 10);
                 buffer.CopySelection();
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(startTask, exitTask, copyTask);

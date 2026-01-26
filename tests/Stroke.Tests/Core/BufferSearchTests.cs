@@ -447,6 +447,7 @@ public class BufferSearchTests
         var barrier = new Barrier(3);
 
         // Act - concurrent search operations
+        var ct = TestContext.Current.CancellationToken;
         var searchForwardTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -455,7 +456,7 @@ public class BufferSearchTests
                 var searchState = new SearchState(text: "text");
                 buffer.ApplySearch(searchState);
             }
-        });
+        }, ct);
 
         var searchBackwardTask = Task.Run(() =>
         {
@@ -465,7 +466,7 @@ public class BufferSearchTests
                 var searchState = new SearchState(text: "text", direction: SearchDirection.Backward);
                 buffer.ApplySearch(searchState);
             }
-        });
+        }, ct);
 
         var documentForSearchTask = Task.Run(() =>
         {
@@ -475,7 +476,7 @@ public class BufferSearchTests
                 var searchState = new SearchState(text: "line");
                 _ = buffer.DocumentForSearch(searchState);
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(searchForwardTask, searchBackwardTask, documentForSearchTask);

@@ -66,7 +66,7 @@ public sealed class CompleterBaseTests
         var completer = new TestCompleter(completions);
 
         var results = new List<CompletionItem>();
-        await foreach (var completion in completer.GetCompletionsAsync(new Document("test"), new CompleteEvent()))
+        await foreach (var completion in completer.GetCompletionsAsync(new Document("test"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             results.Add(completion);
         }
@@ -85,7 +85,7 @@ public sealed class CompleterBaseTests
         var evt = new CompleteEvent(TextInserted: true);
 
         var results = new List<CompletionItem>();
-        await foreach (var completion in completer.GetCompletionsAsync(document, evt))
+        await foreach (var completion in completer.GetCompletionsAsync(document, evt, TestContext.Current.CancellationToken))
         {
             results.Add(completion);
         }
@@ -101,7 +101,7 @@ public sealed class CompleterBaseTests
         var completer = new TestCompleter([]);
 
         var results = new List<CompletionItem>();
-        await foreach (var completion in completer.GetCompletionsAsync(new Document(""), new CompleteEvent()))
+        await foreach (var completion in completer.GetCompletionsAsync(new Document(""), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             results.Add(completion);
         }
@@ -149,7 +149,7 @@ public sealed class CompleterBaseTests
 
         // Async returns "async"
         var asyncResults = new List<CompletionItem>();
-        await foreach (var completion in completer.GetCompletionsAsync(new Document(""), new CompleteEvent()))
+        await foreach (var completion in completer.GetCompletionsAsync(new Document(""), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             asyncResults.Add(completion);
         }

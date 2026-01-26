@@ -272,6 +272,7 @@ public sealed class ThreadedValidatorTests
         var random = new Random(42); // Deterministic seed
 
         // Act - 10 threads, each doing 100 operations = 1000 total
+        var ct = TestContext.Current.CancellationToken;
         for (int thread = 0; thread < 10; thread++)
         {
             var threadId = thread;
@@ -290,7 +291,7 @@ public sealed class ThreadedValidatorTests
                         Interlocked.Increment(ref errorCount);
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -309,6 +310,7 @@ public sealed class ThreadedValidatorTests
         var tasks = new List<Task>();
 
         // Act - 10 threads, each doing 100 validations
+        var ct = TestContext.Current.CancellationToken;
         for (int thread = 0; thread < 10; thread++)
         {
             tasks.Add(Task.Run(async () =>
@@ -319,7 +321,7 @@ public sealed class ThreadedValidatorTests
                     await validator.ValidateAsync(document);
                     Interlocked.Increment(ref callCount);
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -345,6 +347,7 @@ public sealed class ThreadedValidatorTests
         var tasks = new List<Task>();
 
         // Act - mix of sync and async calls
+        var ct = TestContext.Current.CancellationToken;
         for (int i = 0; i < 10; i++)
         {
             tasks.Add(Task.Run(async () =>
@@ -362,7 +365,7 @@ public sealed class ThreadedValidatorTests
                         Interlocked.Increment(ref asyncCount);
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);
@@ -385,6 +388,7 @@ public sealed class ThreadedValidatorTests
         var tasks = new List<Task>();
 
         // Act - each thread validates different length strings
+        var ct = TestContext.Current.CancellationToken;
         for (int thread = 0; thread < 10; thread++)
         {
             var expectedLength = thread + 1;
@@ -407,7 +411,7 @@ public sealed class ThreadedValidatorTests
                         }
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);

@@ -544,6 +544,7 @@ public class BufferNavigationTests
         var barrier = new Barrier(4);
 
         // Act - concurrent navigation operations
+        var ct = TestContext.Current.CancellationToken;
         var leftTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -551,7 +552,7 @@ public class BufferNavigationTests
             {
                 buffer.CursorLeft();
             }
-        });
+        }, ct);
 
         var rightTask = Task.Run(() =>
         {
@@ -560,7 +561,7 @@ public class BufferNavigationTests
             {
                 buffer.CursorRight();
             }
-        });
+        }, ct);
 
         var upTask = Task.Run(() =>
         {
@@ -569,7 +570,7 @@ public class BufferNavigationTests
             {
                 buffer.CursorUp();
             }
-        });
+        }, ct);
 
         var downTask = Task.Run(() =>
         {
@@ -578,7 +579,7 @@ public class BufferNavigationTests
             {
                 buffer.CursorDown();
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(leftTask, rightTask, upTask, downTask);

@@ -157,6 +157,7 @@ public class BufferEditingTests
     public void InsertText_FiresOnTextInsertEvent()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var buffer = new Buffer();
         var wasFired = false;
         var signal = new ManualResetEventSlim(false);
@@ -164,7 +165,7 @@ public class BufferEditingTests
 
         // Act
         buffer.InsertText("test");
-        signal.Wait(TimeSpan.FromSeconds(5));
+        signal.Wait(TimeSpan.FromSeconds(5), ct);
 
         // Assert
         Assert.True(wasFired);
@@ -942,6 +943,7 @@ public class BufferEditingTests
         var barrier = new Barrier(2);
 
         // Act - concurrent inserts
+        var ct = TestContext.Current.CancellationToken;
         var task1 = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -949,7 +951,7 @@ public class BufferEditingTests
             {
                 buffer.InsertText("a", fireEvent: false);
             }
-        });
+        }, ct);
 
         var task2 = Task.Run(() =>
         {
@@ -958,7 +960,7 @@ public class BufferEditingTests
             {
                 buffer.InsertText("b", fireEvent: false);
             }
-        });
+        }, ct);
 
         // Assert - no exceptions and text has correct total length
         await Task.WhenAll(task1, task2);

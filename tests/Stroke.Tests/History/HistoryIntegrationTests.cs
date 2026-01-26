@@ -54,7 +54,7 @@ public sealed class HistoryIntegrationTests : IDisposable
             Assert.NotNull(history.GetStrings());
 
             var loadedAsync = new List<string>();
-            await foreach (var item in history.LoadAsync())
+            await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
             {
                 loadedAsync.Add(item);
             }
@@ -85,7 +85,7 @@ public sealed class HistoryIntegrationTests : IDisposable
 
         // Act
         var items = new List<string>();
-        await foreach (var item in threadedHistory.LoadAsync())
+        await foreach (var item in threadedHistory.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -106,7 +106,7 @@ public sealed class HistoryIntegrationTests : IDisposable
         var threadedHistory = new ThreadedHistory(fileHistory);
 
         // Trigger initial load
-        await foreach (var _ in threadedHistory.LoadAsync()) { }
+        await foreach (var _ in threadedHistory.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act - append through threaded
         threadedHistory.AppendString("new_entry");
@@ -131,7 +131,7 @@ public sealed class HistoryIntegrationTests : IDisposable
 
         // Act
         var items = new List<string>();
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -151,7 +151,7 @@ public sealed class HistoryIntegrationTests : IDisposable
         var threaded = new ThreadedHistory(inMemory);
 
         // Trigger load
-        await foreach (var _ in threaded.LoadAsync()) { }
+        await foreach (var _ in threaded.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act - append through threaded
         threaded.AppendString("entry3");
@@ -205,7 +205,7 @@ public sealed class HistoryIntegrationTests : IDisposable
 
             // Load async
             var asyncItems = new List<string>();
-            await foreach (var item in history.LoadAsync())
+            await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
             {
                 asyncItems.Add(item);
             }
@@ -244,21 +244,21 @@ public sealed class HistoryIntegrationTests : IDisposable
 
         // Assert - each has its own entries
         var memItems = new List<string>();
-        await foreach (var item in inMemory.LoadAsync())
+        await foreach (var item in inMemory.LoadAsync(TestContext.Current.CancellationToken))
         {
             memItems.Add(item);
         }
         Assert.Equal(2, memItems.Count);
 
         var fileItems = new List<string>();
-        await foreach (var item in fileHistory.LoadAsync())
+        await foreach (var item in fileHistory.LoadAsync(TestContext.Current.CancellationToken))
         {
             fileItems.Add(item);
         }
         Assert.Equal(2, fileItems.Count);
 
         var threadedItems = new List<string>();
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             threadedItems.Add(item);
         }

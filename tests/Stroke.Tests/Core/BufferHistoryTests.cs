@@ -463,6 +463,7 @@ public class BufferHistoryTests
         var barrier = new Barrier(3);
 
         // Act - concurrent history operations
+        var ct = TestContext.Current.CancellationToken;
         var backwardTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -470,7 +471,7 @@ public class BufferHistoryTests
             {
                 buffer.HistoryBackward();
             }
-        });
+        }, ct);
 
         var forwardTask = Task.Run(() =>
         {
@@ -479,7 +480,7 @@ public class BufferHistoryTests
             {
                 buffer.HistoryForward();
             }
-        });
+        }, ct);
 
         var gotoTask = Task.Run(() =>
         {
@@ -488,7 +489,7 @@ public class BufferHistoryTests
             {
                 buffer.GoToHistory(i % 10);
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(backwardTask, forwardTask, gotoTask);

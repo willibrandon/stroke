@@ -39,12 +39,13 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_InMemoryHistory_EmptyHistory()
     {
         // From quickstart: Create empty history
+        var ct = TestContext.Current.CancellationToken;
         var history = new InMemoryHistory();
 
         // Should be empty
         Assert.Empty(history.GetStrings());
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(ct))
         {
             items.Add(item);
         }
@@ -55,10 +56,11 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_InMemoryHistory_PrePopulated()
     {
         // From quickstart: Pre-populate with existing entries
+        var ct = TestContext.Current.CancellationToken;
         var history = new InMemoryHistory(["command1", "command2", "command3"]);
 
         // Trigger cache load (required before GetStrings shows pre-populated items)
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(ct)) { }
 
         // Add entries (these go to both cache and storage)
         history.AppendString("echo hello");
@@ -70,7 +72,7 @@ public sealed class QuickstartValidationTests : IDisposable
 
         // Load entries asynchronously (newest-first order) - uses cache
         var loadedEntries = new List<string>();
-        await foreach (var entry in history.LoadAsync())
+        await foreach (var entry in history.LoadAsync(ct))
         {
             loadedEntries.Add(entry);
         }
@@ -81,6 +83,7 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_FileHistory_PersistenceAcrossSessions()
     {
         // From quickstart: Create file-backed history
+        var ct = TestContext.Current.CancellationToken;
         var path = GetTempFile();
         var history = new FileHistory(path);
 
@@ -91,7 +94,7 @@ public sealed class QuickstartValidationTests : IDisposable
         // On next application start, previous entries are available
         var history2 = new FileHistory(path);
         var entries = new List<string>();
-        await foreach (var entry in history2.LoadAsync())
+        await foreach (var entry in history2.LoadAsync(ct))
         {
             entries.Add(entry);
         }
@@ -104,6 +107,7 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_ThreadedHistory_BackgroundLoading()
     {
         // From quickstart: Wrap any history for background loading
+        var ct = TestContext.Current.CancellationToken;
         var path = GetTempFile();
         var fileHistory = new FileHistory(path);
         fileHistory.AppendString("entry1");
@@ -115,7 +119,7 @@ public sealed class QuickstartValidationTests : IDisposable
 
         // Start using immediately - loading happens in background
         var entries = new List<string>();
-        await foreach (var entry in threadedHistory.LoadAsync())
+        await foreach (var entry in threadedHistory.LoadAsync(ct))
         {
             entries.Add(entry);
         }
@@ -175,6 +179,7 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_LoadHistoryStrings_NewestFirst()
     {
         // From API reference: LoadHistoryStrings() - Load entries from backend (newest-first)
+        var ct = TestContext.Current.CancellationToken;
         var history = new InMemoryHistory(["oldest", "middle", "newest"]);
 
         // LoadHistoryStrings returns newest-first
@@ -183,7 +188,7 @@ public sealed class QuickstartValidationTests : IDisposable
 
         // LoadAsync also returns newest-first
         var asyncItems = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(ct))
         {
             asyncItems.Add(item);
         }
@@ -194,10 +199,11 @@ public sealed class QuickstartValidationTests : IDisposable
     public async Task Quickstart_GetStrings_OldestFirst()
     {
         // From API reference: GetStrings() - Get cached entries (oldest-first)
+        var ct = TestContext.Current.CancellationToken;
         var history = new InMemoryHistory(["oldest", "middle", "newest"]);
 
         // Trigger cache load via LoadAsync (which populates the cache)
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(ct)) { }
 
         // GetStrings returns oldest-first
         var items = history.GetStrings();

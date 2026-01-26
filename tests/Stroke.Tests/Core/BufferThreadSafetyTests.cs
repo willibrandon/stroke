@@ -26,6 +26,7 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document(""));
 
         // Act - multiple tasks inserting text concurrently
+        var ct = TestContext.Current.CancellationToken;
         var tasks = Enumerable.Range(0, ConcurrentTaskCount).Select(taskId =>
             Task.Run(() =>
             {
@@ -33,7 +34,7 @@ public class BufferThreadSafetyTests
                 {
                     buffer.InsertText($"T{taskId}I{i}");
                 }
-            })).ToArray();
+            }, ct)).ToArray();
 
         await Task.WhenAll(tasks);
 
@@ -49,6 +50,7 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document(initialText, cursorPosition: 500));
 
         // Act - multiple tasks deleting text concurrently
+        var ct = TestContext.Current.CancellationToken;
         var tasks = Enumerable.Range(0, ConcurrentTaskCount).Select(_ =>
             Task.Run(() =>
             {
@@ -64,7 +66,7 @@ public class BufferThreadSafetyTests
                         // Ignore - deletion may exceed available text
                     }
                 }
-            })).ToArray();
+            }, ct)).ToArray();
 
         await Task.WhenAll(tasks);
 
@@ -79,13 +81,14 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("initial text for concurrent operations"));
 
         // Act - mixed insert and delete operations
+        var ct = TestContext.Current.CancellationToken;
         var insertTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.InsertText("X");
             }
-        });
+        }, ct);
 
         var deleteTask = Task.Run(() =>
         {
@@ -100,7 +103,7 @@ public class BufferThreadSafetyTests
                     // Ignore
                 }
             }
-        });
+        }, ct);
 
         await Task.WhenAll(insertTask, deleteTask);
 
@@ -124,13 +127,14 @@ public class BufferThreadSafetyTests
         }
 
         // Act - concurrent undo and redo operations
+        var ct = TestContext.Current.CancellationToken;
         var undoTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.Undo();
             }
-        });
+        }, ct);
 
         var redoTask = Task.Run(() =>
         {
@@ -138,7 +142,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.Redo();
             }
-        });
+        }, ct);
 
         await Task.WhenAll(undoTask, redoTask);
 
@@ -158,13 +162,14 @@ public class BufferThreadSafetyTests
         }
 
         // Act - insert, undo, and save all running concurrently
+        var ct = TestContext.Current.CancellationToken;
         var insertTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.InsertText("X");
             }
-        });
+        }, ct);
 
         var undoTask = Task.Run(() =>
         {
@@ -172,7 +177,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.Undo();
             }
-        });
+        }, ct);
 
         var saveTask = Task.Run(() =>
         {
@@ -180,7 +185,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.SaveToUndoStack();
             }
-        });
+        }, ct);
 
         await Task.WhenAll(insertTask, undoTask, saveTask);
 
@@ -205,6 +210,7 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("test"));
 
         // Act - completion operations and editing concurrently
+        var ct = TestContext.Current.CancellationToken;
         var completionTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
@@ -212,7 +218,7 @@ public class BufferThreadSafetyTests
                 buffer.SetCompletions(completions);
                 buffer.CancelCompletion();
             }
-        });
+        }, ct);
 
         var editTask = Task.Run(() =>
         {
@@ -220,7 +226,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.InsertText("x");
             }
-        });
+        }, ct);
 
         var readTask = Task.Run(() =>
         {
@@ -230,7 +236,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.CursorPosition;
                 _ = buffer.Document;
             }
-        });
+        }, ct);
 
         await Task.WhenAll(completionTask, editTask, readTask);
 
@@ -245,13 +251,14 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("test"));
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var editTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.InsertText("y");
             }
-        });
+        }, ct);
 
         var readTask = Task.Run(() =>
         {
@@ -260,7 +267,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.Suggestion;
                 _ = buffer.Text;
             }
-        });
+        }, ct);
 
         await Task.WhenAll(editTask, readTask);
 
@@ -275,13 +282,14 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("test"));
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var validationTask = Task.Run(async () =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 await buffer.ValidateAsync();
             }
-        });
+        }, ct);
 
         var editTask = Task.Run(() =>
         {
@@ -289,7 +297,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.InsertText("z");
             }
-        });
+        }, ct);
 
         var syncValidateTask = Task.Run(() =>
         {
@@ -297,7 +305,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.Validate();
             }
-        });
+        }, ct);
 
         await Task.WhenAll(validationTask, editTask, syncValidateTask);
 
@@ -316,13 +324,14 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("line1\nline2\nline3\nline4\nline5", cursorPosition: 15));
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var leftTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.CursorLeft();
             }
-        });
+        }, ct);
 
         var rightTask = Task.Run(() =>
         {
@@ -330,7 +339,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.CursorRight();
             }
-        });
+        }, ct);
 
         var upTask = Task.Run(() =>
         {
@@ -338,7 +347,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.CursorUp();
             }
-        });
+        }, ct);
 
         var downTask = Task.Run(() =>
         {
@@ -346,7 +355,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.CursorDown();
             }
-        });
+        }, ct);
 
         await Task.WhenAll(leftTask, rightTask, upTask, downTask);
 
@@ -366,6 +375,7 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("hello world test text for selection", cursorPosition: 0));
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var selectTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
@@ -374,7 +384,7 @@ public class BufferThreadSafetyTests
                 buffer.CursorRight(3);
                 buffer.ExitSelection();
             }
-        });
+        }, ct);
 
         var copyTask = Task.Run(() =>
         {
@@ -385,7 +395,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.CopySelection();
                 buffer.ExitSelection();
             }
-        });
+        }, ct);
 
         await Task.WhenAll(selectTask, copyTask);
 
@@ -410,13 +420,14 @@ public class BufferThreadSafetyTests
         buffer.LoadHistoryIfNotYetLoaded();
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var backwardTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
             {
                 buffer.HistoryBackward();
             }
-        });
+        }, ct);
 
         var forwardTask = Task.Run(() =>
         {
@@ -424,7 +435,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.HistoryForward();
             }
-        });
+        }, ct);
 
         var gotoTask = Task.Run(() =>
         {
@@ -432,7 +443,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.GoToHistory(i % 10);
             }
-        });
+        }, ct);
 
         await Task.WhenAll(backwardTask, forwardTask, gotoTask);
 
@@ -457,6 +468,7 @@ public class BufferThreadSafetyTests
         buffer.LoadHistoryIfNotYetLoaded();
 
         // Act
+        var ct = TestContext.Current.CancellationToken;
         var forwardSearchTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
@@ -464,7 +476,7 @@ public class BufferThreadSafetyTests
                 var state = new SearchState("text", SearchDirection.Forward);
                 buffer.ApplySearch(state);
             }
-        });
+        }, ct);
 
         var backwardSearchTask = Task.Run(() =>
         {
@@ -473,7 +485,7 @@ public class BufferThreadSafetyTests
                 var state = new SearchState("text", SearchDirection.Backward);
                 buffer.ApplySearch(state);
             }
-        });
+        }, ct);
 
         var documentSearchTask = Task.Run(() =>
         {
@@ -482,7 +494,7 @@ public class BufferThreadSafetyTests
                 var state = new SearchState("searchable", SearchDirection.Forward);
                 _ = buffer.DocumentForSearch(state);
             }
-        });
+        }, ct);
 
         await Task.WhenAll(forwardSearchTask, backwardSearchTask, documentSearchTask);
 
@@ -501,6 +513,7 @@ public class BufferThreadSafetyTests
         var buffer = new Buffer(document: new Document("test content", cursorPosition: 5));
 
         // Act - concurrent reads and writes of various properties
+        var ct = TestContext.Current.CancellationToken;
         var readTextTask = Task.Run(() =>
         {
             for (var i = 0; i < IterationsPerTask; i++)
@@ -508,7 +521,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.Text;
                 _ = buffer.Document;
             }
-        });
+        }, ct);
 
         var readPositionTask = Task.Run(() =>
         {
@@ -517,7 +530,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.CursorPosition;
                 _ = buffer.WorkingIndex;
             }
-        });
+        }, ct);
 
         var writePositionTask = Task.Run(() =>
         {
@@ -525,7 +538,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.CursorPosition = i % 5;
             }
-        });
+        }, ct);
 
         var readStateTask = Task.Run(() =>
         {
@@ -535,7 +548,7 @@ public class BufferThreadSafetyTests
                 _ = buffer.ValidationState;
                 _ = buffer.Suggestion;
             }
-        });
+        }, ct);
 
         var insertTask = Task.Run(() =>
         {
@@ -543,7 +556,7 @@ public class BufferThreadSafetyTests
             {
                 buffer.InsertText("x");
             }
-        });
+        }, ct);
 
         await Task.WhenAll(readTextTask, readPositionTask, writePositionTask, readStateTask, insertTask);
 

@@ -389,6 +389,7 @@ public class BufferValidationTests
         var barrier = new Barrier(3);
 
         // Act - concurrent validation and text changes
+        var ct = TestContext.Current.CancellationToken;
         var validateTask = Task.Run(async () =>
         {
             barrier.SignalAndWait();
@@ -396,7 +397,7 @@ public class BufferValidationTests
             {
                 await buffer.ValidateAsync();
             }
-        });
+        }, ct);
 
         var syncValidateTask = Task.Run(() =>
         {
@@ -405,7 +406,7 @@ public class BufferValidationTests
             {
                 buffer.Validate();
             }
-        });
+        }, ct);
 
         var textChangeTask = Task.Run(() =>
         {
@@ -414,7 +415,7 @@ public class BufferValidationTests
             {
                 buffer.InsertText("x", fireEvent: false);
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(validateTask, syncValidateTask, textChangeTask);
