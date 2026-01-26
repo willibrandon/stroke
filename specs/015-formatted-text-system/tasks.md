@@ -19,11 +19,11 @@
 
 **Purpose**: Create new files, interface foundation, and dependencies
 
-- [ ] T001 Create IFormattedText interface in src/Stroke/FormattedText/IFormattedText.cs
-- [ ] T002 [P] Add Wcwidth NuGet package reference to src/Stroke/Stroke.csproj
-- [ ] T003 [P] Create AnsiColors static class in src/Stroke/FormattedText/AnsiColors.cs with FG/BG color mappings
-- [ ] T004 [P] Create HtmlFormatter internal class in src/Stroke/FormattedText/HtmlFormatter.cs
-- [ ] T005 [P] Create AnsiFormatter internal class in src/Stroke/FormattedText/AnsiFormatter.cs
+- [x] T001 Create IFormattedText interface in src/Stroke/FormattedText/IFormattedText.cs
+- [x] T002 [P] Add Wcwidth NuGet package reference to src/Stroke/Stroke.csproj
+- [x] T003 [P] Create AnsiColors static class in src/Stroke/FormattedText/AnsiColors.cs with FG/BG color mappings
+- [x] T004 [P] Create HtmlFormatter internal class in src/Stroke/FormattedText/HtmlFormatter.cs
+- [x] T005 [P] Create AnsiFormatter internal class in src/Stroke/FormattedText/AnsiFormatter.cs
 
 ---
 
@@ -33,13 +33,13 @@
 
 **⚠️ CRITICAL**: FR-001 to FR-006 must be complete before user story implementation
 
-- [ ] T006 Extend StyleAndTextTuple in src/Stroke/FormattedText/StyleAndTextTuple.cs with MouseHandler constructor overload (FR-001)
-- [ ] T007 Extend FormattedText in src/Stroke/FormattedText/FormattedText.cs to implement IFormattedText (FR-004)
-- [ ] T008 Add FormattedText.Empty static singleton property in src/Stroke/FormattedText/FormattedText.cs (FR-004)
-- [ ] T009 Add IEquatable<FormattedText> implementation in src/Stroke/FormattedText/FormattedText.cs (FR-004)
-- [ ] T010 [P] Add FormattedTextUtils.IsFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-030)
-- [ ] T011 [P] Extend StyleAndTextTupleTests in tests/Stroke.Tests/FormattedText/StyleAndTextTupleTests.cs for mouse handler
-- [ ] T012 [P] Extend FormattedTextTests in tests/Stroke.Tests/FormattedText/FormattedTextTests.cs for IFormattedText and Empty
+- [x] T006 Extend StyleAndTextTuple in src/Stroke/FormattedText/StyleAndTextTuple.cs with MouseHandler constructor overload (FR-001)
+- [x] T007 Extend FormattedText in src/Stroke/FormattedText/FormattedText.cs to implement IFormattedText (FR-004)
+- [x] T008 Add FormattedText.Empty static singleton property in src/Stroke/FormattedText/FormattedText.cs (FR-004)
+- [x] T009 Add IEquatable<FormattedText> implementation in src/Stroke/FormattedText/FormattedText.cs (FR-004)
+- [x] T010 [P] Add FormattedTextUtils.IsFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-030)
+- [x] T011 [P] Extend StyleAndTextTupleTests in tests/Stroke.Tests/FormattedText/StyleAndTextTupleTests.cs for mouse handler
+- [x] T012 [P] Extend FormattedTextTests in tests/Stroke.Tests/FormattedText/FormattedTextTests.cs for IFormattedText and Empty
 
 **Checkpoint**: Foundation ready - user story implementation can begin
 
@@ -53,19 +53,19 @@
 
 ### Tests for User Story 1
 
-- [ ] T013 [P] [US1] Test plain string conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T014 [P] [US1] Test list of tuples conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T015 [P] [US1] Test IFormattedText conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T016 [P] [US1] Test callable conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T017 [P] [US1] Test null conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T018 [P] [US1] Test non-convertible error without autoConvert in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T019 [P] [US1] Test autoConvert=true behavior in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T013 [P] [US1] Test plain string conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T014 [P] [US1] Test list of tuples conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T015 [P] [US1] Test IFormattedText conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T016 [P] [US1] Test callable conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T017 [P] [US1] Test null conversion in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T018 [P] [US1] Test non-convertible error without autoConvert in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T019 [P] [US1] Test autoConvert=true behavior in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Extend FormattedTextUtils.ToFormattedText() for IFormattedText support in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-005)
-- [ ] T021 [US1] Implement style prefix application in FormattedTextUtils.ToFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-006)
-- [ ] T022 [US1] Add autoConvert parameter handling in FormattedTextUtils.ToFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs
+- [x] T020 [US1] Extend FormattedTextUtils.ToFormattedText() for IFormattedText support in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-005)
+- [x] T021 [US1] Implement style prefix application in FormattedTextUtils.ToFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-006)
+- [x] T022 [US1] Add autoConvert parameter handling in FormattedTextUtils.ToFormattedText() in src/Stroke/FormattedText/FormattedTextUtils.cs
 
 **Checkpoint**: User Story 1 complete - can convert any supported type to FormattedText
 
@@ -79,26 +79,26 @@
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] Create tests/Stroke.Tests/FormattedText/HtmlTests.cs with basic element tests (b, i, u, s)
-- [ ] T024 [P] [US2] Add HTML style element tests (fg, bg, color alias) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T025 [P] [US2] Add custom element to class tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T026 [P] [US2] Add nested element tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T027 [P] [US2] Add entity decoding tests (&lt;, &gt;, &amp;, &#60;, &#x3C;) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T028 [P] [US2] Add Html.Format() safe interpolation tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T029 [P] [US2] Add malformed XML error handling tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T030 [P] [US2] Add edge case tests (self-closing, empty element, whitespace) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T023 [P] [US2] Create tests/Stroke.Tests/FormattedText/HtmlTests.cs with basic element tests (b, i, u, s)
+- [x] T024 [P] [US2] Add HTML style element tests (fg, bg, color alias) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T025 [P] [US2] Add custom element to class tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T026 [P] [US2] Add nested element tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T027 [P] [US2] Add entity decoding tests (&lt;, &gt;, &amp;, &#60;, &#x3C;) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T028 [P] [US2] Add Html.Format() safe interpolation tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T029 [P] [US2] Add malformed XML error handling tests in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T030 [P] [US2] Add edge case tests (self-closing, empty element, whitespace) in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T031 [US2] Create Html class with constructor and Value property in src/Stroke/FormattedText/Html.cs (FR-007)
-- [ ] T032 [US2] Implement HTML parsing with XDocument in src/Stroke/FormattedText/Html.cs (FR-007)
-- [ ] T033 [US2] Implement style element with fg/bg/color attributes in src/Stroke/FormattedText/Html.cs (FR-008)
-- [ ] T034 [US2] Implement b/i/u/s element support in src/Stroke/FormattedText/Html.cs (FR-009)
-- [ ] T035 [US2] Implement custom element to CSS class conversion in src/Stroke/FormattedText/Html.cs (FR-010)
-- [ ] T036 [US2] Implement nested element class accumulation in src/Stroke/FormattedText/Html.cs (FR-011)
-- [ ] T037 [US2] Implement Html.Escape() static method in src/Stroke/FormattedText/Html.cs (FR-012)
-- [ ] T038 [US2] Implement Html.Format() method using HtmlFormatter in src/Stroke/FormattedText/Html.cs (FR-029)
-- [ ] T039 [US2] Implement ToFormattedText() returning cached result in src/Stroke/FormattedText/Html.cs
+- [x] T031 [US2] Create Html class with constructor and Value property in src/Stroke/FormattedText/Html.cs (FR-007)
+- [x] T032 [US2] Implement HTML parsing with XDocument in src/Stroke/FormattedText/Html.cs (FR-007)
+- [x] T033 [US2] Implement style element with fg/bg/color attributes in src/Stroke/FormattedText/Html.cs (FR-008)
+- [x] T034 [US2] Implement b/i/u/s element support in src/Stroke/FormattedText/Html.cs (FR-009)
+- [x] T035 [US2] Implement custom element to CSS class conversion in src/Stroke/FormattedText/Html.cs (FR-010)
+- [x] T036 [US2] Implement nested element class accumulation in src/Stroke/FormattedText/Html.cs (FR-011)
+- [x] T037 [US2] Implement Html.Escape() static method in src/Stroke/FormattedText/Html.cs (FR-012)
+- [x] T038 [US2] Implement Html.Format() method using HtmlFormatter in src/Stroke/FormattedText/Html.cs (FR-029)
+- [x] T039 [US2] Implement ToFormattedText() returning cached result in src/Stroke/FormattedText/Html.cs
 
 **Checkpoint**: User Story 2 complete - can parse HTML markup to styled fragments
 
@@ -112,30 +112,30 @@
 
 ### Tests for User Story 3
 
-- [ ] T040 [P] [US3] Create tests/Stroke.Tests/FormattedText/AnsiTests.cs with basic SGR tests (colors, bold)
-- [ ] T041 [P] [US3] Add SGR attribute tests (dim, italic, underline, strike, blink, reverse, hidden) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T042 [P] [US3] Add SGR disable code tests (22-29) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T043 [P] [US3] Add 256-color tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T044 [P] [US3] Add true color RGB tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T045 [P] [US3] Add ZeroWidthEscape (\001...\002) tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T046 [P] [US3] Add cursor forward escape tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T047 [P] [US3] Add Ansi.Format() safe interpolation tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
-- [ ] T048 [P] [US3] Add edge case tests (\x9b CSI, malformed, bounds clamping) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T040 [P] [US3] Create tests/Stroke.Tests/FormattedText/AnsiTests.cs with basic SGR tests (colors, bold)
+- [x] T041 [P] [US3] Add SGR attribute tests (dim, italic, underline, strike, blink, reverse, hidden) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T042 [P] [US3] Add SGR disable code tests (22-29) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T043 [P] [US3] Add 256-color tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T044 [P] [US3] Add true color RGB tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T045 [P] [US3] Add ZeroWidthEscape (\001...\002) tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T046 [P] [US3] Add cursor forward escape tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T047 [P] [US3] Add Ansi.Format() safe interpolation tests in tests/Stroke.Tests/FormattedText/AnsiTests.cs
+- [x] T048 [P] [US3] Add edge case tests (\x9b CSI, malformed, bounds clamping) in tests/Stroke.Tests/FormattedText/AnsiTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T049 [US3] Create Ansi class with constructor and Value property in src/Stroke/FormattedText/Ansi.cs (FR-013)
-- [ ] T050 [US3] Implement ANSI state machine parser in src/Stroke/FormattedText/Ansi.cs (FR-013)
-- [ ] T051 [US3] Implement SGR attribute codes (0-9) in src/Stroke/FormattedText/Ansi.cs (FR-014)
-- [ ] T052 [US3] Implement SGR disable codes (22-29) in src/Stroke/FormattedText/Ansi.cs (FR-015)
-- [ ] T053 [US3] Implement basic ANSI colors (30-37, 40-47, 90-97, 100-107) in src/Stroke/FormattedText/Ansi.cs (FR-016)
-- [ ] T054 [US3] Implement 256-color mode (38;5;N, 48;5;N) in src/Stroke/FormattedText/Ansi.cs (FR-017)
-- [ ] T055 [US3] Implement true color mode (38;2;R;G;B, 48;2;R;G;B) in src/Stroke/FormattedText/Ansi.cs (FR-018)
-- [ ] T056 [US3] Implement ZeroWidthEscape handling (\001...\002) in src/Stroke/FormattedText/Ansi.cs (FR-019)
-- [ ] T057 [US3] Implement cursor forward escape (\x1b[NC) in src/Stroke/FormattedText/Ansi.cs (FR-020)
-- [ ] T058 [US3] Implement Ansi.Escape() static method in src/Stroke/FormattedText/Ansi.cs (FR-021)
-- [ ] T059 [US3] Implement Ansi.Format() method using AnsiFormatter in src/Stroke/FormattedText/Ansi.cs (FR-029)
-- [ ] T060 [US3] Implement ToFormattedText() returning cached result in src/Stroke/FormattedText/Ansi.cs
+- [x] T049 [US3] Create Ansi class with constructor and Value property in src/Stroke/FormattedText/Ansi.cs (FR-013)
+- [x] T050 [US3] Implement ANSI state machine parser in src/Stroke/FormattedText/Ansi.cs (FR-013)
+- [x] T051 [US3] Implement SGR attribute codes (0-9) in src/Stroke/FormattedText/Ansi.cs (FR-014)
+- [x] T052 [US3] Implement SGR disable codes (22-29) in src/Stroke/FormattedText/Ansi.cs (FR-015)
+- [x] T053 [US3] Implement basic ANSI colors (30-37, 40-47, 90-97, 100-107) in src/Stroke/FormattedText/Ansi.cs (FR-016)
+- [x] T054 [US3] Implement 256-color mode (38;5;N, 48;5;N) in src/Stroke/FormattedText/Ansi.cs (FR-017)
+- [x] T055 [US3] Implement true color mode (38;2;R;G;B, 48;2;R;G;B) in src/Stroke/FormattedText/Ansi.cs (FR-018)
+- [x] T056 [US3] Implement ZeroWidthEscape handling (\001...\002) in src/Stroke/FormattedText/Ansi.cs (FR-019)
+- [x] T057 [US3] Implement cursor forward escape (\x1b[NC) in src/Stroke/FormattedText/Ansi.cs (FR-020)
+- [x] T058 [US3] Implement Ansi.Escape() static method in src/Stroke/FormattedText/Ansi.cs (FR-021)
+- [x] T059 [US3] Implement Ansi.Format() method using AnsiFormatter in src/Stroke/FormattedText/Ansi.cs (FR-029)
+- [x] T060 [US3] Implement ToFormattedText() returning cached result in src/Stroke/FormattedText/Ansi.cs
 
 **Checkpoint**: User Story 3 complete - can parse ANSI sequences to styled fragments
 
@@ -149,21 +149,21 @@
 
 ### Tests for User Story 4
 
-- [ ] T061 [P] [US4] Add FragmentListLen tests (basic, ZeroWidthEscape exclusion) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T062 [P] [US4] Add FragmentListWidth tests (ASCII, CJK, combining, control) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T063 [P] [US4] Add FragmentListToText tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T064 [P] [US4] Add SplitLines tests (basic, consecutive newlines, CR+LF) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T065 [P] [US4] Add SplitLines mouse handler preservation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T066 [P] [US4] Add empty fragment list edge case tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T061 [P] [US4] Add FragmentListLen tests (basic, ZeroWidthEscape exclusion) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T062 [P] [US4] Add FragmentListWidth tests (ASCII, CJK, combining, control) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T063 [P] [US4] Add FragmentListToText tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T064 [P] [US4] Add SplitLines tests (basic, consecutive newlines, CR+LF) in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T065 [P] [US4] Add SplitLines mouse handler preservation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T066 [P] [US4] Add empty fragment list edge case tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T067 [US4] Update FragmentListLen to exclude ZeroWidthEscape in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-022)
-- [ ] T068 [US4] Add FragmentListWidth with Wcwidth integration in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-023)
-- [ ] T069 [US4] Ensure FragmentListToText excludes ZeroWidthEscape in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-024)
-- [ ] T070 [US4] Implement SplitLines with CR+LF handling in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-025)
-- [ ] T071 [US4] Implement mouse handler preservation in SplitLines in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-025)
-- [ ] T072 [US4] Ensure ToPlainText works with AnyFormattedText in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-026)
+- [x] T067 [US4] Update FragmentListLen to exclude ZeroWidthEscape in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-022)
+- [x] T068 [US4] Add FragmentListWidth with Wcwidth integration in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-023)
+- [x] T069 [US4] Ensure FragmentListToText excludes ZeroWidthEscape in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-024)
+- [x] T070 [US4] Implement SplitLines with CR+LF handling in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-025)
+- [x] T071 [US4] Implement mouse handler preservation in SplitLines in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-025)
+- [x] T072 [US4] Ensure ToPlainText works with AnyFormattedText in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-026)
 
 **Checkpoint**: User Story 4 complete - can measure and manipulate fragment lists
 
@@ -177,21 +177,21 @@
 
 ### Tests for User Story 5
 
-- [ ] T073 [P] [US5] Create tests/Stroke.Tests/FormattedText/TemplateTests.cs with basic interpolation tests
-- [ ] T074 [P] [US5] Add formatting preservation tests (HTML in template) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
-- [ ] T075 [P] [US5] Add multiple placeholder tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
-- [ ] T076 [P] [US5] Add lazy evaluation tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
-- [ ] T077 [P] [US5] Add positional syntax error tests ({0} throws) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
-- [ ] T078 [P] [US5] Add escaped braces tests ({{ }}) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
-- [ ] T079 [P] [US5] Add placeholder/value count mismatch tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T073 [P] [US5] Create tests/Stroke.Tests/FormattedText/TemplateTests.cs with basic interpolation tests
+- [x] T074 [P] [US5] Add formatting preservation tests (HTML in template) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T075 [P] [US5] Add multiple placeholder tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T076 [P] [US5] Add lazy evaluation tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T077 [P] [US5] Add positional syntax error tests ({0} throws) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T078 [P] [US5] Add escaped braces tests ({{ }}) in tests/Stroke.Tests/FormattedText/TemplateTests.cs
+- [x] T079 [P] [US5] Add placeholder/value count mismatch tests in tests/Stroke.Tests/FormattedText/TemplateTests.cs
 
 ### Implementation for User Story 5
 
-- [ ] T080 [US5] Create Template class with constructor validation in src/Stroke/FormattedText/Template.cs (FR-027)
-- [ ] T081 [US5] Implement placeholder parsing in Template constructor in src/Stroke/FormattedText/Template.cs (FR-027)
-- [ ] T082 [US5] Implement escaped braces ({{ }}) handling in src/Stroke/FormattedText/Template.cs (FR-027)
-- [ ] T083 [US5] Implement Template.Format() returning lazy callable in src/Stroke/FormattedText/Template.cs (FR-027)
-- [ ] T084 [US5] Implement value count validation in Template.Format() in src/Stroke/FormattedText/Template.cs (FR-027)
+- [x] T080 [US5] Create Template class with constructor validation in src/Stroke/FormattedText/Template.cs (FR-027)
+- [x] T081 [US5] Implement placeholder parsing in Template constructor in src/Stroke/FormattedText/Template.cs (FR-027)
+- [x] T082 [US5] Implement escaped braces ({{ }}) handling in src/Stroke/FormattedText/Template.cs (FR-027)
+- [x] T083 [US5] Implement Template.Format() returning lazy callable in src/Stroke/FormattedText/Template.cs (FR-027)
+- [x] T084 [US5] Implement value count validation in Template.Format() in src/Stroke/FormattedText/Template.cs (FR-027)
 
 **Checkpoint**: User Story 5 complete - can create and format templates
 
@@ -205,16 +205,16 @@
 
 ### Tests for User Story 6
 
-- [ ] T085 [P] [US6] Add Merge basic tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T086 [P] [US6] Add Merge order preservation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T087 [P] [US6] Add Merge null/empty handling tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
-- [ ] T088 [P] [US6] Add Merge lazy evaluation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T085 [P] [US6] Add Merge basic tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T086 [P] [US6] Add Merge order preservation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T087 [P] [US6] Add Merge null/empty handling tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
+- [x] T088 [P] [US6] Add Merge lazy evaluation tests in tests/Stroke.Tests/FormattedText/FormattedTextUtilsTests.cs
 
 ### Implementation for User Story 6
 
-- [ ] T089 [US6] Implement FormattedTextUtils.Merge(IEnumerable) in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
-- [ ] T090 [US6] Implement FormattedTextUtils.Merge(params) in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
-- [ ] T091 [US6] Implement null/empty skipping in Merge in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
+- [x] T089 [US6] Implement FormattedTextUtils.Merge(IEnumerable) in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
+- [x] T090 [US6] Implement FormattedTextUtils.Merge(params) in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
+- [x] T091 [US6] Implement null/empty skipping in Merge in src/Stroke/FormattedText/FormattedTextUtils.cs (FR-028)
 
 **Checkpoint**: User Story 6 complete - can merge multiple formatted text items
 
@@ -228,16 +228,16 @@
 
 ### Tests for User Story 7
 
-- [ ] T092 [P] [US7] Create tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs with basic conversion tests
-- [ ] T093 [P] [US7] Add hierarchical token type tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
-- [ ] T094 [P] [US7] Add empty token list tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
-- [ ] T095 [P] [US7] Add empty text token skipping tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
+- [x] T092 [P] [US7] Create tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs with basic conversion tests
+- [x] T093 [P] [US7] Add hierarchical token type tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
+- [x] T094 [P] [US7] Add empty token list tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
+- [x] T095 [P] [US7] Add empty text token skipping tests in tests/Stroke.Tests/FormattedText/PygmentsTokensTests.cs
 
 ### Implementation for User Story 7
 
-- [ ] T096 [US7] Create PygmentsTokens class with constructors in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
-- [ ] T097 [US7] Implement token type to class:pygments.* conversion in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
-- [ ] T098 [US7] Implement ToFormattedText() in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
+- [x] T096 [US7] Create PygmentsTokens class with constructors in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
+- [x] T097 [US7] Implement token type to class:pygments.* conversion in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
+- [x] T098 [US7] Implement ToFormattedText() in src/Stroke/FormattedText/PygmentsTokens.cs (FR-031)
 
 **Checkpoint**: User Story 7 complete - can convert Pygments tokens to styled text
 
@@ -251,20 +251,20 @@
 
 ### Tests for User Story 8
 
-- [ ] T099 [P] [US8] Add AnyFormattedText string conversion tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
-- [ ] T100 [P] [US8] Add AnyFormattedText Html/Ansi/PygmentsTokens conversion tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
-- [ ] T101 [P] [US8] Add AnyFormattedText callable tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
-- [ ] T102 [P] [US8] Add AnyFormattedText IsEmpty tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
-- [ ] T103 [P] [US8] Add AnyFormattedText ToFormattedText with style prefix tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
+- [x] T099 [P] [US8] Add AnyFormattedText string conversion tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
+- [x] T100 [P] [US8] Add AnyFormattedText Html/Ansi/PygmentsTokens conversion tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
+- [x] T101 [P] [US8] Add AnyFormattedText callable tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
+- [x] T102 [P] [US8] Add AnyFormattedText IsEmpty tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
+- [x] T103 [P] [US8] Add AnyFormattedText ToFormattedText with style prefix tests in tests/Stroke.Tests/FormattedText/AnyFormattedTextTests.cs
 
 ### Implementation for User Story 8
 
-- [ ] T104 [US8] Add implicit conversion from Html in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
-- [ ] T105 [US8] Add implicit conversion from Ansi in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
-- [ ] T106 [US8] Add implicit conversion from PygmentsTokens in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
-- [ ] T107 [US8] Implement ToFormattedText with style parameter in src/Stroke/FormattedText/AnyFormattedText.cs (FR-033)
-- [ ] T108 [US8] Implement IsEmpty property in src/Stroke/FormattedText/AnyFormattedText.cs (FR-034)
-- [ ] T109 [US8] Implement ToPlainText method in src/Stroke/FormattedText/AnyFormattedText.cs
+- [x] T104 [US8] Add implicit conversion from Html in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
+- [x] T105 [US8] Add implicit conversion from Ansi in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
+- [x] T106 [US8] Add implicit conversion from PygmentsTokens in src/Stroke/FormattedText/AnyFormattedText.cs (FR-032)
+- [x] T107 [US8] Implement ToFormattedText with style parameter in src/Stroke/FormattedText/AnyFormattedText.cs (FR-033)
+- [x] T108 [US8] Implement IsEmpty property in src/Stroke/FormattedText/AnyFormattedText.cs (FR-034)
+- [x] T109 [US8] Implement ToPlainText method in src/Stroke/FormattedText/AnyFormattedText.cs
 
 **Checkpoint**: User Story 8 complete - flexible API input via AnyFormattedText
 
@@ -274,12 +274,12 @@
 
 **Purpose**: Performance validation, coverage verification, integration
 
-- [ ] T110 Add benchmark for ToFormattedText with 1KB/5KB/10KB inputs in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
-- [ ] T111 Add benchmark for HTML parsing with 100KB input in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
-- [ ] T112 Add benchmark for ANSI parsing throughput in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
-- [ ] T113 Run coverage analysis and verify ≥80% line coverage across FormattedText files
-- [ ] T114 Run quickstart.md code examples as integration tests
-- [ ] T115 Verify all 18 Python APIs from spec mapping table have implementations
+- [x] T110 Add benchmark for ToFormattedText with 1KB/5KB/10KB inputs in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
+- [x] T111 Add benchmark for HTML parsing with 100KB input in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
+- [x] T112 Add benchmark for ANSI parsing throughput in tests/Stroke.Benchmarks/FormattedTextBenchmarks.cs
+- [x] T113 Run coverage analysis and verify ≥80% line coverage across FormattedText files
+- [x] T114 Run quickstart.md code examples as integration tests
+- [x] T115 Verify all 18 Python APIs from spec mapping table have implementations
 
 ---
 

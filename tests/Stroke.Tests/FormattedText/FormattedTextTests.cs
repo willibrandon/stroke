@@ -196,4 +196,82 @@ public sealed class FormattedTextTests
 
         Assert.Same(Stroke.FormattedText.FormattedText.Empty, ft);
     }
+
+    [Fact]
+    public void ImplementsIFormattedText()
+    {
+        var ft = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+
+        Assert.True(ft is IFormattedText);
+    }
+
+    [Fact]
+    public void IFormattedText_ToFormattedText_ReturnsSelf()
+    {
+        var ft = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+
+        IFormattedText ift = ft;
+        var result = ift.ToFormattedText();
+
+        Assert.Same(ft, result);
+    }
+
+    [Fact]
+    public void Empty_ImplementsIFormattedText()
+    {
+        IFormattedText ift = Stroke.FormattedText.FormattedText.Empty;
+        var result = ift.ToFormattedText();
+
+        Assert.Same(Stroke.FormattedText.FormattedText.Empty, result);
+    }
+
+    [Fact]
+    public void Equality_WithObject_Works()
+    {
+        var ft1 = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+        var ft2 = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+
+        Assert.True(ft1.Equals((object)ft2));
+    }
+
+    [Fact]
+    public void Equality_WithDifferentType_ReturnsFalse()
+    {
+        var ft = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+
+        Assert.False(ft.Equals("hello"));
+    }
+
+    [Fact]
+    public void Equality_SameInstance_IsEqual()
+    {
+        var ft = new Stroke.FormattedText.FormattedText([
+            new StyleAndTextTuple("bold", "hello")
+        ]);
+
+        Assert.True(ft.Equals(ft));
+    }
+
+    [Fact]
+    public void Empty_IsSameAcrossMultipleAccesses()
+    {
+        // Access multiple times and verify singleton behavior
+        var e1 = Stroke.FormattedText.FormattedText.Empty;
+        var e2 = Stroke.FormattedText.FormattedText.Empty;
+        var e3 = Stroke.FormattedText.FormattedText.Empty;
+
+        Assert.Same(e1, e2);
+        Assert.Same(e2, e3);
+        Assert.Empty(e1);
+    }
 }
