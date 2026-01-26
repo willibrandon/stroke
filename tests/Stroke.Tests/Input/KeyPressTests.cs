@@ -120,15 +120,47 @@ public class KeyPressTests
     [InlineData(Keys.ControlDown, "\x1b[1;5B")]
     [InlineData(Keys.ControlRight, "\x1b[1;5C")]
     [InlineData(Keys.ControlLeft, "\x1b[1;5D")]
+    [InlineData(Keys.ControlHome, "\x1b[1;5H")]
+    [InlineData(Keys.ControlEnd, "\x1b[1;5F")]
+    [InlineData(Keys.ControlInsert, "\x1b[2;5~")]
+    [InlineData(Keys.ControlDelete, "\x1b[3;5~")]
+    [InlineData(Keys.ControlPageUp, "\x1b[5;5~")]
+    [InlineData(Keys.ControlPageDown, "\x1b[6;5~")]
+    public void ControlNavigationKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
+    {
+        var keyPress = new KeyPress(key);
+        Assert.Equal(expectedData, keyPress.Data);
+    }
+
+    [Theory]
     [InlineData(Keys.ShiftUp, "\x1b[1;2A")]
     [InlineData(Keys.ShiftDown, "\x1b[1;2B")]
     [InlineData(Keys.ShiftRight, "\x1b[1;2C")]
     [InlineData(Keys.ShiftLeft, "\x1b[1;2D")]
+    [InlineData(Keys.ShiftHome, "\x1b[1;2H")]
+    [InlineData(Keys.ShiftEnd, "\x1b[1;2F")]
+    [InlineData(Keys.ShiftInsert, "\x1b[2;2~")]
+    [InlineData(Keys.ShiftDelete, "\x1b[3;2~")]
+    [InlineData(Keys.ShiftPageUp, "\x1b[5;2~")]
+    [InlineData(Keys.ShiftPageDown, "\x1b[6;2~")]
+    public void ShiftNavigationKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
+    {
+        var keyPress = new KeyPress(key);
+        Assert.Equal(expectedData, keyPress.Data);
+    }
+
+    [Theory]
     [InlineData(Keys.ControlShiftUp, "\x1b[1;6A")]
     [InlineData(Keys.ControlShiftDown, "\x1b[1;6B")]
     [InlineData(Keys.ControlShiftRight, "\x1b[1;6C")]
     [InlineData(Keys.ControlShiftLeft, "\x1b[1;6D")]
-    public void Constructor_ModifiedNavigationKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
+    [InlineData(Keys.ControlShiftHome, "\x1b[1;6H")]
+    [InlineData(Keys.ControlShiftEnd, "\x1b[1;6F")]
+    [InlineData(Keys.ControlShiftInsert, "\x1b[2;6~")]
+    [InlineData(Keys.ControlShiftDelete, "\x1b[3;6~")]
+    [InlineData(Keys.ControlShiftPageUp, "\x1b[5;6~")]
+    [InlineData(Keys.ControlShiftPageDown, "\x1b[6;6~")]
+    public void ControlShiftNavigationKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
     {
         var keyPress = new KeyPress(key);
         Assert.Equal(expectedData, keyPress.Data);
@@ -222,28 +254,104 @@ public class KeyPressTests
     }
 
     [Fact]
-    public void ExtendedFunctionKeys_UseKeyNameAsDefaultData()
+    public void ShiftEscape_UsesEscapeCharacter()
     {
-        Assert.Equal("F21", new KeyPress(Keys.F21).Data);
-        Assert.Equal("F22", new KeyPress(Keys.F22).Data);
-        Assert.Equal("F23", new KeyPress(Keys.F23).Data);
-        Assert.Equal("F24", new KeyPress(Keys.F24).Data);
+        var keyPress = new KeyPress(Keys.ShiftEscape);
+        Assert.Equal("\x1b", keyPress.Data);
     }
 
-    [Fact]
-    public void ControlNumbers_UseKeyNameAsDefaultData()
+    [Theory]
+    [InlineData(Keys.F13, "\x1b[25~")]
+    [InlineData(Keys.F14, "\x1b[26~")]
+    [InlineData(Keys.F15, "\x1b[28~")]
+    [InlineData(Keys.F16, "\x1b[29~")]
+    [InlineData(Keys.F17, "\x1b[31~")]
+    [InlineData(Keys.F18, "\x1b[32~")]
+    [InlineData(Keys.F19, "\x1b[33~")]
+    [InlineData(Keys.F20, "\x1b[34~")]
+    public void ExtendedFunctionKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
     {
-        Assert.Equal("Control0", new KeyPress(Keys.Control0).Data);
-        Assert.Equal("Control1", new KeyPress(Keys.Control1).Data);
-        Assert.Equal("Control9", new KeyPress(Keys.Control9).Data);
+        var keyPress = new KeyPress(key);
+        Assert.Equal(expectedData, keyPress.Data);
     }
 
-    [Fact]
-    public void ControlShiftNumbers_UseKeyNameAsDefaultData()
+    [Theory]
+    [InlineData(Keys.F21, "F21")]
+    [InlineData(Keys.F22, "F22")]
+    [InlineData(Keys.F23, "F23")]
+    [InlineData(Keys.F24, "F24")]
+    public void ExtendedFunctionKeys_F21ToF24_UseKeyNameAsDefaultData(Keys key, string expectedData)
     {
-        Assert.Equal("ControlShift0", new KeyPress(Keys.ControlShift0).Data);
-        Assert.Equal("ControlShift1", new KeyPress(Keys.ControlShift1).Data);
-        Assert.Equal("ControlShift9", new KeyPress(Keys.ControlShift9).Data);
+        Assert.Equal(expectedData, new KeyPress(key).Data);
+    }
+
+    [Theory]
+    [InlineData(Keys.ControlF1, "\x1b[1;5P")]
+    [InlineData(Keys.ControlF2, "\x1b[1;5Q")]
+    [InlineData(Keys.ControlF3, "\x1b[1;5R")]
+    [InlineData(Keys.ControlF4, "\x1b[1;5S")]
+    [InlineData(Keys.ControlF5, "\x1b[15;5~")]
+    [InlineData(Keys.ControlF6, "\x1b[17;5~")]
+    [InlineData(Keys.ControlF7, "\x1b[18;5~")]
+    [InlineData(Keys.ControlF8, "\x1b[19;5~")]
+    [InlineData(Keys.ControlF9, "\x1b[20;5~")]
+    [InlineData(Keys.ControlF10, "\x1b[21;5~")]
+    [InlineData(Keys.ControlF11, "\x1b[23;5~")]
+    [InlineData(Keys.ControlF12, "\x1b[24;5~")]
+    public void ControlFunctionKeys_UseCorrectVt100Sequences(Keys key, string expectedData)
+    {
+        var keyPress = new KeyPress(key);
+        Assert.Equal(expectedData, keyPress.Data);
+    }
+
+    [Theory]
+    [InlineData(Keys.ControlF13, "ControlF13")]
+    [InlineData(Keys.ControlF14, "ControlF14")]
+    [InlineData(Keys.ControlF15, "ControlF15")]
+    [InlineData(Keys.ControlF16, "ControlF16")]
+    [InlineData(Keys.ControlF17, "ControlF17")]
+    [InlineData(Keys.ControlF18, "ControlF18")]
+    [InlineData(Keys.ControlF19, "ControlF19")]
+    [InlineData(Keys.ControlF20, "ControlF20")]
+    [InlineData(Keys.ControlF21, "ControlF21")]
+    [InlineData(Keys.ControlF22, "ControlF22")]
+    [InlineData(Keys.ControlF23, "ControlF23")]
+    [InlineData(Keys.ControlF24, "ControlF24")]
+    public void ControlFunctionKeys_F13ToF24_UseKeyNameAsDefaultData(Keys key, string expectedData)
+    {
+        Assert.Equal(expectedData, new KeyPress(key).Data);
+    }
+
+    [Theory]
+    [InlineData(Keys.Control0, "Control0")]
+    [InlineData(Keys.Control1, "Control1")]
+    [InlineData(Keys.Control2, "Control2")]
+    [InlineData(Keys.Control3, "Control3")]
+    [InlineData(Keys.Control4, "Control4")]
+    [InlineData(Keys.Control5, "Control5")]
+    [InlineData(Keys.Control6, "Control6")]
+    [InlineData(Keys.Control7, "Control7")]
+    [InlineData(Keys.Control8, "Control8")]
+    [InlineData(Keys.Control9, "Control9")]
+    public void ControlNumbers_UseKeyNameAsDefaultData(Keys key, string expectedData)
+    {
+        Assert.Equal(expectedData, new KeyPress(key).Data);
+    }
+
+    [Theory]
+    [InlineData(Keys.ControlShift0, "ControlShift0")]
+    [InlineData(Keys.ControlShift1, "ControlShift1")]
+    [InlineData(Keys.ControlShift2, "ControlShift2")]
+    [InlineData(Keys.ControlShift3, "ControlShift3")]
+    [InlineData(Keys.ControlShift4, "ControlShift4")]
+    [InlineData(Keys.ControlShift5, "ControlShift5")]
+    [InlineData(Keys.ControlShift6, "ControlShift6")]
+    [InlineData(Keys.ControlShift7, "ControlShift7")]
+    [InlineData(Keys.ControlShift8, "ControlShift8")]
+    [InlineData(Keys.ControlShift9, "ControlShift9")]
+    public void ControlShiftNumbers_UseKeyNameAsDefaultData(Keys key, string expectedData)
+    {
+        Assert.Equal(expectedData, new KeyPress(key).Data);
     }
 
     [Fact]

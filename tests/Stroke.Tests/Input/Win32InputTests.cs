@@ -366,19 +366,56 @@ public class Win32InputTests
 
     [Fact]
     [SupportedOSPlatform("windows")]
-    public void WaitForHandles_WithTimeout_TimesOut_OnWindows()
+    public void WaitForHandles_WithNonSignaledEvent_TimesOut_OnWindows()
     {
         if (!OperatingSystem.IsWindows())
             return;
 
-        using var input = new Win32Input();
-        var handles = new[] { input.FileNo() };
+        // Create a manual-reset event in non-signaled state
+        var eventHandle = ConsoleApi.CreateEvent(nint.Zero, true, false, null);
+        Assert.NotEqual(nint.Zero, eventHandle);
 
-        // Wait with very short timeout - should time out
-        var result = Win32Input.WaitForHandles(handles, 1);
+        try
+        {
+            var handles = new[] { eventHandle };
 
-        // Result is -1 on timeout (no input available)
-        Assert.Equal(-1, result);
+            // Wait with very short timeout - should time out since event is not signaled
+            var result = Win32Input.WaitForHandles(handles, 1);
+
+            // Result is -1 on timeout
+            Assert.Equal(-1, result);
+        }
+        finally
+        {
+            ConsoleApi.CloseHandle(eventHandle);
+        }
+    }
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForHandles_WithSignaledEvent_ReturnsIndex_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        // Create a manual-reset event and signal it
+        var eventHandle = ConsoleApi.CreateEvent(nint.Zero, true, true, null);
+        Assert.NotEqual(nint.Zero, eventHandle);
+
+        try
+        {
+            var handles = new[] { eventHandle };
+
+            // Wait should return immediately since event is signaled
+            var result = Win32Input.WaitForHandles(handles, 1);
+
+            // Result is 0 (index of signaled handle)
+            Assert.Equal(0, result);
+        }
+        finally
+        {
+            ConsoleApi.CloseHandle(eventHandle);
+        }
     }
 
     #endregion

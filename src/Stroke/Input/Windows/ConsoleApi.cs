@@ -186,4 +186,50 @@ public static partial class ConsoleApi
     public const uint INFINITE = 0xFFFFFFFF;
 
     #endregion
+
+    #region Event Functions
+
+    /// <summary>
+    /// Creates or opens an unnamed event object.
+    /// </summary>
+    /// <param name="lpEventAttributes">Security attributes (can be null).</param>
+    /// <param name="bManualReset">If true, creates a manual-reset event; if false, auto-reset.</param>
+    /// <param name="bInitialState">If true, the initial state is signaled; if false, nonsignaled.</param>
+    /// <param name="lpName">Event name (null for unnamed).</param>
+    /// <returns>Handle to the event object, or IntPtr.Zero on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "CreateEventW", SetLastError = true)]
+    public static partial nint CreateEvent(
+        nint lpEventAttributes,
+        [MarshalAs(UnmanagedType.Bool)] bool bManualReset,
+        [MarshalAs(UnmanagedType.Bool)] bool bInitialState,
+        [MarshalAs(UnmanagedType.LPWStr)] string? lpName);
+
+    /// <summary>
+    /// Sets the specified event object to the signaled state.
+    /// </summary>
+    /// <param name="hEvent">Handle to the event object.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetEvent", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetEvent(nint hEvent);
+
+    /// <summary>
+    /// Sets the specified event object to the nonsignaled state.
+    /// </summary>
+    /// <param name="hEvent">Handle to the event object.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "ResetEvent", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool ResetEvent(nint hEvent);
+
+    /// <summary>
+    /// Closes an open object handle.
+    /// </summary>
+    /// <param name="hObject">Handle to an open object.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "CloseHandle", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool CloseHandle(nint hObject);
+
+    #endregion
 }

@@ -441,6 +441,187 @@ public class Vt100ParserTests
         Assert.Throws<ArgumentNullException>(() => new Vt100Parser(null!));
     }
 
+    [Theory]
+    [InlineData("\x1b[25~", Keys.F13)]
+    [InlineData("\x1b[26~", Keys.F14)]
+    [InlineData("\x1b[28~", Keys.F15)]
+    [InlineData("\x1b[29~", Keys.F16)]
+    [InlineData("\x1b[31~", Keys.F17)]
+    [InlineData("\x1b[32~", Keys.F18)]
+    [InlineData("\x1b[33~", Keys.F19)]
+    [InlineData("\x1b[34~", Keys.F20)]
+    public void Feed_ExtendedFunctionKeys_MapsCorrectly(string sequence, Keys expectedKey)
+    {
+        _parser.Feed(sequence);
+
+        Assert.Single(_keys);
+        Assert.Equal(expectedKey, _keys[0].Key);
+    }
+
+    [Theory]
+    [InlineData("\x1b[1;5H", Keys.ControlHome)]
+    [InlineData("\x1b[1;5F", Keys.ControlEnd)]
+    [InlineData("\x1b[1;2H", Keys.ShiftHome)]
+    [InlineData("\x1b[1;2F", Keys.ShiftEnd)]
+    public void Feed_ModifiedHomeEnd_MapsCorrectly(string sequence, Keys expectedKey)
+    {
+        _parser.Feed(sequence);
+
+        Assert.Single(_keys);
+        Assert.Equal(expectedKey, _keys[0].Key);
+    }
+
+    [Theory]
+    [InlineData("\x1b[2;5~", Keys.ControlInsert)]
+    [InlineData("\x1b[3;5~", Keys.ControlDelete)]
+    [InlineData("\x1b[5;5~", Keys.ControlPageUp)]
+    [InlineData("\x1b[6;5~", Keys.ControlPageDown)]
+    [InlineData("\x1b[2;2~", Keys.ShiftInsert)]
+    [InlineData("\x1b[3;2~", Keys.ShiftDelete)]
+    public void Feed_ModifiedEditingKeys_MapsCorrectly(string sequence, Keys expectedKey)
+    {
+        _parser.Feed(sequence);
+
+        Assert.Single(_keys);
+        Assert.Equal(expectedKey, _keys[0].Key);
+    }
+
+    [Fact]
+    public void Feed_Flush_PartialOscSequence_EmitsAsLiterals()
+    {
+        _parser.Feed("\x1b]");
+        Assert.Empty(_keys);
+
+        _parser.Flush();
+        Assert.True(_keys.Count >= 1);
+        Assert.Equal(Keys.Escape, _keys[0].Key);
+    }
+
+    [Fact]
+    public void Feed_Flush_PartialCsiSequence_EmitsAsLiterals()
+    {
+        _parser.Feed("\x1b[1;");
+        Assert.Empty(_keys);
+
+        _parser.Flush();
+        Assert.True(_keys.Count >= 1);
+        Assert.Equal(Keys.Escape, _keys[0].Key);
+    }
+
+    #region OSC and Special Sequence Tests
+
+    [Fact]
+    public void Feed_OscSequence_WithBel_Discards()
+    {
+        // OSC (Operating System Command) terminated with BEL
+        _parser.Feed("\x1b]0;Window Title\x07");
+
+        // OSC sequences are discarded, should not produce key events
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_OscSequence_WithSt_Discards()
+    {
+        // OSC terminated with ST (String Terminator)
+        _parser.Feed("\x1b]0;Title\x1b\\");
+
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_DcsSequence_Discards()
+    {
+        // DCS (Device Control String): ESC P ... ST
+        _parser.Feed("\x1bP0;1|text\x1b\\");
+
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_SosSequence_Discards()
+    {
+        // SOS (Start of String): ESC X ... ST
+        _parser.Feed("\x1bXsome string\x1b\\");
+
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_PmSequence_Discards()
+    {
+        // PM (Privacy Message): ESC ^ ... ST
+        _parser.Feed("\x1b^privacy\x1b\\");
+
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_ApcSequence_Discards()
+    {
+        // APC (Application Program Command): ESC _ ... ST
+        _parser.Feed("\x1b_command\x1b\\");
+
+        Assert.Empty(_keys);
+    }
+
+    [Fact]
+    public void Feed_CprResponse_OutputsCprResponseKey()
+    {
+        // Cursor Position Report: ESC [ row ; col R
+        _parser.Feed("\x1b[24;80R");
+
+        Assert.Single(_keys);
+        Assert.Equal(Keys.CPRResponse, _keys[0].Key);
+        Assert.Equal("\x1b[24;80R", _keys[0].Data);
+    }
+
+    [Fact]
+    public void Feed_CprResponse_DifferentCoordinates()
+    {
+        _parser.Feed("\x1b[1;1R");
+
+        Assert.Single(_keys);
+        Assert.Equal(Keys.CPRResponse, _keys[0].Key);
+    }
+
+    [Fact]
+    public void Feed_ControlCharacterInCsi_FlushesAndProcesses()
+    {
+        // Control character in the middle of a CSI sequence should flush and process
+        _parser.Feed("\x1b[\x03");
+
+        // Should have flushed ESC and [ as characters, plus Ctrl+C
+        Assert.True(_keys.Count >= 1);
+        Assert.Contains(_keys, k => k.Key == Keys.ControlC);
+    }
+
+    [Fact]
+    public void Feed_BufferOverflow_Flushes()
+    {
+        // Build a very long invalid sequence to trigger buffer overflow
+        var longSequence = "\x1b[" + new string('1', 300) + ";";
+        _parser.Feed(longSequence);
+
+        // When buffer exceeds limit, it should flush
+        Assert.True(_keys.Count >= 1);
+    }
+
+    [Fact]
+    public void Reset_WithRequest_ClearsPasteBuffer()
+    {
+        _parser.Feed("\x1b[200~paste");
+        Assert.Single(_keys); // BracketedPaste start marker
+
+        _parser.Reset(request: true);
+
+        // After reset, new content should be treated normally
+        _parser.Feed("abc");
+        Assert.Equal(4, _keys.Count); // 1 from paste start + 3 from "abc"
+    }
+
+    #endregion
+
     #region T086-T088: Mouse Protocol Tests
 
     // T086: X10 Mouse Protocol Tests
