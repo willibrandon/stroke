@@ -23,6 +23,10 @@ public sealed class PerformanceTests
         var document = new Document("word_", cursorPosition: 5);
         var completeEvent = new CompleteEvent(TextInserted: true);
 
+        // JIT warmup: Run once to compile all code paths.
+        // This ensures we measure steady-state performance, not JIT compilation time.
+        _ = completer.GetCompletions(document, completeEvent).ToList();
+
         // Act: Time the completion
         var sw = Stopwatch.StartNew();
         var completions = completer.GetCompletions(document, completeEvent).ToList();
@@ -45,6 +49,11 @@ public sealed class PerformanceTests
         var fuzzyCompleter = new FuzzyCompleter(wordCompleter);
         var document = new Document("wrd", cursorPosition: 3);
         var completeEvent = new CompleteEvent(TextInserted: true);
+
+        // JIT warmup: Run both completers once to compile all code paths.
+        // This ensures we measure steady-state performance, not JIT compilation time.
+        _ = wordCompleter.GetCompletions(document, completeEvent).ToList();
+        _ = fuzzyCompleter.GetCompletions(document, completeEvent).ToList();
 
         // Time base completer
         var swBase = Stopwatch.StartNew();
