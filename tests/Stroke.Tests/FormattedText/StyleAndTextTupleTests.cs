@@ -1,4 +1,7 @@
+using Stroke.Core.Primitives;
 using Stroke.FormattedText;
+using Stroke.Input;
+using Stroke.KeyBinding;
 using Xunit;
 
 namespace Stroke.Tests.FormattedText;
@@ -81,10 +84,11 @@ public sealed class StyleAndTextTupleTests
     {
         var tuple = new StyleAndTextTuple("bold", "hello");
 
-        var (style, text) = tuple;
+        var (style, text, handler) = tuple;
 
         Assert.Equal("bold", style);
         Assert.Equal("hello", text);
+        Assert.Null(handler);
     }
 
     [Fact]
@@ -96,5 +100,116 @@ public sealed class StyleAndTextTupleTests
 
         Assert.Contains("bold", str);
         Assert.Contains("hello", str);
+    }
+
+    [Fact]
+    public void Constructor_WithMouseHandler_SetsAllProperties()
+    {
+        static NotImplementedOrNone Handler(MouseEvent e) => NotImplementedOrNone.None;
+        var tuple = new StyleAndTextTuple("class:link", "Click me", Handler);
+
+        Assert.Equal("class:link", tuple.Style);
+        Assert.Equal("Click me", tuple.Text);
+        Assert.NotNull(tuple.MouseHandler);
+    }
+
+    [Fact]
+    public void Constructor_WithoutMouseHandler_HasNullHandler()
+    {
+        var tuple = new StyleAndTextTuple("bold", "hello");
+
+        Assert.Null(tuple.MouseHandler);
+    }
+
+    [Fact]
+    public void Constructor_WithExplicitNullHandler_HasNullHandler()
+    {
+        var tuple = new StyleAndTextTuple("bold", "hello", null);
+
+        Assert.Null(tuple.MouseHandler);
+    }
+
+    [Fact]
+    public void ImplicitConversion_FromThreeTuple_Works()
+    {
+        static NotImplementedOrNone Handler(MouseEvent e) => NotImplementedOrNone.None;
+        StyleAndTextTuple tuple = ("class:link", "Click", (Func<MouseEvent, NotImplementedOrNone>?)Handler);
+
+        Assert.Equal("class:link", tuple.Style);
+        Assert.Equal("Click", tuple.Text);
+        Assert.NotNull(tuple.MouseHandler);
+    }
+
+    [Fact]
+    public void MouseHandler_CanBeInvoked()
+    {
+        bool handlerCalled = false;
+        NotImplementedOrNone Handler(MouseEvent e)
+        {
+            handlerCalled = true;
+            return NotImplementedOrNone.None;
+        }
+
+        var tuple = new StyleAndTextTuple("class:button", "Submit", Handler);
+        var mouseEvent = new MouseEvent(
+            new Point(0, 0),
+            MouseEventType.MouseDown,
+            MouseButton.Left,
+            MouseModifiers.None);
+
+        var result = tuple.MouseHandler!(mouseEvent);
+
+        Assert.True(handlerCalled);
+        Assert.Same(NotImplementedOrNone.None, result);
+    }
+
+    [Fact]
+    public void MouseHandler_CanReturnNotImplemented()
+    {
+        static NotImplementedOrNone Handler(MouseEvent e) => NotImplementedOrNone.NotImplemented;
+
+        var tuple = new StyleAndTextTuple("class:area", "Text", Handler);
+        var mouseEvent = new MouseEvent(
+            new Point(0, 0),
+            MouseEventType.MouseUp,
+            MouseButton.Left,
+            MouseModifiers.None);
+
+        var result = tuple.MouseHandler!(mouseEvent);
+
+        Assert.Same(NotImplementedOrNone.NotImplemented, result);
+    }
+
+    [Fact]
+    public void Equality_WithSameHandler_AreEqual()
+    {
+        static NotImplementedOrNone Handler(MouseEvent e) => NotImplementedOrNone.None;
+        var tuple1 = new StyleAndTextTuple("style", "text", Handler);
+        var tuple2 = new StyleAndTextTuple("style", "text", Handler);
+
+        Assert.Equal(tuple1, tuple2);
+    }
+
+    [Fact]
+    public void Equality_WithDifferentHandlers_AreNotEqual()
+    {
+        static NotImplementedOrNone Handler1(MouseEvent e) => NotImplementedOrNone.None;
+        static NotImplementedOrNone Handler2(MouseEvent e) => NotImplementedOrNone.NotImplemented;
+
+        var tuple1 = new StyleAndTextTuple("style", "text", Handler1);
+        var tuple2 = new StyleAndTextTuple("style", "text", Handler2);
+
+        Assert.NotEqual(tuple1, tuple2);
+    }
+
+    [Fact]
+    public void Equality_WithNullVsNonNullHandler_AreNotEqual()
+    {
+        static NotImplementedOrNone Handler(MouseEvent e) => NotImplementedOrNone.None;
+
+        var tuple1 = new StyleAndTextTuple("style", "text");
+        var tuple2 = new StyleAndTextTuple("style", "text", Handler);
+
+        Assert.NotEqual(tuple1, tuple2);
     }
 }

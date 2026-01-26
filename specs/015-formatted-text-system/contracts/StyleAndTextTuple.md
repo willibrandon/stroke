@@ -1,8 +1,10 @@
-using Stroke.Input;
-using Stroke.KeyBinding;
+# Contract: StyleAndTextTuple
 
-namespace Stroke.FormattedText;
+**Namespace**: `Stroke.FormattedText`
 
+## Type Definition
+
+```csharp
 /// <summary>
 /// A single styled text fragment represented as a (style, text) pair with optional mouse handler.
 /// </summary>
@@ -27,26 +29,60 @@ public readonly record struct StyleAndTextTuple(
     /// <summary>
     /// Creates a StyleAndTextTuple without a mouse handler.
     /// </summary>
-    /// <param name="style">The style class name.</param>
-    /// <param name="text">The text content.</param>
-    public StyleAndTextTuple(string style, string text) : this(style, text, null)
-    {
-    }
+    public StyleAndTextTuple(string style, string text) : this(style, text, null) { }
 
     /// <summary>
     /// Implicitly converts a value tuple (string, string) to a <see cref="StyleAndTextTuple"/>.
     /// </summary>
-    /// <param name="tuple">The value tuple containing (style, text).</param>
-    /// <returns>A new StyleAndTextTuple with the given style and text.</returns>
     public static implicit operator StyleAndTextTuple((string Style, string Text) tuple) =>
         new(tuple.Style, tuple.Text);
 
     /// <summary>
     /// Implicitly converts a value tuple (string, string, handler) to a <see cref="StyleAndTextTuple"/>.
     /// </summary>
-    /// <param name="tuple">The value tuple containing (style, text, handler).</param>
-    /// <returns>A new StyleAndTextTuple with the given style, text, and mouse handler.</returns>
     public static implicit operator StyleAndTextTuple(
         (string Style, string Text, Func<MouseEvent, NotImplementedOrNone>? Handler) tuple) =>
         new(tuple.Style, tuple.Text, tuple.Handler);
 }
+```
+
+## Special Style Values
+
+| Style Pattern | Meaning |
+|---------------|---------|
+| `""` | Unstyled text |
+| `"class:name"` | CSS-like class reference |
+| `"class:a,b,c"` | Multiple classes (nested elements) |
+| `"fg:color"` | Foreground color |
+| `"bg:color"` | Background color |
+| `"bold"` | Bold text attribute |
+| `"italic"` | Italic text attribute |
+| `"underline"` | Underlined text |
+| `"strike"` | Strikethrough text |
+| `"dim"` | Dim/faint text |
+| `"blink"` | Blinking text |
+| `"reverse"` | Reverse video |
+| `"hidden"` | Hidden text |
+| `"[ZeroWidthEscape]"` | Zero-width escape sequence marker |
+
+## Usage Examples
+
+```csharp
+// Plain text
+var plain = new StyleAndTextTuple("", "Hello");
+
+// Styled text
+var bold = new StyleAndTextTuple("bold", "Important");
+
+// With color
+var colored = new StyleAndTextTuple("fg:red bg:blue", "Alert");
+
+// Using tuple syntax
+StyleAndTextTuple fromTuple = ("class:header", "Title");
+
+// With mouse handler
+var interactive = new StyleAndTextTuple(
+    "class:link",
+    "Click me",
+    e => { Console.WriteLine("Clicked!"); return NotImplementedOrNone.None; });
+```

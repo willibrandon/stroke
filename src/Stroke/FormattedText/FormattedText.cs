@@ -9,14 +9,15 @@ namespace Stroke.FormattedText;
 /// <remarks>
 /// <para>
 /// This class provides an immutable collection of <see cref="StyleAndTextTuple"/> fragments.
-/// It implements <see cref="IReadOnlyList{T}"/> for easy iteration and indexing.
+/// It implements <see cref="IReadOnlyList{T}"/> for easy iteration and indexing, and
+/// <see cref="IFormattedText"/> for integration with the formatted text system.
 /// </para>
 /// <para>
-/// This type is part of the minimal FormattedText implementation required by the Completion System.
-/// A full FormattedText implementation will be provided in Feature 13.
+/// Equivalent to Python Prompt Toolkit's <c>FormattedText</c> class which extends
+/// <c>StyleAndTextTuples</c> (a list of tuples).
 /// </para>
 /// </remarks>
-public sealed class FormattedText : IReadOnlyList<StyleAndTextTuple>, IEquatable<FormattedText>
+public sealed class FormattedText : IReadOnlyList<StyleAndTextTuple>, IEquatable<FormattedText>, IFormattedText
 {
     /// <summary>
     /// Gets the singleton empty <see cref="FormattedText"/> instance.
@@ -111,4 +112,7 @@ public sealed class FormattedText : IReadOnlyList<StyleAndTextTuple>, IEquatable
     /// </returns>
     public static implicit operator FormattedText(string? text) =>
         string.IsNullOrEmpty(text) ? Empty : new([new("", text)]);
+
+    /// <inheritdoc />
+    IReadOnlyList<StyleAndTextTuple> IFormattedText.ToFormattedText() => this;
 }

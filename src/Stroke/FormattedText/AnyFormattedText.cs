@@ -64,6 +64,27 @@ public readonly struct AnyFormattedText : IEquatable<AnyFormattedText>
     public static implicit operator AnyFormattedText(Func<AnyFormattedText>? func) => new(func);
 
     /// <summary>
+    /// Implicitly converts an <see cref="Html"/> instance to <see cref="AnyFormattedText"/>.
+    /// </summary>
+    /// <param name="html">The HTML markup to convert.</param>
+    /// <returns>An AnyFormattedText containing the HTML instance.</returns>
+    public static implicit operator AnyFormattedText(Html? html) => new(html);
+
+    /// <summary>
+    /// Implicitly converts an <see cref="Ansi"/> instance to <see cref="AnyFormattedText"/>.
+    /// </summary>
+    /// <param name="ansi">The ANSI-escaped text to convert.</param>
+    /// <returns>An AnyFormattedText containing the ANSI instance.</returns>
+    public static implicit operator AnyFormattedText(Ansi? ansi) => new(ansi);
+
+    /// <summary>
+    /// Implicitly converts a <see cref="PygmentsTokens"/> instance to <see cref="AnyFormattedText"/>.
+    /// </summary>
+    /// <param name="tokens">The Pygments tokens to convert.</param>
+    /// <returns>An AnyFormattedText containing the PygmentsTokens instance.</returns>
+    public static implicit operator AnyFormattedText(PygmentsTokens? tokens) => new(tokens);
+
+    /// <summary>
     /// Converts this value to canonical <see cref="FormattedText"/>.
     /// </summary>
     /// <param name="style">Optional style to apply to string values.</param>
