@@ -395,6 +395,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless completion - completers may access filesystem for PathCompleter) (012-completion-system)
 - C# 13 / .NET 10 + Stroke.Core (Point type) (013-mouse-events)
 - N/A (in-memory data structures only) (013-mouse-events)
+- C# 13 / .NET 10 + None (Stroke.FormattedText layer - zero external dependencies per Constitution III) (015-formatted-text-system)
 
 ## Recent Changes
 - 014-input-system: Added cross-platform input system with IInput interface, Vt100Parser for VT100/ANSI escape sequence parsing, platform-specific implementations (Win32Input for Windows, Vt100Input for POSIX), pipe input for testing (IPipeInput, PosixPipeInput, Win32PipeInput, SimplePipeInput), raw/cooked terminal mode support, InputFactory for platform detection, KeyPress record struct, AnsiSequences dictionary (>80% coverage)
