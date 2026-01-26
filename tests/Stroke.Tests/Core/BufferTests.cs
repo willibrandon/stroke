@@ -573,6 +573,7 @@ public class BufferTests
     public void OnTextChanged_FiredOnTextChange()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var buffer = new Buffer();
         var wasFired = false;
         Buffer? receivedBuffer = null;
@@ -587,7 +588,7 @@ public class BufferTests
 
         // Act
         buffer.Text = "hello";
-        var signaled = signal.Wait(TimeSpan.FromSeconds(5));
+        var signaled = signal.Wait(TimeSpan.FromSeconds(5), ct);
 
         // Assert
         Assert.True(signaled, "Event was not fired within timeout");
@@ -599,6 +600,7 @@ public class BufferTests
     public void OnCursorPositionChanged_FiredOnCursorChange()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var buffer = new Buffer(document: new Document("hello"));
         var wasFired = false;
         Buffer? receivedBuffer = null;
@@ -613,7 +615,7 @@ public class BufferTests
 
         // Act
         buffer.CursorPosition = 3;
-        var signaled = signal.Wait(TimeSpan.FromSeconds(5));
+        var signaled = signal.Wait(TimeSpan.FromSeconds(5), ct);
 
         // Assert
         Assert.True(signaled, "Event was not fired within timeout");
@@ -625,6 +627,7 @@ public class BufferTests
     public void Constructor_EventCallbacksAreRegistered()
     {
         // Arrange
+        var ct = TestContext.Current.CancellationToken;
         var textChangedCalled = false;
         var cursorChangedCalled = false;
         var signal1 = new ManualResetEventSlim(false);
@@ -638,8 +641,8 @@ public class BufferTests
         buffer.Text = "test";
         buffer.CursorPosition = 2;
 
-        signal1.Wait(TimeSpan.FromSeconds(5));
-        signal2.Wait(TimeSpan.FromSeconds(5));
+        signal1.Wait(TimeSpan.FromSeconds(5), ct);
+        signal2.Wait(TimeSpan.FromSeconds(5), ct);
 
         // Assert
         Assert.True(textChangedCalled);
@@ -706,6 +709,7 @@ public class BufferTests
         var barrier = new Barrier(2);
 
         // Act - concurrent reads and writes
+        var ct = TestContext.Current.CancellationToken;
         var writeTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -713,7 +717,7 @@ public class BufferTests
             {
                 buffer.Text = $"value{i}";
             }
-        });
+        }, ct);
 
         var readTask = Task.Run(() =>
         {
@@ -722,7 +726,7 @@ public class BufferTests
             {
                 _ = buffer.Text;
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(writeTask, readTask);
@@ -737,6 +741,7 @@ public class BufferTests
         var barrier = new Barrier(2);
 
         // Act - concurrent cursor updates
+        var ct = TestContext.Current.CancellationToken;
         var task1 = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -744,7 +749,7 @@ public class BufferTests
             {
                 buffer.CursorPosition = i % 50;
             }
-        });
+        }, ct);
 
         var task2 = Task.Run(() =>
         {
@@ -753,7 +758,7 @@ public class BufferTests
             {
                 buffer.CursorPosition = (i + 25) % 50;
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(task1, task2);

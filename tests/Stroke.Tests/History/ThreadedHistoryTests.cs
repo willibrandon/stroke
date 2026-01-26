@@ -114,7 +114,7 @@ public sealed class ThreadedHistoryTests
 
         // Act - first LoadAsync should trigger background loading
         var items = new List<string>();
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -138,7 +138,7 @@ public sealed class ThreadedHistoryTests
         var itemsWithTimes = new List<(string Item, TimeSpan Elapsed)>();
         var sw = Stopwatch.StartNew();
 
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             itemsWithTimes.Add((item, sw.Elapsed));
         }
@@ -167,7 +167,7 @@ public sealed class ThreadedHistoryTests
         var sw = Stopwatch.StartNew();
         string? firstItem = null;
 
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             firstItem = item;
             break;
@@ -198,18 +198,19 @@ public sealed class ThreadedHistoryTests
         var threaded = new ThreadedHistory(slowHistory);
 
         // Start loading in background
+        var ct = TestContext.Current.CancellationToken;
         var loadTask = Task.Run(async () =>
         {
             var items = new List<string>();
-            await foreach (var item in threaded.LoadAsync())
+            await foreach (var item in threaded.LoadAsync(ct))
             {
                 items.Add(item);
             }
             return items;
-        });
+        }, ct);
 
         // Wait for first item to be yielded (guarantees loading is in progress)
-        await itemYieldedSignal.WaitAsync(TimeSpan.FromSeconds(5));
+        await itemYieldedSignal.WaitAsync(TimeSpan.FromSeconds(5), ct);
 
         // Append while loading is in progress
         threaded.AppendString("new_item");
@@ -237,17 +238,18 @@ public sealed class ThreadedHistoryTests
 
         // Act - multiple concurrent consumers
         var tasks = new List<Task<List<string>>>();
+        var ct = TestContext.Current.CancellationToken;
         for (int i = 0; i < 5; i++)
         {
             tasks.Add(Task.Run(async () =>
             {
                 var items = new List<string>();
-                await foreach (var item in threaded.LoadAsync())
+                await foreach (var item in threaded.LoadAsync(ct))
                 {
                     items.Add(item);
                 }
                 return items;
-            }));
+            }, ct));
         }
 
         var results = await Task.WhenAll(tasks);
@@ -305,7 +307,7 @@ public sealed class ThreadedHistoryTests
         var threaded = new ThreadedHistory(slowHistory);
 
         // Act - start loading but don't wait for completion
-        var cts = new CancellationTokenSource();
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         var items = new List<string>();
 
         await foreach (var item in threaded.LoadAsync(cts.Token))
@@ -337,7 +339,7 @@ public sealed class ThreadedHistoryTests
 
         // Act - first LoadAsync should reload from backend
         var items = new List<string>();
-        await foreach (var item in threaded.LoadAsync())
+        await foreach (var item in threaded.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -358,7 +360,7 @@ public sealed class ThreadedHistoryTests
         var threaded = new ThreadedHistory(inner);
 
         // Trigger load
-        await foreach (var _ in threaded.LoadAsync()) { }
+        await foreach (var _ in threaded.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act
         var strings = threaded.GetStrings();
@@ -400,6 +402,7 @@ public sealed class ThreadedHistoryTests
 
         // Act
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -418,14 +421,14 @@ public sealed class ThreadedHistoryTests
                             _ = threaded.GetStrings();
                             break;
                         case 2:
-                            await foreach (var _ in threaded.LoadAsync()) { }
+                            await foreach (var _ in threaded.LoadAsync(ct)) { }
                             break;
                         case 3:
                             _ = threaded.LoadHistoryStrings().ToList();
                             break;
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);

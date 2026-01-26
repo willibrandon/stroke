@@ -93,7 +93,7 @@ public sealed class DummyHistoryTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -111,7 +111,7 @@ public sealed class DummyHistoryTests
 
         // Act
         var items = new List<string>();
-        await foreach (var item in history.LoadAsync())
+        await foreach (var item in history.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -125,7 +125,7 @@ public sealed class DummyHistoryTests
     {
         // Arrange
         var history = new DummyHistory();
-        var cts = new CancellationTokenSource();
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
 
         // Act
         var items = new List<string>();
@@ -214,6 +214,7 @@ public sealed class DummyHistoryTests
 
         // Act
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -235,14 +236,14 @@ public sealed class DummyHistoryTests
                             _ = history.GetStrings();
                             break;
                         case 3:
-                            await foreach (var _ in history.LoadAsync()) { }
+                            await foreach (var _ in history.LoadAsync(ct)) { }
                             break;
                         case 4:
                             _ = history.LoadHistoryStrings().ToList();
                             break;
                     }
                 }
-            }));
+            }, ct));
         }
 
         await Task.WhenAll(tasks);

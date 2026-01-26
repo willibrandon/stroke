@@ -545,6 +545,7 @@ public class BufferCompletionTests
         var barrier = new Barrier(4);
 
         // Act - concurrent completion operations
+        var ct = TestContext.Current.CancellationToken;
         var setTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -552,7 +553,7 @@ public class BufferCompletionTests
             {
                 buffer.SetCompletions(completions);
             }
-        });
+        }, ct);
 
         var nextTask = Task.Run(() =>
         {
@@ -561,7 +562,7 @@ public class BufferCompletionTests
             {
                 buffer.CompleteNext();
             }
-        });
+        }, ct);
 
         var prevTask = Task.Run(() =>
         {
@@ -570,7 +571,7 @@ public class BufferCompletionTests
             {
                 buffer.CompletePrevious();
             }
-        });
+        }, ct);
 
         var cancelTask = Task.Run(() =>
         {
@@ -579,7 +580,7 @@ public class BufferCompletionTests
             {
                 buffer.CancelCompletion();
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(setTask, nextTask, prevTask, cancelTask);
@@ -605,6 +606,7 @@ public class BufferCompletionTests
         var barrier = new Barrier(4);
 
         // Act - concurrent CompletionState operations
+        var ct = TestContext.Current.CancellationToken;
         var goToIndexTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -612,7 +614,7 @@ public class BufferCompletionTests
             {
                 state.GoToIndex(i % completions.Count);
             }
-        });
+        }, ct);
 
         var readIndexTask = Task.Run(() =>
         {
@@ -621,7 +623,7 @@ public class BufferCompletionTests
             {
                 _ = state.CompleteIndex;
             }
-        });
+        }, ct);
 
         var currentCompletionTask = Task.Run(() =>
         {
@@ -630,7 +632,7 @@ public class BufferCompletionTests
             {
                 _ = state.CurrentCompletion;
             }
-        });
+        }, ct);
 
         var newTextTask = Task.Run(() =>
         {
@@ -639,7 +641,7 @@ public class BufferCompletionTests
             {
                 _ = state.NewTextAndPosition();
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(goToIndexTask, readIndexTask, currentCompletionTask, newTextTask);

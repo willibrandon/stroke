@@ -400,6 +400,7 @@ public class BufferUndoRedoTests
         var barrier = new Barrier(3);
 
         // Act - concurrent undo/redo operations
+        var ct = TestContext.Current.CancellationToken;
         var saveTask = Task.Run(() =>
         {
             barrier.SignalAndWait();
@@ -408,7 +409,7 @@ public class BufferUndoRedoTests
                 buffer.SaveToUndoStack();
                 buffer.Text = $"text{i}";
             }
-        });
+        }, ct);
 
         var undoTask = Task.Run(() =>
         {
@@ -417,7 +418,7 @@ public class BufferUndoRedoTests
             {
                 buffer.Undo();
             }
-        });
+        }, ct);
 
         var redoTask = Task.Run(() =>
         {
@@ -426,7 +427,7 @@ public class BufferUndoRedoTests
             {
                 buffer.Redo();
             }
-        });
+        }, ct);
 
         // Assert - no exceptions
         await Task.WhenAll(saveTask, undoTask, redoTask);

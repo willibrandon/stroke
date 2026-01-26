@@ -115,7 +115,7 @@ public sealed class ConditionalCompleterTests
         var conditional = new ConditionalCompleter(inner, () => true);
 
         var completions = new List<CompletionItem>();
-        await foreach (var c in conditional.GetCompletionsAsync(new Document("asy"), new CompleteEvent()))
+        await foreach (var c in conditional.GetCompletionsAsync(new Document("asy"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             completions.Add(c);
         }
@@ -130,7 +130,7 @@ public sealed class ConditionalCompleterTests
         var conditional = new ConditionalCompleter(inner, () => false);
 
         var completions = new List<CompletionItem>();
-        await foreach (var c in conditional.GetCompletionsAsync(new Document("asy"), new CompleteEvent()))
+        await foreach (var c in conditional.GetCompletionsAsync(new Document("asy"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             completions.Add(c);
         }

@@ -820,6 +820,7 @@ public class QuickstartValidationTests
     {
         // From specs/007-mutable-buffer/quickstart.md: 10. Events
         // Note: Events are fired asynchronously on ThreadPool
+        var ct = TestContext.Current.CancellationToken;
         var textChangedSignal = new ManualResetEventSlim(false);
         var cursorChangedSignal = new ManualResetEventSlim(false);
 
@@ -830,14 +831,14 @@ public class QuickstartValidationTests
 
         // InsertText triggers OnTextChanged (and also OnCursorPositionChanged as cursor moves)
         buffer.InsertText("test");
-        Assert.True(textChangedSignal.Wait(TimeSpan.FromSeconds(5)), "OnTextChanged not fired");
+        Assert.True(textChangedSignal.Wait(TimeSpan.FromSeconds(5), ct), "OnTextChanged not fired");
 
         // Reset cursor signal since InsertText also moves cursor
         cursorChangedSignal.Reset();
 
         // CursorPosition setter triggers OnCursorPositionChanged
         buffer.CursorPosition = 0;
-        Assert.True(cursorChangedSignal.Wait(TimeSpan.FromSeconds(5)), "OnCursorPositionChanged not fired");
+        Assert.True(cursorChangedSignal.Wait(TimeSpan.FromSeconds(5), ct), "OnCursorPositionChanged not fired");
     }
 
     [Fact]

@@ -16,7 +16,7 @@ public sealed class ThreadedCompleterTests
     private static async Task<List<CompletionItem>> GetCompletionsAsync(
         ICompleter completer,
         string text,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var completions = new List<CompletionItem>();
         await foreach (var completion in completer.GetCompletionsAsync(
@@ -64,7 +64,7 @@ public sealed class ThreadedCompleterTests
         var inner = new WordCompleter(["hello", "world"]);
         var threaded = new ThreadedCompleter(inner);
 
-        var completions = await GetCompletionsAsync(threaded, "hel");
+        var completions = await GetCompletionsAsync(threaded, "hel", TestContext.Current.CancellationToken);
 
         Assert.Single(completions);
         Assert.Equal("hello", completions[0].Text);
@@ -78,7 +78,7 @@ public sealed class ThreadedCompleterTests
         var threaded = new ThreadedCompleter(slowCompleter);
 
         var sw = System.Diagnostics.Stopwatch.StartNew();
-        var completions = await GetCompletionsAsync(threaded, "");
+        var completions = await GetCompletionsAsync(threaded, "", TestContext.Current.CancellationToken);
         sw.Stop();
 
         Assert.Equal(3, completions.Count);
@@ -100,7 +100,8 @@ public sealed class ThreadedCompleterTests
 
         await foreach (var completion in threaded.GetCompletionsAsync(
             new Document(""),
-            new CompleteEvent()))
+            new CompleteEvent(),
+            TestContext.Current.CancellationToken))
         {
             results.Add((completion, sw.ElapsedMilliseconds));
         }
@@ -121,7 +122,7 @@ public sealed class ThreadedCompleterTests
             delayMs: 100);
         var threaded = new ThreadedCompleter(slowCompleter);
 
-        using var cts = new CancellationTokenSource();
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         var completions = new List<CompletionItem>();
 
         try
@@ -161,7 +162,8 @@ public sealed class ThreadedCompleterTests
         {
             await foreach (var _ in threaded.GetCompletionsAsync(
                 new Document(""),
-                new CompleteEvent()))
+                new CompleteEvent(),
+                TestContext.Current.CancellationToken))
             {
                 // Should throw
             }

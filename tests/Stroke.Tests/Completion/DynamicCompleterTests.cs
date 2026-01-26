@@ -71,7 +71,7 @@ public sealed class DynamicCompleterTests
         var dynamic = new DynamicCompleter(() => completer);
 
         var completions = new List<CompletionItem>();
-        await foreach (var c in dynamic.GetCompletionsAsync(new Document("asy"), new CompleteEvent()))
+        await foreach (var c in dynamic.GetCompletionsAsync(new Document("asy"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             completions.Add(c);
         }
@@ -85,7 +85,7 @@ public sealed class DynamicCompleterTests
         var dynamic = new DynamicCompleter(() => null);
 
         var completions = new List<CompletionItem>();
-        await foreach (var c in dynamic.GetCompletionsAsync(new Document("test"), new CompleteEvent()))
+        await foreach (var c in dynamic.GetCompletionsAsync(new Document("test"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             completions.Add(c);
         }

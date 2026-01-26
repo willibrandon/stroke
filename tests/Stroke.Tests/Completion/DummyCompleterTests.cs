@@ -63,7 +63,7 @@ public sealed class DummyCompleterTests
         var evt = new CompleteEvent();
 
         var completions = new List<CompletionItem>();
-        await foreach (var completion in completer.GetCompletionsAsync(document, evt))
+        await foreach (var completion in completer.GetCompletionsAsync(document, evt, TestContext.Current.CancellationToken))
         {
             completions.Add(completion);
         }

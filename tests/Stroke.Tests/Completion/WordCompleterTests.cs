@@ -336,7 +336,7 @@ public sealed class WordCompleterTests
 
         var completions = new List<CompletionItem>();
         await foreach (var c in completer.GetCompletionsAsync(
-            new Document("hel"), new CompleteEvent()))
+            new Document("hel"), new CompleteEvent(), TestContext.Current.CancellationToken))
         {
             completions.Add(c);
         }

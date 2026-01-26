@@ -138,7 +138,7 @@ public sealed class FileHistoryTests : IDisposable
         // Act - create new instance to force reload
         var history2 = new FileHistory(path);
         var items = new List<string>();
-        await foreach (var item in history2.LoadAsync())
+        await foreach (var item in history2.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -269,7 +269,7 @@ public sealed class FileHistoryTests : IDisposable
         // Act - simulate new session by creating new instance
         var history2 = new FileHistory(path);
         var items = new List<string>();
-        await foreach (var item in history2.LoadAsync())
+        await foreach (var item in history2.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -293,7 +293,7 @@ public sealed class FileHistoryTests : IDisposable
         // Reload
         var history2 = new FileHistory(path);
         var items = new List<string>();
-        await foreach (var item in history2.LoadAsync())
+        await foreach (var item in history2.LoadAsync(TestContext.Current.CancellationToken))
         {
             items.Add(item);
         }
@@ -315,6 +315,7 @@ public sealed class FileHistoryTests : IDisposable
 
         // Act
         var tasks = new List<Task>();
+        var ct = TestContext.Current.CancellationToken;
         for (int t = 0; t < threadCount; t++)
         {
             int threadId = t;
@@ -324,7 +325,7 @@ public sealed class FileHistoryTests : IDisposable
                 {
                     history.AppendString($"t{threadId}_e{i}");
                 }
-            }));
+            }, ct));
         }
         await Task.WhenAll(tasks);
 
@@ -453,7 +454,7 @@ public sealed class FileHistoryTests : IDisposable
         history.AppendString("newest");
 
         // Trigger load
-        await foreach (var _ in history.LoadAsync()) { }
+        await foreach (var _ in history.LoadAsync(TestContext.Current.CancellationToken)) { }
 
         // Act
         var strings = history.GetStrings();

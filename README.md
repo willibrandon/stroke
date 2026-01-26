@@ -100,6 +100,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `MouseHandlers` 2D handler grid with O(1) lookup (sparse dictionary storage)
   - `NotImplementedOrNone` for event bubbling pattern
   - Thread-safe operations (100% test coverage)
+- **Input System** — Cross-platform terminal input abstraction
+  - `IInput` interface for terminal input sources
+  - `Vt100Parser` for VT100/ANSI escape sequence parsing
+  - `KeyPress` record struct with key identity and raw data
+  - `AnsiSequences` dictionary mapping escape sequences to keys
+  - Platform implementations: `Win32Input` (Windows), `Vt100Input` (POSIX)
+  - Pipe input for testing: `IPipeInput`, `PosixPipeInput`, `Win32PipeInput`
+  - `InputFactory` for platform-appropriate input creation
+  - Raw/cooked terminal mode support
+  - Mouse protocol support (X10, SGR, urxvt)
+  - Thread-safe operations (>80% test coverage)
 
 ### Up Next
 
