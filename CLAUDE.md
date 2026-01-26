@@ -382,6 +382,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory data structures only) (013-mouse-events)
 
 ## Recent Changes
+- 014-input-system: Added cross-platform input system with IInput interface, Vt100Parser for VT100/ANSI escape sequence parsing, platform-specific implementations (Win32Input for Windows, Vt100Input for POSIX), pipe input for testing (IPipeInput, PosixPipeInput, Win32PipeInput, SimplePipeInput), raw/cooked terminal mode support, InputFactory for platform detection, KeyPress record struct, AnsiSequences dictionary (>80% coverage)
 - 013-mouse-events: Added mouse event system with MouseEventType enum (5 values), MouseButton enum (5 values), MouseModifiers [Flags] enum, MouseEvent record struct, MouseHandlers class (thread-safe with Lock), NotImplementedOrNone abstract class for event bubbling (106 tests, 100% coverage)
 - 012-completion-system: Added ICompleter interface with 12 completers (WordCompleter, PathCompleter, FuzzyCompleter, FuzzyWordCompleter, DeduplicateCompleter, MergeCompleter, ThreadedCompleter, DummyCompleter, NestedCompleter, ExecutableCompleter, ConditionalCompleter, DynamicCompleter), Completion record, CompleteEvent record (267 tests, >80% coverage); added Stroke.Benchmarks project
 - 011-keys-enum: Added Keys enum with 151 key values from Python Prompt Toolkit
