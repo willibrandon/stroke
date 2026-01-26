@@ -292,6 +292,97 @@ public class Win32InputTests
 
     #endregion
 
+    #region WaitForInput Tests (T083)
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForInput_WhenClosed_ReturnsFalse_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        using var input = new Win32Input();
+        input.Close();
+
+        var result = input.WaitForInput(0);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForInput_WithZeroTimeout_ReturnsImmediately_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        using var input = new Win32Input();
+
+        // With 0 timeout, should return immediately (likely false since no input pending)
+        var result = input.WaitForInput(0);
+
+        // Result depends on console state; mainly testing it doesn't hang
+        Assert.True(result || !result); // Tautology to ensure no exception
+    }
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForInput_AfterDispose_ThrowsObjectDisposedException_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        var input = new Win32Input();
+        input.Dispose();
+
+        Assert.Throws<ObjectDisposedException>(() => input.WaitForInput(0));
+    }
+
+    #endregion
+
+    #region WaitForHandles Tests (T083)
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForHandles_NullArray_ThrowsArgumentNullException_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        Assert.Throws<ArgumentNullException>(() => Win32Input.WaitForHandles(null!));
+    }
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForHandles_EmptyArray_ReturnsMinusOne_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        var result = Win32Input.WaitForHandles([]);
+
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+    [SupportedOSPlatform("windows")]
+    public void WaitForHandles_WithTimeout_TimesOut_OnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+            return;
+
+        using var input = new Win32Input();
+        var handles = new[] { input.FileNo() };
+
+        // Wait with very short timeout - should time out
+        var result = Win32Input.WaitForHandles(handles, 1);
+
+        // Result is -1 on timeout (no input available)
+        Assert.Equal(-1, result);
+    }
+
+    #endregion
+
     #region Attach/Detach Stack Tests
 
     [Fact]

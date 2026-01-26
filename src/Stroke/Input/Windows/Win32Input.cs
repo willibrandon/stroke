@@ -161,6 +161,30 @@ public sealed class Win32Input : IInput
     /// <inheritdoc/>
     public string TypeaheadHash() => $"Win32Input-{_id}-{_handle}";
 
+    /// <summary>
+    /// Waits for input to become available with an optional timeout.
+    /// </summary>
+    /// <param name="timeoutMs">
+    /// Timeout in milliseconds. Use <see cref="ConsoleApi.INFINITE"/> for no timeout.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if input is available; <c>false</c> if the wait timed out or the input is closed.
+    /// </returns>
+    /// <remarks>
+    /// This method is used for event loop integration. It allows the event loop to wait
+    /// efficiently on the console input handle using <c>WaitForSingleObject</c>.
+    /// </remarks>
+    public bool WaitForInput(uint timeoutMs = ConsoleApi.INFINITE)
+    {
+        ThrowIfDisposed();
+
+        if (_closed)
+            return false;
+
+        var result = ConsoleApi.WaitForSingleObject(_handle, timeoutMs);
+        return result == ConsoleApi.WAIT_OBJECT_0;
+    }
+
     /// <inheritdoc/>
     public void Close()
     {
@@ -343,5 +367,46 @@ public sealed class Win32Input : IInput
         public static readonly NoOpDisposable Instance = new();
         private NoOpDisposable() { }
         public void Dispose() { }
+    }
+
+    /// <summary>
+    /// Waits for multiple handles until one becomes signaled or the timeout expires.
+    /// </summary>
+    /// <param name="handles">Array of handles to wait on.</param>
+    /// <param name="timeoutMs">
+    /// Timeout in milliseconds. Use <see cref="ConsoleApi.INFINITE"/> for no timeout.
+    /// </param>
+    /// <returns>
+    /// The index of the signaled handle, or <c>-1</c> if the wait timed out or failed.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// This is a port of Python Prompt Toolkit's <c>wait_for_handles</c> function.
+    /// It allows the event loop to wait efficiently on multiple handles simultaneously.
+    /// </para>
+    /// <para>
+    /// Thread safety: This method is thread-safe and can be called from any thread.
+    /// </para>
+    /// </remarks>
+    public static int WaitForHandles(nint[] handles, uint timeoutMs = ConsoleApi.INFINITE)
+    {
+        ArgumentNullException.ThrowIfNull(handles);
+
+        if (handles.Length == 0)
+            return -1;
+
+        var result = ConsoleApi.WaitForMultipleObjects(
+            (uint)handles.Length,
+            handles,
+            false,  // Wait for any
+            timeoutMs);
+
+        if (result >= ConsoleApi.WAIT_OBJECT_0 && result < ConsoleApi.WAIT_OBJECT_0 + handles.Length)
+        {
+            return (int)(result - ConsoleApi.WAIT_OBJECT_0);
+        }
+
+        // WAIT_TIMEOUT or WAIT_FAILED
+        return -1;
     }
 }

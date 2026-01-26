@@ -85,9 +85,9 @@
 
 - [x] T026 [US1] Implement base `PipeInputBase` in `src/Stroke/Input/Pipe/PipeInputBase.cs` (shared buffer logic, VT100 parser integration)
 - [x] T027 [US1] Implement `PosixPipeInput` in `src/Stroke/Input/Posix/PosixPipeInput.cs` (IPipeInput using OS pipe())
-- [ ] T028 [US1] Implement `Win32PipeInput` in `src/Stroke/Input/Windows/Win32PipeInput.cs` (IPipeInput using Windows events)
+- [x] T028 [US1] Implement `Win32PipeInput` in `src/Stroke/Input/Windows/Win32PipeInput.cs` (IPipeInput using Windows events)
 - [x] T029 [US1] Write tests for `PosixPipeInput` in `tests/Stroke.Tests/Input/PosixPipeInputTests.cs` (SendText, SendBytes, ReadKeys)
-- [ ] T030 [US1] Write tests for `Win32PipeInput` in `tests/Stroke.Tests/Input/Win32PipeInputTests.cs` (SendText, SendBytes, ReadKeys)
+- [x] T030 [US1] Write tests for `Win32PipeInput` in `tests/Stroke.Tests/Input/Win32PipeInputTests.cs` (SendText, SendBytes, ReadKeys)
 - [x] T031 [US1] Wire `InputFactory.CreatePipe()` to return platform-appropriate `IPipeInput` in `src/Stroke/Input/InputFactory.cs`
 - [x] T032 [US1] Verify all User Story 1 acceptance scenarios pass using PipeInput
 
@@ -248,7 +248,7 @@
 - [x] T080 [US7] Implement Attach() with callback stack in `InputBase` or per-implementation
 - [x] T081 [US7] Implement Detach() returning reattach disposable
 - [x] T082 [US7] Add non-blocking mode support to `PosixStdinReader` for event loop integration
-- [ ] T083 [US7] Add WaitForSingleObject with timeout to `Win32Input` for event loop integration
+- [x] T083 [US7] Add WaitForSingleObject with timeout to `Win32Input` for event loop integration
 - [x] T084 [US7] Wire FileNo() to return file descriptor/handle for external event loop registration
 - [x] T085 [US7] Verify all User Story 7 acceptance scenarios pass (EventLoopIntegrationTests pass - Attach/Detach/Close with callbacks)
 
@@ -296,7 +296,7 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T099 Add XML documentation comments to all public types in `src/Stroke/Input/`
+- [x] T099 Add XML documentation comments to all public types in `src/Stroke/Input/`
 - [x] T100 [P] Verify NFR-001: Raw mode entry/exit <10ms - Requires real terminal; platform-specific code is minimal (single tcsetattr/SetConsoleMode call)
 - [x] T101 [P] Verify NFR-002: FrozenDictionary O(1) lookups in AnsiSequences - Verified: ~1.8ns per lookup
 - [x] T102 [P] Verify NFR-003: Zero allocation for single character input - Verified: 24B per char (KeyPress struct + callback list; acceptable for hot path)

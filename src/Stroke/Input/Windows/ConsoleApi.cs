@@ -140,4 +140,50 @@ public static partial class ConsoleApi
     /// </summary>
     public const uint RAW_MODE_SET_FLAGS =
         ENABLE_VIRTUAL_TERMINAL_INPUT;
+
+    #region Wait Functions
+
+    /// <summary>
+    /// Waits until the specified object is in the signaled state or the timeout expires.
+    /// </summary>
+    /// <param name="hHandle">Handle to the object.</param>
+    /// <param name="dwMilliseconds">Timeout in milliseconds. Use INFINITE for no timeout.</param>
+    /// <returns>
+    /// WAIT_OBJECT_0 if the object is signaled, WAIT_TIMEOUT on timeout,
+    /// or WAIT_FAILED on error.
+    /// </returns>
+    [LibraryImport(Kernel32, EntryPoint = "WaitForSingleObject", SetLastError = true)]
+    public static partial uint WaitForSingleObject(nint hHandle, uint dwMilliseconds);
+
+    /// <summary>
+    /// Waits until one or more of the specified objects are signaled or the timeout expires.
+    /// </summary>
+    /// <param name="nCount">Number of handles in the array.</param>
+    /// <param name="lpHandles">Array of object handles.</param>
+    /// <param name="bWaitAll">If true, wait for all objects; if false, wait for any.</param>
+    /// <param name="dwMilliseconds">Timeout in milliseconds. Use INFINITE for no timeout.</param>
+    /// <returns>
+    /// Index of the signaled object plus WAIT_OBJECT_0, WAIT_TIMEOUT on timeout,
+    /// or WAIT_FAILED on error.
+    /// </returns>
+    [LibraryImport(Kernel32, EntryPoint = "WaitForMultipleObjects", SetLastError = true)]
+    public static partial uint WaitForMultipleObjects(
+        uint nCount,
+        nint[] lpHandles,
+        [MarshalAs(UnmanagedType.Bool)] bool bWaitAll,
+        uint dwMilliseconds);
+
+    /// <summary>The object is signaled.</summary>
+    public const uint WAIT_OBJECT_0 = 0x00000000;
+
+    /// <summary>The wait operation timed out.</summary>
+    public const uint WAIT_TIMEOUT = 0x00000102;
+
+    /// <summary>The wait operation failed.</summary>
+    public const uint WAIT_FAILED = 0xFFFFFFFF;
+
+    /// <summary>Infinite timeout value.</summary>
+    public const uint INFINITE = 0xFFFFFFFF;
+
+    #endregion
 }
