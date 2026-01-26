@@ -502,7 +502,7 @@ public class MouseHandlersTests
 
     // Exception propagation test (FR-014)
     [Fact]
-    public void MouseHandlers_HandlerThrowsException_PropagesToCaller()
+    public void MouseHandlers_HandlerThrowsException_PropagatesToCaller()
     {
         var handlers = new MouseHandlers();
         var expectedException = new InvalidOperationException("Test exception");
