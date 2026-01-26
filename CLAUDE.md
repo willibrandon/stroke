@@ -167,6 +167,21 @@ public sealed class SomeStatefulClass
 
 **Documentation**: All thread-safe classes MUST document their thread safety guarantees in XML documentation comments.
 
+### XII. Contracts in Markdown Only (NON-NEGOTIABLE)
+
+API contracts MUST be specified in markdown format only. This is absolute:
+
+- **No .cs contract files**: Contracts MUST NEVER be created as `.cs` files
+- **Markdown only**: All contracts MUST be written in `.md` files
+- **Format**: Use markdown code blocks with C# syntax highlighting for signatures
+
+**Rationale**: Markdown contracts are human-readable documentation that can be reviewed without IDE tooling. They serve as design artifacts, not compilable code. The actual implementation comes later during the coding phase.
+
+**Forbidden**:
+- Creating `contracts/*.cs` files
+- Creating any `.cs` file during the planning phase
+- Treating contracts as compilable code
+
 ## Planning Documents
 
 ### API Mapping (`docs/api-mapping.md`)
