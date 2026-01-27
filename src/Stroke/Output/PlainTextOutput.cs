@@ -67,8 +67,6 @@ public sealed class PlainTextOutput : IOutput
     /// <inheritdoc/>
     public void Flush()
     {
-        string output;
-
         using (_lock.EnterScope())
         {
             if (_buffer.Count == 0)
@@ -76,18 +74,18 @@ public sealed class PlainTextOutput : IOutput
                 return;
             }
 
-            output = string.Concat(_buffer);
+            var output = string.Concat(_buffer);
             _buffer.Clear();
-        }
 
-        try
-        {
-            _stdout.Write(output);
-            _stdout.Flush();
-        }
-        catch (IOException)
-        {
-            // Resilient to I/O exceptions - log and continue
+            try
+            {
+                _stdout.Write(output);
+                _stdout.Flush();
+            }
+            catch (IOException)
+            {
+                // Resilient to I/O exceptions - log and continue
+            }
         }
     }
 

@@ -116,8 +116,6 @@ public sealed partial class Vt100Output : IOutput
     /// <inheritdoc/>
     public void Flush()
     {
-        string output;
-
         using (_lock.EnterScope())
         {
             if (_buffer.Count == 0)
@@ -125,19 +123,19 @@ public sealed partial class Vt100Output : IOutput
                 return;
             }
 
-            output = string.Concat(_buffer);
+            var output = string.Concat(_buffer);
             _buffer.Clear();
-        }
 
-        try
-        {
-            _stdout.Write(output);
-            _stdout.Flush();
-        }
-        catch (IOException)
-        {
-            // NFR-006: Be resilient to I/O exceptions during Flush
-            // Log and continue (in production, we'd use a logger)
+            try
+            {
+                _stdout.Write(output);
+                _stdout.Flush();
+            }
+            catch (IOException)
+            {
+                // NFR-006: Be resilient to I/O exceptions during Flush
+                // Log and continue (in production, we'd use a logger)
+            }
         }
     }
 
