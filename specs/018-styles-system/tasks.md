@@ -27,7 +27,7 @@ Based on plan.md structure:
 
 **Purpose**: Project initialization and basic directory structure
 
-- [ ] T001 Create Styles directory structure: `src/Stroke/Styles/` and `tests/Stroke.Tests/Styles/`
+- [x] T001 Create Styles directory structure: `src/Stroke/Styles/` and `tests/Stroke.Tests/Styles/`
 
 ---
 
@@ -37,10 +37,10 @@ Based on plan.md structure:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 [P] Implement Attrs record struct in `src/Stroke/Styles/Attrs.cs` (FR-001)
-- [ ] T003 [P] Implement DefaultAttrs static class with Default and Empty constants in `src/Stroke/Styles/DefaultAttrs.cs` (FR-002)
-- [ ] T004 [P] Implement Priority enum (DictKeyOrder, MostPrecise) in `src/Stroke/Styles/Priority.cs` (FR-009)
-- [ ] T005 [P] Write AttrsTests in `tests/Stroke.Tests/Styles/AttrsTests.cs`
+- [x] T002 [P] Implement Attrs record struct in `src/Stroke/Styles/Attrs.cs` (FR-001)
+- [x] T003 [P] Implement DefaultAttrs static class with Default and Empty constants in `src/Stroke/Styles/DefaultAttrs.cs` (FR-002)
+- [x] T004 [P] Implement Priority enum (DictKeyOrder, MostPrecise) in `src/Stroke/Styles/Priority.cs` (FR-009)
+- [x] T005 [P] Write AttrsTests in `tests/Stroke.Tests/Styles/AttrsTests.cs`
 
 **Checkpoint**: Foundation ready - core types available for all user stories
 
@@ -54,21 +54,21 @@ Based on plan.md structure:
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Implement AnsiColorNames static class (17 names, 10 aliases) in `src/Stroke/Styles/AnsiColorNames.cs` (FR-003)
-- [ ] T007 [P] [US1] Implement NamedColors static class (140 HTML/CSS colors) in `src/Stroke/Styles/NamedColors.cs` (FR-004)
-- [ ] T008 [P] [US1] Write AnsiColorNamesTests in `tests/Stroke.Tests/Styles/AnsiColorNamesTests.cs`
-- [ ] T009 [P] [US1] Write NamedColorsTests in `tests/Stroke.Tests/Styles/NamedColorsTests.cs`
-- [ ] T010 [US1] Implement StyleParser.ParseColor in `src/Stroke/Styles/StyleParser.cs` (FR-010) - depends on T006, T007
-- [ ] T011 [US1] Write StyleParserTests in `tests/Stroke.Tests/Styles/StyleParserTests.cs`
-- [ ] T012 [US1] Implement IStyle interface in `src/Stroke/Styles/IStyle.cs` (FR-005)
-- [ ] T013 [US1] Implement Style class with constructor, FromDict, GetAttrsForStyleStr in `src/Stroke/Styles/Style.cs` (FR-008, FR-009, FR-022-024)
-- [ ] T014 [US1] Implement style string parsing (colors, attributes, classes, noinherit) in Style class (FR-022)
-- [ ] T015 [US1] Implement hierarchical class name expansion in Style class (FR-023)
-- [ ] T016 [US1] Implement rule precedence (later rules override) in Style class (FR-024)
-- [ ] T017 [US1] Implement style caching using SimpleCache in Style class (FR-025)
-- [ ] T018 [US1] Write StyleTests in `tests/Stroke.Tests/Styles/StyleTests.cs`
-- [ ] T019 [US1] Implement DummyStyle singleton in `src/Stroke/Styles/DummyStyle.cs` (FR-006)
-- [ ] T020 [US1] Write DummyStyleTests in `tests/Stroke.Tests/Styles/DummyStyleTests.cs`
+- [x] T006 [P] [US1] Implement AnsiColorNames static class (17 names, 10 aliases) in `src/Stroke/Styles/AnsiColorNames.cs` (FR-003)
+- [x] T007 [P] [US1] Implement NamedColors static class (140 HTML/CSS colors) in `src/Stroke/Styles/NamedColors.cs` (FR-004)
+- [x] T008 [P] [US1] Write AnsiColorNamesTests in `tests/Stroke.Tests/Styles/AnsiColorNamesTests.cs`
+- [x] T009 [P] [US1] Write NamedColorsTests in `tests/Stroke.Tests/Styles/NamedColorsTests.cs`
+- [x] T010 [US1] Implement StyleParser.ParseColor in `src/Stroke/Styles/StyleParser.cs` (FR-010) - depends on T006, T007
+- [x] T011 [US1] Write StyleParserTests in `tests/Stroke.Tests/Styles/StyleParserTests.cs`
+- [x] T012 [US1] Implement IStyle interface in `src/Stroke/Styles/IStyle.cs` (FR-005)
+- [x] T013 [US1] Implement Style class with constructor, FromDict, GetAttrsForStyleStr in `src/Stroke/Styles/Style.cs` (FR-008, FR-009, FR-022-024)
+- [x] T014 [US1] Implement style string parsing (colors, attributes, classes, noinherit) in Style class (FR-022)
+- [x] T015 [US1] Implement hierarchical class name expansion in Style class (FR-023)
+- [x] T016 [US1] Implement rule precedence (later rules override) in Style class (FR-024)
+- [x] T017 [US1] Implement style caching using SimpleCache in Style class (FR-025)
+- [x] T018 [US1] Write StyleTests in `tests/Stroke.Tests/Styles/StyleTests.cs`
+- [x] T019 [US1] Implement DummyStyle singleton in `src/Stroke/Styles/DummyStyle.cs` (FR-006)
+- [x] T020 [US1] Write DummyStyleTests in `tests/Stroke.Tests/Styles/DummyStyleTests.cs`
 
 **Checkpoint**: User Story 1 complete - developers can define and use custom styles
 
@@ -84,9 +84,9 @@ Based on plan.md structure:
 
 ### Implementation for User Story 2
 
-- [ ] T021 [P] [US2] Add color validation edge case tests (invalid colors, aliases, 3-digit hex) in `tests/Stroke.Tests/Styles/StyleParserTests.cs`
-- [ ] T022 [US2] Verify ANSI alias resolution works correctly (ansibrown → ansiyellow)
-- [ ] T023 [US2] Verify named color case-insensitivity (AliceBlue, aliceblue, ALICEBLUE)
+- [x] T021 [P] [US2] Add color validation edge case tests (invalid colors, aliases, 3-digit hex) in `tests/Stroke.Tests/Styles/StyleParserTests.cs`
+- [x] T022 [US2] Verify ANSI alias resolution works correctly (ansibrown → ansiyellow)
+- [x] T023 [US2] Verify named color case-insensitivity (AliceBlue, aliceblue, ALICEBLUE)
 
 **Checkpoint**: User Story 2 complete - all color formats properly supported
 
@@ -100,10 +100,10 @@ Based on plan.md structure:
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement _MergedStyle internal class in `src/Stroke/Styles/Style.cs` (or separate file if needed)
-- [ ] T025 [US3] Implement StyleMerger.MergeStyles in `src/Stroke/Styles/StyleMerger.cs` (FR-011)
-- [ ] T026 [US3] Write StyleMergerTests in `tests/Stroke.Tests/Styles/StyleMergerTests.cs`
-- [ ] T027 [US3] Implement invalidation hash propagation for merged styles
+- [x] T024 [US3] Implement _MergedStyle internal class in `src/Stroke/Styles/Style.cs` (or separate file if needed)
+- [x] T025 [US3] Implement StyleMerger.MergeStyles in `src/Stroke/Styles/StyleMerger.cs` (FR-011)
+- [x] T026 [US3] Write StyleMergerTests in `tests/Stroke.Tests/Styles/StyleMergerTests.cs`
+- [x] T027 [US3] Implement invalidation hash propagation for merged styles
 
 **Checkpoint**: User Story 3 complete - styles can be merged from multiple sources
 
@@ -117,16 +117,16 @@ Based on plan.md structure:
 
 ### Implementation for User Story 4
 
-- [ ] T028 [P] [US4] Implement ColorUtils internal class (RgbToHls, HlsToRgb, GetOppositeColor) in `src/Stroke/Styles/ColorUtils.cs`
-- [ ] T029 [P] [US4] Implement AnsiColorsToRgb internal class in `src/Stroke/Styles/AnsiColorsToRgb.cs`
-- [ ] T030 [P] [US4] Implement OppositeAnsiColorNames internal class in `src/Stroke/Styles/OppositeAnsiColorNames.cs`
-- [ ] T031 [US4] Implement IStyleTransformation interface in `src/Stroke/Styles/IStyleTransformation.cs` (FR-012)
-- [ ] T032 [US4] Implement DummyStyleTransformation singleton in `src/Stroke/Styles/DummyStyleTransformation.cs` (FR-013)
-- [ ] T033 [US4] Implement ReverseStyleTransformation in `src/Stroke/Styles/ReverseStyleTransformation.cs` (FR-014)
-- [ ] T034 [US4] Implement SwapLightAndDarkStyleTransformation in `src/Stroke/Styles/SwapLightAndDarkStyleTransformation.cs` (FR-015)
-- [ ] T035 [US4] Implement SetDefaultColorStyleTransformation in `src/Stroke/Styles/SetDefaultColorStyleTransformation.cs` (FR-016)
-- [ ] T036 [US4] Implement AdjustBrightnessStyleTransformation in `src/Stroke/Styles/AdjustBrightnessStyleTransformation.cs` (FR-017)
-- [ ] T037 [US4] Write StyleTransformationTests in `tests/Stroke.Tests/Styles/StyleTransformationTests.cs`
+- [x] T028 [P] [US4] Implement ColorUtils internal class (RgbToHls, HlsToRgb, GetOppositeColor) in `src/Stroke/Styles/ColorUtils.cs`
+- [x] T029 [P] [US4] Implement AnsiColorsToRgb internal class in `src/Stroke/Styles/AnsiColorsToRgb.cs`
+- [x] T030 [P] [US4] Implement OppositeAnsiColorNames internal class in `src/Stroke/Styles/OppositeAnsiColorNames.cs`
+- [x] T031 [US4] Implement IStyleTransformation interface in `src/Stroke/Styles/IStyleTransformation.cs` (FR-012)
+- [x] T032 [US4] Implement DummyStyleTransformation singleton in `src/Stroke/Styles/DummyStyleTransformation.cs` (FR-013)
+- [x] T033 [US4] Implement ReverseStyleTransformation in `src/Stroke/Styles/ReverseStyleTransformation.cs` (FR-014)
+- [x] T034 [US4] Implement SwapLightAndDarkStyleTransformation in `src/Stroke/Styles/SwapLightAndDarkStyleTransformation.cs` (FR-015)
+- [x] T035 [US4] Implement SetDefaultColorStyleTransformation in `src/Stroke/Styles/SetDefaultColorStyleTransformation.cs` (FR-016)
+- [x] T036 [US4] Implement AdjustBrightnessStyleTransformation in `src/Stroke/Styles/AdjustBrightnessStyleTransformation.cs` (FR-017)
+- [x] T037 [US4] Write StyleTransformationTests in `tests/Stroke.Tests/Styles/StyleTransformationTests.cs`
 
 **Checkpoint**: User Story 4 complete - 5 core transformations available (Dummy, Reverse, SwapLightAndDark, SetDefaultColor, AdjustBrightness)
 
@@ -140,13 +140,13 @@ Based on plan.md structure:
 
 ### Implementation for User Story 5
 
-- [ ] T038 [P] [US5] Implement DynamicStyle class in `src/Stroke/Styles/DynamicStyle.cs` (FR-007)
-- [ ] T039 [P] [US5] Write DynamicStyleTests in `tests/Stroke.Tests/Styles/DynamicStyleTests.cs`
-- [ ] T040 [US5] Implement ConditionalStyleTransformation in `src/Stroke/Styles/ConditionalStyleTransformation.cs` (FR-018)
-- [ ] T041 [US5] Implement DynamicStyleTransformation in `src/Stroke/Styles/DynamicStyleTransformation.cs` (FR-019)
-- [ ] T042 [US5] Implement _MergedStyleTransformation internal class in `src/Stroke/Styles/MergedStyleTransformation.cs` (FR-020)
-- [ ] T043 [US5] Implement StyleTransformationMerger.MergeStyleTransformations in `src/Stroke/Styles/StyleTransformationMerger.cs` (FR-020)
-- [ ] T044 [US5] Write conditional/dynamic transformation tests in `tests/Stroke.Tests/Styles/StyleTransformationTests.cs`
+- [x] T038 [P] [US5] Implement DynamicStyle class in `src/Stroke/Styles/DynamicStyle.cs` (FR-007)
+- [x] T039 [P] [US5] Write DynamicStyleTests in `tests/Stroke.Tests/Styles/DynamicStyleTests.cs`
+- [x] T040 [US5] Implement ConditionalStyleTransformation in `src/Stroke/Styles/ConditionalStyleTransformation.cs` (FR-018)
+- [x] T041 [US5] Implement DynamicStyleTransformation in `src/Stroke/Styles/DynamicStyleTransformation.cs` (FR-019)
+- [x] T042 [US5] Implement _MergedStyleTransformation internal class in `src/Stroke/Styles/MergedStyleTransformation.cs` (FR-020)
+- [x] T043 [US5] Implement StyleTransformationMerger.MergeStyleTransformations in `src/Stroke/Styles/StyleTransformationMerger.cs` (FR-020)
+- [x] T044 [US5] Write conditional/dynamic transformation tests in `tests/Stroke.Tests/Styles/StyleTransformationTests.cs`
 
 **Checkpoint**: User Story 5 complete - dynamic and conditional styling available
 
@@ -160,16 +160,16 @@ Based on plan.md structure:
 
 ### Implementation for User Story 6
 
-- [ ] T045 [P] [US6] Define PROMPT_TOOLKIT_STYLE rules (68 rules) in `src/Stroke/Styles/DefaultStyles.cs`
-- [ ] T046 [P] [US6] Define COLORS_STYLE rules (157 rules: 17 ANSI + 140 named) in `src/Stroke/Styles/DefaultStyles.cs`
-- [ ] T047 [P] [US6] Define WIDGETS_STYLE rules (19 rules) in `src/Stroke/Styles/DefaultStyles.cs`
-- [ ] T048 [P] [US6] Define PYGMENTS_DEFAULT_STYLE rules (34 rules) in `src/Stroke/Styles/DefaultStyles.cs`
-- [ ] T049 [US6] Implement DefaultStyles static class in `src/Stroke/Styles/DefaultStyles.cs` (FR-021)
-- [ ] T050 [US6] Write DefaultStylesTests in `tests/Stroke.Tests/Styles/DefaultStylesTests.cs`
-- [ ] T051 [US6] Implement PygmentsStyleUtils.PygmentsTokenToClassName in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-028)
-- [ ] T052 [US6] Implement PygmentsStyleUtils.StyleFromPygmentsDict in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-027) - depends on T051
-- [ ] T053 [US6] Implement PygmentsStyleUtils.StyleFromPygmentsClass in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-026) - depends on T052
-- [ ] T054 [US6] Write PygmentsStyleUtilsTests in `tests/Stroke.Tests/Styles/PygmentsStyleUtilsTests.cs`
+- [x] T045 [P] [US6] Define PROMPT_TOOLKIT_STYLE rules (68 rules) in `src/Stroke/Styles/DefaultStyles.cs`
+- [x] T046 [P] [US6] Define COLORS_STYLE rules (157 rules: 17 ANSI + 140 named) in `src/Stroke/Styles/DefaultStyles.cs`
+- [x] T047 [P] [US6] Define WIDGETS_STYLE rules (19 rules) in `src/Stroke/Styles/DefaultStyles.cs`
+- [x] T048 [P] [US6] Define PYGMENTS_DEFAULT_STYLE rules (34 rules) in `src/Stroke/Styles/DefaultStyles.cs`
+- [x] T049 [US6] Implement DefaultStyles static class in `src/Stroke/Styles/DefaultStyles.cs` (FR-021)
+- [x] T050 [US6] Write DefaultStylesTests in `tests/Stroke.Tests/Styles/DefaultStylesTests.cs`
+- [x] T051 [US6] Implement PygmentsStyleUtils.PygmentsTokenToClassName in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-028)
+- [x] T052 [US6] Implement PygmentsStyleUtils.StyleFromPygmentsDict in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-027) - depends on T051
+- [x] T053 [US6] Implement PygmentsStyleUtils.StyleFromPygmentsClass in `src/Stroke/Styles/PygmentsStyleUtils.cs` (FR-026) - depends on T052
+- [x] T054 [US6] Write PygmentsStyleUtilsTests in `tests/Stroke.Tests/Styles/PygmentsStyleUtilsTests.cs`
 
 **Checkpoint**: User Story 6 complete - default UI and Pygments styles available, Pygments utilities implemented
 
@@ -179,13 +179,13 @@ Based on plan.md structure:
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T055 Verify all acceptance scenarios from spec.md pass
-- [ ] T056 Verify edge cases from spec.md are handled correctly (empty strings, undefined classes, conflicting attrs, noinherit, hierarchical classes, null styles in merge, ANSI-to-RGB conversion, alias resolution)
-- [ ] T057 Verify success criteria SC-001 through SC-010 are met
-- [ ] T058 Run quickstart.md validation - ensure all examples work
-- [ ] T059 Verify thread safety (concurrent access tests with 10+ threads, 1000+ operations)
-- [ ] T060 Code review for Constitution compliance (immutability, thread safety, no external deps)
-- [ ] T061 Verify test coverage meets 80% target (SC-009) using `dotnet test --collect:"XPlat Code Coverage"`
+- [x] T055 Verify all acceptance scenarios from spec.md pass
+- [x] T056 Verify edge cases from spec.md are handled correctly (empty strings, undefined classes, conflicting attrs, noinherit, hierarchical classes, null styles in merge, ANSI-to-RGB conversion, alias resolution)
+- [x] T057 Verify success criteria SC-001 through SC-010 are met
+- [x] T058 Run quickstart.md validation - ensure all examples work
+- [x] T059 Verify thread safety (concurrent access tests with 10+ threads, 1000+ operations)
+- [x] T060 Code review for Constitution compliance (immutability, thread safety, no external deps)
+- [x] T061 Verify test coverage meets 80% target (SC-009) using `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
 
