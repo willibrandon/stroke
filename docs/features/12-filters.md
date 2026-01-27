@@ -1,14 +1,13 @@
-# Feature 12: Filter System
+# Feature 12: Filter System (Core Infrastructure)
 
 ## Overview
 
-Implement the filter system for conditional enabling/disabling of features based on application state.
+Implement the core filter infrastructure for conditional enabling/disabling of features. This provides the base classes and combinators; application-specific filters are in Feature 121.
 
 ## Python Prompt Toolkit Reference
 
 **Sources:**
 - `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/filters/base.py`
-- `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/filters/app.py`
 - `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/filters/utils.py`
 
 ## Public API
@@ -188,224 +187,6 @@ public static class FilterUtils
 }
 ```
 
-### Application Filters
-
-```csharp
-namespace Stroke.Filters;
-
-/// <summary>
-/// Built-in filters that check application state.
-/// </summary>
-public static class AppFilters
-{
-    /// <summary>
-    /// Enable when a buffer with the given name has focus.
-    /// </summary>
-    public static IFilter HasFocus(string bufferName);
-
-    /// <summary>
-    /// Enable when the given buffer has focus.
-    /// </summary>
-    public static IFilter HasFocus(IBuffer buffer);
-
-    /// <summary>
-    /// Enable when the given control has focus.
-    /// </summary>
-    public static IFilter HasFocus(IUIControl control);
-
-    /// <summary>
-    /// Enable when the given container has focus.
-    /// </summary>
-    public static IFilter HasFocus(IContainer container);
-
-    /// <summary>
-    /// Enabled when the currently focused control is a BufferControl.
-    /// </summary>
-    public static readonly IFilter BufferHasFocus;
-
-    /// <summary>
-    /// Enable when the current buffer has a selection.
-    /// </summary>
-    public static readonly IFilter HasSelection;
-
-    /// <summary>
-    /// Enable when the current buffer has a suggestion.
-    /// </summary>
-    public static readonly IFilter HasSuggestion;
-
-    /// <summary>
-    /// Enable when the current buffer has completions.
-    /// </summary>
-    public static readonly IFilter HasCompletions;
-
-    /// <summary>
-    /// True when the user selected a completion.
-    /// </summary>
-    public static readonly IFilter CompletionIsSelected;
-
-    /// <summary>
-    /// True when the current buffer is read only.
-    /// </summary>
-    public static readonly IFilter IsReadOnly;
-
-    /// <summary>
-    /// True when the current buffer has been marked as multiline.
-    /// </summary>
-    public static readonly IFilter IsMultiline;
-
-    /// <summary>
-    /// Current buffer has validation error.
-    /// </summary>
-    public static readonly IFilter HasValidationError;
-
-    /// <summary>
-    /// Enable when the input processor has an 'arg'.
-    /// </summary>
-    public static readonly IFilter HasArg;
-
-    /// <summary>
-    /// True when the CLI is returning, aborting or exiting.
-    /// </summary>
-    public static readonly IFilter IsDone;
-
-    /// <summary>
-    /// Only true when the renderer knows its real height.
-    /// </summary>
-    public static readonly IFilter RendererHeightIsKnown;
-
-    /// <summary>
-    /// Check whether a given editing mode is active.
-    /// </summary>
-    public static IFilter InEditingMode(EditingMode editingMode);
-
-    /// <summary>
-    /// True when paste mode is enabled.
-    /// </summary>
-    public static readonly IFilter InPasteMode;
-}
-```
-
-### Vi Mode Filters
-
-```csharp
-namespace Stroke.Filters;
-
-/// <summary>
-/// Vi-specific filters.
-/// </summary>
-public static class ViFilters
-{
-    /// <summary>
-    /// True when Vi mode is active.
-    /// </summary>
-    public static readonly IFilter ViMode;
-
-    /// <summary>
-    /// Active when Vi navigation key bindings are active.
-    /// </summary>
-    public static readonly IFilter ViNavigationMode;
-
-    /// <summary>
-    /// Active when Vi insert mode is active.
-    /// </summary>
-    public static readonly IFilter ViInsertMode;
-
-    /// <summary>
-    /// Active when Vi insert-multiple mode is active.
-    /// </summary>
-    public static readonly IFilter ViInsertMultipleMode;
-
-    /// <summary>
-    /// Active when Vi replace mode is active.
-    /// </summary>
-    public static readonly IFilter ViReplaceMode;
-
-    /// <summary>
-    /// Active when Vi replace-single mode is active.
-    /// </summary>
-    public static readonly IFilter ViReplaceSingleMode;
-
-    /// <summary>
-    /// Active when Vi selection mode is active.
-    /// </summary>
-    public static readonly IFilter ViSelectionMode;
-
-    /// <summary>
-    /// Active when waiting for a text object in Vi.
-    /// </summary>
-    public static readonly IFilter ViWaitingForTextObjectMode;
-
-    /// <summary>
-    /// Active when Vi digraph mode is active.
-    /// </summary>
-    public static readonly IFilter ViDigraphMode;
-
-    /// <summary>
-    /// Active when recording a Vi macro.
-    /// </summary>
-    public static readonly IFilter ViRecordingMacro;
-
-    /// <summary>
-    /// When the '/' and '?' bindings for Vi search are reversed.
-    /// </summary>
-    public static readonly IFilter ViSearchDirectionReversed;
-}
-```
-
-### Emacs Mode Filters
-
-```csharp
-namespace Stroke.Filters;
-
-/// <summary>
-/// Emacs-specific filters.
-/// </summary>
-public static class EmacsFilters
-{
-    /// <summary>
-    /// When the Emacs bindings are active.
-    /// </summary>
-    public static readonly IFilter EmacsMode;
-
-    /// <summary>
-    /// When Emacs insert mode is active.
-    /// </summary>
-    public static readonly IFilter EmacsInsertMode;
-
-    /// <summary>
-    /// When Emacs selection mode is active.
-    /// </summary>
-    public static readonly IFilter EmacsSelectionMode;
-}
-```
-
-### Search Filters
-
-```csharp
-namespace Stroke.Filters;
-
-/// <summary>
-/// Search-related filters.
-/// </summary>
-public static class SearchFilters
-{
-    /// <summary>
-    /// When we are searching.
-    /// </summary>
-    public static readonly IFilter IsSearching;
-
-    /// <summary>
-    /// When the current UIControl is searchable.
-    /// </summary>
-    public static readonly IFilter ControlIsSearchable;
-
-    /// <summary>
-    /// When shift selection mode is active.
-    /// </summary>
-    public static readonly IFilter ShiftSelectionMode;
-}
-```
-
 ## Project Structure
 
 ```
@@ -419,11 +200,7 @@ src/Stroke/
     ├── AndList.cs (internal)
     ├── OrList.cs (internal)
     ├── Invert.cs (internal)
-    ├── FilterUtils.cs
-    ├── AppFilters.cs
-    ├── ViFilters.cs
-    ├── EmacsFilters.cs
-    └── SearchFilters.cs
+    └── FilterUtils.cs
 tests/Stroke.Tests/
 └── Filters/
     ├── FilterTests.cs
@@ -466,9 +243,7 @@ Filters are lazy - they only compute their value when `Invoke()` is called. Comb
 
 ## Dependencies
 
-- `Stroke.Application` (Feature 35) - For accessing current app state
-- `Stroke.Core.Buffer` (Feature 06) - For buffer-related filters
-- `Stroke.KeyBinding.ViState` (Feature 28) - For Vi mode filters
+None. This is the core filter infrastructure with no external dependencies.
 
 ## Implementation Tasks
 
@@ -478,16 +253,15 @@ Filters are lazy - they only compute their value when `Invoke()` is called. Comb
 4. Implement `Condition` class
 5. Implement internal `_AndList`, `_OrList`, `_Invert` classes
 6. Implement `FilterUtils` static class
-7. Implement `AppFilters` static class
-8. Implement `ViFilters` static class
-9. Implement `EmacsFilters` static class
-10. Implement `SearchFilters` static class
-11. Write comprehensive unit tests
+7. Write comprehensive unit tests
 
 ## Acceptance Criteria
 
 - [ ] All filter types match Python Prompt Toolkit semantics
 - [ ] Filter combination caching works correctly
 - [ ] Short-circuit optimization works correctly
-- [ ] All application filters correctly query app state
 - [ ] Unit tests achieve 80% coverage
+
+## Related Features
+
+- Feature 121: Application Filters (app-specific filters that use this infrastructure)

@@ -237,7 +237,8 @@ public static KeyBindingsBase LoadEmacsBindings()
 
 - `Stroke.KeyBinding.KeyBindings` (Feature 19) - KeyBindings class
 - `Stroke.KeyBinding.Bindings.NamedCommands` (Feature 56) - Command registry
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - EmacsMode, EmacsInsertMode, EmacsSelectionMode
 - `Stroke.Search` (Feature 53) - Search functions
 
 ## Implementation Tasks

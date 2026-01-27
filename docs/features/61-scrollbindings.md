@@ -349,7 +349,8 @@ public static KeyBindingsBase LoadPageNavigationBindings()
 - `Stroke.Layout.Window` (Feature 25) - Window with RenderInfo
 - `Stroke.Core.Buffer` (Feature 06) - Buffer operations
 - `Stroke.Core.Document` (Feature 01) - Document navigation
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - EmacsMode, ViMode, BufferHasFocus
 
 ## Implementation Tasks
 

@@ -38,11 +38,12 @@ This document provides a comprehensive index of all 120 feature specifications f
 | 36 | Completion (Extended) | Additional completion types |
 | 37 | Completers | Built-in completers |
 
-### Filters and Conditions (Feature 12)
+### Filters and Conditions (Features 12, 121)
 
 | # | Feature | Python Reference |
 |---|---------|-----------------|
-| 12 | Filters | `filters/` - Composable conditions |
+| 12 | Filters (Core) | `filters/base.py` - Core filter infrastructure |
+| 121 | Filters (App) | `filters/app.py` - Application-specific filters |
 
 ### Formatted Text and Styles (Features 13-14, 77-78, 85)
 
@@ -241,14 +242,14 @@ This document provides a comprehensive index of all 120 feature specifications f
 
 ## Statistics
 
-- **Total Features**: 120
+- **Total Features**: 121
 - **Python Source Files with `__all__`**: 141
 - **Coverage**: Comprehensive (all public APIs documented)
 
 ## Implementation Order Recommendations
 
 ### Phase 1: Core Foundation
-Features 00-10, 12, 19-20 (Document, Buffer, Keys, Filters, KeyBindings)
+Features 00-10, 12, 19-20 (Document, Buffer, Keys, Filters Core, KeyBindings)
 
 ### Phase 2: Rendering
 Features 13-15, 22-23, 24, 52 (Formatted Text, Styles, Output, Screen, Renderer)
@@ -257,7 +258,7 @@ Features 13-15, 22-23, 24, 52 (Formatted Text, Styles, Output, Screen, Renderer)
 Features 25-30 (Containers, Controls, Window, Layout, Margins, Processors)
 
 ### Phase 4: Application
-Features 31, 49, 118-119 (Application, Current, Dummy, RunInTerminal)
+Features 31, 49, 118-119, 121 (Application, Current, Dummy, RunInTerminal, App Filters)
 
 ### Phase 5: Input
 Features 16-17, 50, 75, 100-101 (Input, Mouse, Win32, Pipes)

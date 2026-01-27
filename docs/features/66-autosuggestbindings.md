@@ -191,7 +191,8 @@ public void InsertText(string text, bool overwrite = false)
 - `Stroke.KeyBinding.KeyBindings` (Feature 19) - KeyBindings class
 - `Stroke.AutoSuggest.Suggestion` (Feature 58) - Suggestion class
 - `Stroke.Core.Buffer` (Feature 06) - Buffer with suggestion
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - EmacsMode (for suggestion bindings)
 
 ## Implementation Tasks
 

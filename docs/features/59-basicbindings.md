@@ -238,7 +238,8 @@ private static bool IfNoRepeat(KeyPressEvent e) => !e.IsRepeat;
 
 - `Stroke.KeyBinding.KeyBindings` (Feature 19) - KeyBindings class
 - `Stroke.KeyBinding.Bindings.NamedCommands` (Feature 56) - Named commands
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - ViInsertMode, EmacsInsertMode, HasSelection
 - `Stroke.Core.Buffer` (Feature 06) - Buffer operations
 
 ## Implementation Tasks

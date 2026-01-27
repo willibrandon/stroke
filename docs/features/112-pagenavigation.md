@@ -167,7 +167,7 @@ var viApp = new Application(
 
 ## Dependencies
 
-- Feature 12: Filters (BufferHasFocus, EmacsMode, ViMode)
+- Feature 121: App Filters (BufferHasFocus, EmacsMode, ViMode)
 - Feature 19: Key Bindings (ConditionalKeyBindings)
 - Feature 61: Scroll Bindings
 

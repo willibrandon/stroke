@@ -335,7 +335,8 @@ private void RegisterMotion(KeyBindings bindings, string key, Func<KeyPressEvent
 - `Stroke.KeyBinding.ViState` (Feature 38) - Vi state management
 - `Stroke.Search` (Feature 53) - Search functions
 - `Stroke.Clipboard` (Feature 40) - Clipboard for registers
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - ViMode, ViNavigationMode, ViInsertMode, ViSelectionMode
 
 ## Implementation Tasks
 

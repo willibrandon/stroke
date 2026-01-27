@@ -631,7 +631,7 @@ using var pb = new ProgressBar(formatters: formatters);
 - `Stroke.Layout` (Feature 22) - HSplit, VSplit, Window, ConditionalContainer
 - `Stroke.Layout.Controls.FormattedTextControl` (Feature 26) - Text display
 - `Stroke.Layout.Controls.UIControl` (Feature 24) - Custom control
-- `Stroke.Filters` (Feature 12) - IsDone, RendererHeightIsKnown
+- `Stroke.Filters` (Feature 121) - IsDone, RendererHeightIsKnown (App Filters)
 - `Stroke.KeyBinding` (Feature 19) - Key bindings for Ctrl-C, Ctrl-L
 - `Stroke.Utils.UnicodeWidth` (Feature 69) - Character width calculation
 

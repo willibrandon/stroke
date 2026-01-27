@@ -783,7 +783,7 @@ public delegate void InputHook(InputHookContext context);
 
 ## Module: prompt_toolkit.filters
 
-### Classes
+### Core Filter Infrastructure (Feature 12)
 
 | Python | Stroke | Notes |
 |--------|--------|-------|
@@ -792,41 +792,62 @@ public delegate void InputHook(InputHookContext context);
 | `Never` | `Never` | Always false |
 | `Always` | `Always` | Always true |
 
-### Filter Functions (Conditions)
+### Application Filters (Feature 121)
+
+These filters require access to application runtime state and are in `AppFilters`, `ViFilters`, `EmacsFilters`, and `SearchFilters` static classes.
+
+#### AppFilters
 
 | Python | Stroke | Notes |
 |--------|--------|-------|
-| `has_arg` | `Filters.HasArg` | `IFilter` property |
-| `has_completions` | `Filters.HasCompletions` | `IFilter` property |
-| `completion_is_selected` | `Filters.CompletionIsSelected` | `IFilter` property |
-| `has_focus(value)` | `Filters.HasFocus(value)` | Returns `IFilter` |
-| `buffer_has_focus` | `Filters.BufferHasFocus` | `IFilter` property |
-| `has_selection` | `Filters.HasSelection` | `IFilter` property |
-| `has_validation_error` | `Filters.HasValidationError` | `IFilter` property |
-| `is_done` | `Filters.IsDone` | `IFilter` property |
-| `is_read_only` | `Filters.IsReadOnly` | `IFilter` property |
-| `is_multiline` | `Filters.IsMultiline` | `IFilter` property |
-| `renderer_height_is_known` | `Filters.RendererHeightIsKnown` | `IFilter` property |
-| `in_editing_mode(mode)` | `Filters.InEditingMode(mode)` | Returns `IFilter` |
-| `in_paste_mode` | `Filters.InPasteMode` | `IFilter` property |
-| `vi_mode` | `Filters.ViMode` | `IFilter` property |
-| `vi_navigation_mode` | `Filters.ViNavigationMode` | `IFilter` property |
-| `vi_insert_mode` | `Filters.ViInsertMode` | `IFilter` property |
-| `vi_insert_multiple_mode` | `Filters.ViInsertMultipleMode` | `IFilter` property |
-| `vi_replace_mode` | `Filters.ViReplaceMode` | `IFilter` property |
-| `vi_selection_mode` | `Filters.ViSelectionMode` | `IFilter` property |
-| `vi_waiting_for_text_object_mode` | `Filters.ViWaitingForTextObjectMode` | `IFilter` property |
-| `vi_digraph_mode` | `Filters.ViDigraphMode` | `IFilter` property |
-| `vi_recording_macro` | `Filters.ViRecordingMacro` | `IFilter` property |
-| `emacs_mode` | `Filters.EmacsMode` | `IFilter` property |
-| `emacs_insert_mode` | `Filters.EmacsInsertMode` | `IFilter` property |
-| `emacs_selection_mode` | `Filters.EmacsSelectionMode` | `IFilter` property |
-| `shift_selection_mode` | `Filters.ShiftSelectionMode` | `IFilter` property |
-| `is_searching` | `Filters.IsSearching` | `IFilter` property |
-| `control_is_searchable` | `Filters.ControlIsSearchable` | `IFilter` property |
-| `vi_search_direction_reversed` | `Filters.ViSearchDirectionReversed` | `IFilter` property |
+| `has_arg` | `AppFilters.HasArg` | `IFilter` property |
+| `has_completions` | `AppFilters.HasCompletions` | `IFilter` property |
+| `completion_is_selected` | `AppFilters.CompletionIsSelected` | `IFilter` property |
+| `has_focus(value)` | `AppFilters.HasFocus(value)` | Returns `IFilter` |
+| `buffer_has_focus` | `AppFilters.BufferHasFocus` | `IFilter` property |
+| `has_selection` | `AppFilters.HasSelection` | `IFilter` property |
+| `has_validation_error` | `AppFilters.HasValidationError` | `IFilter` property |
+| `is_done` | `AppFilters.IsDone` | `IFilter` property |
+| `is_read_only` | `AppFilters.IsReadOnly` | `IFilter` property |
+| `is_multiline` | `AppFilters.IsMultiline` | `IFilter` property |
+| `renderer_height_is_known` | `AppFilters.RendererHeightIsKnown` | `IFilter` property |
+| `in_editing_mode(mode)` | `AppFilters.InEditingMode(mode)` | Returns `IFilter` |
+| `in_paste_mode` | `AppFilters.InPasteMode` | `IFilter` property |
+| `has_suggestion` | `AppFilters.HasSuggestion` | `IFilter` property |
 
-### Utility Functions
+#### ViFilters
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| `vi_mode` | `ViFilters.ViMode` | `IFilter` property |
+| `vi_navigation_mode` | `ViFilters.ViNavigationMode` | `IFilter` property |
+| `vi_insert_mode` | `ViFilters.ViInsertMode` | `IFilter` property |
+| `vi_insert_multiple_mode` | `ViFilters.ViInsertMultipleMode` | `IFilter` property |
+| `vi_replace_mode` | `ViFilters.ViReplaceMode` | `IFilter` property |
+| `vi_replace_single_mode` | `ViFilters.ViReplaceSingleMode` | `IFilter` property |
+| `vi_selection_mode` | `ViFilters.ViSelectionMode` | `IFilter` property |
+| `vi_waiting_for_text_object_mode` | `ViFilters.ViWaitingForTextObjectMode` | `IFilter` property |
+| `vi_digraph_mode` | `ViFilters.ViDigraphMode` | `IFilter` property |
+| `vi_recording_macro` | `ViFilters.ViRecordingMacro` | `IFilter` property |
+| `vi_search_direction_reversed` | `ViFilters.ViSearchDirectionReversed` | `IFilter` property |
+
+#### EmacsFilters
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| `emacs_mode` | `EmacsFilters.EmacsMode` | `IFilter` property |
+| `emacs_insert_mode` | `EmacsFilters.EmacsInsertMode` | `IFilter` property |
+| `emacs_selection_mode` | `EmacsFilters.EmacsSelectionMode` | `IFilter` property |
+
+#### SearchFilters
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| `is_searching` | `SearchFilters.IsSearching` | `IFilter` property |
+| `control_is_searchable` | `SearchFilters.ControlIsSearchable` | `IFilter` property |
+| `shift_selection_mode` | `SearchFilters.ShiftSelectionMode` | `IFilter` property |
+
+### Utility Functions (Feature 12)
 
 | Python | Stroke | Signature |
 |--------|--------|-----------|

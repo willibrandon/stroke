@@ -6330,8 +6330,14 @@ public sealed class ThreadedHistory : IHistory
 
 ## 11. Filter System
 
+The filter system is split into two parts:
+- **Core Infrastructure (Feature 12)**: `IFilter`, `Condition`, `Always`, `Never`, and combinators
+- **Application Filters (Feature 121)**: Filters that query runtime app state (`AppFilters`, `ViFilters`, `EmacsFilters`, `SearchFilters`)
+
+### 11.0 Core Filter Infrastructure (Feature 12)
+
 ```csharp
-namespace Stroke.Filters.Core;
+namespace Stroke.Filters;
 
 /// <summary>
 /// Interface for conditional filters.
@@ -6416,10 +6422,12 @@ public sealed class Never : IFilter
 }
 ```
 
-### 11.1 Built-in Filters
+### 11.1 Application Filters (Feature 121)
+
+Application-specific filters that query runtime state. These depend on `Application`, `ViState`, and other runtime components.
 
 ```csharp
-namespace Stroke.Filters.BuiltIn;
+namespace Stroke.Filters;
 
 /// <summary>
 /// Common filter conditions.

@@ -233,7 +233,7 @@ public static class EmacsBindings
 ## Dependencies
 
 - Feature 9: Search State
-- Feature 12: Filters (IsSearching, ControlIsSearchable)
+- Feature 121: App Filters (IsSearching, ControlIsSearchable)
 - Feature 19: Key Bindings
 - Feature 53: Search Operations
 

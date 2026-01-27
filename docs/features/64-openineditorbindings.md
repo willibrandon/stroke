@@ -189,7 +189,8 @@ await app.RunInTerminalAsync(async () =>
 
 - `Stroke.KeyBinding.KeyBindings` (Feature 19) - KeyBindings class
 - `Stroke.KeyBinding.Bindings.NamedCommands` (Feature 56) - Named commands
-- `Stroke.Filters` (Feature 12) - Filter conditions
+- `Stroke.Filters` (Feature 12) - Core filter infrastructure
+- `Stroke.Filters` (Feature 121) - EmacsMode, ViNavigationMode, HasSelection
 - `Stroke.Application` (Feature 37) - RunInTerminal support
 
 ## Implementation Tasks

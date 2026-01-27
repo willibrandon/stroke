@@ -337,7 +337,7 @@ class:scrollbar                          - Scrollbar/arrows
 - `Stroke.Layout.Dimension` (Feature 24) - Dimension system
 - `Stroke.Completion.Completion` (Feature 35) - Completion class
 - `Stroke.Core.Buffer` (Feature 02) - Buffer and CompletionState
-- `Stroke.Filters` (Feature 12) - has_completions, is_done filters
+- `Stroke.Filters` (Feature 121) - HasCompletions, IsDone (App Filters)
 
 ## Implementation Tasks
 
