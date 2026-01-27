@@ -403,6 +403,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory style definitions and caches only) (018-styles-system)
 - N/A (in-memory parsing only) (019-html-formatted-text)
 - C# 13 / .NET 10 + None (Stroke.Core layer with zero external dependencies per Constitution III) (020-ansi-formatted-text)
+- C# 13 / .NET 10+ + None (Stroke.Output depends only on Stroke.Core and Stroke.Styles per Constitution III) (021-output-system)
+- N/A (in-memory output buffers only) (021-output-system)
 
 ## Recent Changes
 - 020-ansi-formatted-text: Added % operator overloads to Ansi class for Python-style string interpolation with automatic ANSI escape neutralization (\x1b and \b replaced with ?), 15 new tests (63 total Ansi tests, 96.83% coverage)
