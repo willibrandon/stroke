@@ -190,22 +190,22 @@ public class DimensionUtilsTests
     }
 
     [Fact]
-    public void MaxLayoutDimensions_ZeroPreferredNonZeroMax_NotFiltered()
+    public void MaxLayoutDimensions_ZeroPreferredNonZeroMax_IsFiltered()
     {
-        // Only preferred=0 AND max=0 should be filtered
+        // Python: [d for d in dimensions if d.preferred != 0 and d.max != 0]
+        // Dimensions with preferred=0 are filtered out even if max>0
         var dimensions = new List<Dimension>
         {
-            new Dimension(min: 0, max: 10, preferred: 0),  // max>0, should NOT be filtered
-            new Dimension(min: 5, max: 20, preferred: 15)
+            new Dimension(min: 0, max: 10, preferred: 0),  // preferred=0, filtered OUT
+            new Dimension(min: 5, max: 20, preferred: 15)  // kept
         };
 
         var result = DimensionUtils.MaxLayoutDimensions(dimensions);
 
-        // First dimension has min=0, max=10, preferred=0
-        // Second has min=5, max=20, preferred=15
-        // Neither is zero (preferred=0 but max>0)
-        Assert.Equal(5, result.Min);  // max(0, 5) = 5
-        Assert.Equal(15, result.Preferred);  // max(0, 15) = 15
+        // First dimension filtered out, only second remains
+        Assert.Equal(5, result.Min);
+        Assert.Equal(20, result.Max);
+        Assert.Equal(15, result.Preferred);
     }
 
     #endregion

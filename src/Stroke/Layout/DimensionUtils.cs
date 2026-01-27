@@ -77,11 +77,13 @@ public static class DimensionUtils
             return Dimension.Zero();
         }
 
-        // Step 3: Filter out "empty" dimensions (where preferred=0 AND max=0)
+        // Step 3: Filter out "empty" dimensions (where preferred=0 OR max=0)
+        // Python: [d for d in dimensions if d.preferred != 0 and d.max != 0]
+        // Only keep dimensions where BOTH preferred and max are non-zero
         var filtered = new List<Dimension>();
         foreach (var d in dimensions)
         {
-            if (d.Preferred != 0 || d.Max != 0)
+            if (d.Preferred != 0 && d.Max != 0)
             {
                 filtered.Add(d);
             }
