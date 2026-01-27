@@ -10,6 +10,9 @@ FromLeft4thButtonPressed = "FromLeft4thButtonPressed"
 [default.extend-words]
 # Technical terms that are not typos
 nd = "nd"
+# Hex color codes (valid CSS colors, not typos)
+daa = "daa"
+ba = "ba"
 # Auto-suggest test data: "ommit" is the suffix of "commit" when user types "git c"
 ommit = "ommit"
 # Test data: result of deleting a character from "hello"
