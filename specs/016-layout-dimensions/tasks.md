@@ -19,8 +19,8 @@
 
 **Purpose**: Verify project structure and existing Layout namespace
 
-- [ ] T001 Verify existing Layout directory at src/Stroke/Layout/ contains MouseHandlers.cs
-- [ ] T002 Verify test directory exists at tests/Stroke.Tests/Layout/
+- [x] T001 Verify existing Layout directory at src/Stroke/Layout/ contains MouseHandlers.cs
+- [x] T002 Verify test directory exists at tests/Stroke.Tests/Layout/
 
 **Checkpoint**: Project structure ready for Dimension implementation
 
@@ -32,10 +32,10 @@
 
 **⚠️ CRITICAL**: Dimension class must be structurally complete before user story work
 
-- [ ] T003 Create Dimension.cs with class skeleton, constants (MaxDimensionValue, DefaultWeight), and constructor signature in src/Stroke/Layout/Dimension.cs
-- [ ] T004 [P] Create DimensionTests.cs test file skeleton in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T005 [P] Create DimensionUtils.cs with D static class skeleton in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T006 [P] Create DimensionUtilsTests.cs test file skeleton in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T003 Create Dimension.cs with class skeleton, constants (MaxDimensionValue, DefaultWeight), and constructor signature in src/Stroke/Layout/Dimension.cs
+- [x] T004 [P] Create DimensionTests.cs test file skeleton in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T005 [P] Create DimensionUtils.cs with D static class skeleton in src/Stroke/Layout/DimensionUtils.cs
+- [x] T006 [P] Create DimensionUtilsTests.cs test file skeleton in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
 
 **Checkpoint**: Foundation ready - file structure in place
 
@@ -51,25 +51,25 @@
 
 ### Tests for User Story 1 & 2
 
-- [ ] T007 [P] [US1] Write constructor default value tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T008 [P] [US1] Write constructor explicit value tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T009 [P] [US1] Write validation tests (negative values) in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T010 [P] [US1] Write validation tests (max < min) in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T011 [P] [US1] Write preferred clamping tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T012 [P] [US1] Write *Specified property tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T013 [P] [US1] Write ToString tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T014 [P] [US2] Write weight property tests (default, explicit, zero weight) in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T007 [P] [US1] Write constructor default value tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T008 [P] [US1] Write constructor explicit value tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T009 [P] [US1] Write validation tests (negative values) in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T010 [P] [US1] Write validation tests (max < min) in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T011 [P] [US1] Write preferred clamping tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T012 [P] [US1] Write *Specified property tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T013 [P] [US1] Write ToString tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T014 [P] [US2] Write weight property tests (default, explicit, zero weight) in tests/Stroke.Tests/Layout/DimensionTests.cs
 
 ### Implementation for User Story 1 & 2
 
-- [ ] T015 [US1] Implement Dimension constructor with parameter validation (ArgumentOutOfRangeException for negatives) in src/Stroke/Layout/Dimension.cs
-- [ ] T016 [US1] Implement default value application (min=0, max=MaxDimensionValue, weight=DefaultWeight, preferred=min) in src/Stroke/Layout/Dimension.cs
-- [ ] T017 [US1] Implement cross-parameter validation (ArgumentException for max < min) in src/Stroke/Layout/Dimension.cs
-- [ ] T018 [US1] Implement preferred clamping logic in src/Stroke/Layout/Dimension.cs
-- [ ] T019 [US1] Implement Min, Max, Preferred, Weight get-only properties in src/Stroke/Layout/Dimension.cs
-- [ ] T020 [US1] Implement MinSpecified, MaxSpecified, PreferredSpecified, WeightSpecified properties in src/Stroke/Layout/Dimension.cs
-- [ ] T021 [US1] Implement ToString() showing only specified parameters in src/Stroke/Layout/Dimension.cs
-- [ ] T022 [US1] Run tests to verify all US1/US2 tests pass
+- [x] T015 [US1] Implement Dimension constructor with parameter validation (ArgumentOutOfRangeException for negatives) in src/Stroke/Layout/Dimension.cs
+- [x] T016 [US1] Implement default value application (min=0, max=MaxDimensionValue, weight=DefaultWeight, preferred=min) in src/Stroke/Layout/Dimension.cs
+- [x] T017 [US1] Implement cross-parameter validation (ArgumentException for max < min) in src/Stroke/Layout/Dimension.cs
+- [x] T018 [US1] Implement preferred clamping logic in src/Stroke/Layout/Dimension.cs
+- [x] T019 [US1] Implement Min, Max, Preferred, Weight get-only properties in src/Stroke/Layout/Dimension.cs
+- [x] T020 [US1] Implement MinSpecified, MaxSpecified, PreferredSpecified, WeightSpecified properties in src/Stroke/Layout/Dimension.cs
+- [x] T021 [US1] Implement ToString() showing only specified parameters in src/Stroke/Layout/Dimension.cs
+- [x] T022 [US1] Run tests to verify all US1/US2 tests pass
 
 **Checkpoint**: Dimension class fully functional with all core properties - MVP complete
 
@@ -83,15 +83,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T023 [P] [US3] Write Exact() factory method tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T024 [P] [US3] Write Zero() factory method tests in tests/Stroke.Tests/Layout/DimensionTests.cs
-- [ ] T025 [P] [US3] Write Exact() negative amount validation test in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T023 [P] [US3] Write Exact() factory method tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T024 [P] [US3] Write Zero() factory method tests in tests/Stroke.Tests/Layout/DimensionTests.cs
+- [x] T025 [P] [US3] Write Exact() negative amount validation test in tests/Stroke.Tests/Layout/DimensionTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Implement Dimension.Exact(int amount) factory method in src/Stroke/Layout/Dimension.cs
-- [ ] T027 [US3] Implement Dimension.Zero() factory method in src/Stroke/Layout/Dimension.cs
-- [ ] T028 [US3] Run tests to verify all US3 tests pass
+- [x] T026 [US3] Implement Dimension.Exact(int amount) factory method in src/Stroke/Layout/Dimension.cs
+- [x] T027 [US3] Implement Dimension.Zero() factory method in src/Stroke/Layout/Dimension.cs
+- [x] T028 [US3] Run tests to verify all US3 tests pass
 
 **Checkpoint**: Factory methods complete - fixed-size dimensions work independently
 
@@ -105,21 +105,21 @@
 
 ### Tests for User Story 4
 
-- [ ] T029 [P] [US4] Write SumLayoutDimensions basic tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T030 [P] [US4] Write SumLayoutDimensions empty list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T031 [P] [US4] Write SumLayoutDimensions null list test (ArgumentNullException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T032 [P] [US4] Write MaxLayoutDimensions basic tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T033 [P] [US4] Write MaxLayoutDimensions empty list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T034 [P] [US4] Write MaxLayoutDimensions all-zero list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T035 [P] [US4] Write MaxLayoutDimensions zero-filtering tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T036 [P] [US4] Write MaxLayoutDimensions non-overlapping ranges test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T037 [P] [US4] Write MaxLayoutDimensions null list test (ArgumentNullException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T029 [P] [US4] Write SumLayoutDimensions basic tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T030 [P] [US4] Write SumLayoutDimensions empty list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T031 [P] [US4] Write SumLayoutDimensions null list test (ArgumentNullException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T032 [P] [US4] Write MaxLayoutDimensions basic tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T033 [P] [US4] Write MaxLayoutDimensions empty list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T034 [P] [US4] Write MaxLayoutDimensions all-zero list test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T035 [P] [US4] Write MaxLayoutDimensions zero-filtering tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T036 [P] [US4] Write MaxLayoutDimensions non-overlapping ranges test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T037 [P] [US4] Write MaxLayoutDimensions null list test (ArgumentNullException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T038 [US4] Implement SumLayoutDimensions in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T039 [US4] Implement MaxLayoutDimensions algorithm (5-step per FR-010) in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T040 [US4] Run tests to verify all US4 tests pass
+- [x] T038 [US4] Implement SumLayoutDimensions in src/Stroke/Layout/DimensionUtils.cs
+- [x] T039 [US4] Implement MaxLayoutDimensions algorithm (5-step per FR-010) in src/Stroke/Layout/DimensionUtils.cs
+- [x] T040 [US4] Run tests to verify all US4 tests pass
 
 **Checkpoint**: Aggregation functions complete - containers can calculate combined sizing
 
@@ -133,21 +133,21 @@
 
 ### Tests for User Story 5
 
-- [ ] T041 [P] [US5] Write ToDimension null input test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T042 [P] [US5] Write ToDimension int input test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T043 [P] [US5] Write ToDimension Dimension passthrough test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T044 [P] [US5] Write ToDimension Func<object?> callable tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T045 [P] [US5] Write ToDimension nested callable test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T046 [P] [US5] Write ToDimension unsupported type test (ArgumentException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T047 [P] [US5] Write IsDimension tests for all supported types in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T048 [P] [US5] Write IsDimension tests for unsupported types in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T041 [P] [US5] Write ToDimension null input test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T042 [P] [US5] Write ToDimension int input test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T043 [P] [US5] Write ToDimension Dimension passthrough test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T044 [P] [US5] Write ToDimension Func<object?> callable tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T045 [P] [US5] Write ToDimension nested callable test in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T046 [P] [US5] Write ToDimension unsupported type test (ArgumentException) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T047 [P] [US5] Write IsDimension tests for all supported types in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T048 [P] [US5] Write IsDimension tests for unsupported types in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
 
 ### Implementation for User Story 5
 
-- [ ] T049 [US5] Implement ToDimension type dispatch logic in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T050 [US5] Implement ToDimension callable recursion in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T051 [US5] Implement IsDimension type checking in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T052 [US5] Run tests to verify all US5 tests pass
+- [x] T049 [US5] Implement ToDimension type dispatch logic in src/Stroke/Layout/DimensionUtils.cs
+- [x] T050 [US5] Implement ToDimension callable recursion in src/Stroke/Layout/DimensionUtils.cs
+- [x] T051 [US5] Implement IsDimension type checking in src/Stroke/Layout/DimensionUtils.cs
+- [x] T052 [US5] Run tests to verify all US5 tests pass
 
 **Checkpoint**: Dynamic dimension support complete - callables work for runtime-determined sizes
 
@@ -161,15 +161,15 @@
 
 ### Tests for D Alias
 
-- [ ] T053 [P] Write D.Create tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T054 [P] Write D.Exact tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T055 [P] Write D.Zero tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T053 [P] Write D.Create tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T054 [P] Write D.Exact tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T055 [P] Write D.Zero tests in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
 
 ### Implementation for D Alias
 
-- [ ] T056 Implement D.Create factory method in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T057 Implement D.Exact and D.Zero factory methods in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T058 Run tests to verify all D alias tests pass
+- [x] T056 Implement D.Create factory method in src/Stroke/Layout/DimensionUtils.cs
+- [x] T057 Implement D.Exact and D.Zero factory methods in src/Stroke/Layout/DimensionUtils.cs
+- [x] T058 Run tests to verify all D alias tests pass
 
 **Checkpoint**: D alias complete - shorter syntax available
 
@@ -179,11 +179,11 @@
 
 **Purpose**: Final validation, edge cases, and coverage verification
 
-- [ ] T059 Add XML documentation comments to all public members in src/Stroke/Layout/Dimension.cs
-- [ ] T060 [P] Add XML documentation comments to all public members in src/Stroke/Layout/DimensionUtils.cs
-- [ ] T061 [P] Add edge case tests (single-element lists, all-identical dimensions) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
-- [ ] T062 Run full test suite and verify 80% code coverage target (SC-006)
-- [ ] T063 Run quickstart.md examples as validation tests
+- [x] T059 Add XML documentation comments to all public members in src/Stroke/Layout/Dimension.cs
+- [x] T060 [P] Add XML documentation comments to all public members in src/Stroke/Layout/DimensionUtils.cs
+- [x] T061 [P] Add edge case tests (single-element lists, all-identical dimensions) in tests/Stroke.Tests/Layout/DimensionUtilsTests.cs
+- [x] T062 Run full test suite and verify 80% code coverage target (SC-006)
+- [x] T063 Run quickstart.md examples as validation tests
 
 ---
 
