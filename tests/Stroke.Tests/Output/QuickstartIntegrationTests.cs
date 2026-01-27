@@ -49,10 +49,10 @@ public sealed class QuickstartIntegrationTests
         ColorDepth? envDepth = ColorDepthExtensions.FromEnvironment();
 
         // Use default if not specified
-        ColorDepth depth = envDepth ?? ColorDepth.Default; // Depth8Bit
+        ColorDepth depth = envDepth ?? ColorDepthExtensions.Default; // Depth8Bit
 
         // Verify default
-        Assert.Equal(ColorDepth.Depth8Bit, ColorDepth.Default);
+        Assert.Equal(ColorDepth.Depth8Bit, ColorDepthExtensions.Default);
 
         // Or get from output instance
         var writer = new StringWriter();
@@ -95,7 +95,7 @@ public sealed class QuickstartIntegrationTests
 
         var result = writer.ToString();
         // Verify cursor position escape sequence
-        Assert.Contains("\x1b[11;21H", result); // CursorGoto (1-based)
+        Assert.Contains("\x1b[10;20H", result); // CursorGoto
         Assert.Contains("\x1b[5A", result);      // CursorUp
         Assert.Contains("\x1b[10C", result);     // CursorForward
         Assert.Contains("\x1b[?25l", result);    // HideCursor
@@ -323,8 +323,7 @@ public sealed class QuickstartIntegrationTests
         output.DisableBracketedPaste();
         output.SetAttributes(DefaultAttrs.Default, ColorDepth.Depth8Bit);
         output.ResetAttributes();
-        output.ScrollBufferUp(1);
-        output.ScrollBufferDown(1);
+        output.ScrollBufferToPrompt();
         output.Flush();
 
         // Verify no exceptions were thrown
@@ -354,7 +353,9 @@ public sealed class QuickstartIntegrationTests
         Assert.Contains("     ", result); // 5 spaces from CursorForward
         Assert.Contains("\n", result);    // Newline from CursorDown
         // Verify no escape sequences
-        Assert.DoesNotContain("\x1b", result);
+        // Note: Use Assert.False instead of Assert.DoesNotContain because xUnit has issues
+        // with control characters in DoesNotContain assertions
+        Assert.False(result.Contains('\x1b'), "PlainTextOutput should not emit escape sequences");
     }
 
     [Fact]
@@ -424,10 +425,14 @@ public sealed class QuickstartIntegrationTests
         output.Flush();
 
         var result = writer.ToString();
-        // The escape character should be replaced, preventing terminal injection
-        Assert.DoesNotContain("\x1b[2J", result);
+        // The escape character should be replaced with '?', preventing terminal injection
+        // Note: Use Assert.False instead of Assert.DoesNotContain because xUnit has issues
+        // with control characters in DoesNotContain assertions
+        Assert.False(result.Contains("\x1b[2J"), "Write() should escape the escape character");
         Assert.Contains("Hello", result);
         Assert.Contains("World", result);
+        // Verify the escape character was replaced with '?'
+        Assert.Contains("?[2J", result);
     }
 
     #endregion
@@ -464,8 +469,9 @@ public sealed class QuickstartIntegrationTests
 
         Assert.NotNull(output);
 
-        // Should support full color
-        Assert.Equal(ColorDepth.Depth24Bit, output.GetDefaultColorDepth());
+        // Default color depth is Depth8Bit (256 colors) when no explicit depth is specified
+        // and no environment variables are set
+        Assert.Equal(ColorDepth.Depth8Bit, output.GetDefaultColorDepth());
 
         // Should have reasonable default size
         var size = output.GetSize();
@@ -508,16 +514,18 @@ public sealed class QuickstartIntegrationTests
     [Fact]
     public void ModalCursorShapeConfig_ReturnsShapeBasedOnMode()
     {
-        var config = new ModalCursorShapeConfig();
+        var currentMode = ModalCursorShapeConfig.EditingMode.ViNavigation;
+        var config = new ModalCursorShapeConfig(() => currentMode);
 
-        // Default mode should return Block
+        // Vi navigation mode should return Block
         Assert.Equal(CursorShape.Block, config.GetCursorShape());
 
-        // Change mode and verify
-        config.SetMode(InputMode.Insert);
+        // Change mode to insert and verify
+        currentMode = ModalCursorShapeConfig.EditingMode.ViInsert;
         Assert.Equal(CursorShape.Beam, config.GetCursorShape());
 
-        config.SetMode(InputMode.Replace);
+        // Change mode to replace and verify
+        currentMode = ModalCursorShapeConfig.EditingMode.ViReplace;
         Assert.Equal(CursorShape.Underline, config.GetCursorShape());
     }
 
@@ -525,18 +533,18 @@ public sealed class QuickstartIntegrationTests
     public void DynamicCursorShapeConfig_CallsProvider()
     {
         var called = false;
-        CursorShape expectedShape = CursorShape.BlinkingBeam;
+        var innerConfig = new SimpleCursorShapeConfig(CursorShape.BlinkingBeam);
 
         var config = new DynamicCursorShapeConfig(() =>
         {
             called = true;
-            return expectedShape;
+            return innerConfig;
         });
 
         var result = config.GetCursorShape();
 
         Assert.True(called);
-        Assert.Equal(expectedShape, result);
+        Assert.Equal(CursorShape.BlinkingBeam, result);
     }
 
     #endregion
