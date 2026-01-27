@@ -396,6 +396,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke.Core (Point type) (013-mouse-events)
 - N/A (in-memory data structures only) (013-mouse-events)
 - C# 13 / .NET 10 + None (Stroke.FormattedText layer - zero external dependencies per Constitution III) (015-formatted-text-system)
+- C# 13 / .NET 10 + None (Stroke.Layout layer, depends only on Core per Constitution III) (016-layout-dimensions)
 
 ## Recent Changes
 - 015-formatted-text-system: Added comprehensive formatted text system with Html (HTML-like markup parsing), Ansi (ANSI escape sequence parsing with SGR codes, 256-color, true color), Template (placeholder interpolation with lazy evaluation), PygmentsTokens (Pygments-style token conversion), extended FormattedTextUtils (ZeroWidthEscape, FragmentListWidth with Wcwidth, SplitLines, Merge), extended AnyFormattedText with implicit conversions for Html/Ansi/PygmentsTokens (281 tests, >90% coverage)
