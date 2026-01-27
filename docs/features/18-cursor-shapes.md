@@ -72,7 +72,8 @@ public interface ICursorShapeConfig
     /// Return the cursor shape to be used in the current state.
     /// </summary>
     /// <param name="application">The current application.</param>
-    CursorShape GetCursorShape(IApplication application);
+    /// <typeparam name="TResult">The application result type.</typeparam>
+    CursorShape GetCursorShape<TResult>(Application<TResult> application);
 }
 ```
 
@@ -97,7 +98,7 @@ public sealed class SimpleCursorShapeConfig : ICursorShapeConfig
     /// </summary>
     public CursorShape CursorShape { get; }
 
-    public CursorShape GetCursorShape(IApplication application) => CursorShape;
+    public CursorShape GetCursorShape<TResult>(Application<TResult> application) => CursorShape;
 }
 ```
 
@@ -115,7 +116,7 @@ namespace Stroke.Input;
 /// </summary>
 public sealed class ModalCursorShapeConfig : ICursorShapeConfig
 {
-    public CursorShape GetCursorShape(IApplication application);
+    public CursorShape GetCursorShape<TResult>(Application<TResult> application);
 }
 ```
 
@@ -140,7 +141,7 @@ public sealed class DynamicCursorShapeConfig : ICursorShapeConfig
     /// </summary>
     public Func<ICursorShapeConfig?> GetCursorShapeConfig { get; }
 
-    public CursorShape GetCursorShape(IApplication application);
+    public CursorShape GetCursorShape<TResult>(Application<TResult> application);
 }
 ```
 
@@ -226,7 +227,7 @@ The output layer tracks whether the cursor shape was ever changed. On exit, it o
 
 ## Dependencies
 
-- `Stroke.Application.IApplication` (Feature 35) - Application interface
+- `Stroke.Application.Application<TResult>` (Feature 31) - Application class
 - `Stroke.KeyBinding.EditingMode` (Feature 27) - Editing mode enum
 - `Stroke.KeyBinding.ViState` (Feature 28) - Vi input mode
 

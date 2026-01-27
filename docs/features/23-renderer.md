@@ -142,7 +142,8 @@ public sealed class Renderer
     /// <param name="app">The application.</param>
     /// <param name="layout">The layout to render.</param>
     /// <param name="isAborted">True if the input was aborted.</param>
-    public void Render(IApplication app, ILayout layout, bool isAborted = false);
+    /// <typeparam name="TResult">The application result type.</typeparam>
+    public void Render<TResult>(Application<TResult> app, ILayout layout, bool isAborted = false);
 
     /// <summary>
     /// Erase the current output on screen.
@@ -310,7 +311,7 @@ When outputting wide characters:
 - `Stroke.Rendering.IOutput` (Feature 15) - Output interface
 - `Stroke.Core.FormattedText` (Feature 13) - Formatted text
 - `Stroke.Layout.ILayout` (Feature 30) - Layout interface
-- `Stroke.Application.IApplication` (Feature 35) - Application interface
+- `Stroke.Application.Application<TResult>` (Feature 31) - Application class
 
 ## Implementation Tasks
 

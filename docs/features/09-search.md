@@ -158,7 +158,7 @@ When starting/stopping search in Vi mode, the input mode is updated:
 - `Stroke.Core.Buffer` (Feature 06)
 - `Stroke.Filters` (Feature 12)
 - `Stroke.Layout.Controls` (Feature 20)
-- `Stroke.Application` (Feature 35)
+- `Stroke.Application` (Feature 31)
 
 ## Implementation Tasks
 

@@ -335,7 +335,7 @@ class:scrollbar                          - Scrollbar/arrows
 - `Stroke.Layout.HSplit` (Feature 25) - Vertical layout
 - `Stroke.Layout.ScrollbarMargin` (Feature 28) - Scrollbar margin
 - `Stroke.Layout.Dimension` (Feature 24) - Dimension system
-- `Stroke.Completion.Completion` (Feature 35) - Completion class
+- `Stroke.Completion.Completion` (Feature 36) - Completion class
 - `Stroke.Core.Buffer` (Feature 02) - Buffer and CompletionState
 - `Stroke.Filters` (Feature 121) - HasCompletions, IsDone (App Filters)
 

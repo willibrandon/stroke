@@ -136,7 +136,7 @@ public sealed class KeyPressEvent
     /// <summary>
     /// The current Application object.
     /// </summary>
-    public IApplication App { get; }
+    public Application<object> App { get; }
 
     /// <summary>
     /// The current buffer.
@@ -217,7 +217,7 @@ After processing keys, a timeout is started. If no more keys arrive within the t
 - `Stroke.KeyBinding.Binding` (Feature 19) - Key binding class
 - `Stroke.Input.KeyPress` (Feature 16) - Key press class
 - `Stroke.Input.Keys` (Feature 10) - Keys enum
-- `Stroke.Application.IApplication` (Feature 35) - Application interface
+- `Stroke.Application.Application<TResult>` (Feature 31) - Application class
 
 ## Implementation Tasks
 
