@@ -1841,11 +1841,8 @@ public sealed record SelectionState(
 
 | Python | Stroke |
 |--------|--------|
-| `Priority.LOWEST` | `Priority.Lowest` |
-| `Priority.LOW` | `Priority.Low` |
-| `Priority.NORMAL` | `Priority.Normal` |
-| `Priority.HIGH` | `Priority.High` |
-| `Priority.HIGHEST` | `Priority.Highest` |
+| `Priority.DICT_KEY_ORDER` | `Priority.DictKeyOrder` |
+| `Priority.MOST_PRECISE` | `Priority.MostPrecise` |
 
 ### Constants
 

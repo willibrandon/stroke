@@ -399,6 +399,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + None (Stroke.Layout layer, depends only on Core per Constitution III) (016-layout-dimensions)
 - C# 13 / .NET 10+ + None (Stroke.Filters is part of Core layer with zero external dependencies per Constitution III) (017-filter-system-core)
 - N/A (in-memory only - filter instances and caches) (017-filter-system-core)
+- C# 13 / .NET 10 + None (Stroke.Styles is part of Core layer, zero external dependencies per Constitution III) (018-styles-system)
+- N/A (in-memory style definitions and caches only) (018-styles-system)
 
 ## Recent Changes
 - 017-filter-system-core: Added Filter System with IFilter interface, Filter abstract base class with operators (&, |, ~) and per-instance caching, Always/Never singletons, Condition wrapper for Func<bool>, FilterOrBool union type, FilterUtils static utilities (ToFilter, IsTrue), boolean algebra (identity, annihilation, short-circuit, double negation), thread-safe operations (279 tests, 100% coverage on all filter classes)
