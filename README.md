@@ -128,6 +128,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `FilterUtils` static utilities (`ToFilter()`, `IsTrue()`)
   - Boolean algebra: identity, annihilation, short-circuit, double negation
   - Thread-safe operations (100% test coverage)
+- **Styles System** — Visual styling for terminal UI components
+  - `Style` class with rule-based styling, class lookup, and style inheritance
+  - `Attrs` record struct for color/formatting attributes (color, bgcolor, bold, italic, etc.)
+  - `BaseStyle` abstract class for custom style implementations
+  - `NamedColors` with 148 CSS colors (from Python Prompt Toolkit)
+  - `AnsiColors` with 16 standard + 256 indexed palette colors
+  - Color utilities: `ParseColor`, `AnsiColorToRgb`, hex/ANSI conversion
+  - Style transformations: `SwapLightAndDarkStyleTransformation`, `ReverseStyleTransformation`, `AdjustBrightnessStyleTransformation`, `ConditionalStyleTransformation`
+  - `DynamicStyle` and `ConditionalStyle` for runtime styling
+  - `MergeStyles` for combining multiple style sources
+  - Default styles: `PromptToolkitStyle`, `ColorsStyle`, `WidgetsStyle`, `PygmentsDefaultStyle`
+  - `PygmentsStyleUtils` for syntax highlighting integration
+  - Thread-safe operations (>80% test coverage)
 
 ### Up Next
 
