@@ -34,7 +34,7 @@ public class FilterBenchmarks
         var c = new Condition(() => true);
         _complexExpression = ((Filter)a.And(b)).Or(c);
 
-        // Deep chain of 10 ANDed conditions
+        // Deep chain of 10 AND conditions
         var conditions = Enumerable.Range(0, 10).Select(_ => new Condition(() => true)).ToArray();
         IFilter chain = conditions[0].And(conditions[1]);
         for (int i = 2; i < conditions.Length; i++)
