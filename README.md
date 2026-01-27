@@ -116,6 +116,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Color attributes (`fg`, `bg`, `color`) with ANSI, hex, and named color support
   - `%` operator for Python-style string interpolation with automatic HTML escaping
   - `Ansi` class for ANSI escape sequence parsing (SGR codes, 256-color, true color)
+  - `%` operator for Python-style string interpolation with automatic ANSI escape neutralization
   - `Template` class for placeholder interpolation with lazy evaluation
   - `PygmentsTokens` for Pygments-style token conversion
   - `FormattedTextUtils` utilities (ZeroWidthEscape, FragmentListWidth, SplitLines, Merge)

@@ -24,9 +24,9 @@
 
 **Purpose**: Verify existing infrastructure is ready
 
-- [ ] T001 Verify `AnsiFormatter.FormatPercent()` exists and works in `src/Stroke/FormattedText/AnsiFormatter.cs`
-- [ ] T002 Verify existing Ansi tests pass by running `dotnet test --filter "FullyQualifiedName~AnsiTests"`
-- [ ] T003 Identify insertion point for new operators in `src/Stroke/FormattedText/Ansi.cs` (after line 89, near existing methods)
+- [x] T001 Verify `AnsiFormatter.FormatPercent()` exists and works in `src/Stroke/FormattedText/AnsiFormatter.cs`
+- [x] T002 Verify existing Ansi tests pass by running `dotnet test --filter "FullyQualifiedName~AnsiTests"`
+- [x] T003 Identify insertion point for new operators in `src/Stroke/FormattedText/Ansi.cs` (after line 89, near existing methods)
 
 **Checkpoint**: Infrastructure verified - ready for implementation
 
@@ -52,22 +52,22 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T004 [P] [US1] Add test `PercentOperator_WithSingleValue_SubstitutesAndEscapes` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T005 [P] [US1] Add test `PercentOperator_WithAnsiInValue_EscapesControlChars` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T006 [P] [US1] Add test `PercentOperator_WithBackspaceInValue_EscapesBackspace` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T007 [P] [US1] Add test `PercentOperator_WithCombinedEscape_NeutralizesBoth` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T008 [P] [US1] Add test `PercentOperator_WithNullValue_ConvertsToEmpty` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T009 [P] [US1] Add test `PercentOperator_PreservesOriginalStyling` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T010 [P] [US1] Add test `PercentOperator_ReturnsNewInstance` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T011 [P] [US1] Add test `PercentOperator_WithTerminalReset_NeutralizesEscape` (SEC-T004) in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T012 [P] [US1] Add test `PercentOperator_WithNonStringValue_CallsToString` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T013 [P] [US1] Add test `PercentOperator_WithNoPlaceholders_ReturnsUnchanged` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T004 [P] [US1] Add test `PercentOperator_WithSingleValue_SubstitutesAndEscapes` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T005 [P] [US1] Add test `PercentOperator_WithAnsiInValue_EscapesControlChars` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T006 [P] [US1] Add test `PercentOperator_WithBackspaceInValue_EscapesBackspace` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T007 [P] [US1] Add test `PercentOperator_WithCombinedEscape_NeutralizesBoth` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T008 [P] [US1] Add test `PercentOperator_WithNullValue_ConvertsToEmpty` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T009 [P] [US1] Add test `PercentOperator_PreservesOriginalStyling` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T010 [P] [US1] Add test `PercentOperator_ReturnsNewInstance` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T011 [P] [US1] Add test `PercentOperator_WithTerminalReset_NeutralizesEscape` (SEC-T004) in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T012 [P] [US1] Add test `PercentOperator_WithNonStringValue_CallsToString` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T013 [P] [US1] Add test `PercentOperator_WithNoPlaceholders_ReturnsUnchanged` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement `operator %(Ansi ansi, object value)` in `src/Stroke/FormattedText/Ansi.cs` (region T049) following Html.cs pattern
-- [ ] T015 [US1] Add XML documentation to single-value operator per contract specification
-- [ ] T016 [US1] Verify all US1 tests pass by running `dotnet test --filter "PercentOperator_With"`
+- [x] T014 [US1] Implement `operator %(Ansi ansi, object value)` in `src/Stroke/FormattedText/Ansi.cs` (region T049) following Html.cs pattern
+- [x] T015 [US1] Add XML documentation to single-value operator per contract specification
+- [x] T016 [US1] Verify all US1 tests pass by running `dotnet test --filter "PercentOperator_With"`
 
 **Checkpoint**: User Story 1 complete - single value `%` operator works independently
 
@@ -83,17 +83,17 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T017 [P] [US2] Add test `PercentOperator_WithArray_SubstitutesAllPlaceholders` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T018 [P] [US2] Add test `PercentOperator_WithInsufficientArgs_LeavesPlaceholders` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T019 [P] [US2] Add test `PercentOperator_WithExtraArgs_IgnoresExtra` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T020 [P] [US2] Add test `PercentOperator_WithEmptyArray_LeavesTemplate` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
-- [ ] T021 [P] [US2] Add test `PercentOperator_WithNullArray_ThrowsArgumentNull` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T017 [P] [US2] Add test `PercentOperator_WithArray_SubstitutesAllPlaceholders` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T018 [P] [US2] Add test `PercentOperator_WithInsufficientArgs_LeavesPlaceholders` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T019 [P] [US2] Add test `PercentOperator_WithExtraArgs_IgnoresExtra` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T020 [P] [US2] Add test `PercentOperator_WithEmptyArray_LeavesTemplate` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
+- [x] T021 [P] [US2] Add test `PercentOperator_WithNullArray_ThrowsArgumentNull` in `tests/Stroke.Tests/FormattedText/AnsiTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement `operator %(Ansi ansi, object[] values)` in `src/Stroke/FormattedText/Ansi.cs` (region T049) following Html.cs pattern
-- [ ] T023 [US2] Add XML documentation to array operator per contract specification
-- [ ] T024 [US2] Verify all US2 tests pass by running `dotnet test --filter "PercentOperator_With"`
+- [x] T022 [US2] Implement `operator %(Ansi ansi, object[] values)` in `src/Stroke/FormattedText/Ansi.cs` (region T049) following Html.cs pattern
+- [x] T023 [US2] Add XML documentation to array operator per contract specification
+- [x] T024 [US2] Verify all US2 tests pass by running `dotnet test --filter "PercentOperator_With"`
 
 **Checkpoint**: User Story 2 complete - array `%` operator works independently
 
@@ -103,10 +103,10 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T025 Run full Ansi test suite: `dotnet test --filter "FullyQualifiedName~AnsiTests"`
-- [ ] T026 Verify test coverage meets 80% threshold for Ansi class
-- [ ] T027 Validate quickstart.md examples work correctly
-- [ ] T028 Update CLAUDE.md Recent Changes section with feature completion
+- [x] T025 Run full Ansi test suite: `dotnet test --filter "FullyQualifiedName~AnsiTests"`
+- [x] T026 Verify test coverage meets 80% threshold for Ansi class (96.83% achieved)
+- [x] T027 Validate quickstart.md examples work correctly
+- [x] T028 Update CLAUDE.md Recent Changes section with feature completion
 
 ---
 
