@@ -402,6 +402,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + None (Stroke.Styles is part of Core layer, zero external dependencies per Constitution III) (018-styles-system)
 - N/A (in-memory style definitions and caches only) (018-styles-system)
 - N/A (in-memory parsing only) (019-html-formatted-text)
+- C# 13 / .NET 10 + None (Stroke.Core layer with zero external dependencies per Constitution III) (020-ansi-formatted-text)
 
 ## Recent Changes
 - 019-html-formatted-text: Added % operator overloads to Html class for Python-style string interpolation with automatic HTML escaping, fixed FR-022 (fg attribute takes precedence over color attribute), added 7 new tests (46 total Html tests, 98.96% coverage)
