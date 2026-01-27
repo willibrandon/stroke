@@ -76,6 +76,24 @@ public sealed class Html : IFormattedText
     /// <returns>The escaped text with &amp;, &lt;, &gt;, and &quot; replaced.</returns>
     public static string Escape(object? text) => HtmlFormatter.Escape(text);
 
+    /// <summary>
+    /// Formats HTML with %s-style substitution (single value).
+    /// </summary>
+    /// <param name="html">The Html template.</param>
+    /// <param name="value">The value to substitute.</param>
+    /// <returns>A new Html with the value escaped and substituted.</returns>
+    public static Html operator %(Html html, object value) =>
+        new(HtmlFormatter.FormatPercent(html.Value, value));
+
+    /// <summary>
+    /// Formats HTML with %s-style substitution (multiple values).
+    /// </summary>
+    /// <param name="html">The Html template.</param>
+    /// <param name="values">The values to substitute.</param>
+    /// <returns>A new Html with all values escaped and substituted.</returns>
+    public static Html operator %(Html html, object[] values) =>
+        new(HtmlFormatter.FormatPercent(html.Value, values));
+
     /// <inheritdoc />
     public override string ToString() => $"Html({Value})";
 
@@ -131,7 +149,8 @@ public sealed class Html : IFormattedText
                 string fg = string.Empty;
                 string bg = string.Empty;
 
-                // Process attributes
+                // Process attributes (two-pass: first check for fg, then process color as fallback)
+                string colorValue = string.Empty;
                 foreach (var attr in childElement.Attributes())
                 {
                     var attrName = attr.Name.LocalName;
@@ -151,12 +170,16 @@ public sealed class Html : IFormattedText
                     }
                     else if (attrName == "color")
                     {
-                        // Alias for fg
+                        // Alias for fg (fg takes precedence per FR-022)
                         if (attrValue.Contains(' '))
                             throw new FormatException("\"color\" attribute contains a space.");
-                        fg = attrValue;
+                        colorValue = attrValue;
                     }
                 }
+
+                // Apply color only if fg wasn't set (FR-022: fg takes precedence)
+                if (string.IsNullOrEmpty(fg) && !string.IsNullOrEmpty(colorValue))
+                    fg = colorValue;
 
                 // Push to stacks
                 if (addToNameStack)

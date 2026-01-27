@@ -28,9 +28,9 @@ The `Html` class is already ~95% complete:
 
 **Purpose**: Verify existing implementation before adding missing functionality
 
-- [ ] T001 Verify existing Html.cs implementation in src/Stroke/FormattedText/Html.cs
-- [ ] T002 Verify existing HtmlFormatter.cs implementation in src/Stroke/FormattedText/HtmlFormatter.cs
-- [ ] T003 [P] Run existing test suite with `dotnet test` to confirm baseline
+- [x] T001 Verify existing Html.cs implementation in src/Stroke/FormattedText/Html.cs
+- [x] T002 Verify existing HtmlFormatter.cs implementation in src/Stroke/FormattedText/HtmlFormatter.cs
+- [x] T003 [P] Run existing test suite with `dotnet test` to confirm baseline
 
 ---
 
@@ -42,17 +42,17 @@ The `Html` class is already ~95% complete:
 
 ### Tests for FR-016 (% Operator)
 
-- [ ] T004 [P] Add test `PercentOperator_WithSingleValue_SubstitutesAndEscapes` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T005 [P] Add test `PercentOperator_WithArray_SubstitutesAllPlaceholders` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T006 [P] Add test `PercentOperator_WithSpecialChars_EscapesThem` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T007 [P] Add test `PercentOperator_WithInsufficientArgs_LeavesPlaceholders` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T007a [P] Add test `Format_WithMissingPlaceholder_LeavesPlaceholderUnchanged` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T007b [P] Add test `Format_WithNullDictionaryValue_TreatsAsEmptyString` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T004 [P] Add test `PercentOperator_WithSingleValue_SubstitutesAndEscapes` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T005 [P] Add test `PercentOperator_WithArray_SubstitutesAllPlaceholders` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T006 [P] Add test `PercentOperator_WithSpecialChars_EscapesThem` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T007 [P] Add test `PercentOperator_WithInsufficientArgs_LeavesPlaceholders` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T007a [P] Add test `Format_WithMissingPlaceholder_LeavesPlaceholderUnchanged` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T007b [P] Add test `Format_WithNullDictionaryValue_TreatsAsEmptyString` in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 ### Implementation for FR-016
 
-- [ ] T008 Add `operator %(Html, object)` overload in src/Stroke/FormattedText/Html.cs
-- [ ] T009 Add `operator %(Html, object[])` overload in src/Stroke/FormattedText/Html.cs
+- [x] T008 Add `operator %(Html, object)` overload in src/Stroke/FormattedText/Html.cs
+- [x] T009 Add `operator %(Html, object[])` overload in src/Stroke/FormattedText/Html.cs
 
 **Checkpoint**: FR-016 complete - all functional requirements now implemented
 
@@ -66,10 +66,10 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 1
 
-- [ ] T010 [US1] Verify test `Constructor_WithBoldElement_CreatesBoldClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T011 [US1] Verify test `Constructor_WithItalicElement_CreatesItalicClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T012 [US1] Verify test `Constructor_WithUnderlineElement_CreatesUnderlineClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T013 [US1] Verify test `Constructor_WithStrikethroughElement_CreatesStrikethroughClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T010 [US1] Verify test `Constructor_WithBoldElement_CreatesBoldClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T011 [US1] Verify test `Constructor_WithItalicElement_CreatesItalicClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T012 [US1] Verify test `Constructor_WithUnderlineElement_CreatesUnderlineClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T013 [US1] Verify test `Constructor_WithStrikethroughElement_CreatesStrikethroughClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 1 verified - basic formatting works
 
@@ -83,12 +83,12 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 2
 
-- [ ] T014 [US2] Verify test `Constructor_WithStyleFgAttribute_CreatesFgStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T015 [US2] Verify test `Constructor_WithStyleBgAttribute_CreatesBgStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T016 [US2] Verify test `Constructor_WithStyleColorAttribute_TreatsAsAliasFg` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T017 [US2] Verify test `Constructor_WithStyleFgAndBg_CreatesCombinedStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T018 [US2] Verify test `Constructor_WithHexColor_PreservesColorFormat` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T018a [P] [US2] Add test `Constructor_WithBothFgAndColor_FgTakesPrecedence` for FR-022 in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T014 [US2] Verify test `Constructor_WithStyleFgAttribute_CreatesFgStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T015 [US2] Verify test `Constructor_WithStyleBgAttribute_CreatesBgStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T016 [US2] Verify test `Constructor_WithStyleColorAttribute_TreatsAsAliasFg` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T017 [US2] Verify test `Constructor_WithStyleFgAndBg_CreatesCombinedStyleFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T018 [US2] Verify test `Constructor_WithHexColor_PreservesColorFormat` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T018a [P] [US2] Add test `Constructor_WithBothFgAndColor_FgTakesPrecedence` for FR-022 in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 2 verified - colors work
 
@@ -102,8 +102,8 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 3
 
-- [ ] T019 [US3] Verify test `Constructor_WithCustomElement_CreatesClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T020 [US3] Verify test `Constructor_WithAnyElementName_UsesElementNameAsClass` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T019 [US3] Verify test `Constructor_WithCustomElement_CreatesClassFragment` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T020 [US3] Verify test `Constructor_WithAnyElementName_UsesElementNameAsClass` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 3 verified - custom classes work
 
@@ -117,9 +117,9 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 4
 
-- [ ] T021 [US4] Verify test `Constructor_WithNestedElements_AccumulatesClasses` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T022 [US4] Verify test `Constructor_WithMixedContentAndNesting_CreatesMultipleFragments` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T023 [US4] Verify test `Constructor_WithNestedFgColors_UsesInnermostColor` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T021 [US4] Verify test `Constructor_WithNestedElements_AccumulatesClasses` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T022 [US4] Verify test `Constructor_WithMixedContentAndNesting_CreatesMultipleFragments` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T023 [US4] Verify test `Constructor_WithNestedFgColors_UsesInnermostColor` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 4 verified - nesting works
 
@@ -133,11 +133,11 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 5
 
-- [ ] T024 [US5] Verify test `Format_WithPlainString_EscapesSpecialCharacters` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T025 [US5] Verify test `Format_WithMultipleArgs_SubstitutesAllPlaceholders` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T026 [US5] Verify test `Format_WithNamedArgs_SubstitutesCorrectly` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T027 [US5] Verify test `Format_WithSpecialChars_EscapesThem` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T028 [US5] Verify new `%` operator tests (T004-T007) pass in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T024 [US5] Verify test `Format_WithPlainString_EscapesSpecialCharacters` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T025 [US5] Verify test `Format_WithMultipleArgs_SubstitutesAllPlaceholders` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T026 [US5] Verify test `Format_WithNamedArgs_SubstitutesCorrectly` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T027 [US5] Verify test `Format_WithSpecialChars_EscapesThem` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T028 [US5] Verify new `%` operator tests (T004-T007) pass in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 5 verified - safe formatting works
 
@@ -151,7 +151,7 @@ The `Html` class is already ~95% complete:
 
 ### Verification for User Story 6
 
-- [ ] T029 [US6] Verify test `Escape_ReturnsEscapedString` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T029 [US6] Verify test `Escape_ReturnsEscapedString` passes in tests/Stroke.Tests/FormattedText/HtmlTests.cs
 
 **Checkpoint**: User Story 6 verified - escape utility works
 
@@ -161,11 +161,11 @@ The `Html` class is already ~95% complete:
 
 **Purpose**: Final verification and documentation
 
-- [ ] T030 [P] Run full test suite: `dotnet test --filter "FullyQualifiedName~HtmlTests"`
-- [ ] T031 [P] Verify test coverage meets 80% threshold per Constitution VIII
-- [ ] T032 [P] Verify all edge case tests pass in tests/Stroke.Tests/FormattedText/HtmlTests.cs
-- [ ] T033 Run quickstart.md validation examples manually
-- [ ] T034 Update CLAUDE.md recent changes if needed
+- [x] T030 [P] Run full test suite: `dotnet test --filter "FullyQualifiedName~HtmlTests"`
+- [x] T031 [P] Verify test coverage meets 80% threshold per Constitution VIII (Html.cs: 98.96%, HtmlFormatter.cs: 100%)
+- [x] T032 [P] Verify all edge case tests pass in tests/Stroke.Tests/FormattedText/HtmlTests.cs
+- [x] T033 Run quickstart.md validation examples manually
+- [x] T034 Update CLAUDE.md recent changes if needed
 
 ---
 

@@ -111,6 +111,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Raw/cooked terminal mode support
   - Mouse protocol support (X10, SGR, urxvt)
   - Thread-safe operations (>80% test coverage)
+- **Formatted Text System** — Styled text parsing and rendering
+  - `Html` class for HTML-like markup parsing (`<b>`, `<i>`, `<u>`, `<s>`, custom elements)
+  - Color attributes (`fg`, `bg`, `color`) with ANSI, hex, and named color support
+  - `%` operator for Python-style string interpolation with automatic HTML escaping
+  - `Ansi` class for ANSI escape sequence parsing (SGR codes, 256-color, true color)
+  - `Template` class for placeholder interpolation with lazy evaluation
+  - `PygmentsTokens` for Pygments-style token conversion
+  - `FormattedTextUtils` utilities (ZeroWidthEscape, FragmentListWidth, SplitLines, Merge)
+  - `AnyFormattedText` union type with implicit conversions
+  - Thread-safe operations (>90% test coverage)
 - **Layout Dimensions** — Sizing constraints for terminal UI layout
   - `Dimension` immutable class with min/max/preferred/weight properties
   - `Dimension.Exact(amount)` and `Dimension.Zero()` factory methods
