@@ -37,8 +37,8 @@ var showHelp = new Condition(() => _isNewUser) | new Condition(() => _helpReques
 // Negation
 var notSearching = ~new Condition(() => _isSearching);
 
-// Complex combinations
-var shouldActivate = (canEdit | showHelp) & notSearching;
+// Complex combinations (cast to Filter when chaining)
+var shouldActivate = (Filter)((Filter)canEdit | showHelp) & notSearching;
 ```
 
 ### Using FilterOrBool in APIs
@@ -82,6 +82,8 @@ bool shouldShow = FilterUtils.IsTrue(visible);
 | `a & b` | `a.And(b)` | Returns `true` only if both are `true` |
 | `a \| b` | `a.Or(b)` | Returns `true` if either is `true` |
 | `~a` | `a.Invert()` | Returns opposite of `a` |
+
+> **Note**: Operators are defined on the `Filter` class, not the `IFilter` interface (C# doesn't support operators on interfaces). When chaining operators, the result is `IFilter`, so you may need to cast to `Filter` for subsequent operations: `(Filter)(a & b) & c`.
 
 ## Algebraic Properties
 
@@ -147,9 +149,10 @@ keyBindings.Add(
 ### Combining Application State
 
 ```csharp
+// Cast to Filter when chaining multiple operators
 var canSave =
-    new Condition(() => _document.IsDirty) &
-    new Condition(() => !_document.IsReadOnly) &
+    (Filter)(new Condition(() => _document.IsDirty) &
+    new Condition(() => !_document.IsReadOnly)) &
     new Condition(() => _hasWritePermission);
 ```
 

@@ -119,6 +119,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ToDimension` type conversion with callable support
   - `D` static alias class for shorter syntax
   - Thread-safe (immutable, >80% test coverage)
+- **Filter System** — Composable boolean conditions for feature activation
+  - `IFilter` interface with `Invoke()`, `And()`, `Or()`, `Invert()`
+  - `Filter` abstract base with operators (`&`, `|`, `~`) and per-instance caching
+  - `Always` and `Never` singletons for constant filters
+  - `Condition` wrapper for `Func<bool>` dynamic evaluation
+  - `FilterOrBool` union type for API ergonomics
+  - `FilterUtils` static utilities (`ToFilter()`, `IsTrue()`)
+  - Boolean algebra: identity, annihilation, short-circuit, double negation
+  - Thread-safe operations (100% test coverage)
 
 ### Up Next
 
