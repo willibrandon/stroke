@@ -111,6 +111,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Raw/cooked terminal mode support
   - Mouse protocol support (X10, SGR, urxvt)
   - Thread-safe operations (>80% test coverage)
+- **Layout Dimensions** — Sizing constraints for terminal UI layout
+  - `Dimension` immutable class with min/max/preferred/weight properties
+  - `Dimension.Exact(amount)` and `Dimension.Zero()` factory methods
+  - `DimensionUtils.SumLayoutDimensions` for sequential layout aggregation
+  - `DimensionUtils.MaxLayoutDimensions` for parallel layout aggregation
+  - `ToDimension` type conversion with callable support
+  - `D` static alias class for shorter syntax
+  - Thread-safe (immutable, >80% test coverage)
 
 ### Up Next
 

@@ -396,8 +396,10 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke.Core (Point type) (013-mouse-events)
 - N/A (in-memory data structures only) (013-mouse-events)
 - C# 13 / .NET 10 + None (Stroke.FormattedText layer - zero external dependencies per Constitution III) (015-formatted-text-system)
+- C# 13 / .NET 10 + None (Stroke.Layout layer, depends only on Core per Constitution III) (016-layout-dimensions)
 
 ## Recent Changes
+- 016-layout-dimensions: Added Dimension class for layout sizing constraints (min/max/preferred/weight), DimensionUtils with SumLayoutDimensions and MaxLayoutDimensions aggregation functions, ToDimension/IsDimension type conversion utilities, D static alias class for shorter syntax (95 tests, >80% coverage)
 - 015-formatted-text-system: Added comprehensive formatted text system with Html (HTML-like markup parsing), Ansi (ANSI escape sequence parsing with SGR codes, 256-color, true color), Template (placeholder interpolation with lazy evaluation), PygmentsTokens (Pygments-style token conversion), extended FormattedTextUtils (ZeroWidthEscape, FragmentListWidth with Wcwidth, SplitLines, Merge), extended AnyFormattedText with implicit conversions for Html/Ansi/PygmentsTokens (281 tests, >90% coverage)
 - 014-input-system: Added cross-platform input system with IInput interface, Vt100Parser for VT100/ANSI escape sequence parsing, platform-specific implementations (Win32Input for Windows, Vt100Input for POSIX), pipe input for testing (IPipeInput, PosixPipeInput, Win32PipeInput, SimplePipeInput), raw/cooked terminal mode support, InputFactory for platform detection, KeyPress record struct, AnsiSequences dictionary (>80% coverage)
 - 013-mouse-events: Added mouse event system with MouseEventType enum (5 values), MouseButton enum (5 values), MouseModifiers [Flags] enum, MouseEvent record struct, MouseHandlers class (thread-safe with Lock), NotImplementedOrNone abstract class for event bubbling (106 tests, 100% coverage)
