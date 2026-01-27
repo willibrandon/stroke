@@ -134,6 +134,19 @@ public class HtmlTests
         Assert.Equal("fg:#ff0000", fragments[0].Style);
     }
 
+    [Fact]
+    public void Constructor_WithBothFgAndColor_FgTakesPrecedence()
+    {
+        // Per FR-022: When both fg and color are present, fg takes precedence
+        var html = new Html("<style fg='red' color='blue'>text</style>");
+
+        var fragments = html.ToFormattedText();
+
+        Assert.Single(fragments);
+        Assert.Equal("fg:red", fragments[0].Style);
+        Assert.Equal("text", fragments[0].Text);
+    }
+
     #endregion
 
     #region T025: Custom element to class tests
@@ -334,6 +347,77 @@ public class HtmlTests
         var escaped = Html.Escape("<b>test</b> & more");
 
         Assert.Equal("&lt;b&gt;test&lt;/b&gt; &amp; more", escaped);
+    }
+
+    #endregion
+
+    #region T028a: % operator tests
+
+    [Fact]
+    public void PercentOperator_WithSingleValue_SubstitutesAndEscapes()
+    {
+        var html = new Html("<b>%s</b>") % "hello";
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("hello", text);
+    }
+
+    [Fact]
+    public void PercentOperator_WithArray_SubstitutesAllPlaceholders()
+    {
+        var html = new Html("%s and %s") % new object[] { "foo", "bar" };
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("foo and bar", text);
+    }
+
+    [Fact]
+    public void PercentOperator_WithSpecialChars_EscapesThem()
+    {
+        var html = new Html("<b>%s</b>") % "<script>";
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        // The escaped characters should be decoded back to original by XML parser
+        Assert.Equal("<script>", text);
+    }
+
+    [Fact]
+    public void PercentOperator_WithInsufficientArgs_LeavesPlaceholders()
+    {
+        var html = new Html("%s and %s") % "only one";
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("only one and %s", text);
+    }
+
+    [Fact]
+    public void Format_WithMissingPlaceholder_LeavesPlaceholderUnchanged()
+    {
+        var html = new Html("Hello {name} and {other}!").Format(new Dictionary<string, object> { ["name"] = "World" });
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("Hello World and {other}!", text);
+    }
+
+    [Fact]
+    public void Format_WithNullDictionaryValue_TreatsAsEmptyString()
+    {
+        var html = new Html("Hello {name}!").Format(new Dictionary<string, object> { ["name"] = null! });
+
+        var fragments = html.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("Hello !", text);
     }
 
     #endregion
