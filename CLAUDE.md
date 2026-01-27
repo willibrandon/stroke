@@ -397,6 +397,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory data structures only) (013-mouse-events)
 - C# 13 / .NET 10 + None (Stroke.FormattedText layer - zero external dependencies per Constitution III) (015-formatted-text-system)
 - C# 13 / .NET 10 + None (Stroke.Layout layer, depends only on Core per Constitution III) (016-layout-dimensions)
+- C# 13 / .NET 10+ + None (Stroke.Filters is part of Core layer with zero external dependencies per Constitution III) (017-filter-system-core)
+- N/A (in-memory only - filter instances and caches) (017-filter-system-core)
 
 ## Recent Changes
 - 016-layout-dimensions: Added Dimension class for layout sizing constraints (min/max/preferred/weight), DimensionUtils with SumLayoutDimensions and MaxLayoutDimensions aggregation functions, ToDimension/IsDimension type conversion utilities, D static alias class for shorter syntax (95 tests, >80% coverage)
