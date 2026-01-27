@@ -329,6 +329,9 @@ public sealed class PlainTextOutput : IOutput
     public string Encoding => "utf-8";
 
     /// <inheritdoc/>
+    public TextWriter? Stdout => _stdout;
+
+    /// <inheritdoc/>
     public ColorDepth GetDefaultColorDepth() => ColorDepth.Depth1Bit;
 
     #endregion

@@ -324,6 +324,15 @@ public sealed class PlainTextOutputTests
         Assert.False(output.RespondsToCpr);
     }
 
+    [Fact]
+    public void Stdout_ReturnsUnderlyingWriter()
+    {
+        var writer = new StringWriter();
+        var output = new PlainTextOutput(writer);
+
+        Assert.Same(writer, output.Stdout);
+    }
+
     #endregion
 
     #region Integration

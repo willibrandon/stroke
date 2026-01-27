@@ -451,6 +451,15 @@ public sealed class Vt100OutputTests
         Assert.Equal(ColorDepth.Depth24Bit, output.GetDefaultColorDepth());
     }
 
+    [Fact]
+    public void Stdout_ReturnsUnderlyingWriter()
+    {
+        var writer = new StringWriter();
+        var output = Vt100Output.FromPty(writer);
+
+        Assert.Same(writer, output.Stdout);
+    }
+
     #endregion
 
     #region Windows-Specific Tests

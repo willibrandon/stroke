@@ -355,6 +355,20 @@ public interface IOutput
     string Encoding { get; }
 
     /// <summary>
+    /// Gets the underlying output stream, or <c>null</c> if not available.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This property exposes the underlying <see cref="TextWriter"/> for direct access.
+    /// It is used by features like <c>patch_stdout</c> that need to redirect output.
+    /// </para>
+    /// <para>
+    /// Returns <c>null</c> for outputs that don't have a backing stream (e.g., DummyOutput).
+    /// </para>
+    /// </remarks>
+    TextWriter? Stdout { get; }
+
+    /// <summary>
     /// Gets the default color depth for this output.
     /// </summary>
     /// <returns>The default color depth.</returns>

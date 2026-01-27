@@ -271,6 +271,9 @@ public sealed class DummyOutput : IOutput
     public string Encoding => "utf-8";
 
     /// <inheritdoc/>
+    public TextWriter? Stdout => null;
+
+    /// <inheritdoc/>
     public ColorDepth GetDefaultColorDepth() => ColorDepth.Depth1Bit;
 
     #endregion

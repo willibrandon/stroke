@@ -316,6 +316,14 @@ public sealed class DummyOutputTests
         Assert.Equal(ColorDepth.Depth1Bit, output.GetDefaultColorDepth());
     }
 
+    [Fact]
+    public void Stdout_ReturnsNull()
+    {
+        var output = new DummyOutput();
+
+        Assert.Null(output.Stdout);
+    }
+
     #endregion
 
     #region Windows-Specific

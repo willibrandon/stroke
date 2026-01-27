@@ -447,6 +447,9 @@ public sealed partial class Vt100Output : IOutput
     public string Encoding => "utf-8";
 
     /// <inheritdoc/>
+    public TextWriter? Stdout => _stdout;
+
+    /// <inheritdoc/>
     public ColorDepth GetDefaultColorDepth()
     {
         // First check for explicit default
