@@ -1,8 +1,10 @@
-# Feature 18: Cursor Shapes
+# Feature 18: Cursor Shape Configuration
 
 ## Overview
 
-Implement cursor shape configuration for changing the terminal cursor appearance based on editing mode.
+Implement cursor shape configuration classes for changing the terminal cursor appearance based on editing mode.
+
+**Note:** The `CursorShape` enum is defined in Feature 15 (Output) to avoid circular dependencies. This feature provides the configuration classes that use that enum.
 
 ## Python Prompt Toolkit Reference
 
@@ -10,58 +12,12 @@ Implement cursor shape configuration for changing the terminal cursor appearance
 
 ## Public API
 
-### CursorShape Enum
-
-```csharp
-namespace Stroke.Input;
-
-/// <summary>
-/// Cursor shape options.
-/// </summary>
-public enum CursorShape
-{
-    /// <summary>
-    /// Never change the cursor shape. Default value that tells the output
-    /// implementation to never send cursor shape escape sequences.
-    /// </summary>
-    NeverChange,
-
-    /// <summary>
-    /// Block cursor (filled rectangle).
-    /// </summary>
-    Block,
-
-    /// <summary>
-    /// Beam cursor (vertical line).
-    /// </summary>
-    Beam,
-
-    /// <summary>
-    /// Underline cursor.
-    /// </summary>
-    Underline,
-
-    /// <summary>
-    /// Blinking block cursor.
-    /// </summary>
-    BlinkingBlock,
-
-    /// <summary>
-    /// Blinking beam cursor.
-    /// </summary>
-    BlinkingBeam,
-
-    /// <summary>
-    /// Blinking underline cursor.
-    /// </summary>
-    BlinkingUnderline
-}
-```
-
 ### ICursorShapeConfig Interface
 
 ```csharp
-namespace Stroke.Input;
+namespace Stroke.CursorShapes;
+
+using Stroke.Output; // For CursorShape enum
 
 /// <summary>
 /// Abstract base for cursor shape configuration.
@@ -80,7 +36,7 @@ public interface ICursorShapeConfig
 ### SimpleCursorShapeConfig Class
 
 ```csharp
-namespace Stroke.Input;
+namespace Stroke.CursorShapes;
 
 /// <summary>
 /// Always show the given cursor shape.
@@ -105,7 +61,7 @@ public sealed class SimpleCursorShapeConfig : ICursorShapeConfig
 ### ModalCursorShapeConfig Class
 
 ```csharp
-namespace Stroke.Input;
+namespace Stroke.CursorShapes;
 
 /// <summary>
 /// Show cursor shape according to the current input mode.
@@ -123,7 +79,7 @@ public sealed class ModalCursorShapeConfig : ICursorShapeConfig
 ### DynamicCursorShapeConfig Class
 
 ```csharp
-namespace Stroke.Input;
+namespace Stroke.CursorShapes;
 
 /// <summary>
 /// Dynamic cursor shape configuration.
@@ -148,7 +104,7 @@ public sealed class DynamicCursorShapeConfig : ICursorShapeConfig
 ### ToCursorShapeConfig Function
 
 ```csharp
-namespace Stroke.Input;
+namespace Stroke.CursorShapes;
 
 /// <summary>
 /// Cursor shape configuration utilities.
@@ -175,21 +131,21 @@ public static class CursorShapeConfigUtils
 
 ```
 src/Stroke/
-└── Input/
-    ├── CursorShape.cs
+└── CursorShapes/
     ├── ICursorShapeConfig.cs
     ├── SimpleCursorShapeConfig.cs
     ├── ModalCursorShapeConfig.cs
     ├── DynamicCursorShapeConfig.cs
     └── CursorShapeConfigUtils.cs
 tests/Stroke.Tests/
-└── Input/
-    ├── CursorShapeTests.cs
+└── CursorShapes/
     ├── SimpleCursorShapeConfigTests.cs
     ├── ModalCursorShapeConfigTests.cs
     ├── DynamicCursorShapeConfigTests.cs
     └── CursorShapeConfigUtilsTests.cs
 ```
+
+**Note:** The `CursorShape` enum and its tests are in Feature 15 (Output) at `src/Stroke/Output/CursorShape.cs`.
 
 ## Implementation Notes
 
@@ -227,19 +183,19 @@ The output layer tracks whether the cursor shape was ever changed. On exit, it o
 
 ## Dependencies
 
+- `Stroke.Output.CursorShape` (Feature 15) - Cursor shape enum
 - `Stroke.Application.Application<TResult>` (Feature 31) - Application class
 - `Stroke.KeyBinding.EditingMode` (Feature 27) - Editing mode enum
 - `Stroke.KeyBinding.ViState` (Feature 28) - Vi input mode
 
 ## Implementation Tasks
 
-1. Implement `CursorShape` enum
-2. Implement `ICursorShapeConfig` interface
-3. Implement `SimpleCursorShapeConfig` class
-4. Implement `ModalCursorShapeConfig` class
-5. Implement `DynamicCursorShapeConfig` class
-6. Implement `CursorShapeConfigUtils` static class
-7. Write comprehensive unit tests
+1. Implement `ICursorShapeConfig` interface
+2. Implement `SimpleCursorShapeConfig` class
+3. Implement `ModalCursorShapeConfig` class
+4. Implement `DynamicCursorShapeConfig` class
+5. Implement `CursorShapeConfigUtils` static class
+6. Write comprehensive unit tests
 
 ## Acceptance Criteria
 

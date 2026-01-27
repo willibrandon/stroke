@@ -587,11 +587,13 @@ On Unix:
 
 - `Stroke.Layout` (Feature 29) - Layout class
 - `Stroke.Rendering.Renderer` (Feature 23) - Renderer
-- `Stroke.KeyBinding.KeyProcessor` (Feature 19) - Key processing
-- `Stroke.Input` (Feature 14) - Input abstraction
-- `Stroke.Output` (Feature 16) - Output abstraction
-- `Stroke.Styles` (Feature 03) - Style system
-- `Stroke.Clipboard` (Feature 42) - Clipboard
+- `Stroke.KeyBinding.KeyProcessor` (Feature 20) - Key processing
+- `Stroke.Input` (Feature 16) - Input abstraction
+- `Stroke.Output` (Feature 15) - Output abstraction (includes CursorShape enum)
+- `Stroke.Styles` (Feature 14) - Style system
+- `Stroke.Clipboard` (Feature 04) - Clipboard
+
+**Note:** Feature 18 (Cursor Shape Configuration) depends on this feature, not the other way around. Application accepts `ICursorShapeConfig` as a constructor parameter, but the configuration classes are implemented after Application.
 
 ## Implementation Tasks
 

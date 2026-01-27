@@ -83,6 +83,54 @@ public static class ColorDepthExtensions
 }
 ```
 
+### CursorShape Enum
+
+```csharp
+namespace Stroke.Output;
+
+/// <summary>
+/// Cursor shape options.
+/// </summary>
+public enum CursorShape
+{
+    /// <summary>
+    /// Never change the cursor shape. Default value that tells the output
+    /// implementation to never send cursor shape escape sequences.
+    /// </summary>
+    NeverChange,
+
+    /// <summary>
+    /// Block cursor (filled rectangle).
+    /// </summary>
+    Block,
+
+    /// <summary>
+    /// Beam cursor (vertical line).
+    /// </summary>
+    Beam,
+
+    /// <summary>
+    /// Underline cursor.
+    /// </summary>
+    Underline,
+
+    /// <summary>
+    /// Blinking block cursor.
+    /// </summary>
+    BlinkingBlock,
+
+    /// <summary>
+    /// Blinking beam cursor.
+    /// </summary>
+    BlinkingBeam,
+
+    /// <summary>
+    /// Blinking underline cursor.
+    /// </summary>
+    BlinkingUnderline
+}
+```
+
 ### IOutput Interface (Abstract Base)
 
 ```csharp
@@ -489,6 +537,7 @@ public static class AnsiColorCodes
 src/Stroke/
 └── Output/
     ├── ColorDepth.cs
+    ├── CursorShape.cs
     ├── IOutput.cs
     ├── DummyOutput.cs
     ├── Vt100Output.cs
@@ -501,6 +550,7 @@ src/Stroke/
 tests/Stroke.Tests/
 └── Output/
     ├── ColorDepthTests.cs
+    ├── CursorShapeTests.cs
     ├── DummyOutputTests.cs
     ├── Vt100OutputTests.cs
     ├── PlainTextOutputTests.cs
@@ -553,22 +603,24 @@ The output tracks cursor visibility state to avoid sending redundant hide/show c
 
 - `Stroke.Core.Size` (Feature 00) - Terminal size representation
 - `Stroke.Styles.Attrs` (Feature 14) - Style attributes
-- `Stroke.Input.CursorShape` (Feature 18) - Cursor shape enum
+
+**Note:** The `CursorShape` enum is defined in this feature (not Feature 18) to avoid circular dependencies. Feature 18 (Cursor Shape Configuration) depends on this feature for the enum.
 
 ## Implementation Tasks
 
 1. Implement `ColorDepth` enum with aliases
 2. Implement `ColorDepthExtensions` with environment detection
-3. Implement `IOutput` interface
-4. Implement `DummyOutput` class
-5. Implement `AnsiColorCodes` static class
-6. Implement `SixteenColorCache` internal class
-7. Implement `TwoFiftySixColorCache` internal class
-8. Implement `EscapeCodeCache` internal class
-9. Implement `Vt100Output` class with all escape sequences
-10. Implement `PlainTextOutput` class
-11. Implement `OutputFactory.CreateOutput`
-12. Write comprehensive unit tests
+3. Implement `CursorShape` enum
+4. Implement `IOutput` interface
+5. Implement `DummyOutput` class
+6. Implement `AnsiColorCodes` static class
+7. Implement `SixteenColorCache` internal class
+8. Implement `TwoFiftySixColorCache` internal class
+9. Implement `EscapeCodeCache` internal class
+10. Implement `Vt100Output` class with all escape sequences
+11. Implement `PlainTextOutput` class
+12. Implement `OutputFactory.CreateOutput`
+13. Write comprehensive unit tests
 
 ## Acceptance Criteria
 
