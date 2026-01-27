@@ -21,6 +21,7 @@ dotnet run -c Release --filter '*FormattedTextBenchmarks*'
 dotnet run -c Release --filter '*TemplateScalingBenchmarks*'
 dotnet run -c Release --filter '*AnyFormattedTextBenchmarks*'
 dotnet run -c Release --filter '*FormattedTextUtilsBenchmarks*'
+dotnet run -c Release --filter '*OutputBenchmarks*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -68,6 +69,16 @@ dotnet run -c Release --list flat
 | HTML 100KB parsing | T111: HTML markup parsing |
 | ANSI 1KB/10KB/100KB parsing | T112: ANSI escape sequence parsing |
 
+### Output System (NFR-003)
+
+| Benchmark | Target | Description |
+|-----------|--------|-------------|
+| Color cache memory | ≤10KB | NFR-003: Typical use case memory budget |
+| SetAttributes (24-bit) | O(1) cache | Escape code cache lookup |
+| SetAttributes (256-color) | O(1) cache | Color palette mapping |
+| SetAttributes (16-color) | O(1) cache | Nearest color search |
+| Cache hits (after warmup) | 0 allocs | Steady-state should not allocate |
+
 ## Benchmark Classes
 
 ### Completion System
@@ -89,3 +100,9 @@ dotnet run -c Release --list flat
 - **TemplateScalingBenchmarks** - Template interpolation with 5/50 placeholders
 - **AnyFormattedTextBenchmarks** - Implicit conversion overhead from string/Html/Ansi/FormattedText
 - **FormattedTextUtilsBenchmarks** - FragmentListToText, FragmentListWidth, SplitLines with 10/1000 fragments
+
+### Output System
+- **OutputBenchmarks** - Basic output operations (write, cursor movement, SetAttributes)
+- **ColorCacheMemoryBenchmarks** - Memory footprint with N unique colors (10, 50, 100)
+- **ColorCacheStressBenchmarks** - Full cache build scenarios (256-color, 16-color, 24-bit)
+- **OutputImplementationBenchmarks** - Comparison of Vt100Output, PlainTextOutput, DummyOutput

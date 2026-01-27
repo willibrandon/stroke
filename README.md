@@ -152,6 +152,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Default styles: `PromptToolkitStyle`, `ColorsStyle`, `WidgetsStyle`, `PygmentsDefaultStyle`
   - `PygmentsStyleUtils` for syntax highlighting integration
   - Thread-safe operations (>80% test coverage)
+- **Output System** — Terminal output abstraction with VT100/ANSI support
+  - `IOutput` interface with 30+ terminal control methods
+  - `Vt100Output` VT100/ANSI escape sequence implementation
+  - `PlainTextOutput` for redirected streams (files, pipes)
+  - `DummyOutput` no-op implementation for testing
+  - `ColorDepth` enum (1-bit, 4-bit, 8-bit, 24-bit) with environment detection
+  - `NO_COLOR`, `STROKE_COLOR_DEPTH`, `COLORTERM`, `TERM` environment variable support
+  - Thread-safe color caches for 16-color and 256-color palette mapping
+  - `CursorShape` enum with block, underline, beam shapes and blinking variants
+  - `ICursorShapeConfig` with modal Vi/Emacs cursor shape support
+  - `OutputFactory` for platform detection (TTY vs redirected)
+  - `FlushStdout` helper for immediate write-and-flush operations
+  - Thread-safe operations (85.7% test coverage)
 
 ### Up Next
 
