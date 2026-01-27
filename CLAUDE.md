@@ -401,6 +401,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only - filter instances and caches) (017-filter-system-core)
 - C# 13 / .NET 10 + None (Stroke.Styles is part of Core layer, zero external dependencies per Constitution III) (018-styles-system)
 - N/A (in-memory style definitions and caches only) (018-styles-system)
+- N/A (in-memory parsing only) (019-html-formatted-text)
 
 ## Recent Changes
 - 018-styles-system: Added comprehensive styles system with Style class (rule-based styling with class lookup and inheritance), Attrs record struct (color/formatting attributes), BaseStyle abstract class, StyleAndTextTuples helpers, named colors (148 CSS colors in NamedColors), ANSI colors (16 standard + 256 indexed), color utilities (ParseColor, AnsiColorToRgb), style transformations (SwapLightAndDarkStyleTransformation, ReverseStyleTransformation, SetDefaultColorStyleTransformation, AdjustBrightnessStyleTransformation, ConditionalStyleTransformation, DummyStyleTransformation), DynamicStyle/ConditionalStyle for runtime styling, MergeStyles for combining styles, default styles (PromptToolkitStyle, ColorsStyle, WidgetsStyle, PygmentsDefaultStyle), PygmentsStyleUtils for syntax highlighting integration (542 tests, >80% coverage)
