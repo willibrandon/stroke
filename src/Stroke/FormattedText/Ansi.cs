@@ -88,6 +88,57 @@ public sealed class Ansi : IFormattedText
     /// <returns>The text with \x1b and \b replaced with '?'.</returns>
     public static string Escape(object? text) => AnsiFormatter.Escape(text);
 
+    /// <summary>
+    /// Formats ANSI text with %s-style substitution (single value).
+    /// </summary>
+    /// <param name="ansi">The Ansi template.</param>
+    /// <param name="value">The value to substitute.</param>
+    /// <returns>A new Ansi with the value escaped and substituted.</returns>
+    /// <remarks>
+    /// <para>
+    /// ANSI escape sequences (\x1b) and backspaces (\b) in the value are replaced with '?'.
+    /// This prevents style injection attacks.
+    /// </para>
+    /// <para>
+    /// Equivalent to Python Prompt Toolkit's <c>ANSI.__mod__</c> method.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var greeting = new Ansi("\x1b[1mHello %s!\x1b[0m") % "World";
+    /// // Result: Bold "Hello World!"
+    /// </code>
+    /// </example>
+    public static Ansi operator %(Ansi ansi, object value) =>
+        new(AnsiFormatter.FormatPercent(ansi.Value, value));
+
+    /// <summary>
+    /// Formats ANSI text with %s-style substitution (multiple values).
+    /// </summary>
+    /// <param name="ansi">The Ansi template.</param>
+    /// <param name="values">The values to substitute.</param>
+    /// <returns>A new Ansi with all values escaped and substituted.</returns>
+    /// <remarks>
+    /// <para>
+    /// ANSI escape sequences (\x1b) and backspaces (\b) in values are replaced with '?'.
+    /// </para>
+    /// <para>
+    /// If there are more placeholders than values, extra placeholders remain as literal %s.
+    /// If there are more values than placeholders, extra values are ignored.
+    /// </para>
+    /// <para>
+    /// Equivalent to Python Prompt Toolkit's <c>ANSI.__mod__</c> method with tuple argument.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var message = new Ansi("%s said: %s") % new object[] { "Alice", "Hello" };
+    /// // Result: "Alice said: Hello"
+    /// </code>
+    /// </example>
+    public static Ansi operator %(Ansi ansi, object[] values) =>
+        new(AnsiFormatter.FormatPercent(ansi.Value, values ?? throw new ArgumentNullException(nameof(values))));
+
     /// <inheritdoc />
     public override string ToString() => $"Ansi({Value})";
 

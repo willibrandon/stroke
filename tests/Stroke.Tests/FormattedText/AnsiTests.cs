@@ -562,4 +562,162 @@ public class AnsiTests
     }
 
     #endregion
+
+    #region T049: % operator tests
+
+    [Fact]
+    public void PercentOperator_WithSingleValue_SubstitutesAndEscapes()
+    {
+        var ansi = new Ansi("\x1b[1mHello %s!\x1b[0m") % "World";
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("Hello World!", text);
+        Assert.Contains(fragments, f => f.Style.Contains("bold") && f.Text == "H");
+    }
+
+    [Fact]
+    public void PercentOperator_WithAnsiInValue_EscapesControlChars()
+    {
+        var ansi = new Ansi("Value: %s") % "\x1b[31mred";
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        // Escape character should be replaced with '?'
+        Assert.Contains("?[31mred", text);
+        Assert.False(ansi.Value.Contains('\x1b'), "Value should not contain ESC character");
+    }
+
+    [Fact]
+    public void PercentOperator_WithBackspaceInValue_EscapesBackspace()
+    {
+        var ansi = new Ansi("Value: %s") % "a\bb";
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        // Backspace should be replaced with '?'
+        Assert.Contains("a?b", text);
+        Assert.False(ansi.Value.Contains('\b'), "Value should not contain backspace character");
+    }
+
+    [Fact]
+    public void PercentOperator_WithCombinedEscape_NeutralizesBoth()
+    {
+        var ansi = new Ansi("%s") % "\x1b\b";
+
+        Assert.Equal("??", ansi.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithNullValue_ConvertsToEmpty()
+    {
+        var ansi = new Ansi("Hello %s!") % (object)null!;
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("Hello !", text);
+    }
+
+    [Fact]
+    public void PercentOperator_PreservesOriginalStyling()
+    {
+        var ansi = new Ansi("\x1b[1mHello %s!\x1b[0m") % "World";
+
+        var fragments = ansi.ToFormattedText();
+
+        // Bold styling should be preserved on template text
+        Assert.Contains(fragments, f => f.Style.Contains("bold") && f.Text == "H");
+        Assert.Contains(fragments, f => f.Style.Contains("bold") && f.Text == "e");
+        Assert.Contains(fragments, f => f.Style.Contains("bold") && f.Text == "W");
+    }
+
+    [Fact]
+    public void PercentOperator_ReturnsNewInstance()
+    {
+        var original = new Ansi("Hello %s!");
+        var result = original % "World";
+
+        Assert.NotSame(original, result);
+        Assert.Equal("Hello %s!", original.Value);
+        Assert.Equal("Hello World!", result.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithTerminalReset_NeutralizesEscape()
+    {
+        // SEC-T004: Terminal reset sequences should be neutralized
+        var ansi = new Ansi("%s") % "\x1b[0m\x1b[H\x1b[J";
+
+        // All escape characters should be replaced with '?'
+        Assert.Equal("?[0m?[H?[J", ansi.Value);
+        Assert.False(ansi.Value.Contains('\x1b'), "Value should not contain ESC character");
+    }
+
+    [Fact]
+    public void PercentOperator_WithNonStringValue_CallsToString()
+    {
+        var ansi = new Ansi("Value: %s") % 42;
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("Value: 42", text);
+    }
+
+    [Fact]
+    public void PercentOperator_WithNoPlaceholders_ReturnsUnchanged()
+    {
+        var ansi = new Ansi("Hello World") % "ignored";
+
+        Assert.Equal("Hello World", ansi.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithArray_SubstitutesAllPlaceholders()
+    {
+        var ansi = new Ansi("%s and %s") % new object[] { "foo", "bar" };
+
+        var fragments = ansi.ToFormattedText();
+        var text = FormattedTextUtils.FragmentListToText(fragments);
+
+        Assert.Equal("foo and bar", text);
+    }
+
+    [Fact]
+    public void PercentOperator_WithInsufficientArgs_LeavesPlaceholders()
+    {
+        var ansi = new Ansi("%s and %s") % new object[] { "only one" };
+
+        Assert.Equal("only one and %s", ansi.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithExtraArgs_IgnoresExtra()
+    {
+        var ansi = new Ansi("%s") % new object[] { "first", "second" };
+
+        Assert.Equal("first", ansi.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithEmptyArray_LeavesTemplate()
+    {
+        var ansi = new Ansi("%s") % new object[] { };
+
+        Assert.Equal("%s", ansi.Value);
+    }
+
+    [Fact]
+    public void PercentOperator_WithNullArray_ThrowsArgumentNull()
+    {
+        var ansi = new Ansi("%s");
+
+        Assert.Throws<ArgumentNullException>(() => ansi % (object[]?)null!);
+    }
+
+    #endregion
 }
