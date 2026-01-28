@@ -213,18 +213,23 @@ public sealed class KeyBindings : IKeyBindingsBase
 
         var cacheKey = keys as ImmutableArray<KeyOrChar>? ?? [.. keys];
 
+        // Take a snapshot of bindings BEFORE entering cache lock to avoid deadlock.
+        // The cache callback must not acquire _lock while cache lock is held.
+        List<Binding> snapshot;
+        using (_lock.EnterScope())
+        {
+            snapshot = [.. _bindings];
+        }
+
         return _forKeysCache.Get(cacheKey, () =>
         {
             List<Binding> matches = [];
 
-            using (_lock.EnterScope())
+            foreach (var binding in snapshot)
             {
-                foreach (var binding in _bindings)
+                if (MatchesKeys(binding.Keys, keys))
                 {
-                    if (MatchesKeys(binding.Keys, keys))
-                    {
-                        matches.Add(binding);
-                    }
+                    matches.Add(binding);
                 }
             }
 
@@ -251,19 +256,24 @@ public sealed class KeyBindings : IKeyBindingsBase
 
         var cacheKey = keys as ImmutableArray<KeyOrChar>? ?? [.. keys];
 
+        // Take a snapshot of bindings BEFORE entering cache lock to avoid deadlock.
+        // The cache callback must not acquire _lock while cache lock is held.
+        List<Binding> snapshot;
+        using (_lock.EnterScope())
+        {
+            snapshot = [.. _bindings];
+        }
+
         return _startingCache.Get(cacheKey, () =>
         {
             List<Binding> matches = [];
 
-            using (_lock.EnterScope())
+            foreach (var binding in snapshot)
             {
-                foreach (var binding in _bindings)
+                // Binding must be longer than the prefix
+                if (binding.Keys.Count > keys.Count && StartsWithPrefix(binding.Keys, keys))
                 {
-                    // Binding must be longer than the prefix
-                    if (binding.Keys.Count > keys.Count && StartsWithPrefix(binding.Keys, keys))
-                    {
-                        matches.Add(binding);
-                    }
+                    matches.Add(binding);
                 }
             }
 
