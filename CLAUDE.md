@@ -406,6 +406,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + None (Stroke.Output depends only on Stroke.Core and Stroke.Styles per Constitution III) (021-output-system)
 - N/A (in-memory output buffers only) (021-output-system)
 - C# 13 / .NET 10+ + Stroke.Core (SimpleCache, IFilter, FilterOrBool), Stroke.Input (Keys enum) (022-key-bindings-system)
+- C# 13 / .NET 10 + Stroke.Input (KeyPress), Stroke.Clipboard (ClipboardData), Stroke.KeyBinding (KeyPressEvent) (023-editing-modes-state)
 
 ## Recent Changes
 - 022-key-bindings-system: Added Key Bindings System with KeyBindings registry (thread-safe, caching), Binding immutable class, KeyOrChar/KeyPress types, KeyPressEvent, KeyBindingDecorator factory, proxy types (ConditionalKeyBindings, MergedKeyBindings, GlobalOnlyKeyBindings, DynamicKeyBindings), KeyBindingUtils (ParseKey, Merge), KeyBindingsExtensions (WithFilter, GlobalOnly, Merge), FilterOrBool.HasValue property for distinguishing struct default from explicit values (365 tests, >80% coverage)
