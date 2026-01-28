@@ -185,6 +185,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `OperatorFuncDelegate` for Vi operator function callbacks
   - InputMode setter side effects (clears operator state when entering Navigation mode)
   - Thread-safe operations with `System.Threading.Lock` (116 tests, 100% coverage)
+- **Utilities** — Common utility classes ported from Python Prompt Toolkit
+  - `Event<TSender>` pub/sub with `+=` and `-=` operators for handler management
+  - `UnicodeWidth` character/string width calculation with thread-safe LRU caching
+  - `PlatformUtils` OS detection (Windows/macOS/Linux) and environment variable checks
+  - `CollectionUtils.TakeUsingWeights` for proportional item distribution
+  - `ConversionUtils` with `ToStr`, `ToInt`, `ToFloat` lazy value conversion
+  - `AnyFloat` union type for double values or callables returning double
+  - `DummyContext` no-op IDisposable singleton
+  - Thread-safe operations (146 tests, >80% coverage)
 
 ### Up Next
 
