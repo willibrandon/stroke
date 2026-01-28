@@ -407,6 +407,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory output buffers only) (021-output-system)
 - C# 13 / .NET 10+ + Stroke.Core (SimpleCache, IFilter, FilterOrBool), Stroke.Input (Keys enum) (022-key-bindings-system)
 - C# 13 / .NET 10 + Stroke.Input (KeyPress), Stroke.Clipboard (ClipboardData), Stroke.KeyBinding (KeyPressEvent) (023-editing-modes-state)
+- C# 13 / .NET 10 + Wcwidth NuGet package (v4.0.1, MIT) for character width calculation (024-utilities)
+- N/A (in-memory caches only) (024-utilities)
 
 ## Recent Changes
 - 023-editing-modes-state: Added Vi/Emacs editing mode state management with EditingMode enum (Vi, Emacs), InputMode enum (Insert, InsertMultiple, Navigation, Replace, ReplaceSingle), BufferNames static class (SearchBuffer, DefaultBuffer, SystemBuffer), CharacterFind sealed record for f/F/t/T commands, ViState class (thread-safe with Lock, InputMode setter side effects, named registers, Reset()), EmacsState class (thread-safe macro recording with StartMacro/EndMacro/AppendToRecording), OperatorFuncDelegate (116 tests, 100% coverage)
