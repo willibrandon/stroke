@@ -405,6 +405,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + None (Stroke.Core layer with zero external dependencies per Constitution III) (020-ansi-formatted-text)
 - C# 13 / .NET 10+ + None (Stroke.Output depends only on Stroke.Core and Stroke.Styles per Constitution III) (021-output-system)
 - N/A (in-memory output buffers only) (021-output-system)
+- C# 13 / .NET 10+ + Stroke.Core (SimpleCache, IFilter, FilterOrBool), Stroke.Input (Keys enum) (022-key-bindings-system)
 
 ## Recent Changes
 - 021-output-system: Added VT100 output system with IOutput interface, Vt100Output/PlainTextOutput/DummyOutput implementations, ColorDepth enum with environment detection (NO_COLOR, STROKE_COLOR_DEPTH), thread-safe color caches (16-color, 256-color), CursorShape enum with modal Vi/Emacs support, OutputFactory for platform detection, FlushStdout helper (420 tests, 85.7% coverage)
