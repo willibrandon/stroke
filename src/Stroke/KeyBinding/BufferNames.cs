@@ -11,11 +11,11 @@ namespace Stroke.KeyBinding;
 public static class BufferNames
 {
     /// <summary>Name of the search buffer.</summary>
-    public const string SearchBuffer = "SEARCH_BUFFER";
+    public const string Search = "SEARCH_BUFFER";
 
     /// <summary>Name of the default buffer.</summary>
-    public const string DefaultBuffer = "DEFAULT_BUFFER";
+    public const string Default = "DEFAULT_BUFFER";
 
     /// <summary>Name of the system buffer.</summary>
-    public const string SystemBuffer = "SYSTEM_BUFFER";
+    public const string System = "SYSTEM_BUFFER";
 }

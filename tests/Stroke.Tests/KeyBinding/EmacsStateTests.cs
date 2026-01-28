@@ -71,7 +71,8 @@ public class EmacsStateTests
 
         state.EndMacro();
 
-        Assert.Equal(2, state.Macro.Count);
+        Assert.NotNull(state.Macro);
+        Assert.Equal(2, state.Macro!.Count);
         Assert.Equal(Keys.ControlA, state.Macro[0].Key);
         Assert.Equal(Keys.ControlE, state.Macro[1].Key);
     }
@@ -99,21 +100,21 @@ public class EmacsStateTests
     }
 
     [Fact]
-    public void EmacsState_EndMacro_WhenNotRecording_SetsMacroToEmptyList()
+    public void EmacsState_EndMacro_WhenNotRecording_SetsMacroToNull()
     {
         var state = new EmacsState();
         // First record something
         state.StartMacro();
         state.AppendToRecording(new Stroke.Input.KeyPress(Keys.ControlA));
         state.EndMacro();
-        Assert.Single(state.Macro);
+        Assert.Single(state.Macro!);
 
         // Now call EndMacro when not recording
         state.EndMacro();
 
-        // Macro should be empty list when EndMacro called while not recording
-        Assert.NotNull(state.Macro);
-        Assert.Empty(state.Macro);
+        // Macro becomes null when EndMacro called while not recording
+        // (matches Python: self.macro = self.current_recording where current_recording is None)
+        Assert.Null(state.Macro);
     }
 
     [Fact]
@@ -135,12 +136,12 @@ public class EmacsStateTests
         state.StartMacro();
         state.AppendToRecording(new Stroke.Input.KeyPress(Keys.ControlA));
         state.EndMacro();
-        Assert.Single(state.Macro);
+        Assert.Single(state.Macro!);
 
         state.Reset();
 
         // Macro is NOT cleared by Reset()
-        Assert.Single(state.Macro);
+        Assert.Single(state.Macro!);
     }
 
     [Fact]
@@ -198,7 +199,7 @@ public class EmacsStateTests
         state.EndMacro();
 
         Assert.NotNull(state.Macro);
-        Assert.Empty(state.Macro);
+        Assert.Empty(state.Macro!);
     }
 
     [Fact]
@@ -223,7 +224,7 @@ public class EmacsStateTests
         state.StartMacro();
         state.AppendToRecording(new Stroke.Input.KeyPress(Keys.ControlA));
         state.EndMacro();
-        Assert.Single(state.Macro);
+        Assert.Single(state.Macro!);
 
         // Second session
         state.StartMacro();
@@ -232,7 +233,8 @@ public class EmacsStateTests
         state.EndMacro();
 
         // Macro should be the second session's content
-        Assert.Equal(2, state.Macro.Count);
+        Assert.NotNull(state.Macro);
+        Assert.Equal(2, state.Macro!.Count);
         Assert.Equal(Keys.ControlB, state.Macro[0].Key);
     }
 
@@ -364,7 +366,7 @@ public class EmacsStateTests
 
         // Even if we somehow managed to modify the copy (via cast),
         // the internal state should be unaffected
-        Assert.Single(state.Macro);
+        Assert.Single(state.Macro!);
     }
 
     #endregion

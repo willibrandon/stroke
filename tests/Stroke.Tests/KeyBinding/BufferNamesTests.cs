@@ -9,21 +9,21 @@ namespace Stroke.Tests.KeyBinding;
 public class BufferNamesTests
 {
     [Fact]
-    public void BufferNames_SearchBuffer_HasCorrectValue()
+    public void BufferNames_Search_HasCorrectValue()
     {
-        Assert.Equal("SEARCH_BUFFER", BufferNames.SearchBuffer);
+        Assert.Equal("SEARCH_BUFFER", BufferNames.Search);
     }
 
     [Fact]
-    public void BufferNames_DefaultBuffer_HasCorrectValue()
+    public void BufferNames_Default_HasCorrectValue()
     {
-        Assert.Equal("DEFAULT_BUFFER", BufferNames.DefaultBuffer);
+        Assert.Equal("DEFAULT_BUFFER", BufferNames.Default);
     }
 
     [Fact]
-    public void BufferNames_SystemBuffer_HasCorrectValue()
+    public void BufferNames_System_HasCorrectValue()
     {
-        Assert.Equal("SYSTEM_BUFFER", BufferNames.SystemBuffer);
+        Assert.Equal("SYSTEM_BUFFER", BufferNames.System);
     }
 
     [Fact]
@@ -42,9 +42,9 @@ public class BufferNamesTests
     {
         var values = new[]
         {
-            BufferNames.SearchBuffer,
-            BufferNames.DefaultBuffer,
-            BufferNames.SystemBuffer
+            BufferNames.Search,
+            BufferNames.Default,
+            BufferNames.System
         };
 
         var uniqueCount = values.Distinct().Count();
@@ -55,9 +55,9 @@ public class BufferNamesTests
     [Fact]
     public void BufferNames_ConstantsAreNotNullOrEmpty()
     {
-        Assert.False(string.IsNullOrEmpty(BufferNames.SearchBuffer));
-        Assert.False(string.IsNullOrEmpty(BufferNames.DefaultBuffer));
-        Assert.False(string.IsNullOrEmpty(BufferNames.SystemBuffer));
+        Assert.False(string.IsNullOrEmpty(BufferNames.Search));
+        Assert.False(string.IsNullOrEmpty(BufferNames.Default));
+        Assert.False(string.IsNullOrEmpty(BufferNames.System));
     }
 
     [Fact]
@@ -65,13 +65,13 @@ public class BufferNamesTests
     {
         var buffers = new Dictionary<string, object>
         {
-            { BufferNames.SearchBuffer, new object() },
-            { BufferNames.DefaultBuffer, new object() },
-            { BufferNames.SystemBuffer, new object() }
+            { BufferNames.Search, new object() },
+            { BufferNames.Default, new object() },
+            { BufferNames.System, new object() }
         };
 
         Assert.Equal(3, buffers.Count);
-        Assert.True(buffers.ContainsKey(BufferNames.SearchBuffer));
+        Assert.True(buffers.ContainsKey(BufferNames.Search));
     }
 
     [Fact]
@@ -79,8 +79,8 @@ public class BufferNamesTests
     {
         // Verify exact match with Python Prompt Toolkit values
         // From prompt_toolkit/enums.py
-        Assert.Equal("SEARCH_BUFFER", BufferNames.SearchBuffer);
-        Assert.Equal("DEFAULT_BUFFER", BufferNames.DefaultBuffer);
-        Assert.Equal("SYSTEM_BUFFER", BufferNames.SystemBuffer);
+        Assert.Equal("SEARCH_BUFFER", BufferNames.Search);
+        Assert.Equal("DEFAULT_BUFFER", BufferNames.Default);
+        Assert.Equal("SYSTEM_BUFFER", BufferNames.System);
     }
 }

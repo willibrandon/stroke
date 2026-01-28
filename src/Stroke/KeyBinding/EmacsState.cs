@@ -17,7 +17,7 @@ using InputKeyPress = Stroke.Input.KeyPress;
 public sealed class EmacsState
 {
     private readonly Lock _lock = new();
-    private List<InputKeyPress> _macro = [];
+    private List<InputKeyPress>? _macro = [];
     private List<InputKeyPress>? _currentRecording;
 
     /// <summary>
@@ -28,18 +28,25 @@ public sealed class EmacsState
     }
 
     /// <summary>
-    /// Gets the last recorded macro, or an empty list if none.
+    /// Gets the last recorded macro, or null if no macro has been recorded or if
+    /// <see cref="EndMacro"/> was called while not recording.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Returns a copy of the internal list to ensure thread safety.
+    /// </para>
+    /// <para>
+    /// Initially an empty list. Becomes null if <see cref="EndMacro"/> is called
+    /// while not recording (matching Python Prompt Toolkit behavior).
+    /// </para>
     /// </remarks>
-    public IReadOnlyList<InputKeyPress> Macro
+    public IReadOnlyList<InputKeyPress>? Macro
     {
         get
         {
             using (_lock.EnterScope())
             {
-                return _macro.ToList();
+                return _macro?.ToList();
             }
         }
     }
@@ -94,23 +101,22 @@ public sealed class EmacsState
     /// Ends macro recording.
     /// </summary>
     /// <remarks>
-    /// Copies <see cref="CurrentRecording"/> to <see cref="Macro"/> and sets <see cref="CurrentRecording"/> to null.
-    /// If not recording, sets <see cref="Macro"/> to an empty list.
+    /// <para>
+    /// Sets <see cref="Macro"/> to the current recording and clears <see cref="CurrentRecording"/>.
+    /// </para>
+    /// <para>
+    /// If not recording, <see cref="Macro"/> becomes null (matching Python Prompt Toolkit's
+    /// <c>self.macro = self.current_recording</c> which sets macro to None when not recording).
+    /// </para>
     /// </remarks>
     public void EndMacro()
     {
         using (_lock.EnterScope())
         {
-            if (_currentRecording != null)
-            {
-                _macro = [.. _currentRecording];
-                _currentRecording = null;
-            }
-            else
-            {
-                // When not recording, EndMacro clears the macro
-                _macro = [];
-            }
+            // Python: self.macro = self.current_recording
+            // When not recording, current_recording is None, so macro becomes None
+            _macro = _currentRecording != null ? [.. _currentRecording] : null;
+            _currentRecording = null;
         }
     }
 
