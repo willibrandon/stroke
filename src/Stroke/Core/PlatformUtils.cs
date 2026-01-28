@@ -1,11 +1,5 @@
-# Contract: PlatformUtils
+using System.Runtime.InteropServices;
 
-**Namespace**: `Stroke.Core`
-**File**: `src/Stroke/Core/PlatformUtils.cs`
-
-## API Contract
-
-```csharp
 namespace Stroke.Core;
 
 /// <summary>
@@ -34,7 +28,7 @@ public static class PlatformUtils
     /// <value>
     /// <c>true</c> if running on Windows; otherwise, <c>false</c>.
     /// </value>
-    public static bool IsWindows { get; }
+    public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
     /// <summary>
     /// Gets a value indicating whether the application is running on macOS.
@@ -42,7 +36,7 @@ public static class PlatformUtils
     /// <value>
     /// <c>true</c> if running on macOS; otherwise, <c>false</c>.
     /// </value>
-    public static bool IsMacOS { get; }
+    public static bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
     /// <summary>
     /// Gets a value indicating whether the application is running on Linux.
@@ -50,7 +44,7 @@ public static class PlatformUtils
     /// <value>
     /// <c>true</c> if running on Linux; otherwise, <c>false</c>.
     /// </value>
-    public static bool IsLinux { get; }
+    public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
     /// <summary>
     /// Gets a value indicating whether suspend-to-background (SIGTSTP) is supported.
@@ -58,7 +52,7 @@ public static class PlatformUtils
     /// <value>
     /// <c>true</c> on Unix-like systems (Linux, macOS); <c>false</c> on Windows.
     /// </value>
-    public static bool SuspendToBackgroundSupported { get; }
+    public static bool SuspendToBackgroundSupported => !IsWindows;
 
     /// <summary>
     /// Gets a value indicating whether the ConEmu console with ANSI support is in use.
@@ -71,7 +65,8 @@ public static class PlatformUtils
     /// The comparison is case-sensitive: only "ON" returns true.
     /// Values like "on", "On", "oN" return false.
     /// </remarks>
-    public static bool IsConEmuAnsi { get; }
+    public static bool IsConEmuAnsi =>
+        IsWindows && Environment.GetEnvironmentVariable("ConEmuANSI") == "ON";
 
     /// <summary>
     /// Gets a value indicating whether the current thread is the main thread.
@@ -79,7 +74,7 @@ public static class PlatformUtils
     /// <value>
     /// <c>true</c> if the current thread is the main thread; otherwise, <c>false</c>.
     /// </value>
-    public static bool InMainThread { get; }
+    public static bool InMainThread => Thread.CurrentThread.ManagedThreadId == 1;
 
     /// <summary>
     /// Gets a value indicating whether the terminal bell is enabled.
@@ -89,7 +84,34 @@ public static class PlatformUtils
     /// <c>"true"</c>, <c>"TRUE"</c>, <c>"True"</c>, or <c>"1"</c>; defaults to <c>true</c>
     /// if not set.
     /// </value>
-    public static bool BellEnabled { get; }
+    public static bool BellEnabled
+    {
+        get
+        {
+            var bellEnv = Environment.GetEnvironmentVariable("STROKE_BELL");
+            if (string.IsNullOrEmpty(bellEnv))
+            {
+                return true; // Default to true when not set
+            }
+
+            // Check for explicit true values
+            if (string.Equals(bellEnv, "true", StringComparison.OrdinalIgnoreCase) ||
+                bellEnv == "1")
+            {
+                return true;
+            }
+
+            // Check for explicit false values
+            if (string.Equals(bellEnv, "false", StringComparison.OrdinalIgnoreCase) ||
+                bellEnv == "0")
+            {
+                return false;
+            }
+
+            // For any other value, default to true
+            return true;
+        }
+    }
 
     /// <summary>
     /// Gets the value of the TERM environment variable.
@@ -97,7 +119,10 @@ public static class PlatformUtils
     /// <returns>
     /// The value of the TERM environment variable, or an empty string if not set.
     /// </returns>
-    public static string GetTermEnvironmentVariable();
+    public static string GetTermEnvironmentVariable()
+    {
+        return Environment.GetEnvironmentVariable("TERM") ?? "";
+    }
 
     /// <summary>
     /// Determines whether the terminal is a "dumb" terminal.
@@ -113,40 +138,11 @@ public static class PlatformUtils
     /// The comparison is case-insensitive: "DUMB", "Dumb", "dumb" all return true.
     /// Same for "unknown", "UNKNOWN", etc.
     /// </remarks>
-    public static bool IsDumbTerminal(string? term = null);
+    public static bool IsDumbTerminal(string? term = null)
+    {
+        term ??= GetTermEnvironmentVariable();
+
+        return string.Equals(term, "dumb", StringComparison.OrdinalIgnoreCase) ||
+               string.Equals(term, "unknown", StringComparison.OrdinalIgnoreCase);
+    }
 }
-```
-
-## Functional Requirements Coverage
-
-| Requirement | Method/Property |
-|-------------|-----------------|
-| FR-011 | `IsWindows`, `IsMacOS`, `IsLinux` |
-| FR-012 | `SuspendToBackgroundSupported` |
-| FR-013 | `IsConEmuAnsi` |
-| FR-014 | `InMainThread` |
-| FR-015 | `GetTermEnvironmentVariable()` |
-| FR-016 | `IsDumbTerminal()` |
-| FR-017 | `BellEnabled` |
-| FR-032 | `IsDumbTerminal()` uses case-insensitive comparison |
-| FR-033 | `IsConEmuAnsi` uses case-sensitive comparison (only "ON") |
-
-## Edge Cases
-
-| Scenario | Behavior |
-|----------|----------|
-| TERM not set | `GetTermEnvironmentVariable()` returns "" |
-| TERM not set | `IsDumbTerminal()` returns false |
-| TERM="DUMB" (uppercase) | `IsDumbTerminal()` returns true (case-insensitive) |
-| TERM="Unknown" (mixed case) | `IsDumbTerminal()` returns true (case-insensitive) |
-| ConEmuANSI not set | `IsConEmuAnsi` returns false |
-| ConEmuANSI="OFF" | `IsConEmuAnsi` returns false |
-| ConEmuANSI="on" (lowercase) | `IsConEmuAnsi` returns false (case-sensitive) |
-| ConEmuANSI="ON" | `IsConEmuAnsi` returns true |
-| STROKE_BELL not set | `BellEnabled` returns true (default) |
-| STROKE_BELL="false" | `BellEnabled` returns false |
-| STROKE_BELL="0" | `BellEnabled` returns false |
-| Non-standard Unix (FreeBSD) | All three OS properties false; `SuspendToBackgroundSupported` true |
-| Exactly one of IsWindows/IsMacOS/IsLinux on supported platforms | Always true |
-| InMainThread detection | Uses `Thread.CurrentThread.ManagedThreadId == 1` |
-

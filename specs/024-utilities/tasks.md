@@ -26,9 +26,9 @@ tests/Stroke.Tests/Core/   # Test files
 
 **Purpose**: Verify project structure and dependencies are ready
 
-- [ ] T001 Verify Wcwidth NuGet package (v4.0.1) is referenced in src/Stroke/Stroke.csproj
-- [ ] T002 Verify src/Stroke/Core/ directory exists for utility classes
-- [ ] T003 Verify tests/Stroke.Tests/Core/ directory exists for test files
+- [x] T001 Verify Wcwidth NuGet package (v4.0.1) is referenced in src/Stroke/Stroke.csproj
+- [x] T002 Verify src/Stroke/Core/ directory exists for utility classes
+- [x] T003 Verify tests/Stroke.Tests/Core/ directory exists for test files
 
 ---
 
@@ -48,7 +48,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for User Story 1
 
-- [ ] T004 [P] [US1] Create EventTests.cs in tests/Stroke.Tests/Core/EventTests.cs with tests for:
+- [x] T004 [P] [US1] Create EventTests.cs in tests/Stroke.Tests/Core/EventTests.cs with tests for:
   - Constructor with sender only
   - Constructor with sender and initial handler
   - AddHandler adds handler to list
@@ -68,7 +68,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Implement Event<TSender> class in src/Stroke/Core/Event.cs per Event.md contract:
+- [x] T005 [US1] Implement Event<TSender> class in src/Stroke/Core/Event.cs per Event.md contract:
   - Private `_sender` field (TSender)
   - Private `_handlers` list (List<Action<TSender>>)
   - `Sender` property (readonly)
@@ -78,7 +78,7 @@ tests/Stroke.Tests/Core/   # Test files
   - `Fire()` - iterates snapshot of handlers, passes sender
   - `operator +(Event<TSender> e, Action<TSender> handler)` - calls AddHandler, returns e
   - `operator -(Event<TSender> e, Action<TSender> handler)` - calls RemoveHandler, returns e
-- [ ] T006 [US1] Run EventTests and verify all tests pass (target: 100% coverage for Event.cs)
+- [x] T006 [US1] Run EventTests and verify all tests pass (target: 100% coverage for Event.cs)
 
 **Checkpoint**: Event class fully functional and tested.
 
@@ -92,7 +92,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for User Story 2
 
-- [ ] T007 [P] [US2] Create UnicodeWidthTests.cs in tests/Stroke.Tests/Core/UnicodeWidthTests.cs with tests for:
+- [x] T007 [P] [US2] Create UnicodeWidthTests.cs in tests/Stroke.Tests/Core/UnicodeWidthTests.cs with tests for:
   - GetWidth(char) returns 1 for ASCII letter ('A')
   - GetWidth(char) returns 2 for CJK character ('中')
   - GetWidth(char) returns 0 for control character ('\x1b')
@@ -110,17 +110,17 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Implementation for User Story 2
 
-- [ ] T008 [P] [US2] Implement StringWidthCache internal class in src/Stroke/Core/UnicodeWidth.cs:
+- [x] T008 [P] [US2] Implement StringWidthCache internal class in src/Stroke/Core/UnicodeWidth.cs:
   - Constants: LongStringMinLength = 64, MaxLongStrings = 16
   - Private Lock `_lock` for thread safety
   - Private Dictionary<string, int> `_cache`
   - Private Queue<string> `_longStrings` for FIFO eviction
   - `GetWidth(string text)` method with locking and eviction logic
-- [ ] T009 [US2] Implement UnicodeWidth static class in src/Stroke/Core/UnicodeWidth.cs:
+- [x] T009 [US2] Implement UnicodeWidth static class in src/Stroke/Core/UnicodeWidth.cs:
   - Private static `_cache` (StringWidthCache instance)
   - `GetWidth(char c)` - uses Wcwidth, converts -1 to 0
   - `GetWidth(string? text)` - returns 0 for null/empty, delegates to cache
-- [ ] T010 [US2] Run UnicodeWidthTests and verify all tests pass (target: 100% coverage)
+- [x] T010 [US2] Run UnicodeWidthTests and verify all tests pass (target: 100% coverage)
 
 **Checkpoint**: UnicodeWidth fully functional with thread-safe caching.
 
@@ -134,7 +134,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for User Story 3
 
-- [ ] T011 [P] [US3] Create PlatformUtilsTests.cs in tests/Stroke.Tests/Core/PlatformUtilsTests.cs with tests for:
+- [x] T011 [P] [US3] Create PlatformUtilsTests.cs in tests/Stroke.Tests/Core/PlatformUtilsTests.cs with tests for:
   - Exactly one of IsWindows/IsMacOS/IsLinux is true (on supported platforms)
   - SuspendToBackgroundSupported returns true on Unix, false on Windows
   - GetTermEnvironmentVariable() returns TERM value or empty string
@@ -147,13 +147,13 @@ tests/Stroke.Tests/Core/   # Test files
   - IsConEmuAnsi returns false for "on", "On", "OFF", etc.
   - IsConEmuAnsi returns false when ConEmuANSI is not set
   - InMainThread returns true when called from main thread
-  - BellEnabled returns true by default (PROMPT_TOOLKIT_BELL not set)
+  - BellEnabled returns true by default (STROKE_BELL not set)
   - BellEnabled returns true for "true", "TRUE", "True", "1"
   - BellEnabled returns false for "false", "0", other values
 
 ### Implementation for User Story 3
 
-- [ ] T012 [US3] Implement PlatformUtils static class in src/Stroke/Core/PlatformUtils.cs per PlatformUtils.md contract:
+- [x] T012 [US3] Implement PlatformUtils static class in src/Stroke/Core/PlatformUtils.cs per PlatformUtils.md contract:
   - `IsWindows` property (RuntimeInformation.IsOSPlatform)
   - `IsMacOS` property (RuntimeInformation.IsOSPlatform)
   - `IsLinux` property (RuntimeInformation.IsOSPlatform)
@@ -162,8 +162,8 @@ tests/Stroke.Tests/Core/   # Test files
   - `IsDumbTerminal(string? term = null)` method (case-insensitive "dumb"/"unknown")
   - `IsConEmuAnsi` property (case-sensitive "ON" check)
   - `InMainThread` property (Thread.CurrentThread.ManagedThreadId == 1)
-  - `BellEnabled` property (PROMPT_TOOLKIT_BELL check, defaults true)
-- [ ] T013 [US3] Run PlatformUtilsTests and verify all tests pass (target: >80% coverage)
+  - `BellEnabled` property (STROKE_BELL check, defaults true)
+- [x] T013 [US3] Run PlatformUtilsTests and verify all tests pass (target: >80% coverage)
 
 **Checkpoint**: PlatformUtils fully functional for cross-platform detection.
 
@@ -177,7 +177,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for User Story 4
 
-- [ ] T014 [P] [US4] Create CollectionUtilsTests.cs in tests/Stroke.Tests/Core/CollectionUtilsTests.cs with tests for:
+- [x] T014 [P] [US4] Create CollectionUtilsTests.cs in tests/Stroke.Tests/Core/CollectionUtilsTests.cs with tests for:
   - TakeUsingWeights with [1,2,4] weights distributes proportionally (within 5% for 100+ items)
   - Single item with positive weight yields that item infinitely
   - Equal weights yield round-robin distribution
@@ -195,13 +195,13 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Implementation for User Story 4
 
-- [ ] T015 [US4] Implement CollectionUtils.TakeUsingWeights<T> in src/Stroke/Core/CollectionUtils.cs per CollectionUtils.md contract:
+- [x] T015 [US4] Implement CollectionUtils.TakeUsingWeights<T> in src/Stroke/Core/CollectionUtils.cs per CollectionUtils.md contract:
   - Validate inputs (ArgumentNullException, ArgumentException)
   - Filter items with weight > 0
   - Throw if no positive weights
   - Implement fill-based algorithm from research.md (R4)
   - Use yield return for lazy evaluation
-- [ ] T016 [US4] Run CollectionUtilsTests and verify all tests pass (target: >80% coverage)
+- [x] T016 [US4] Run CollectionUtilsTests and verify all tests pass (target: >80% coverage)
 
 **Checkpoint**: CollectionUtils fully functional for weighted distribution.
 
@@ -215,7 +215,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for User Story 5
 
-- [ ] T017 [P] [US5] Create ConversionUtilsTests.cs in tests/Stroke.Tests/Core/ConversionUtilsTests.cs with tests for:
+- [x] T017 [P] [US5] Create ConversionUtilsTests.cs in tests/Stroke.Tests/Core/ConversionUtilsTests.cs with tests for:
   - ToStr(string) returns the string
   - ToStr(null string) returns ""
   - ToStr(Func<string>) invokes and returns result
@@ -231,7 +231,7 @@ tests/Stroke.Tests/Core/   # Test files
   - ToFloat(null Func<double>) returns 0.0
   - ToFloat(AnyFloat) extracts value
   - ToFloat(object) uses Convert.ToDouble, returns 0.0 on failure
-- [ ] T018 [P] [US5] Create AnyFloatTests.cs in tests/Stroke.Tests/Core/AnyFloatTests.cs with tests for:
+- [x] T018 [P] [US5] Create AnyFloatTests.cs in tests/Stroke.Tests/Core/AnyFloatTests.cs with tests for:
   - Implicit conversion from double
   - Implicit conversion from Func<double>
   - Explicit conversion to double
@@ -248,7 +248,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Implementation for User Story 5
 
-- [ ] T019 [P] [US5] Implement AnyFloat struct in src/Stroke/Core/ConversionUtils.cs per ConversionUtils.md contract:
+- [x] T019 [P] [US5] Implement AnyFloat struct in src/Stroke/Core/ConversionUtils.cs per ConversionUtils.md contract:
   - Private `_value` (double?)
   - Private `_getter` (Func<double>?)
   - `Value` property (returns _value ?? _getter?.Invoke() ?? 0.0)
@@ -257,12 +257,12 @@ tests/Stroke.Tests/Core/   # Test files
   - Explicit operator to double
   - IEquatable<AnyFloat> implementation
   - GetHashCode, Equals, ==, != operators
-- [ ] T020 [US5] Implement ConversionUtils static class in src/Stroke/Core/ConversionUtils.cs per ConversionUtils.md contract:
+- [x] T020 [US5] Implement ConversionUtils static class in src/Stroke/Core/ConversionUtils.cs per ConversionUtils.md contract:
   - ToStr overloads: string?, Func<string?>?, Func<Func<string?>?>?, object?
   - ToInt overloads: int, Func<int>?, object?
   - ToFloat overloads: double, Func<double>?, AnyFloat, object?
   - Recursive unwrapping for nested callables
-- [ ] T021 [US5] Run ConversionUtilsTests and AnyFloatTests, verify all tests pass (target: >80% coverage)
+- [x] T021 [US5] Run ConversionUtilsTests and AnyFloatTests, verify all tests pass (target: >80% coverage)
 
 **Checkpoint**: ConversionUtils and AnyFloat fully functional.
 
@@ -274,7 +274,7 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Tests for DummyContext
 
-- [ ] T022 [P] Create DummyContextTests.cs in tests/Stroke.Tests/Core/DummyContextTests.cs with tests for:
+- [x] T022 [P] Create DummyContextTests.cs in tests/Stroke.Tests/Core/DummyContextTests.cs with tests for:
   - Instance property returns singleton
   - Multiple accesses return same instance
   - Dispose() completes without error
@@ -282,12 +282,12 @@ tests/Stroke.Tests/Core/   # Test files
 
 ### Implementation for DummyContext
 
-- [ ] T023 Implement DummyContext in src/Stroke/Core/DummyContext.cs per DummyContext.md contract:
+- [x] T023 Implement DummyContext in src/Stroke/Core/DummyContext.cs per DummyContext.md contract:
   - Private constructor
   - Static Instance property (singleton)
   - No-op Dispose() method
   - Implements IDisposable
-- [ ] T024 Run DummyContextTests and verify all tests pass (target: 100% coverage)
+- [x] T024 Run DummyContextTests and verify all tests pass (target: 100% coverage)
 
 **Checkpoint**: DummyContext complete.
 
@@ -297,11 +297,11 @@ tests/Stroke.Tests/Core/   # Test files
 
 **Purpose**: Final validation and documentation
 
-- [ ] T025 Run all utility tests together, verify >80% overall coverage
-- [ ] T026 Verify all 33 functional requirements (FR-001 through FR-033) have test coverage
-- [ ] T027 Verify edge cases from spec.md are covered by tests
-- [ ] T028 Run quickstart.md code examples to verify they work
-- [ ] T029 Verify thread safety for UnicodeWidth with concurrent test
+- [x] T025 Run all utility tests together, verify >80% overall coverage
+- [x] T026 Verify all 33 functional requirements (FR-001 through FR-033) have test coverage
+- [x] T027 Verify edge cases from spec.md are covered by tests
+- [x] T028 Run quickstart.md code examples to verify they work
+- [x] T029 Verify thread safety for UnicodeWidth with concurrent test
 
 ---
 

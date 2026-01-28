@@ -183,7 +183,7 @@ A developer working with configuration or UI properties needs to support both im
 - **FR-014**: System MUST provide InMainThread that returns true when called from the main thread.
 - **FR-015**: System MUST provide TermEnvironmentVariable that returns the TERM environment variable.
 - **FR-016**: System MUST provide IsDumbTerminal that returns true when TERM is "dumb" or "unknown".
-- **FR-017**: System MUST provide BellEnabled that checks the PROMPT_TOOLKIT_BELL environment variable.
+- **FR-017**: System MUST provide BellEnabled that checks the STROKE_BELL environment variable.
 - **FR-018**: System MUST provide ToStr that converts strings or callables returning strings to strings.
 - **FR-019**: System MUST provide ToInt that converts integers or callables returning integers to integers.
 - **FR-020**: System MUST provide ToFloat that converts floats or callables returning floats to floats.
@@ -229,7 +229,7 @@ A developer working with configuration or UI properties needs to support both im
 - The Wcwidth NuGet package (v4.0.1) is used for character width calculation per `docs/dependencies-plan.md`.
 - Thread safety for Event is not required, following standard .NET event semantics (the built-in C# `event` keyword is also not thread-safe).
 - The DummyContext singleton is sufficient; no instance creation is needed.
-- Environment variable checks (TERM, PROMPT_TOOLKIT_BELL, ConEmuANSI) are performed at property access time, not cached at startup.
+- Environment variable checks (TERM, STROKE_BELL, ConEmuANSI) are performed at property access time, not cached at startup.
 - The TakeUsingWeights generator produces an infinite sequence; consumers are responsible for limiting iteration.
 - No protection against infinite recursion in nested callables; callers must not create circular callable chains.
 

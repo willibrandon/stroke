@@ -77,7 +77,7 @@ public sealed class Event<TSender>
 **Rationale**:
 - `RuntimeInformation.IsOSPlatform()` is the modern .NET approach
 - Python uses `sys.platform` which maps to these checks
-- Environment variables (`TERM`, `ConEmuANSI`, `PROMPT_TOOLKIT_BELL`) read at access time per spec
+- Environment variables (`TERM`, `ConEmuANSI`, `STROKE_BELL`) read at access time per spec
 
 **API Mapping** (from api-mapping.md):
 | Python | C# |

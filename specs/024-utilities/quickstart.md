@@ -140,8 +140,9 @@ string s4 = ConversionUtils.ToStr(null);  // ""
 int i3 = ConversionUtils.ToInt(null);     // 0
 
 // AnyFloat for flexible APIs
-AnyFloat f1 = 3.14;             // From double
-AnyFloat f2 = () => 2.71;       // From callable
+AnyFloat f1 = 3.14;                         // From double
+Func<double> getter = () => 2.71;
+AnyFloat f2 = getter;                       // From callable
 double result = f1.Value + f2.Value;
 ```
 
