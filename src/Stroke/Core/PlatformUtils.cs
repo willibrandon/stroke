@@ -79,38 +79,18 @@ public static class PlatformUtils
     /// <summary>
     /// Gets a value indicating whether the terminal bell is enabled.
     /// </summary>
-    /// <value>
+    /// <returns>
     /// <c>true</c> if the <c>STROKE_BELL</c> environment variable is set to
-    /// <c>"true"</c>, <c>"TRUE"</c>, <c>"True"</c>, or <c>"1"</c>; defaults to <c>true</c>
-    /// if not set.
-    /// </value>
-    public static bool BellEnabled
+    /// <c>"true"</c> or <c>"1"</c> (case-insensitive); defaults to <c>true</c> if not set.
+    /// </returns>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>get_bell_environment_variable()</c>.
+    /// </remarks>
+    public static bool GetBellEnvironmentVariable()
     {
-        get
-        {
-            var bellEnv = Environment.GetEnvironmentVariable("STROKE_BELL");
-            if (string.IsNullOrEmpty(bellEnv))
-            {
-                return true; // Default to true when not set
-            }
-
-            // Check for explicit true values
-            if (string.Equals(bellEnv, "true", StringComparison.OrdinalIgnoreCase) ||
-                bellEnv == "1")
-            {
-                return true;
-            }
-
-            // Check for explicit false values
-            if (string.Equals(bellEnv, "false", StringComparison.OrdinalIgnoreCase) ||
-                bellEnv == "0")
-            {
-                return false;
-            }
-
-            // For any other value, default to true
-            return true;
-        }
+        var value = Environment.GetEnvironmentVariable("STROKE_BELL") ?? "true";
+        var lower = value.ToLowerInvariant();
+        return lower == "1" || lower == "true";
     }
 
     /// <summary>

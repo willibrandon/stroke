@@ -147,9 +147,9 @@ tests/Stroke.Tests/Core/   # Test files
   - IsConEmuAnsi returns false for "on", "On", "OFF", etc.
   - IsConEmuAnsi returns false when ConEmuANSI is not set
   - InMainThread returns true when called from main thread
-  - BellEnabled returns true by default (STROKE_BELL not set)
-  - BellEnabled returns true for "true", "TRUE", "True", "1"
-  - BellEnabled returns false for "false", "0", other values
+  - GetBellEnvironmentVariable() returns true by default (STROKE_BELL not set)
+  - GetBellEnvironmentVariable() returns true for "true", "TRUE", "1"
+  - GetBellEnvironmentVariable() returns false for other values
 
 ### Implementation for User Story 3
 
@@ -162,7 +162,7 @@ tests/Stroke.Tests/Core/   # Test files
   - `IsDumbTerminal(string? term = null)` method (case-insensitive "dumb"/"unknown")
   - `IsConEmuAnsi` property (case-sensitive "ON" check)
   - `InMainThread` property (Thread.CurrentThread.ManagedThreadId == 1)
-  - `BellEnabled` property (STROKE_BELL check, defaults true)
+  - `GetBellEnvironmentVariable()` method (STROKE_BELL check, defaults true)
 - [x] T013 [US3] Run PlatformUtilsTests and verify all tests pass (target: >80% coverage)
 
 **Checkpoint**: PlatformUtils fully functional for cross-platform detection.

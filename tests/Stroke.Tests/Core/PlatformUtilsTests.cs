@@ -385,10 +385,10 @@ public class PlatformUtilsTests
 
     #endregion
 
-    #region BellEnabled Tests
+    #region GetBellEnvironmentVariable Tests
 
     [Fact]
-    public void BellEnabled_NotSet_ReturnsTrue()
+    public void GetBellEnvironmentVariable_NotSet_ReturnsTrue()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -396,7 +396,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", null);
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.True(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -405,15 +405,16 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_EmptyString_ReturnsTrue()
+    public void GetBellEnvironmentVariable_EmptyString_ReturnsFalse()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
         try
         {
+            // Empty string is not "1" or "true", so returns false (matches Python)
             Environment.SetEnvironmentVariable("STROKE_BELL", "");
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.False(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -422,7 +423,7 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_True_ReturnsTrue()
+    public void GetBellEnvironmentVariable_True_ReturnsTrue()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -430,7 +431,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", "true");
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.True(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -439,7 +440,7 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_TRUE_ReturnsTrue()
+    public void GetBellEnvironmentVariable_TRUE_ReturnsTrue()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -447,7 +448,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", "TRUE");
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.True(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -456,7 +457,7 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_One_ReturnsTrue()
+    public void GetBellEnvironmentVariable_One_ReturnsTrue()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -464,7 +465,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", "1");
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.True(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -473,7 +474,7 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_False_ReturnsFalse()
+    public void GetBellEnvironmentVariable_False_ReturnsFalse()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -481,7 +482,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", "false");
 
-            Assert.False(PlatformUtils.BellEnabled);
+            Assert.False(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -490,24 +491,7 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_FALSE_ReturnsFalse()
-    {
-        var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
-
-        try
-        {
-            Environment.SetEnvironmentVariable("STROKE_BELL", "FALSE");
-
-            Assert.False(PlatformUtils.BellEnabled);
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("STROKE_BELL", savedBell);
-        }
-    }
-
-    [Fact]
-    public void BellEnabled_Zero_ReturnsFalse()
+    public void GetBellEnvironmentVariable_Zero_ReturnsFalse()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
@@ -515,7 +499,7 @@ public class PlatformUtilsTests
         {
             Environment.SetEnvironmentVariable("STROKE_BELL", "0");
 
-            Assert.False(PlatformUtils.BellEnabled);
+            Assert.False(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {
@@ -524,16 +508,16 @@ public class PlatformUtilsTests
     }
 
     [Fact]
-    public void BellEnabled_OtherValue_ReturnsTrue()
+    public void GetBellEnvironmentVariable_OtherValue_ReturnsFalse()
     {
         var savedBell = Environment.GetEnvironmentVariable("STROKE_BELL");
 
         try
         {
-            // Unknown values default to true
+            // Only "1" and "true" return true (matches Python)
             Environment.SetEnvironmentVariable("STROKE_BELL", "yes");
 
-            Assert.True(PlatformUtils.BellEnabled);
+            Assert.False(PlatformUtils.GetBellEnvironmentVariable());
         }
         finally
         {

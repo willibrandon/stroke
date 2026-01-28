@@ -144,7 +144,7 @@ public readonly struct AnyFloat : IEquatable<AnyFloat>
 | `SuspendToBackgroundSupported` | `bool` | True on Unix (SIGTSTP available) |
 | `IsConEmuAnsi` | `bool` | True if ConEmuANSI=ON on Windows |
 | `InMainThread` | `bool` | True if current thread is main thread |
-| `BellEnabled` | `bool` | True if STROKE_BELL is "true" or "1" |
+| `GetBellEnvironmentVariable()` | `bool` | True if STROKE_BELL is "true" or "1" |
 
 **Static Methods**:
 | Method | Return | Description |

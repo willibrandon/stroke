@@ -84,12 +84,14 @@ public static class PlatformUtils
     /// <summary>
     /// Gets a value indicating whether the terminal bell is enabled.
     /// </summary>
-    /// <value>
+    /// <returns>
     /// <c>true</c> if the <c>STROKE_BELL</c> environment variable is set to
-    /// <c>"true"</c>, <c>"TRUE"</c>, <c>"True"</c>, or <c>"1"</c>; defaults to <c>true</c>
-    /// if not set.
-    /// </value>
-    public static bool BellEnabled { get; }
+    /// <c>"true"</c> or <c>"1"</c> (case-insensitive); defaults to <c>true</c> if not set.
+    /// </returns>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>get_bell_environment_variable()</c>.
+    /// </remarks>
+    public static bool GetBellEnvironmentVariable();
 
     /// <summary>
     /// Gets the value of the TERM environment variable.
@@ -127,7 +129,7 @@ public static class PlatformUtils
 | FR-014 | `InMainThread` |
 | FR-015 | `GetTermEnvironmentVariable()` |
 | FR-016 | `IsDumbTerminal()` |
-| FR-017 | `BellEnabled` |
+| FR-017 | `GetBellEnvironmentVariable()` |
 | FR-032 | `IsDumbTerminal()` uses case-insensitive comparison |
 | FR-033 | `IsConEmuAnsi` uses case-sensitive comparison (only "ON") |
 
@@ -143,9 +145,9 @@ public static class PlatformUtils
 | ConEmuANSI="OFF" | `IsConEmuAnsi` returns false |
 | ConEmuANSI="on" (lowercase) | `IsConEmuAnsi` returns false (case-sensitive) |
 | ConEmuANSI="ON" | `IsConEmuAnsi` returns true |
-| STROKE_BELL not set | `BellEnabled` returns true (default) |
-| STROKE_BELL="false" | `BellEnabled` returns false |
-| STROKE_BELL="0" | `BellEnabled` returns false |
+| STROKE_BELL not set | `GetBellEnvironmentVariable()` returns true (default) |
+| STROKE_BELL="false" | `GetBellEnvironmentVariable()` returns false |
+| STROKE_BELL="0" | `GetBellEnvironmentVariable()` returns false |
 | Non-standard Unix (FreeBSD) | All three OS properties false; `SuspendToBackgroundSupported` true |
 | Exactly one of IsWindows/IsMacOS/IsLinux on supported platforms | Always true |
 | InMainThread detection | Uses `Thread.CurrentThread.ManagedThreadId == 1` |
