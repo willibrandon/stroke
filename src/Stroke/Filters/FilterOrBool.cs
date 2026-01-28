@@ -13,6 +13,11 @@ namespace Stroke.Filters;
 /// to create instances.
 /// </para>
 /// <para>
+/// The struct default (<c>default(FilterOrBool)</c>) is distinguishable from
+/// explicit values via the <see cref="HasValue"/> property. This allows APIs
+/// to apply semantic defaults when no value is explicitly provided.
+/// </para>
+/// <para>
 /// This is a faithful port of Python Prompt Toolkit's <c>FilterOrBool</c> type
 /// from <c>prompt_toolkit.filters.base</c>.
 /// </para>
@@ -22,6 +27,13 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     private readonly IFilter? _filter;
     private readonly bool _boolValue;
     private readonly bool _isFilter;
+    private readonly bool _hasValue;
+
+    /// <summary>
+    /// Gets a value indicating whether this instance was explicitly initialized.
+    /// Returns <c>false</c> for <c>default(FilterOrBool)</c>.
+    /// </summary>
+    public bool HasValue => _hasValue;
 
     /// <summary>
     /// Gets a value indicating whether this instance contains a filter.
@@ -31,7 +43,7 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     /// <summary>
     /// Gets a value indicating whether this instance contains a boolean.
     /// </summary>
-    public bool IsBool => !_isFilter;
+    public bool IsBool => _hasValue && !_isFilter;
 
     /// <summary>
     /// Gets the boolean value if <see cref="IsBool"/> is <c>true</c>.
@@ -77,6 +89,7 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     /// <param name="value">The boolean value.</param>
     public FilterOrBool(bool value)
     {
+        _hasValue = true;
         _isFilter = false;
         _boolValue = value;
         _filter = null;
@@ -88,6 +101,7 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     /// <param name="filter">The filter. If <c>null</c>, treated as <see cref="Never"/>.</param>
     public FilterOrBool(IFilter? filter)
     {
+        _hasValue = true;
         _isFilter = true;
         _boolValue = false;
         _filter = filter ?? Never.Instance;
@@ -108,6 +122,16 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     /// <inheritdoc/>
     public bool Equals(FilterOrBool other)
     {
+        if (_hasValue != other._hasValue)
+        {
+            return false;
+        }
+
+        if (!_hasValue)
+        {
+            return true; // Both are unset
+        }
+
         if (_isFilter != other._isFilter)
         {
             return false;
@@ -127,6 +151,11 @@ public readonly struct FilterOrBool : IEquatable<FilterOrBool>
     /// <inheritdoc/>
     public override int GetHashCode()
     {
+        if (!_hasValue)
+        {
+            return 0;
+        }
+
         if (_isFilter)
         {
             return HashCode.Combine(true, _filter?.GetHashCode() ?? 0);

@@ -22,6 +22,7 @@ dotnet run -c Release --filter '*TemplateScalingBenchmarks*'
 dotnet run -c Release --filter '*AnyFormattedTextBenchmarks*'
 dotnet run -c Release --filter '*FormattedTextUtilsBenchmarks*'
 dotnet run -c Release --filter '*OutputBenchmarks*'
+dotnet run -c Release --filter '*KeyBinding*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -79,6 +80,21 @@ dotnet run -c Release --list flat
 | SetAttributes (16-color) | O(1) cache | Nearest color search |
 | Cache hits (after warmup) | 0 allocs | Steady-state should not allocate |
 
+### Key Bindings System (SC-001, SC-002, SC-006)
+
+| Benchmark | Target | Measured |
+|-----------|--------|----------|
+| GetBindingsForKeys (1000 bindings, warm cache) | <1ms p99 | ~16 ns |
+| GetBindingsForKeys round-robin x20 (100 bindings) | >95% cache hit | ~231 ns |
+| GetBindingsForKeys (10000 bindings, warm cache) | <10ms p99 | ~17 ns |
+| GetBindingsForKeys cache miss (1000 bindings) | N/A | ~1.5 μs |
+| GetBindingsStartingWithKeys (1000 bindings) | N/A | ~3.4 μs |
+| Version property access x1000 | N/A | ~0.23 μs |
+| MergedKeyBindings.GetBindingsForKeys | N/A | ~34 ns |
+| ConditionalKeyBindings.GetBindingsForKeys | N/A | ~24 ns |
+| GlobalOnlyKeyBindings.GetBindingsForKeys | N/A | ~35 ns |
+| DynamicKeyBindings.GetBindingsForKeys | N/A | ~42 ns |
+
 ## Benchmark Classes
 
 ### Completion System
@@ -106,3 +122,8 @@ dotnet run -c Release --list flat
 - **ColorCacheMemoryBenchmarks** - Memory footprint with N unique colors (10, 50, 100)
 - **ColorCacheStressBenchmarks** - Full cache build scenarios (256-color, 16-color, 24-bit)
 - **OutputImplementationBenchmarks** - Comparison of Vt100Output, PlainTextOutput, DummyOutput
+
+### Key Bindings System
+- **KeyBindingBenchmarks** - Core key binding lookup benchmarks (SC-001, SC-002, SC-006)
+- **KeyBindingMutationBenchmarks** - Add binding performance with and without filters
+- **KeyBindingProxyBenchmarks** - Merged, Conditional, GlobalOnly, Dynamic proxy benchmarks

@@ -165,6 +165,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `OutputFactory` for platform detection (TTY vs redirected)
   - `FlushStdout` helper for immediate write-and-flush operations
   - Thread-safe operations (85.7% test coverage)
+- **Key Bindings System** — Extensible key binding infrastructure for terminal input handling
+  - `IKeyBindings` interface with binding lookup and prefix matching
+  - `KeyBindings` class with FIFO-based caching (`SimpleCache`)
+  - `Binding` class with filter, eager, isGlobal, recordInMacro, saveBefore support
+  - `KeyBindingDecorator` for fluent binding creation with optional parameters
+  - `KeyOrChar` union type for key enum or character literal bindings
+  - Proxy implementations: `MergedKeyBindings`, `ConditionalKeyBindings`, `GlobalOnlyKeyBindings`, `DynamicKeyBindings`
+  - `KeyPress` record struct matching Python Prompt Toolkit's key_binding.key_processor
+  - `FilterOrBool` with `HasValue` for distinguishing explicit false from struct default
+  - Thread-safe operations (365 tests, >80% coverage)
 
 ### Up Next
 
