@@ -55,16 +55,56 @@ public sealed class KeyBindingUtilsTests
 
     #endregion
 
+    #region ParseKeyOrChar
+
+    [Theory]
+    [InlineData("space")]
+    [InlineData("SPACE")]
+    [InlineData("Space")]
+    public void ParseKeyOrChar_Space_ReturnsSpaceCharacter(string input)
+    {
+        var result = KeyBindingUtils.ParseKeyOrChar(input);
+
+        Assert.True(result.IsChar);
+        Assert.Equal(' ', result.Char);
+    }
+
+    [Fact]
+    public void ParseKeyOrChar_Tab_ReturnsControlI()
+    {
+        var result = KeyBindingUtils.ParseKeyOrChar("tab");
+
+        Assert.True(result.IsKey);
+        Assert.Equal(Keys.ControlI, result.Key);
+    }
+
+    [Fact]
+    public void ParseKeyOrChar_ControlC_ReturnsControlC()
+    {
+        var result = KeyBindingUtils.ParseKeyOrChar("c-c");
+
+        Assert.True(result.IsKey);
+        Assert.Equal(Keys.ControlC, result.Key);
+    }
+
+    [Fact]
+    public void ParseKeyOrChar_NullInput_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => KeyBindingUtils.ParseKeyOrChar(null!));
+    }
+
+    #endregion
+
     #region ParseKey - Special Names
 
     [Theory]
-    [InlineData("space", Keys.ControlAt)]
-    [InlineData("SPACE", Keys.ControlAt)]
-    [InlineData("Space", Keys.ControlAt)]
-    public void ParseKey_Space_ReturnsControlAt(string input, Keys expected)
+    [InlineData("space")]
+    [InlineData("SPACE")]
+    [InlineData("Space")]
+    public void ParseKey_Space_ThrowsArgumentException(string input)
     {
-        var result = KeyBindingUtils.ParseKey(input);
-        Assert.Equal(expected, result);
+        var ex = Assert.Throws<ArgumentException>(() => KeyBindingUtils.ParseKey(input));
+        Assert.Contains("ParseKeyOrChar", ex.Message);
     }
 
     [Theory]

@@ -37,6 +37,43 @@ public static class KeyBindingUtils
     }
 
     /// <summary>
+    /// Parses a key name into a KeyOrChar value.
+    /// </summary>
+    /// <param name="keyName">
+    /// The key name to parse. Supports aliases:
+    /// <list type="bullet">
+    /// <item><description>c-x → ControlX</description></item>
+    /// <item><description>m-x → AltX (Meta key)</description></item>
+    /// <item><description>s-x → ShiftX</description></item>
+    /// <item><description>space → ' ' (space character)</description></item>
+    /// <item><description>tab, enter → Keys.ControlI, Keys.ControlM</description></item>
+    /// </list>
+    /// </param>
+    /// <returns>The parsed KeyOrChar value.</returns>
+    /// <exception cref="ArgumentException">Thrown when the key name is invalid.</exception>
+    /// <remarks>
+    /// <para>
+    /// This method matches Python Prompt Toolkit's behavior where "space" is converted
+    /// to a literal space character ' ' (ASCII 32), not to Control-Space.
+    /// </para>
+    /// </remarks>
+    public static KeyOrChar ParseKeyOrChar(string keyName)
+    {
+        ArgumentNullException.ThrowIfNull(keyName);
+
+        var normalized = keyName.ToLowerInvariant().Trim();
+
+        // "space" maps to literal space character per Python PTK behavior
+        if (normalized == "space")
+        {
+            return ' ';
+        }
+
+        // All other cases return Keys enum wrapped in KeyOrChar
+        return ParseKey(keyName);
+    }
+
+    /// <summary>
     /// Parses a key name into a Keys enum value.
     /// </summary>
     /// <param name="keyName">
@@ -45,21 +82,28 @@ public static class KeyBindingUtils
     /// <item><description>c-x → ControlX</description></item>
     /// <item><description>m-x → AltX (Meta key)</description></item>
     /// <item><description>s-x → ShiftX</description></item>
-    /// <item><description>space, tab, enter → Keys.Space, Keys.ControlI, Keys.ControlM</description></item>
+    /// <item><description>tab, enter → Keys.ControlI, Keys.ControlM</description></item>
     /// </list>
     /// </param>
     /// <returns>The parsed Keys value.</returns>
-    /// <exception cref="ArgumentException">Thrown when the key name is invalid.</exception>
+    /// <exception cref="ArgumentException">Thrown when the key name is invalid or represents a character (use ParseKeyOrChar for "space").</exception>
     public static Keys ParseKey(string keyName)
     {
         ArgumentNullException.ThrowIfNull(keyName);
 
         var normalized = keyName.ToLowerInvariant().Trim();
 
+        // "space" is a character, not a Keys value - use ParseKeyOrChar instead
+        if (normalized == "space")
+        {
+            throw new ArgumentException(
+                "\"space\" represents a character, not a Keys enum value. Use ParseKeyOrChar instead.",
+                nameof(keyName));
+        }
+
         // Handle special names
         return normalized switch
         {
-            "space" => Keys.ControlAt, // Space is Control-@ (NUL)
             "tab" => Keys.ControlI, // Tab is Ctrl+I
             "enter" or "return" => Keys.ControlM, // Enter is Ctrl+M
             "escape" or "esc" => Keys.Escape,
