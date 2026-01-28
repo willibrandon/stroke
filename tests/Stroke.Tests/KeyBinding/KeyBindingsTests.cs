@@ -179,7 +179,7 @@ public sealed class KeyBindingsTests
     }
 
     [Fact]
-    public void Version_MultiplAdds_IncrementsEachTime()
+    public void Version_MultipleAdds_IncrementsEachTime()
     {
         var kb = new KeyBindings();
         var v1 = kb.Version;
