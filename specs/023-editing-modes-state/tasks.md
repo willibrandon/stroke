@@ -24,9 +24,9 @@
 
 **Purpose**: Verify dependencies exist and project structure is ready
 
-- [ ] T001 Verify existing dependencies: KeyPress in Stroke.Input, ClipboardData in Stroke.Clipboard, KeyPressEvent in Stroke.KeyBinding, NotImplementedOrNone in Stroke.KeyBinding
-- [ ] T002 Verify `src/Stroke/KeyBinding/` directory exists (should exist from Feature 022)
-- [ ] T003 Verify `tests/Stroke.Tests/KeyBinding/` directory exists (should exist from Feature 022)
+- [x] T001 Verify existing dependencies: KeyPress in Stroke.Input, ClipboardData in Stroke.Clipboard, KeyPressEvent in Stroke.KeyBinding, NotImplementedOrNone in Stroke.KeyBinding
+- [x] T002 Verify `src/Stroke/KeyBinding/` directory exists (should exist from Feature 022)
+- [x] T003 Verify `tests/Stroke.Tests/KeyBinding/` directory exists (should exist from Feature 022)
 
 ---
 
@@ -36,7 +36,7 @@
 
 **⚠️ CRITICAL**: ViState requires OperatorFuncDelegate to compile
 
-- [ ] T004 Create OperatorFuncDelegate delegate type in `src/Stroke/KeyBinding/OperatorFuncDelegate.cs` with signature: `public delegate NotImplementedOrNone OperatorFuncDelegate(KeyPressEvent e, object? textObject);` per FR-024
+- [x] T004 Create OperatorFuncDelegate delegate type in `src/Stroke/KeyBinding/OperatorFuncDelegate.cs` with signature: `public delegate NotImplementedOrNone OperatorFuncDelegate(KeyPressEvent e, object? textObject);` per FR-024
 
 **Checkpoint**: Delegate type defined - user story implementation can now begin
 
@@ -50,14 +50,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T005 [P] [US3] Create `tests/Stroke.Tests/KeyBinding/EditingModeTests.cs` with tests:
+- [x] T005 [P] [US3] Create `tests/Stroke.Tests/KeyBinding/EditingModeTests.cs` with tests:
   - `EditingMode_HasExactlyTwoValues` verifies `Enum.GetValues<EditingMode>().Length == 2`
   - `EditingMode_ContainsViValue` verifies `Enum.IsDefined(typeof(EditingMode), EditingMode.Vi)`
   - `EditingMode_ContainsEmacsValue` verifies `Enum.IsDefined(typeof(EditingMode), EditingMode.Emacs)`
 
 ### Implementation for User Story 3
 
-- [ ] T006 [US3] Create `src/Stroke/KeyBinding/EditingMode.cs` with EditingMode enum containing Vi and Emacs values per FR-001, with XML documentation
+- [x] T006 [US3] Create `src/Stroke/KeyBinding/EditingMode.cs` with EditingMode enum containing Vi and Emacs values per FR-001, with XML documentation
 
 **Checkpoint**: EditingMode enum complete and independently testable
 
@@ -71,11 +71,11 @@
 
 ### Tests for User Story 1
 
-- [ ] T007 [P] [US1] Create `tests/Stroke.Tests/KeyBinding/InputModeTests.cs` with tests:
+- [x] T007 [P] [US1] Create `tests/Stroke.Tests/KeyBinding/InputModeTests.cs` with tests:
   - `InputMode_HasExactlyFiveValues` verifies enum has 5 values
   - Tests for each value: Insert, InsertMultiple, Navigation, Replace, ReplaceSingle
 
-- [ ] T008 [P] [US1] Create `tests/Stroke.Tests/KeyBinding/ViStateTests.cs` with initial value tests:
+- [x] T008 [P] [US1] Create `tests/Stroke.Tests/KeyBinding/ViStateTests.cs` with initial value tests:
   - `ViState_DefaultInputMode_IsInsert` per US1.1
   - `ViState_DefaultLastCharacterFind_IsNull`
   - `ViState_DefaultOperatorFunc_IsNull`
@@ -87,13 +87,13 @@
   - `ViState_DefaultCurrentRecording_IsEmptyString`
   - `ViState_DefaultTemporaryNavigationMode_IsFalse`
 
-- [ ] T009 [US1] Add ViState transition tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T009 [US1] Add ViState transition tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_SetNavigationMode_ClearsOperatorFunc` per US1.2
   - `ViState_SetNavigationMode_ClearsOperatorArg` per US1.2
   - `ViState_SetNavigationMode_ClearsWaitingForDigraph` per US1.2
   - `ViState_SetNavigationMode_PreservesDigraphSymbol1` per US1.2
 
-- [ ] T010 [US1] Add ViState Reset() tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T010 [US1] Add ViState Reset() tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_Reset_SetsInputModeToInsert` per US1.3
   - `ViState_Reset_ClearsOperatorFunc`
   - `ViState_Reset_ClearsOperatorArg`
@@ -105,15 +105,15 @@
   - `ViState_Reset_PreservesTildeOperator` per CHK030
   - `ViState_Reset_PreservesTemporaryNavigationMode` per CHK030
 
-- [ ] T011 [US1] Add ViState thread safety tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T011 [US1] Add ViState thread safety tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_ConcurrentInputModeChanges_NoCorruption` (10 threads × 1000 ops) per SC-004
   - `ViState_ConcurrentPropertyAccess_NoDeadlocks`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create `src/Stroke/KeyBinding/InputMode.cs` with InputMode enum containing Insert, InsertMultiple, Navigation, Replace, ReplaceSingle values per FR-003, with XML documentation
+- [x] T012 [P] [US1] Create `src/Stroke/KeyBinding/InputMode.cs` with InputMode enum containing Insert, InsertMultiple, Navigation, Replace, ReplaceSingle values per FR-003, with XML documentation
 
-- [ ] T013 [US1] Create `src/Stroke/KeyBinding/ViState.cs` with:
+- [x] T013 [US1] Create `src/Stroke/KeyBinding/ViState.cs` with:
   - Private `Lock _lock` field per FR-025
   - `sealed class` per FR-030
   - All properties from data-model.md with thread-safe getters/setters using `_lock.EnterScope()`
@@ -134,12 +134,12 @@
 
 ### Tests for User Story 2
 
-- [ ] T014 [P] [US2] Create `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs` with initial value tests:
+- [x] T014 [P] [US2] Create `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs` with initial value tests:
   - `EmacsState_DefaultMacro_IsEmptyList` per US2.1
   - `EmacsState_DefaultCurrentRecording_IsNull` per US2.1
   - `EmacsState_DefaultIsRecording_IsFalse` per US2.1
 
-- [ ] T015 [US2] Add EmacsState macro recording tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
+- [x] T015 [US2] Add EmacsState macro recording tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
   - `EmacsState_StartMacro_SetsCurrentRecordingToEmptyList` per US2.2
   - `EmacsState_StartMacro_SetsIsRecordingTrue` per US2.2
   - `EmacsState_EndMacro_CopiesCurrentRecordingToMacro` per US2.3
@@ -151,17 +151,17 @@
   - `EmacsState_AppendToRecording_WhenRecording_AddsKeyPress` per US2.6
   - `EmacsState_AppendToRecording_WhenNotRecording_DoesNothing` per US2.7
 
-- [ ] T016 [US2] Add EmacsState edge case tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
+- [x] T016 [US2] Add EmacsState edge case tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
   - `EmacsState_StartMacro_WhenAlreadyRecording_ReplacesWithNewEmptyList` per CHK056
   - `EmacsState_EndMacro_WithEmptyRecording_SetsMacroToEmptyList` per CHK061
 
-- [ ] T017 [US2] Add EmacsState thread safety tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
+- [x] T017 [US2] Add EmacsState thread safety tests to `tests/Stroke.Tests/KeyBinding/EmacsStateTests.cs`:
   - `EmacsState_ConcurrentMacroOperations_NoCorruption` (10 threads × 1000 ops) per SC-004
   - `EmacsState_ConcurrentPropertyAccess_NoDeadlocks` per CHK058
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Create `src/Stroke/KeyBinding/EmacsState.cs` with:
+- [x] T018 [US2] Create `src/Stroke/KeyBinding/EmacsState.cs` with:
   - Private `Lock _lock` field per FR-026
   - `sealed class` per FR-031
   - `Macro` property (`IReadOnlyList<KeyPress>`, default empty list) per FR-016 - getter returns copy per FR-028
@@ -186,14 +186,14 @@
 
 ### Tests for User Story 4
 
-- [ ] T019 [P] [US4] Create `tests/Stroke.Tests/KeyBinding/CharacterFindTests.cs` with tests:
+- [x] T019 [P] [US4] Create `tests/Stroke.Tests/KeyBinding/CharacterFindTests.cs` with tests:
   - `CharacterFind_ForwardFind_BackwardsIsFalse` per US4.1
   - `CharacterFind_BackwardFind_BackwardsIsTrue` per US4.2
   - `CharacterFind_SameValues_AreEqual` per US4.3 (record value semantics)
   - `CharacterFind_DifferentValues_AreNotEqual`
   - `CharacterFind_IsImmutable` (verify sealed record)
 
-- [ ] T020 [US4] Add CharacterFind edge case tests to `tests/Stroke.Tests/KeyBinding/CharacterFindTests.cs`:
+- [x] T020 [US4] Add CharacterFind edge case tests to `tests/Stroke.Tests/KeyBinding/CharacterFindTests.cs`:
   - `CharacterFind_NullCharacter_Allowed` per CHK054 (no validation per Python behavior)
   - `CharacterFind_EmptyString_Allowed` per CHK054
   - `CharacterFind_MultiCharacterString_Allowed` per CHK054
@@ -201,7 +201,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T021 [US4] Create `src/Stroke/KeyBinding/CharacterFind.cs` with `sealed record CharacterFind(string Character, bool Backwards = false);` per FR-004, with XML documentation
+- [x] T021 [US4] Create `src/Stroke/KeyBinding/CharacterFind.cs` with `sealed record CharacterFind(string Character, bool Backwards = false);` per FR-004, with XML documentation
 
 **Checkpoint**: CharacterFind complete and independently testable
 
@@ -215,7 +215,7 @@
 
 ### Tests for User Story 5
 
-- [ ] T022 [P] [US5] Add named register tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T022 [P] [US5] Add named register tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_GetNamedRegisterNames_InitiallyEmpty` per US5.1
   - `ViState_SetNamedRegister_ThenGet_ReturnsData` per US5.2
   - `ViState_ClearNamedRegister_WhenExists_ReturnsTrue` per US5.3
@@ -224,12 +224,12 @@
   - `ViState_SetNamedRegister_AcceptsAnyStringKey` per US5.6, CHK055
   - `ViState_SetNamedRegister_NullData_Allowed` per CHK055
 
-- [ ] T023 [US5] Add named register thread safety tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T023 [US5] Add named register thread safety tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_ConcurrentNamedRegisterAccess_NoCorruption` (10 threads × 1000 ops)
 
 ### Implementation for User Story 5
 
-- [ ] T024 [US5] Add named register methods to `src/Stroke/KeyBinding/ViState.cs`:
+- [x] T024 [US5] Add named register methods to `src/Stroke/KeyBinding/ViState.cs`:
   - Private `Dictionary<string, ClipboardData> _namedRegisters` field
   - `GetNamedRegister(string name)` method per FR-010 - thread-safe
   - `SetNamedRegister(string name, ClipboardData data)` method per FR-010 - thread-safe
@@ -248,7 +248,7 @@
 
 ### Tests for User Story 6
 
-- [ ] T025 [P] [US6] Add macro recording tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
+- [x] T025 [P] [US6] Add macro recording tests to `tests/Stroke.Tests/KeyBinding/ViStateTests.cs`:
   - `ViState_RecordingRegister_DefaultNull` per US6.1
   - `ViState_CurrentRecording_DefaultEmptyString` per US6.2
   - `ViState_CurrentRecording_CanAccumulateData` per US6.3
@@ -257,7 +257,7 @@
 
 ### Implementation for User Story 6
 
-- [ ] T026 [US6] Verify macro recording properties in `src/Stroke/KeyBinding/ViState.cs` (should already exist from T013):
+- [x] T026 [US6] Verify macro recording properties in `src/Stroke/KeyBinding/ViState.cs` (should already exist from T013):
   - `RecordingRegister` property (`string?`) per FR-013
   - `CurrentRecording` property (`string`, default `""`) per FR-013
 
@@ -273,7 +273,7 @@
 
 ### Tests for User Story 7
 
-- [ ] T027 [P] [US7] Create `tests/Stroke.Tests/KeyBinding/BufferNamesTests.cs` with tests:
+- [x] T027 [P] [US7] Create `tests/Stroke.Tests/KeyBinding/BufferNamesTests.cs` with tests:
   - `BufferNames_SearchBuffer_HasCorrectValue` verifies `"SEARCH_BUFFER"` per US7.1
   - `BufferNames_DefaultBuffer_HasCorrectValue` verifies `"DEFAULT_BUFFER"` per US7.2
   - `BufferNames_SystemBuffer_HasCorrectValue` verifies `"SYSTEM_BUFFER"` per US7.3
@@ -281,7 +281,7 @@
 
 ### Implementation for User Story 7
 
-- [ ] T028 [US7] Create `src/Stroke/KeyBinding/BufferNames.cs` with static class containing:
+- [x] T028 [US7] Create `src/Stroke/KeyBinding/BufferNames.cs` with static class containing:
   - `public const string SearchBuffer = "SEARCH_BUFFER";` per FR-002
   - `public const string DefaultBuffer = "DEFAULT_BUFFER";` per FR-002
   - `public const string SystemBuffer = "SYSTEM_BUFFER";` per FR-002
@@ -295,12 +295,12 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T029 Verify all 6 public types are in `Stroke.KeyBinding` namespace per FR-032
-- [ ] T030 Verify all public types and members have XML documentation per FR-033, SC-006
-- [ ] T031 Run `dotnet test` and verify ≥80% coverage for ViState, EmacsState, CharacterFind per SC-002
-- [ ] T032 Run thread safety stress tests (10 threads × 1000 ops) for ViState and EmacsState per SC-004
-- [ ] T033 Verify file organization: 6 source files, each <1000 LOC per SC-007, Constitution X
-- [ ] T034 Run quickstart.md code examples to verify they work correctly
+- [x] T029 Verify all 6 public types are in `Stroke.KeyBinding` namespace per FR-032
+- [x] T030 Verify all public types and members have XML documentation per FR-033, SC-006
+- [x] T031 Run `dotnet test` and verify ≥80% coverage for ViState, EmacsState, CharacterFind per SC-002
+- [x] T032 Run thread safety stress tests (10 threads × 1000 ops) for ViState and EmacsState per SC-004
+- [x] T033 Verify file organization: 6 source files, each <1000 LOC per SC-007, Constitution X
+- [x] T034 Run quickstart.md code examples to verify they work correctly
 
 ---
 
