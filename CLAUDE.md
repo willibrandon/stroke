@@ -405,8 +405,10 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + None (Stroke.Core layer with zero external dependencies per Constitution III) (020-ansi-formatted-text)
 - C# 13 / .NET 10+ + None (Stroke.Output depends only on Stroke.Core and Stroke.Styles per Constitution III) (021-output-system)
 - N/A (in-memory output buffers only) (021-output-system)
+- C# 13 / .NET 10+ + Stroke.Core (SimpleCache, IFilter, FilterOrBool), Stroke.Input (Keys enum) (022-key-bindings-system)
 
 ## Recent Changes
+- 022-key-bindings-system: Added Key Bindings System with KeyBindings registry (thread-safe, caching), Binding immutable class, KeyOrChar/KeyPress types, KeyPressEvent, KeyBindingDecorator factory, proxy types (ConditionalKeyBindings, MergedKeyBindings, GlobalOnlyKeyBindings, DynamicKeyBindings), KeyBindingUtils (ParseKey, Merge), KeyBindingsExtensions (WithFilter, GlobalOnly, Merge), FilterOrBool.HasValue property for distinguishing struct default from explicit values (365 tests, >80% coverage)
 - 021-output-system: Added VT100 output system with IOutput interface, Vt100Output/PlainTextOutput/DummyOutput implementations, ColorDepth enum with environment detection (NO_COLOR, STROKE_COLOR_DEPTH), thread-safe color caches (16-color, 256-color), CursorShape enum with modal Vi/Emacs support, OutputFactory for platform detection, FlushStdout helper (420 tests, 85.7% coverage)
 - 020-ansi-formatted-text: Added % operator overloads to Ansi class for Python-style string interpolation with automatic ANSI escape neutralization (\x1b and \b replaced with ?), 15 new tests (63 total Ansi tests, 96.83% coverage)
 - 019-html-formatted-text: Added % operator overloads to Html class for Python-style string interpolation with automatic HTML escaping, fixed FR-022 (fg attribute takes precedence over color attribute), added 7 new tests (46 total Html tests, 98.96% coverage)

@@ -212,6 +212,26 @@ public sealed class FilterOrBoolTests
     }
 
     [Fact]
+    public void Equals_DefaultWithDefault_ReturnsTrue()
+    {
+        var fob1 = default(FilterOrBool);
+        var fob2 = default(FilterOrBool);
+
+        Assert.True(fob1.Equals(fob2));
+        Assert.True(fob1 == fob2);
+    }
+
+    [Fact]
+    public void Equals_DefaultWithExplicitFalse_ReturnsFalse()
+    {
+        var fob1 = default(FilterOrBool);
+        var fob2 = new FilterOrBool(false);
+
+        Assert.False(fob1.Equals(fob2));
+        Assert.False(fob1 == fob2);
+    }
+
+    [Fact]
     public void Equals_WithObject_HandlesTypeCorrectly()
     {
         var fob = new FilterOrBool(true);
@@ -243,6 +263,26 @@ public sealed class FilterOrBoolTests
         var fob2 = new FilterOrBool(condition);
 
         Assert.Equal(fob1.GetHashCode(), fob2.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_DefaultValues_ReturnsSameHash()
+    {
+        var fob1 = default(FilterOrBool);
+        var fob2 = default(FilterOrBool);
+
+        Assert.Equal(fob1.GetHashCode(), fob2.GetHashCode());
+    }
+
+    [Fact]
+    public void GetHashCode_DefaultAndExplicitFalse_ReturnsDifferentHash()
+    {
+        var defaultFob = default(FilterOrBool);
+        var explicitFalse = new FilterOrBool(false);
+
+        // While hash collision is theoretically possible, these should be different
+        // given the HasValue distinction in the hash computation
+        Assert.NotEqual(defaultFob.GetHashCode(), explicitFalse.GetHashCode());
     }
 
     #endregion
@@ -295,13 +335,53 @@ public sealed class FilterOrBoolTests
     #region Default Value Tests
 
     [Fact]
-    public void Default_IsBoolFalse()
+    public void Default_HasValueIsFalse()
     {
         var fob = default(FilterOrBool);
 
-        Assert.True(fob.IsBool);
+        Assert.False(fob.HasValue);
         Assert.False(fob.IsFilter);
+        Assert.False(fob.IsBool);
+    }
+
+    [Fact]
+    public void Default_IsDistinguishableFromExplicitFalse()
+    {
+        var defaultFob = default(FilterOrBool);
+        var explicitFalse = new FilterOrBool(false);
+
+        Assert.False(defaultFob.HasValue);
+        Assert.True(explicitFalse.HasValue);
+        Assert.NotEqual(defaultFob, explicitFalse);
+    }
+
+    [Fact]
+    public void ExplicitTrue_HasValueIsTrue()
+    {
+        var fob = new FilterOrBool(true);
+
+        Assert.True(fob.HasValue);
+        Assert.True(fob.IsBool);
+        Assert.True(fob.BoolValue);
+    }
+
+    [Fact]
+    public void ExplicitFalse_HasValueIsTrue()
+    {
+        var fob = new FilterOrBool(false);
+
+        Assert.True(fob.HasValue);
+        Assert.True(fob.IsBool);
         Assert.False(fob.BoolValue);
+    }
+
+    [Fact]
+    public void Filter_HasValueIsTrue()
+    {
+        var fob = new FilterOrBool(Always.Instance);
+
+        Assert.True(fob.HasValue);
+        Assert.True(fob.IsFilter);
     }
 
     #endregion
