@@ -175,6 +175,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `KeyPress` record struct matching Python Prompt Toolkit's key_binding.key_processor
   - `FilterOrBool` with `HasValue` for distinguishing explicit false from struct default
   - Thread-safe operations (365 tests, >80% coverage)
+- **Editing Modes and State** — Vi and Emacs editing mode state management
+  - `EditingMode` enum (Vi, Emacs) for key binding set selection
+  - `InputMode` enum (Insert, InsertMultiple, Navigation, Replace, ReplaceSingle) for Vi modes
+  - `BufferNames` static class with SearchBuffer, DefaultBuffer, SystemBuffer constants
+  - `CharacterFind` sealed record for Vi f/F/t/T command targets
+  - `ViState` class with InputMode, OperatorFunc, named registers, digraph state, macro recording
+  - `EmacsState` class with macro recording (StartMacro, EndMacro, AppendToRecording)
+  - `OperatorFuncDelegate` for Vi operator function callbacks
+  - InputMode setter side effects (clears operator state when entering Navigation mode)
+  - Thread-safe operations with `System.Threading.Lock` (116 tests, 100% coverage)
 
 ### Up Next
 
