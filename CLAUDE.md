@@ -411,6 +411,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory caches only) (024-utilities)
 - C# 13 / .NET 10 + Stroke.Core (Document), Stroke.FormattedText (StyleAndTextTuple, FormattedTextUtils), Stroke.Filters (IFilter, FilterOrBool) (025-lexer-system)
 - N/A (in-memory caches only - line cache, generator tracking) (025-lexer-system)
+- C# 13 / .NET 10 + None (Stroke.KeyBinding namespace has no external dependencies for this feature) (026-vi-digraphs)
+- N/A (static immutable dictionary populated at static initialization) (026-vi-digraphs)
 
 ## Recent Changes
 - 025-lexer-system: Added Lexer System with ILexer interface, SimpleLexer (single-style text), DynamicLexer (runtime lexer switching), PygmentsLexer (syntax highlighting adapter with line caching, generator reuse), ISyntaxSync interface with SyncFromStart singleton and RegexSync (pattern-based sync position), IPygmentsLexer interface for external lexer implementations, TokenCache (thread-safe token-to-style conversion), MinLinesBackwards=50, ReuseGeneratorMaxDistance=100, MaxBackwards=500, ForLanguage factory, FromFilename fallback (163 tests, >80% coverage)
