@@ -215,6 +215,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `FrozenDictionary` storage for O(1) lookup performance
   - Covers Greek, Cyrillic, Hebrew, Arabic, CJK, box drawing, math symbols, and more
   - Thread-safe via immutability (36 tests, 100% coverage)
+- **Regular Languages** — Grammar-based input handling for CLI applications
+  - `Grammar.Compile()` compiles regex patterns with Python `(?P<name>...)` named group syntax
+  - `CompiledGrammar` with `Match()` and `MatchPrefix()` for full and partial matching
+  - `Match` class with `Variables`, `EndNodes`, `TrailingInput` extraction
+  - `GrammarCompleter` (ICompleter) delegates to per-variable completers
+  - `GrammarLexer` (ILexer) applies per-variable lexers for syntax highlighting
+  - `GrammarValidator` (IValidator) validates input against grammar rules
+  - Node classes: `AnyNode`, `NodeSequence`, `RegexNode`, `Lookahead`, `Variable`, `Repeat`
+  - Thread-safe via immutability (162 tests, >80% coverage)
 
 ### Up Next
 

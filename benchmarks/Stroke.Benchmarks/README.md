@@ -24,6 +24,8 @@ dotnet run -c Release --filter '*FormattedTextUtilsBenchmarks*'
 dotnet run -c Release --filter '*OutputBenchmarks*'
 dotnet run -c Release --filter '*KeyBinding*'
 dotnet run -c Release --filter '*Lexer*'
+dotnet run -c Release --filter '*Grammar*'
+dotnet run -c Release --filter '*Matching*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -108,6 +110,19 @@ dotnet run -c Release --list flat
 | DynamicLexer delegation overhead | N/A | ~27 ns |
 | RegexSync find sync position | N/A | ~654 μs |
 
+### Regular Languages (SC-002, SC-003, SC-004)
+
+| Benchmark | Target | Measured |
+|-----------|--------|----------|
+| CompileSimplePattern | N/A | ~24 μs |
+| CompilePatternWithVariables | N/A | ~67 μs |
+| CompileComplexPattern | N/A | ~128 μs |
+| MatchSimple | N/A | ~43 ns |
+| MatchWithVariables | N/A | ~56 ns |
+| MatchPrefix | N/A | ~122 ns |
+| GetSimpleCompletions | N/A | ~652 ns |
+| GetComplexCompletions | N/A | ~14 μs |
+
 ## Benchmark Classes
 
 ### Completion System
@@ -144,3 +159,8 @@ dotnet run -c Release --list flat
 ### Lexer System
 - **LexerBenchmarks** - Core lexer operations: SimpleLexer, PygmentsLexer cache hit/miss, DynamicLexer delegation, RegexSync
 - **LexerScalingBenchmarks** - Lexer scaling with 100/1K/10K line documents
+
+### Regular Languages
+- **GrammarCompilationBenchmarks** - Grammar compilation with simple, complex, nested, and escape function patterns (SC-002)
+- **MatchingBenchmarks** - Pattern matching, variable extraction, prefix matching, EndNodes, TrailingInput (SC-003)
+- **GrammarCompletionBenchmarks** - Grammar-based completion with simple and complex grammars (SC-004)
