@@ -24,8 +24,8 @@
 
 **Purpose**: Create file structure and test infrastructure
 
-- [ ] T001 Create IWindow marker interface in src/Stroke/Layout/IWindow.cs
-- [ ] T002 [P] Create TestWindow helper class in tests/Stroke.Tests/Layout/TestWindow.cs
+- [X] T001 Create IWindow marker interface in src/Stroke/Layout/IWindow.cs
+- [X] T002 [P] Create TestWindow helper class in tests/Stroke.Tests/Layout/TestWindow.cs
 
 ---
 
@@ -35,15 +35,15 @@
 
 **⚠️ CRITICAL**: Char and CharacterDisplayMappings MUST be complete before Screen can be implemented
 
-- [ ] T003 Implement CharacterDisplayMappings static class with 66 mappings in src/Stroke/Layout/CharacterDisplayMappings.cs
-- [ ] T004 [P] Write CharacterDisplayMappings tests (C0, DEL, C1, NBSP mappings) in tests/Stroke.Tests/Layout/CharacterDisplayMappingsTests.cs
-- [ ] T005 Implement Char sealed class with Character, Style, Width properties in src/Stroke/Layout/Char.cs
-- [ ] T006 Add control character transformation logic (C0→caret, DEL→^?, C1→hex, NBSP→space) to Char constructor in src/Stroke/Layout/Char.cs
-- [ ] T007 Add Char.Create factory method with FastDictCache interning (1M entries) in src/Stroke/Layout/Char.cs
-- [ ] T008 Implement Char.Transparent constant and IEquatable<Char> in src/Stroke/Layout/Char.cs
-- [ ] T009 [P] Write Char tests (construction, width, equality, caching, ToString) in tests/Stroke.Tests/Layout/CharTests.cs
-- [ ] T010 Implement WritePosition readonly record struct with validation in src/Stroke/Layout/WritePosition.cs
-- [ ] T011 [P] Write WritePosition tests (construction, equality, negative pos, validation) in tests/Stroke.Tests/Layout/WritePositionTests.cs
+- [X] T003 Implement CharacterDisplayMappings static class with 66 mappings in src/Stroke/Layout/CharacterDisplayMappings.cs
+- [X] T004 [P] Write CharacterDisplayMappings tests (C0, DEL, C1, NBSP mappings) in tests/Stroke.Tests/Layout/CharacterDisplayMappingsTests.cs
+- [X] T005 Implement Char sealed class with Character, Style, Width properties in src/Stroke/Layout/Char.cs
+- [X] T006 Add control character transformation logic (C0→caret, DEL→^?, C1→hex, NBSP→space) to Char constructor in src/Stroke/Layout/Char.cs
+- [X] T007 Add Char.Create factory method with FastDictCache interning (1M entries) in src/Stroke/Layout/Char.cs
+- [X] T008 Implement Char.Transparent constant and IEquatable<Char> in src/Stroke/Layout/Char.cs
+- [X] T009 [P] Write Char tests (construction, width, equality, caching, ToString) in tests/Stroke.Tests/Layout/CharTests.cs
+- [X] T010 Implement WritePosition readonly record struct with validation in src/Stroke/Layout/WritePosition.cs
+- [X] T011 [P] Write WritePosition tests (construction, equality, negative pos, validation) in tests/Stroke.Tests/Layout/WritePositionTests.cs
 
 **Checkpoint**: Char, CharacterDisplayMappings, WritePosition, IWindow ready - Screen implementation can now begin
 
@@ -57,13 +57,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Create Screen class skeleton with Lock, DefaultChar, Width, Height in src/Stroke/Layout/Screen.cs
-- [ ] T013 [US1] Implement sparse storage Dictionary<int, Dictionary<int, Char>> in src/Stroke/Layout/Screen.cs
-- [ ] T014 [US1] Implement Screen indexer this[row, col] getter (returns DefaultChar for unset) in src/Stroke/Layout/Screen.cs
-- [ ] T015 [US1] Implement Screen indexer this[row, col] setter (creates row dict on demand, expands dimensions) in src/Stroke/Layout/Screen.cs
-- [ ] T016 [US1] Implement Screen constructor with optional defaultChar, initialWidth, initialHeight in src/Stroke/Layout/Screen.cs
-- [ ] T017 [P] [US1] Write Screen indexer tests (store/retrieve, default return, negative coords, Int32.MaxValue) in tests/Stroke.Tests/Layout/ScreenTests.cs
-- [ ] T018 [P] [US1] Write Screen dimension tracking tests (auto-expand on write, clamp negative initial) in tests/Stroke.Tests/Layout/ScreenTests.cs
+- [X] T012 [US1] Create Screen class skeleton with Lock, DefaultChar, Width, Height in src/Stroke/Layout/Screen.cs
+- [X] T013 [US1] Implement sparse storage Dictionary<int, Dictionary<int, Char>> in src/Stroke/Layout/Screen.cs
+- [X] T014 [US1] Implement Screen indexer this[row, col] getter (returns DefaultChar for unset) in src/Stroke/Layout/Screen.cs
+- [X] T015 [US1] Implement Screen indexer this[row, col] setter (creates row dict on demand, expands dimensions) in src/Stroke/Layout/Screen.cs
+- [X] T016 [US1] Implement Screen constructor with optional defaultChar, initialWidth, initialHeight in src/Stroke/Layout/Screen.cs
+- [X] T017 [P] [US1] Write Screen indexer tests (store/retrieve, default return, negative coords, Int32.MaxValue) in tests/Stroke.Tests/Layout/ScreenTests.cs
+- [X] T018 [P] [US1] Write Screen dimension tracking tests (auto-expand on write, clamp negative initial) in tests/Stroke.Tests/Layout/ScreenTests.cs
 
 **Checkpoint**: Screen can store and retrieve characters at any coordinate - basic terminal content building works
 
@@ -77,12 +77,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Add cursor positions Dictionary<IWindow, Point> to Screen in src/Stroke/Layout/Screen.cs
-- [ ] T020 [US2] Implement SetCursorPosition and GetCursorPosition methods in src/Stroke/Layout/Screen.cs
-- [ ] T021 [US2] Add menu positions Dictionary<IWindow, Point> to Screen in src/Stroke/Layout/Screen.cs
-- [ ] T022 [US2] Implement SetMenuPosition and GetMenuPosition (with fallback chain) methods in src/Stroke/Layout/Screen.cs
-- [ ] T023 [P] [US2] Write cursor position tests (set/get, Point.Zero default, null throws) in tests/Stroke.Tests/Layout/ScreenCursorTests.cs
-- [ ] T024 [P] [US2] Write menu position tests (set/get, cursor fallback, Point.Zero fallback, null throws) in tests/Stroke.Tests/Layout/ScreenCursorTests.cs
+- [X] T019 [US2] Add cursor positions Dictionary<IWindow, Point> to Screen in src/Stroke/Layout/Screen.cs
+- [X] T020 [US2] Implement SetCursorPosition and GetCursorPosition methods in src/Stroke/Layout/Screen.cs
+- [X] T021 [US2] Add menu positions Dictionary<IWindow, Point> to Screen in src/Stroke/Layout/Screen.cs
+- [X] T022 [US2] Implement SetMenuPosition and GetMenuPosition (with fallback chain) methods in src/Stroke/Layout/Screen.cs
+- [X] T023 [P] [US2] Write cursor position tests (set/get, Point.Zero default, null throws) in tests/Stroke.Tests/Layout/ScreenCursorTests.cs
+- [X] T024 [P] [US2] Write menu position tests (set/get, cursor fallback, Point.Zero fallback, null throws) in tests/Stroke.Tests/Layout/ScreenCursorTests.cs
 
 **Checkpoint**: Screen tracks cursor/menu positions per window - interactive applications can track text input and menu anchors
 
@@ -98,8 +98,8 @@
 
 This story is primarily implemented in the Foundational phase (Char class with control character transformation). This phase adds additional test coverage.
 
-- [ ] T025 [P] [US3] Write control character transformation tests (C0 caret, DEL ^?, C1 hex, NBSP) in tests/Stroke.Tests/Layout/CharControlCharacterTests.cs
-- [ ] T026 [P] [US3] Write style prepending tests (class:control-character, class:nbsp with existing style) in tests/Stroke.Tests/Layout/CharControlCharacterTests.cs
+- [X] T025 [P] [US3] Write control character transformation tests (C0 caret, DEL ^?, C1 hex, NBSP) in tests/Stroke.Tests/Layout/CharControlCharacterTests.cs
+- [X] T026 [P] [US3] Write style prepending tests (class:control-character, class:nbsp with existing style) in tests/Stroke.Tests/Layout/CharControlCharacterTests.cs
 
 **Checkpoint**: Control characters display as ^A, ^?, <80>, etc. with appropriate styling
 
@@ -113,10 +113,10 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Add zero-width escapes Dictionary<(int, int), string> to Screen in src/Stroke/Layout/Screen.cs
-- [ ] T028 [US4] Implement AddZeroWidthEscape method (concatenate, ignore empty, throw on null) in src/Stroke/Layout/Screen.cs
-- [ ] T029 [US4] Implement GetZeroWidthEscapes method (return stored or empty string) in src/Stroke/Layout/Screen.cs
-- [ ] T030 [P] [US4] Write zero-width escape tests (add, concatenate, get, empty string, null throws) in tests/Stroke.Tests/Layout/ScreenEscapeTests.cs
+- [X] T027 [US4] Add zero-width escapes Dictionary<(int, int), string> to Screen in src/Stroke/Layout/Screen.cs
+- [X] T028 [US4] Implement AddZeroWidthEscape method (concatenate, ignore empty, throw on null) in src/Stroke/Layout/Screen.cs
+- [X] T029 [US4] Implement GetZeroWidthEscapes method (return stored or empty string) in src/Stroke/Layout/Screen.cs
+- [X] T030 [P] [US4] Write zero-width escape tests (add, concatenate, get, empty string, null throws) in tests/Stroke.Tests/Layout/ScreenEscapeTests.cs
 
 **Checkpoint**: Screen supports zero-width escapes for hyperlinks and terminal extensions
 
@@ -130,11 +130,11 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 ### Implementation for User Story 5
 
-- [ ] T031 [US5] Add draw queue List<(int ZIndex, int Order, Action)> to Screen in src/Stroke/Layout/Screen.cs
-- [ ] T032 [US5] Implement DrawWithZIndex method (enqueue with sequence number for FIFO) in src/Stroke/Layout/Screen.cs
-- [ ] T033 [US5] Implement DrawAllFloats method (sort by z-index/order, execute iteratively, clear on exception) in src/Stroke/Layout/Screen.cs
-- [ ] T034 [P] [US5] Write DrawAllFloats tests (z-index order, FIFO equal z-index, nested queuing) in tests/Stroke.Tests/Layout/ScreenFloatTests.cs
-- [ ] T035 [P] [US5] Write DrawAllFloats exception tests (clear queue, re-throw, no execute remaining) in tests/Stroke.Tests/Layout/ScreenFloatTests.cs
+- [X] T031 [US5] Add draw queue List<(int ZIndex, int Order, Action)> to Screen in src/Stroke/Layout/Screen.cs
+- [X] T032 [US5] Implement DrawWithZIndex method (enqueue with sequence number for FIFO) in src/Stroke/Layout/Screen.cs
+- [X] T033 [US5] Implement DrawAllFloats method (sort by z-index/order, execute iteratively, clear on exception) in src/Stroke/Layout/Screen.cs
+- [X] T034 [P] [US5] Write DrawAllFloats tests (z-index order, FIFO equal z-index, nested queuing) in tests/Stroke.Tests/Layout/ScreenFloatTests.cs
+- [X] T035 [P] [US5] Write DrawAllFloats exception tests (clear queue, re-throw, no execute remaining) in tests/Stroke.Tests/Layout/ScreenFloatTests.cs
 
 **Checkpoint**: Floating content draws in correct z-order - menus and dialogs layer properly
 
@@ -148,10 +148,10 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 ### Implementation for User Story 6
 
-- [ ] T036 [US6] Implement FillArea method (iterate region, prepend/append style) in src/Stroke/Layout/Screen.cs
-- [ ] T037 [US6] Implement AppendStyleToContent method (iterate all cells, append style) in src/Stroke/Layout/Screen.cs
-- [ ] T038 [P] [US6] Write FillArea tests (prepend, append, empty style no-op, zero dimensions) in tests/Stroke.Tests/Layout/ScreenFillTests.cs
-- [ ] T039 [P] [US6] Write AppendStyleToContent tests (append to all, empty style no-op, empty screen) in tests/Stroke.Tests/Layout/ScreenFillTests.cs
+- [X] T036 [US6] Implement FillArea method (iterate region, prepend/append style) in src/Stroke/Layout/Screen.cs
+- [X] T037 [US6] Implement AppendStyleToContent method (iterate all cells, append style) in src/Stroke/Layout/Screen.cs
+- [X] T038 [P] [US6] Write FillArea tests (prepend, append, empty style no-op, zero dimensions) in tests/Stroke.Tests/Layout/ScreenFillTests.cs
+- [X] T039 [P] [US6] Write AppendStyleToContent tests (append to all, empty style no-op, empty screen) in tests/Stroke.Tests/Layout/ScreenFillTests.cs
 
 **Checkpoint**: Screen supports efficient region filling for backgrounds and style overlays
 
@@ -165,8 +165,8 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 ### Implementation for User Story 7
 
-- [ ] T040 [US7] Implement Clear method (reset buffer, escapes, positions, queue, dimensions; preserve DefaultChar, ShowCursor) in src/Stroke/Layout/Screen.cs
-- [ ] T041 [P] [US7] Write Clear tests (clears all, resets dimensions to initial, preserves config) in tests/Stroke.Tests/Layout/ScreenClearTests.cs
+- [X] T040 [US7] Implement Clear method (reset buffer, escapes, positions, queue, dimensions; preserve DefaultChar, ShowCursor) in src/Stroke/Layout/Screen.cs
+- [X] T041 [P] [US7] Write Clear tests (clears all, resets dimensions to initial, preserves config) in tests/Stroke.Tests/Layout/ScreenClearTests.cs
 
 **Checkpoint**: Screen can be efficiently reused between render cycles
 
@@ -176,10 +176,10 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 **Purpose**: Complete Screen properties and window tracking
 
-- [ ] T042 Implement ShowCursor property in src/Stroke/Layout/Screen.cs
-- [ ] T043 Implement VisibleWindowsToWritePositions property (IDictionary<IWindow, WritePosition>) in src/Stroke/Layout/Screen.cs
-- [ ] T044 Implement VisibleWindows property (IReadOnlyList<IWindow> snapshot) in src/Stroke/Layout/Screen.cs
-- [ ] T045 [P] Write VisibleWindows tests (add/remove, empty list, snapshot behavior) in tests/Stroke.Tests/Layout/ScreenWindowTests.cs
+- [X] T042 Implement ShowCursor property in src/Stroke/Layout/Screen.cs
+- [X] T043 Implement VisibleWindowsToWritePositions property (IDictionary<IWindow, WritePosition>) in src/Stroke/Layout/Screen.cs
+- [X] T044 Implement VisibleWindows property (IReadOnlyList<IWindow> snapshot) in src/Stroke/Layout/Screen.cs
+- [X] T045 [P] Write VisibleWindows tests (add/remove, empty list, snapshot behavior) in tests/Stroke.Tests/Layout/ScreenWindowTests.cs
 
 ---
 
@@ -187,11 +187,11 @@ This story is primarily implemented in the Foundational phase (Char class with c
 
 **Purpose**: Thread safety validation, coverage verification, documentation
 
-- [ ] T046 [P] Write thread safety tests (concurrent read/write, DrawAllFloats lock) in tests/Stroke.Tests/Layout/ScreenThreadSafetyTests.cs
-- [ ] T047 [P] Write sparse storage verification test (100 cells on 10000x10000 = ~100 entries) in tests/Stroke.Tests/Layout/ScreenMemoryTests.cs
-- [ ] T048 Verify ≥80% code coverage for Char.cs, CharacterDisplayMappings.cs, WritePosition.cs, Screen.cs, IWindow.cs
-- [ ] T049 Run quickstart.md validation examples
-- [ ] T050 Review all XML documentation comments for public APIs
+- [X] T046 [P] Write thread safety tests (concurrent read/write, DrawAllFloats lock) in tests/Stroke.Tests/Layout/ScreenThreadSafetyTests.cs
+- [X] T047 [P] Write sparse storage verification test (100 cells on 10000x10000 = ~100 entries) in tests/Stroke.Tests/Layout/ScreenMemoryTests.cs
+- [X] T048 Verify ≥80% code coverage for Char.cs, CharacterDisplayMappings.cs, WritePosition.cs, Screen.cs, IWindow.cs
+- [X] T049 Run quickstart.md validation examples
+- [X] T050 Review all XML documentation comments for public APIs
 
 ---
 
