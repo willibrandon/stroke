@@ -24,8 +24,8 @@
 
 **Purpose**: Project initialization and namespace structure
 
-- [ ] T001 Create Lexers directory at `src/Stroke/Lexers/`
-- [ ] T002 Create test directory at `tests/Stroke.Tests/Lexers/`
+- [x] T001 Create Lexers directory at `src/Stroke/Lexers/`
+- [x] T002 Create test directory at `tests/Stroke.Tests/Lexers/`
 
 ---
 
@@ -35,8 +35,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Implement `ILexer` interface in `src/Stroke/Lexers/ILexer.cs` with `LexDocument` returning `Func<int, IReadOnlyList<StyleAndTextTuple>>` and `InvalidationHash()` returning `object` (FR-001, FR-002)
-- [ ] T004 [P] Create test file `tests/Stroke.Tests/Lexers/LexerBaseTests.cs` with ILexer contract verification tests
+- [x] T003 Implement `ILexer` interface in `src/Stroke/Lexers/ILexer.cs` with `LexDocument` returning `Func<int, IReadOnlyList<StyleAndTextTuple>>` and `InvalidationHash()` returning `object` (FR-001, FR-002)
+- [x] T004 [P] Create test file `tests/Stroke.Tests/Lexers/LexerBaseTests.cs` with ILexer contract verification tests
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -52,7 +52,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T005 [P] [US1] Create `tests/Stroke.Tests/Lexers/SimpleLexerTests.cs` with tests for:
+- [x] T005 [P] [US1] Create `tests/Stroke.Tests/Lexers/SimpleLexerTests.cs` with tests for:
   - Default style returns empty style string (FR-003)
   - Custom style returns configured style (FR-003)
   - Null style treated as empty string (FR-003)
@@ -66,14 +66,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Implement `SimpleLexer` class in `src/Stroke/Lexers/SimpleLexer.cs`:
+- [x] T006 [US1] Implement `SimpleLexer` class in `src/Stroke/Lexers/SimpleLexer.cs`:
   - Sealed class implementing `ILexer`
   - Constructor with `string style = ""` parameter (null treated as "")
   - `Style` property (readonly, never null)
   - `LexDocument(Document)` returning function that maps line numbers to styled tokens
   - `InvalidationHash()` returning `this`
   - Thread-safe (immutable after construction per FR-022)
-- [ ] T007 [US1] Add acceptance tests to SimpleLexerTests.cs:
+- [x] T007 [US1] Add acceptance tests to SimpleLexerTests.cs:
   - `Given_SimpleLexerWithDefaultStyle_When_LexingMultiLineDocument_Then_EachLineHasEmptyStyle` (US1-AC1)
   - `Given_SimpleLexerWithCustomStyle_When_LexingDocument_Then_AllTextHasConfiguredStyle` (US1-AC2)
   - `Given_SimpleLexer_When_RequestingLineBeyondBounds_Then_EmptyListReturned` (US1-AC3)
@@ -92,7 +92,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T008 [P] [US2] Create `tests/Stroke.Tests/Lexers/DynamicLexerTests.cs` with tests for:
+- [x] T008 [P] [US2] Create `tests/Stroke.Tests/Lexers/DynamicLexerTests.cs` with tests for:
   - Callback returns lexer, delegates to that lexer (FR-005)
   - Callback returns null, uses fallback SimpleLexer (FR-006)
   - InvalidationHash returns active lexer's hash (FR-007)
@@ -102,18 +102,18 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Implement `DynamicLexer` class in `src/Stroke/Lexers/DynamicLexer.cs`:
+- [x] T009 [US2] Implement `DynamicLexer` class in `src/Stroke/Lexers/DynamicLexer.cs`:
   - Sealed class implementing `ILexer`
   - Constructor with `Func<ILexer?>` parameter (throws ArgumentNullException if null)
   - Private `SimpleLexer("")` fallback instance
   - `LexDocument(Document)` invoking callback and delegating (or using fallback)
   - `InvalidationHash()` returning active lexer's hash (FR-007)
   - Thread-safe for returned function per FR-023
-- [ ] T010 [US2] Add acceptance tests to DynamicLexerTests.cs:
+- [x] T010 [US2] Add acceptance tests to DynamicLexerTests.cs:
   - `Given_DynamicLexerWithCallback_When_CallbackReturnsLexer_Then_DelegatesToThatLexer` (US2-AC1)
   - `Given_DynamicLexerWithCallback_When_CallbackReturnsNull_Then_FallbackUsed` (US2-AC2)
   - `Given_DynamicLexer_When_CallbackReturnsDifferentLexer_Then_HashChanges` (US2-AC3)
-- [ ] T011 [P] [US2] Create `tests/Stroke.Tests/Lexers/DynamicLexerConcurrencyTests.cs` with:
+- [x] T011 [P] [US2] Create `tests/Stroke.Tests/Lexers/DynamicLexerConcurrencyTests.cs` with:
   - `Concurrent_CallbackInvocation_Safe` (multiple threads calling LexDocument)
   - `Concurrent_ReturnedFunction_ThreadSafe`
 
@@ -131,7 +131,7 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T012 [P] [US3] Create `tests/Stroke.Tests/Lexers/SyntaxSyncTests.cs` with tests for:
+- [x] T012 [P] [US3] Create `tests/Stroke.Tests/Lexers/SyntaxSyncTests.cs` with tests for:
   - ISyntaxSync contract: GetSyncStartPosition returns (Row, Column) tuple (FR-008)
   - SyncFromStart always returns (0, 0) (FR-009)
   - SyncFromStart.Instance returns singleton
@@ -151,22 +151,22 @@
 
 ### Implementation for User Story 3
 
-- [ ] T013 [US3] Implement `ISyntaxSync` interface in `src/Stroke/Lexers/ISyntaxSync.cs`:
+- [x] T013 [US3] Implement `ISyntaxSync` interface in `src/Stroke/Lexers/ISyntaxSync.cs`:
   - `GetSyncStartPosition(Document document, int lineNo)` returning `(int Row, int Column)`
-- [ ] T014 [P] [US3] Implement `SyncFromStart` class in `src/Stroke/Lexers/SyncFromStart.cs`:
+- [x] T014 [P] [US3] Implement `SyncFromStart` class in `src/Stroke/Lexers/SyncFromStart.cs`:
   - Sealed class implementing `ISyntaxSync`
   - Private constructor for singleton pattern
   - Static `Instance` property returning singleton
   - `GetSyncStartPosition` always returns (0, 0)
   - Throws ArgumentNullException if document is null
-- [ ] T015 [P] [US3] Implement `RegexSync` class in `src/Stroke/Lexers/RegexSync.cs`:
+- [x] T015 [P] [US3] Implement `RegexSync` class in `src/Stroke/Lexers/RegexSync.cs`:
   - Sealed class implementing `ISyntaxSync`
   - `MaxBackwards` constant = 500
   - `FromStartIfNoSyncPosFound` constant = 100
   - Constructor taking pattern string, compiling with RegexOptions.Compiled
   - `GetSyncStartPosition` scanning backwards to find pattern match
   - `ForLanguage(string language)` static factory method
-- [ ] T016 [US3] Add acceptance tests to SyntaxSyncTests.cs:
+- [x] T016 [US3] Add acceptance tests to SyntaxSyncTests.cs:
   - `Given_RegexSyncWithPattern_When_RequestingLine1000_Then_PositionWithin500Lines` (US3-AC1)
   - `Given_RegexSync_When_NoMatchNearStart_Then_ReturnsZeroZero` (US3-AC2)
   - `Given_RegexSync_When_NoMatchFarFromStart_Then_ReturnsRequestedLine` (US3-AC3)
@@ -186,10 +186,10 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T017 [P] [US4] Create `tests/Stroke.Tests/Lexers/TestPythonLexer.cs` - real IPygmentsLexer implementation for testing (Constitution VIII - no mocks):
+- [x] T017 [P] [US4] Create `tests/Stroke.Tests/Lexers/TestPythonLexer.cs` - real IPygmentsLexer implementation for testing (Constitution VIII - no mocks):
   - Name property returns "Python"
   - GetTokensUnprocessed tokenizes with keywords, names, text, punctuation
-- [ ] T018 [P] [US4] Create `tests/Stroke.Tests/Lexers/PygmentsLexerTests.cs` with tests for:
+- [x] T018 [P] [US4] Create `tests/Stroke.Tests/Lexers/PygmentsLexerTests.cs` with tests for:
   - Token conversion single level: ["Keyword"] → "class:pygments.keyword" (FR-014)
   - Token conversion nested: ["Name", "Function"] → "class:pygments.name.function" (FR-014)
   - Token conversion deep: ["Name", "Function", "Magic"] → "class:pygments.name.function.magic"
@@ -210,13 +210,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T019 [US4] Implement `IPygmentsLexer` interface in `src/Stroke/Lexers/IPygmentsLexer.cs`:
+- [x] T019 [US4] Implement `IPygmentsLexer` interface in `src/Stroke/Lexers/IPygmentsLexer.cs`:
   - `Name` property returning string
   - `GetTokensUnprocessed(string text)` returning `IEnumerable<(int Index, IReadOnlyList<string> TokenType, string Text)>`
-- [ ] T020 [US4] Implement internal `TokenCache` class in `src/Stroke/Lexers/TokenCache.cs`:
+- [x] T020 [US4] Implement internal `TokenCache` class in `src/Stroke/Lexers/TokenCache.cs`:
   - ConcurrentDictionary for thread-safe caching
   - `GetStyleClass(IReadOnlyList<string> tokenType)` converting to "class:pygments.x.y.z" format
-- [ ] T021 [US4] Implement `PygmentsLexer` class in `src/Stroke/Lexers/PygmentsLexer.cs`:
+- [x] T021 [US4] Implement `PygmentsLexer` class in `src/Stroke/Lexers/PygmentsLexer.cs`:
   - Sealed class implementing `ILexer`
   - `MinLinesBackwards` constant = 50
   - `ReuseGeneratorMaxDistance` constant = 100
@@ -225,7 +225,7 @@
   - `LexDocument(Document)` creating isolated state with line cache and generator tracking
   - `InvalidationHash()` returning `this`
   - Token conversion using TokenCache
-- [ ] T022 [US4] Add acceptance tests to PygmentsLexerTests.cs:
+- [x] T022 [US4] Add acceptance tests to PygmentsLexerTests.cs:
   - `Given_PygmentsLexerWithLexer_When_LexingDocument_Then_TokensConvertedToClassPygmentsFormat` (US4-AC1)
   - `Given_PygmentsLexerWithSyncFromStartEnabled_When_LexingAnyLine_Then_LexesFromBeginning` (US4-AC2)
   - `Given_PygmentsLexerWithSyncFromStartDisabled_When_LexingFarLine_Then_UsesSyntaxSync` (US4-AC3)
@@ -245,32 +245,32 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T023 [P] [US5] Add caching tests to `tests/Stroke.Tests/Lexers/PygmentsLexerTests.cs`:
+- [x] T023 [P] [US5] Add caching tests to `tests/Stroke.Tests/Lexers/PygmentsLexerTests.cs`:
   - Cache hit returns cached result without re-lexing (FR-016)
   - Cache miss lexes and caches result (FR-016)
   - Generator reuse within ReuseGeneratorMaxDistance (FR-017)
   - Generator not reused beyond ReuseGeneratorMaxDistance (FR-017)
   - New generator goes back at least MinLinesBackwards (FR-018)
-- [ ] T024 [P] [US5] Create `tests/Stroke.Tests/Lexers/PygmentsLexerConcurrencyTests.cs`:
+- [x] T024 [P] [US5] Create `tests/Stroke.Tests/Lexers/PygmentsLexerConcurrencyTests.cs`:
   - `Concurrent_LexDocument_NoExceptions` (10 threads, 100 calls each)
   - `Concurrent_LineAccess_ConsistentResults` (1000 concurrent line requests)
   - `Concurrent_CacheAccess_NoCorruption` (verify consistent cached values)
 
 ### Implementation for User Story 5
 
-- [ ] T025 [US5] Enhance `PygmentsLexer.LexDocument` with caching infrastructure:
+- [x] T025 [US5] Enhance `PygmentsLexer.LexDocument` with caching infrastructure:
   - Line cache: `Dictionary<int, IReadOnlyList<StyleAndTextTuple>>` per returned function
   - Cache lookup before lexing
   - Cache population after lexing
-- [ ] T026 [US5] Implement generator reuse logic in `PygmentsLexer`:
+- [x] T026 [US5] Implement generator reuse logic in `PygmentsLexer`:
   - Track active generators with current line position
   - Reuse when `generatorLine < requestedLine AND requestedLine - generatorLine < 100`
   - Create new generator at `max(0, requestedLine - MinLinesBackwards)` when not reusing
-- [ ] T027 [US5] Add thread safety with Lock in `PygmentsLexer` (FR-021, FR-024):
+- [x] T027 [US5] Add thread safety with Lock in `PygmentsLexer` (FR-021, FR-024):
   - `Lock` instance per returned function
   - `EnterScope()` pattern for cache and generator access
   - Satisfies FR-021 (thread safety for mutable state) and FR-024 (Lock pattern)
-- [ ] T028 [US5] Add acceptance tests to PygmentsLexerTests.cs:
+- [x] T028 [US5] Add acceptance tests to PygmentsLexerTests.cs:
   - `Given_LexedLine_When_RequestingSameLine_Then_CachedResultReturned` (US5-AC1)
   - `Given_GeneratorAtLineN_When_RequestingLineNPlus10_Then_GeneratorReused` (US5-AC2)
   - `Given_GeneratorAtLineN_When_RequestingLineBeyondReuseDistance_Then_NewGeneratorCreated` (US5-AC3)
@@ -283,7 +283,7 @@
 
 **Purpose**: Performance validation, edge case coverage, documentation
 
-- [ ] T029 [P] Create `tests/Stroke.Tests/Lexers/EdgeCaseTests.cs` with comprehensive edge case coverage:
+- [x] T029 [P] Create `tests/Stroke.Tests/Lexers/EdgeCaseTests.cs` with comprehensive edge case coverage:
   - EC-002: Mixed line endings (Document handles normalization)
   - EC-004: Malformed tokens from IPygmentsLexer (processed without validation)
   - EC-007: Concurrent access thread safety verification
@@ -291,10 +291,10 @@
   - EC-012: Catastrophic regex backtracking (no timeout enforced - document behavior)
   - EC-018: Null/empty text in GetTokensUnprocessed
   - EC-020: Generator disposed mid-iteration
-- [ ] T030 [P] Add benchmark test for SC-001: SimpleLexer ≤1ms/line verification
-- [ ] T031 [P] Add benchmark test for SC-004: O(1) cached line retrieval verification
-- [ ] T032 Run quickstart.md validation - verify all code examples compile and work
-- [ ] T033 Verify code coverage ≥80% per class (SC-007) using `dotnet test --collect:"XPlat Code Coverage"`
+- [x] T030 [P] Add benchmark test for SC-001: SimpleLexer ≤1ms/line verification
+- [x] T031 [P] Add benchmark test for SC-004: O(1) cached line retrieval verification
+- [x] T032 Run quickstart.md validation - verify all code examples compile and work
+- [x] T033 Verify code coverage ≥80% per class (SC-007) using `dotnet test --collect:"XPlat Code Coverage"`
 
 ---
 
