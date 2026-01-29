@@ -383,13 +383,38 @@ The `char` parameter specifies the background fill character:
 - Can be a callable for dynamic character
 - Used with `style` for custom backgrounds
 
+### Screen Position Registration
+
+Window registers itself with Screen during rendering for position tracking:
+
+```csharp
+// In Window.WriteToScreen():
+screen.VisibleWindowsToWritePositions[this] = writePosition;
+
+// For cursor position (if content has cursor):
+var cursorPos = uiContent.CursorPosition;
+if (cursorPos != null)
+{
+    screen.SetCursorPosition(this, TranslateToScreen(cursorPos.Value));
+}
+
+// For menu position (completion menus attach here):
+var menuPos = uiContent.MenuPosition;
+if (menuPos != null)
+{
+    screen.SetMenuPosition(this, TranslateToScreen(menuPos.Value));
+}
+```
+
+This allows FloatContainers to position completion menus relative to cursor location, and enables the Renderer to place the terminal cursor at the focused window's cursor position.
+
 ## Dependencies
 
 - `Stroke.Layout.IContainer` (Feature 25) - Container interface
 - `Stroke.Layout.IUIControl` (Feature 26) - UI control interface
 - `Stroke.Layout.IMargin` (Feature 28) - Margin interface
 - `Stroke.Layout.Dimension` (Feature 24) - Dimension system
-- `Stroke.Rendering.Screen` (Feature 22) - Screen buffer
+- `Stroke.Layout.Screen` (Feature 22) - Screen buffer (same namespace)
 
 ## Implementation Tasks
 

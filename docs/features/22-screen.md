@@ -8,12 +8,14 @@ Implement the screen buffer system that stores styled characters in a 2D grid, s
 
 **Source:** `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/layout/screen.py`
 
+**Note:** In Python PTK, `screen.py` is part of the `layout` package alongside `containers.py`. Both Screen and Window need to reference each other (Screen tracks cursor positions per Window, Window registers itself with Screen). This is why Screen is in `Stroke.Layout` namespace, not `Stroke.Rendering`.
+
 ## Public API
 
 ### Char Class
 
 ```csharp
-namespace Stroke.Rendering;
+namespace Stroke.Layout;
 
 /// <summary>
 /// Represents a single character in the screen buffer.
@@ -61,7 +63,7 @@ public sealed class Char : IEquatable<Char>
 ### CharacterDisplayMappings
 
 ```csharp
-namespace Stroke.Rendering;
+namespace Stroke.Layout;
 
 /// <summary>
 /// Display mappings for control characters.
@@ -86,7 +88,7 @@ public static class CharacterDisplayMappings
 ### WritePosition Struct
 
 ```csharp
-namespace Stroke.Rendering;
+namespace Stroke.Layout;
 
 /// <summary>
 /// Position and dimensions for writing to the screen.
@@ -135,7 +137,7 @@ public readonly struct WritePosition : IEquatable<WritePosition>
 ### Screen Class
 
 ```csharp
-namespace Stroke.Rendering;
+namespace Stroke.Layout;
 
 /// <summary>
 /// Two-dimensional buffer of Char instances.
@@ -160,12 +162,18 @@ public sealed class Screen
     /// <summary>
     /// Cursor positions. Maps window to (row, column).
     /// </summary>
-    public IDictionary<IWindow, Point> CursorPositions { get; }
+    public IDictionary<Window, Point> CursorPositions { get; }
 
     /// <summary>
     /// Menu positions. Maps window to (row, column).
+    /// Falls back to cursor position if menu position not set.
     /// </summary>
-    public IDictionary<IWindow, Point> MenuPositions { get; }
+    public IDictionary<Window, Point> MenuPositions { get; }
+
+    /// <summary>
+    /// Maps visible windows to their write positions (layout info).
+    /// </summary>
+    public IDictionary<Window, WritePosition> VisibleWindowsToWritePositions { get; }
 
     /// <summary>
     /// True if the cursor is shown.
@@ -207,6 +215,37 @@ public sealed class Screen
     public Char GetChar(int row, int column);
 
     /// <summary>
+    /// Set the cursor position for a window.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <param name="position">The cursor position.</param>
+    public void SetCursorPosition(Window window, Point position);
+
+    /// <summary>
+    /// Get the cursor position for a window.
+    /// Returns Point(0, 0) if not set.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <returns>The cursor position.</returns>
+    public Point GetCursorPosition(Window window);
+
+    /// <summary>
+    /// Set the menu position for a window.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <param name="position">The menu position.</param>
+    public void SetMenuPosition(Window window, Point position);
+
+    /// <summary>
+    /// Get the menu position for a window.
+    /// Falls back to cursor position if menu position not set.
+    /// Returns Point(0, 0) if neither is set.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    /// <returns>The menu position.</returns>
+    public Point GetMenuPosition(Window window);
+
+    /// <summary>
     /// Set the character at a position.
     /// </summary>
     /// <param name="row">The row.</param>
@@ -235,10 +274,19 @@ public sealed class Screen
     public void FillArea(WritePosition writePosition, Char @char);
 
     /// <summary>
-    /// Draw all floats on this screen.
+    /// Queue a drawing function to be executed at a specific z-index.
+    /// Floats use this to postpone drawing until all content is laid out.
     /// </summary>
-    /// <param name="floatContainer">The float container to draw.</param>
-    public void DrawAllFloats(IFloatContainer floatContainer);
+    /// <param name="zIndex">The z-index for layering (higher draws on top).</param>
+    /// <param name="drawFunc">The drawing function to execute.</param>
+    public void DrawWithZIndex(int zIndex, Action drawFunc);
+
+    /// <summary>
+    /// Draw all queued float functions in z-index order.
+    /// Processes the internal list of (z-index, draw-func) tuples.
+    /// Functions may add new floats during execution (loop continues until empty).
+    /// </summary>
+    public void DrawAllFloats();
 
     /// <summary>
     /// Append another screen to this one at a position.
@@ -260,13 +308,13 @@ public sealed class Screen
 
 ```
 src/Stroke/
-└── Rendering/
+└── Layout/
     ├── Char.cs
     ├── CharacterDisplayMappings.cs
     ├── WritePosition.cs
     └── Screen.cs
 tests/Stroke.Tests/
-└── Rendering/
+└── Layout/
     ├── CharTests.cs
     ├── CharacterDisplayMappingsTests.cs
     ├── WritePositionTests.cs
@@ -312,12 +360,37 @@ Zero-width escape sequences are stored separately and inserted at specific posit
 - Hyperlinks
 - Custom escape sequences
 
-### Float Composition
+### Float Drawing Pattern
 
-When drawing floats:
-1. Each float renders to its own Screen
-2. Floats are composed onto the main screen by z-index
-3. Higher z-index floats overwrite lower ones
+Float drawing uses a deferred execution pattern (matching Python PTK):
+
+1. FloatContainer calls `screen.DrawWithZIndex(zIndex, drawFunc)` to queue float drawing
+2. Drawing functions are stored as `(zIndex, Action)` tuples in `_drawFloatFunctions` list
+3. After all content is laid out, `DrawAllFloats()` is called
+4. `DrawAllFloats()` processes queued functions in z-index order (lowest first)
+5. The loop continues until the list is empty (floats can add new floats during drawing)
+
+```csharp
+// Internal field
+private readonly List<(int ZIndex, Action DrawFunc)> _drawFloatFunctions = new();
+
+public void DrawWithZIndex(int zIndex, Action drawFunc)
+{
+    _drawFloatFunctions.Add((zIndex, drawFunc));
+}
+
+public void DrawAllFloats()
+{
+    while (_drawFloatFunctions.Count > 0)
+    {
+        // Sort by z-index, draw one, repeat (allows dynamic additions)
+        var sorted = _drawFloatFunctions.OrderBy(f => f.ZIndex).ToList();
+        _drawFloatFunctions.Clear();
+        _drawFloatFunctions.AddRange(sorted.Skip(1));
+        sorted[0].DrawFunc();
+    }
+}
+```
 
 ### Character Interning
 
@@ -325,9 +398,8 @@ Common ASCII characters (space, letters, digits) should be interned to reduce me
 
 ## Dependencies
 
-- `Stroke.Core.Point` (Feature 00) - Point struct
-- `Stroke.Core.IWindow` (Feature 30) - Window interface
-- `Stroke.Layout.IFloatContainer` (Feature 32) - Float container
+- `Stroke.Core.Point` (Feature 00) - Point struct for cursor/menu positions
+- `Stroke.Layout.Window` (Feature 27) - Window class used as dictionary key for cursor/menu positions (same-namespace forward reference)
 
 ## Implementation Tasks
 

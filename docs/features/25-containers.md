@@ -434,6 +434,29 @@ Similar logic applies for vertical positioning.
 - Higher z-index floats are drawn later (on top)
 - Cursor-positioned floats get very high z-index to draw last
 
+### Float Drawing Pattern
+
+FloatContainer uses Screen's deferred drawing mechanism for float composition:
+
+```csharp
+// In FloatContainer.WriteToScreen():
+foreach (var fl in Floats)
+{
+    // Queue the float's drawing function at its z-index
+    screen.DrawWithZIndex(fl.ZIndex, () =>
+    {
+        // Calculate position, render float content to screen
+        var floatWritePosition = CalculateFloatPosition(fl, writePosition);
+        fl.Content.WriteToScreen(screen, mouseHandlers, floatWritePosition, ...);
+    });
+}
+
+// At the end of the root container's WriteToScreen:
+screen.DrawAllFloats();  // Executes all queued draws in z-index order
+```
+
+This pattern ensures floats are drawn after all background content, and in correct z-order even when floats dynamically add more floats during rendering.
+
 ### Magic Container Protocol
 
 Objects can implement `__pt_container__` (via interface `IHasContainer`) to be treated as containers:
@@ -448,8 +471,8 @@ public interface IHasContainer
 ## Dependencies
 
 - `Stroke.Layout.Dimension` (Feature 24) - Dimension system
-- `Stroke.Rendering.Screen` (Feature 22) - Screen buffer
-- `Stroke.Layout.Window` (Feature 27) - Window container
+- `Stroke.Layout.Screen` (Feature 22) - Screen buffer (same namespace)
+- `Stroke.Layout.Window` (Feature 27) - Window container (same namespace)
 - `Stroke.Filters` (Feature 12) - Filter system
 - `Stroke.KeyBinding` (Feature 19) - Key bindings
 

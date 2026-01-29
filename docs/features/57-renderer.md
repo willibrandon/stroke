@@ -448,7 +448,7 @@ public static void PrintFormattedText(
 
 ## Dependencies
 
-- `Stroke.Rendering.Screen` (Feature 05) - Screen buffer
+- `Stroke.Layout.Screen` (Feature 22) - Screen buffer
 - `Stroke.Output.IOutput` (Feature 51) - Output abstraction
 - `Stroke.Styles` (Feature 08) - Style system
 - `Stroke.Layout.Layout` (Feature 29) - Layout class

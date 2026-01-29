@@ -307,7 +307,7 @@ When outputting wide characters:
 
 ## Dependencies
 
-- `Stroke.Rendering.Screen` (Feature 22) - Screen buffer
+- `Stroke.Layout.Screen` (Feature 22) - Screen buffer
 - `Stroke.Rendering.IOutput` (Feature 15) - Output interface
 - `Stroke.Core.FormattedText` (Feature 13) - Formatted text
 - `Stroke.Layout.ILayout` (Feature 30) - Layout interface
