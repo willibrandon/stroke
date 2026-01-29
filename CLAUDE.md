@@ -409,6 +409,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke.Input (KeyPress), Stroke.Clipboard (ClipboardData), Stroke.KeyBinding (KeyPressEvent) (023-editing-modes-state)
 - C# 13 / .NET 10 + Wcwidth NuGet package (v4.0.1, MIT) for character width calculation (024-utilities)
 - N/A (in-memory caches only) (024-utilities)
+- C# 13 / .NET 10 + Stroke.Core (Document), Stroke.FormattedText (StyleAndTextTuple, FormattedTextUtils), Stroke.Filters (IFilter, FilterOrBool) (025-lexer-system)
+- N/A (in-memory caches only - line cache, generator tracking) (025-lexer-system)
 
 ## Recent Changes
 - 024-utilities: Added utility classes with Event<TSender> (pub/sub with += and -= operators), UnicodeWidth (character/string width with thread-safe LRU cache), PlatformUtils (OS detection, environment variable checks for TERM/STROKE_BELL/ConEmuANSI), CollectionUtils (TakeUsingWeights for proportional distribution), ConversionUtils/AnyFloat (lazy value conversion), DummyContext (no-op IDisposable singleton) (146 tests, >80% coverage)
