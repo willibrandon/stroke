@@ -207,6 +207,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Generator reuse within 100 lines, MinLinesBackwards=50 for scrolling
   - O(1) cached line retrieval (4ns cache hit vs 14ms cache miss)
   - Thread-safe operations (163 tests, >80% coverage)
+- **Vi Digraphs** — RFC1345 digraph mappings for special character insertion
+  - `Digraphs` static class with 1,356 mappings from Python Prompt Toolkit
+  - `Lookup(char, char)` returns Unicode code point as `int?`
+  - `GetString(char, char)` returns character string using `char.ConvertFromUtf32()`
+  - `Map` property for full dictionary enumeration
+  - `FrozenDictionary` storage for O(1) lookup performance
+  - Covers Greek, Cyrillic, Hebrew, Arabic, CJK, box drawing, math symbols, and more
+  - Thread-safe via immutability (36 tests, 100% coverage)
 
 ### Up Next
 
