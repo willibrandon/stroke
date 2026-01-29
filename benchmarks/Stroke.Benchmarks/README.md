@@ -23,6 +23,7 @@ dotnet run -c Release --filter '*AnyFormattedTextBenchmarks*'
 dotnet run -c Release --filter '*FormattedTextUtilsBenchmarks*'
 dotnet run -c Release --filter '*OutputBenchmarks*'
 dotnet run -c Release --filter '*KeyBinding*'
+dotnet run -c Release --filter '*Lexer*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -95,6 +96,18 @@ dotnet run -c Release --list flat
 | GlobalOnlyKeyBindings.GetBindingsForKeys | N/A | ~35 ns |
 | DynamicKeyBindings.GetBindingsForKeys | N/A | ~42 ns |
 
+### Lexer System (SC-001, SC-004)
+
+| Benchmark | Target | Measured |
+|-----------|--------|----------|
+| SimpleLexer single line | ≤1ms/line | ~16 ns |
+| SimpleLexer 10K lines | ≤1ms/line | ~4.9 ns/line |
+| PygmentsLexer cached access (cache hit) | O(1) | ~4.1 ns |
+| PygmentsLexer first access (cache miss) | N/A | ~13.9 ms |
+| PygmentsLexer sequential 100 lines | N/A | ~13.5 ms |
+| DynamicLexer delegation overhead | N/A | ~27 ns |
+| RegexSync find sync position | N/A | ~654 μs |
+
 ## Benchmark Classes
 
 ### Completion System
@@ -127,3 +140,7 @@ dotnet run -c Release --list flat
 - **KeyBindingBenchmarks** - Core key binding lookup benchmarks (SC-001, SC-002, SC-006)
 - **KeyBindingMutationBenchmarks** - Add binding performance with and without filters
 - **KeyBindingProxyBenchmarks** - Merged, Conditional, GlobalOnly, Dynamic proxy benchmarks
+
+### Lexer System
+- **LexerBenchmarks** - Core lexer operations: SimpleLexer, PygmentsLexer cache hit/miss, DynamicLexer delegation, RegexSync
+- **LexerScalingBenchmarks** - Lexer scaling with 100/1K/10K line documents

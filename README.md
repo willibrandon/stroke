@@ -194,6 +194,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `AnyFloat` union type for double values or callables returning double
   - `DummyContext` no-op IDisposable singleton
   - Thread-safe operations (146 tests, >80% coverage)
+- **Lexer System** — Syntax highlighting infrastructure for terminal editors
+  - `ILexer` interface with `LexDocument(Document)` returning line accessor function
+  - `SimpleLexer` single-style lexer for plain text (immutable, thread-safe)
+  - `DynamicLexer` for runtime lexer switching via callback
+  - `PygmentsLexer` adapter with line caching and generator reuse
+  - `IPygmentsLexer` interface for external Pygments-compatible lexers
+  - `ISyntaxSync` interface for syntax synchronization strategies
+  - `SyncFromStart` singleton (always sync from line 0)
+  - `RegexSync` pattern-based sync position finder (MaxBackwards=500)
+  - Token conversion: `["Name", "Function"]` → `"class:pygments.name.function"`
+  - Generator reuse within 100 lines, MinLinesBackwards=50 for scrolling
+  - O(1) cached line retrieval (4ns cache hit vs 14ms cache miss)
+  - Thread-safe operations (163 tests, >80% coverage)
 
 ### Up Next
 
