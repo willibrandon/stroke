@@ -38,7 +38,7 @@ public class CharTests
     [Fact]
     public void Transparent_HasCorrectValue()
     {
-        Assert.Equal("[Transparent]", SChar.Transparent);
+        Assert.Equal("[transparent]", SChar.Transparent);
     }
 
     [Theory]

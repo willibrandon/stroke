@@ -267,4 +267,58 @@ public class ScreenTests
         Assert.Equal("X", screen[0, 0].Character);
         Assert.Equal("X", screen[900, 900].Character);
     }
+
+    [Fact]
+    public void DataBuffer_ExposesUnderlyingStorage()
+    {
+        var screen = new Screen();
+        screen[5, 10] = SChar.Create("A", "class:test");
+
+        var dataBuffer = screen.DataBuffer;
+
+        Assert.NotNull(dataBuffer);
+        Assert.True(dataBuffer.ContainsKey(5));
+        Assert.True(dataBuffer[5].ContainsKey(10));
+        Assert.Equal("A", dataBuffer[5][10].Character);
+    }
+
+    [Fact]
+    public void DataBuffer_AllowsDirectModification()
+    {
+        var screen = new Screen();
+
+        // Direct modification via DataBuffer
+        screen.DataBuffer[3] = new Dictionary<int, SChar>
+        {
+            [7] = SChar.Create("X", "class:direct")
+        };
+
+        // Should be readable via indexer
+        Assert.Equal("X", screen[3, 7].Character);
+    }
+
+    [Fact]
+    public void ZeroWidthEscapes_ExposesUnderlyingStorage()
+    {
+        var screen = new Screen();
+        screen.AddZeroWidthEscape(2, 4, "escape1");
+
+        var escapes = screen.ZeroWidthEscapes;
+
+        Assert.NotNull(escapes);
+        Assert.True(escapes.ContainsKey((2, 4)));
+        Assert.Equal("escape1", escapes[(2, 4)]);
+    }
+
+    [Fact]
+    public void ZeroWidthEscapes_AllowsDirectModification()
+    {
+        var screen = new Screen();
+
+        // Direct modification via ZeroWidthEscapes
+        screen.ZeroWidthEscapes[(1, 2)] = "direct_escape";
+
+        // Should be readable via GetZeroWidthEscapes
+        Assert.Equal("direct_escape", screen.GetZeroWidthEscapes(1, 2));
+    }
 }

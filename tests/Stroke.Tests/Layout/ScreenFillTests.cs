@@ -17,12 +17,12 @@ public class ScreenFillTests
 
         screen.FillArea(region, "class:background");
 
-        // All cells in region should have the style (prepended to [Transparent])
+        // All cells in region should have the style (prepended to [transparent])
         for (int row = 0; row < 2; row++)
         {
             for (int col = 0; col < 3; col++)
             {
-                Assert.Equal("class:background [Transparent]", screen[row, col].Style);
+                Assert.Equal("class:background [transparent]", screen[row, col].Style);
             }
         }
     }
@@ -109,9 +109,9 @@ public class ScreenFillTests
 
         screen.FillArea(region, "class:fill");
 
-        Assert.Equal("class:fill [Transparent]", screen[-1, -1].Style);
-        Assert.Equal("class:fill [Transparent]", screen[0, 0].Style);
-        Assert.Equal("class:fill [Transparent]", screen[1, 1].Style);
+        Assert.Equal("class:fill [transparent]", screen[-1, -1].Style);
+        Assert.Equal("class:fill [transparent]", screen[0, 0].Style);
+        Assert.Equal("class:fill [transparent]", screen[1, 1].Style);
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public class ScreenFillTests
         screen.FillArea(region, "class:fill");
 
         Assert.Equal(" ", screen[0, 0].Character); // Default char
-        Assert.Equal("class:fill [Transparent]", screen[0, 0].Style); // Style prepended to [Transparent]
+        Assert.Equal("class:fill [transparent]", screen[0, 0].Style); // Style prepended to [transparent]
     }
 
     [Fact]

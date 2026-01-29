@@ -27,8 +27,9 @@ public sealed class Char : IEquatable<Char>
     /// </summary>
     /// <remarks>
     /// Equivalent to Python Prompt Toolkit's <c>Transparent</c> constant.
+    /// Value matches Python exactly: <c>"[transparent]"</c> (lowercase).
     /// </remarks>
-    public const string Transparent = "[Transparent]";
+    public const string Transparent = "[transparent]";
 
     // Internal cache for character interning (1,000,000 entries per Python PTK)
     private static readonly FastDictCache<(string Character, string Style), Char> _cache =

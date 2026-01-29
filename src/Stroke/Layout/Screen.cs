@@ -48,6 +48,7 @@ public sealed class Screen
     // Current screen dimensions (auto-expand on write)
     private int _width;
     private int _height;
+    private bool _showCursor = true;
 
     /// <summary>
     /// Gets the default character used for empty cells.
@@ -105,7 +106,61 @@ public sealed class Screen
     /// <summary>
     /// Gets or sets whether the cursor should be visible.
     /// </summary>
-    public bool ShowCursor { get; set; } = true;
+    public bool ShowCursor
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _showCursor;
+            }
+        }
+        set
+        {
+            using (_lock.EnterScope())
+            {
+                _showCursor = value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the underlying data buffer for direct access.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This exposes the sparse storage dictionary where row indices map to
+    /// column dictionaries containing <see cref="Char"/> instances.
+    /// </para>
+    /// <para>
+    /// Equivalent to Python Prompt Toolkit's <c>data_buffer</c> attribute.
+    /// Used by renderer and layout components for efficient screen traversal.
+    /// </para>
+    /// <para>
+    /// <b>Warning:</b> Direct modification bypasses dimension tracking and
+    /// thread synchronization. Prefer using the indexer for normal operations.
+    /// </para>
+    /// </remarks>
+    public IDictionary<int, Dictionary<int, Char>> DataBuffer => _dataBuffer;
+
+    /// <summary>
+    /// Gets the zero-width escape sequence storage for direct access.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Maps (row, column) positions to concatenated escape sequences.
+    /// These sequences are invisible but may contain terminal commands
+    /// like hyperlinks or title changes.
+    /// </para>
+    /// <para>
+    /// Equivalent to Python Prompt Toolkit's <c>zero_width_escapes</c> attribute.
+    /// </para>
+    /// <para>
+    /// <b>Warning:</b> Direct modification bypasses thread synchronization.
+    /// Prefer using <see cref="AddZeroWidthEscape"/> and <see cref="GetZeroWidthEscapes"/>.
+    /// </para>
+    /// </remarks>
+    public IDictionary<(int Row, int Col), string> ZeroWidthEscapes => _zeroWidthEscapes;
 
     /// <summary>
     /// Gets the list of visible windows.
