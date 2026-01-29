@@ -417,6 +417,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only - compiled regexes and parse trees) (027-regular-languages)
 - C# 13 / .NET 10 + Stroke.Core (Point, FastDictCache, UnicodeWidth), Wcwidth NuGet package (028-screen-character-model)
 - N/A (in-memory only - sparse dictionary-based screen buffer) (028-screen-character-model)
+- C# 13 / .NET 10 + Stroke.Core (Document, Buffer, Primitives, Filters, Caches), Stroke.FormattedText (StyleAndTextTuple, AnyFormattedText), Stroke.KeyBinding (IKeyBindingsBase, KeyPressEvent), Stroke.Input (Keys, MouseEvent), Stroke.Lexers (ILexer), Stroke.Layout (Dimension, Screen, Char, WritePosition, MouseHandlers) (029-layout-containers-controls-window)
+- N/A (in-memory only - scroll state, render caches) (029-layout-containers-controls-window)
 
 ## Recent Changes
 - 028-screen-character-model: Added Screen and Character Model with Screen class (sparse 2D buffer via Dictionary<int, Dictionary<int, Char>>), Char sealed class (immutable styled character with FastDictCache interning, control character transformation), CharacterDisplayMappings (66 C0/DEL/C1/NBSP mappings), WritePosition readonly record struct, IWindow marker interface, per-window cursor/menu position tracking, zero-width escape sequences, z-index deferred drawing (DrawWithZIndex/DrawAllFloats), FillArea/AppendStyleToContent region operations, Clear() for screen reuse, thread-safe via Lock (369 tests, >80% coverage)
