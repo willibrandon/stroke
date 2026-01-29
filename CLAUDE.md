@@ -413,6 +413,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory caches only - line cache, generator tracking) (025-lexer-system)
 - C# 13 / .NET 10 + None (Stroke.KeyBinding namespace has no external dependencies for this feature) (026-vi-digraphs)
 - N/A (static immutable dictionary populated at static initialization) (026-vi-digraphs)
+- C# 13 / .NET 10 + Stroke.Core (Document), Stroke.Completion (ICompleter, Completion, CompleteEvent), Stroke.Lexers (ILexer), Stroke.Validation (IValidator, ValidationError), Stroke.FormattedText (StyleAndTextTuple) (027-regular-languages)
+- N/A (in-memory only - compiled regexes and parse trees) (027-regular-languages)
 
 ## Recent Changes
 - 026-vi-digraphs: Added Vi Digraphs with Digraphs static class (1,356 RFC1345 mappings from Python Prompt Toolkit), Lookup(char, char) returning int? code points, GetString(char, char) returning string? characters, Map property for enumeration, FrozenDictionary storage for O(1) lookup, thread-safe via immutability (36 tests, 100% coverage)
