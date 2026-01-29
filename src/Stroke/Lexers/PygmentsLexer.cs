@@ -210,14 +210,53 @@ public sealed class PygmentsLexer : ILexer
         }
 
         // Need to create a new generator
-        var (Row, Column) = GetStartPosition(document, requestedLine);
-        var startLine = Row;
+        // Go at least MIN_LINES_BACKWARDS back first (makes scrolling upwards more efficient)
+        var adjustedLine = Math.Max(0, requestedLine - MinLinesBackwards);
 
-        // Apply MIN_LINES_BACKWARDS
-        startLine = Math.Max(0, startLine - MinLinesBackwards);
+        // Now determine the sync start position
+        int row, column;
+        if (adjustedLine == 0)
+        {
+            row = 0;
+            column = 0;
+        }
+        else
+        {
+            (row, column) = GetStartPosition(document, adjustedLine);
+        }
 
-        var newGenerator = CreateLineGenerator(lines, startLine, Column);
-        generators[newGenerator] = startLine - 1; // Will be updated as generator advances
+        // Try to find a generator close to this adjusted point
+        foreach (var kvp in generators)
+        {
+            var genLine = kvp.Value;
+            if (genLine < adjustedLine && adjustedLine - genLine < ReuseGeneratorMaxDistance)
+            {
+                if (bestGenerator == null || genLine > bestGeneratorLine)
+                {
+                    bestGenerator = kvp.Key;
+                    bestGeneratorLine = genLine;
+                }
+            }
+        }
+
+        if (bestGenerator != null)
+        {
+            return bestGenerator;
+        }
+
+        // Create new generator starting from (row, column)
+        var newGenerator = CreateLineGenerator(lines, row, column);
+
+        // If column is not 0, skip the first line (it's incomplete because
+        // the sync algorithm told us to start parsing mid-line)
+        if (column != 0 && newGenerator.MoveNext())
+        {
+            var (firstLineNo, firstTokens) = newGenerator.Current;
+            cache[firstLineNo] = firstTokens;
+            row++;
+        }
+
+        generators[newGenerator] = row;
         return newGenerator;
     }
 

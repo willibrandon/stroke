@@ -131,14 +131,40 @@ public sealed class PygmentsLexerTests
         });
         var pythonLexer = new TestPythonLexer();
         var lexer = new PygmentsLexer(pythonLexer, syncFromStart: filter);
-        var document = new Document("test");
+        // Need > MIN_LINES_BACKWARDS (50) lines for filter to be evaluated
+        // Python only calls sync strategy when adjustedLine > 0
+        var lines = Enumerable.Range(0, 60).Select(i => $"line{i}");
+        var document = new Document(string.Join("\n", lines));
 
         // Act
         var getLine = lexer.LexDocument(document);
-        _ = getLine(0);
+        // Request line 55 so adjustedLine = max(0, 55-50) = 5 > 0
+        _ = getLine(55);
 
         // Assert
         Assert.True(evaluated, "Filter should have been evaluated");
+    }
+
+    [Fact]
+    public void PygmentsLexer_SyncFromStart_FilterNotEvaluated_WhenLineWithinMinLinesBackwards()
+    {
+        // Arrange - Python behavior: filter not called when adjustedLine == 0
+        var evaluated = false;
+        var filter = new Condition(() =>
+        {
+            evaluated = true;
+            return true;
+        });
+        var pythonLexer = new TestPythonLexer();
+        var lexer = new PygmentsLexer(pythonLexer, syncFromStart: filter);
+        var document = new Document("test");
+
+        // Act - request line 0, adjustedLine = max(0, 0-50) = 0
+        var getLine = lexer.LexDocument(document);
+        _ = getLine(0);
+
+        // Assert - filter NOT evaluated because adjustedLine == 0 means we use (0,0) directly
+        Assert.False(evaluated, "Filter should not be evaluated for lines within MIN_LINES_BACKWARDS");
     }
 
     #endregion
@@ -653,4 +679,48 @@ public sealed class PygmentsLexerTests
     }
 
     #endregion
+
+    #region First-Line Skip Tests (Python PTK Compatibility)
+
+    [Fact]
+    public void PygmentsLexer_SyncReturnsNonZeroColumn_SkipsFirstIncompleteLineSilently()
+    {
+        // Arrange - use a custom sync that returns non-zero column
+        var pythonLexer = new TestPythonLexer();
+        var midLineSync = new MidLineSyntaxSync(row: 5, column: 10);
+        var lexer = new PygmentsLexer(pythonLexer, syncFromStart: false, syntaxSync: midLineSync);
+        // Need enough lines so adjustedLine > 0 and sync is actually consulted
+        var lines = Enumerable.Range(0, 100).Select(i => $"line{i}: some content here").ToArray();
+        var document = new Document(string.Join("\n", lines));
+
+        // Act - request line 60 (adjustedLine = 60-50 = 10 > 0, so sync is consulted)
+        var getLine = lexer.LexDocument(document);
+        var tokens = getLine(60);
+
+        // Assert - should return tokens (first incomplete line was silently skipped/cached)
+        Assert.NotNull(tokens);
+    }
+
+    #endregion
+}
+
+/// <summary>
+/// Test sync strategy that returns a mid-line position (non-zero column).
+/// Used to test Python PTK's first-line skip behavior.
+/// </summary>
+internal sealed class MidLineSyntaxSync : ISyntaxSync
+{
+    private readonly int _row;
+    private readonly int _column;
+
+    public MidLineSyntaxSync(int row, int column)
+    {
+        _row = row;
+        _column = column;
+    }
+
+    public (int Row, int Column) GetSyncStartPosition(Document document, int lineNo)
+    {
+        return (_row, _column);
+    }
 }
