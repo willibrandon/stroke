@@ -415,6 +415,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (static immutable dictionary populated at static initialization) (026-vi-digraphs)
 - C# 13 / .NET 10 + Stroke.Core (Document), Stroke.Completion (ICompleter, Completion, CompleteEvent), Stroke.Lexers (ILexer), Stroke.Validation (IValidator, ValidationError), Stroke.FormattedText (StyleAndTextTuple) (027-regular-languages)
 - N/A (in-memory only - compiled regexes and parse trees) (027-regular-languages)
+- C# 13 / .NET 10 + Stroke.Core (Point, FastDictCache, UnicodeWidth), Wcwidth NuGet package (028-screen-character-model)
+- N/A (in-memory only - sparse dictionary-based screen buffer) (028-screen-character-model)
 
 ## Recent Changes
 - 027-regular-languages: Added Regular Languages contrib module with Grammar.Compile() for regex patterns with Python (?P<name>...) syntax, CompiledGrammar with Match/MatchPrefix, Match class with Variables/EndNodes/TrailingInput extraction, MatchVariable for variable metadata, GrammarCompleter (ICompleter) for per-variable completion delegation, GrammarLexer (ILexer) for syntax highlighting, GrammarValidator (IValidator) for input validation, Node parse tree classes (AnyNode, NodeSequence, RegexNode, Lookahead, Variable, Repeat), RegexParser for pattern compilation with prefix generation, thread-safe via immutability (162 tests, >80% coverage)
