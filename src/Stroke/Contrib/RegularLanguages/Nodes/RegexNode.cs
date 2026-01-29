@@ -6,8 +6,14 @@ namespace Stroke.Contrib.RegularLanguages;
 /// A literal regular expression pattern.
 /// </summary>
 /// <remarks>
-/// This class is immutable and thread-safe.
-/// The pattern is validated at construction time.
+/// <para>This class is immutable and thread-safe.</para>
+/// <para>The pattern is validated at construction time.</para>
+/// <para>
+/// <b>Naming deviation:</b> This class is named <c>RegexNode</c> instead of <c>Regex</c>
+/// (as in Python Prompt Toolkit) to avoid conflict with <see cref="System.Text.RegularExpressions.Regex"/>.
+/// The <see cref="Pattern"/> property is named <c>Pattern</c> instead of <c>regex</c> to follow
+/// .NET conventions and avoid stuttering (<c>RegexNode.Regex</c>).
+/// </para>
 /// </remarks>
 public sealed class RegexNode : Node
 {

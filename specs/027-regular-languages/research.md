@@ -306,6 +306,17 @@ public abstract class Node
 | `min_repeat` | `MinRepeat` |
 | `max_repeat` | `MaxRepeat` |
 
+### Naming Deviations from Python PTK (Constitution I Compliance)
+
+The following class/property names deviate from Python Prompt Toolkit naming beyond standard `snake_case` → `PascalCase` conversion:
+
+| Python | C# | Rationale |
+|--------|-----|-----------|
+| `Regex` class | `RegexNode` | Avoids name conflict with `System.Text.RegularExpressions.Regex`. The .NET BCL `Regex` class is fundamental to the implementation and would cause ambiguity if the Node subclass had the same name. |
+| `Regex.regex` property | `RegexNode.Pattern` | The Python property `regex` holds a regex pattern string. Renamed to `Pattern` to avoid stuttering (`RegexNode.Regex`) and to use standard .NET terminology for regex pattern strings. |
+
+These deviations are required by C# language constraints (name collision avoidance) per Constitution Principle I.
+
 ### Immutability Patterns Applied
 
 1. **ImmutableArray**: Use for collections (e.g., `Regex[]` → `ImmutableArray<Regex>`)
