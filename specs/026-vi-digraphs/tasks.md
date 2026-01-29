@@ -25,9 +25,9 @@ Per plan.md Project Structure:
 
 **Purpose**: Verify project structure exists and create source file skeleton
 
-- [ ] T001 Verify KeyBinding namespace exists in `src/Stroke/KeyBinding/` directory
-- [ ] T002 Create `Digraphs.cs` skeleton with class definition and XML documentation in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T003 Create `DigraphsTests.cs` test file skeleton in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T001 Verify KeyBinding namespace exists in `src/Stroke/KeyBinding/` directory
+- [x] T002 Create `Digraphs.cs` skeleton with class definition and XML documentation in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T003 Create `DigraphsTests.cs` test file skeleton in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 ---
 
@@ -37,26 +37,26 @@ Per plan.md Project Structure:
 
 **⚠️ CRITICAL**: No user story can function until the dictionary data is populated
 
-- [ ] T004 Read Python source file at `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/digraphs.py` and extract all DIGRAPHS dictionary entries
-- [ ] T005 Create private static method `CreateDigraphDictionary()` that returns `FrozenDictionary<(char, char), int>` in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T006 Populate dictionary with control characters (0x00-0x1F, ~32 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T007 [P] Populate dictionary with ASCII printable characters (0x20-0x7F, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T008 [P] Populate dictionary with Latin-1 Supplement characters (0x80-0xFF, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T009 [P] Populate dictionary with Latin Extended-A characters (0x100-0x17F, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T010 [P] Populate dictionary with Latin Extended-B characters (0x180-0x24F, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T011 [P] Populate dictionary with Greek and Coptic characters (0x370-0x3FF, ~80 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T012 [P] Populate dictionary with Cyrillic characters (0x400-0x4FF, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T013 [P] Populate dictionary with Hebrew characters (0x5D0-0x5EA, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T014 [P] Populate dictionary with Arabic characters (0x600-0x6FF, ~60 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T015 [P] Populate dictionary with currency symbols (0x20A0-0x20BF, ~10 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T016 [P] Populate dictionary with mathematical operators (0x2200-0x22FF, ~50 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T017 [P] Populate dictionary with box drawing characters (0x2500-0x257F, ~60 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T018 [P] Populate dictionary with Hiragana characters (0x3040-0x309F, ~90 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T019 [P] Populate dictionary with Katakana characters (0x30A0-0x30FF, ~90 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T020 [P] Populate dictionary with Bopomofo characters (0x3100-0x312F, ~40 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T021 [P] Populate dictionary with Latin ligatures and remaining characters (0xFB00-0xFB06 and miscellaneous) in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T022 Initialize static `_map` field with `CreateDigraphDictionary().ToFrozenDictionary()` in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T023 Add entry count verification test to confirm 1,300+ entries exist in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T004 Read Python source file at `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/digraphs.py` and extract all DIGRAPHS dictionary entries
+- [x] T005 Create private static method `CreateDigraphDictionary()` that returns `FrozenDictionary<(char, char), int>` in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T006 Populate dictionary with control characters (0x00-0x1F, ~32 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T007 [P] Populate dictionary with ASCII printable characters (0x20-0x7F, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T008 [P] Populate dictionary with Latin-1 Supplement characters (0x80-0xFF, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T009 [P] Populate dictionary with Latin Extended-A characters (0x100-0x17F, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T010 [P] Populate dictionary with Latin Extended-B characters (0x180-0x24F, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T011 [P] Populate dictionary with Greek and Coptic characters (0x370-0x3FF, ~80 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T012 [P] Populate dictionary with Cyrillic characters (0x400-0x4FF, ~100 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T013 [P] Populate dictionary with Hebrew characters (0x5D0-0x5EA, ~30 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T014 [P] Populate dictionary with Arabic characters (0x600-0x6FF, ~60 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T015 [P] Populate dictionary with currency symbols (0x20A0-0x20BF, ~10 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T016 [P] Populate dictionary with mathematical operators (0x2200-0x22FF, ~50 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T017 [P] Populate dictionary with box drawing characters (0x2500-0x257F, ~60 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T018 [P] Populate dictionary with Hiragana characters (0x3040-0x309F, ~90 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T019 [P] Populate dictionary with Katakana characters (0x30A0-0x30FF, ~90 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T020 [P] Populate dictionary with Bopomofo characters (0x3100-0x312F, ~40 entries) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T021 [P] Populate dictionary with Latin ligatures and remaining characters (0xFB00-0xFB06 and miscellaneous) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T022 Initialize static `_map` field with `CreateDigraphDictionary().ToFrozenDictionary()` in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T023 Add entry count verification test to confirm 1,300+ entries exist in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 **Checkpoint**: Dictionary foundation ready - all 1,300+ mappings ported from Python source
 
@@ -70,16 +70,16 @@ Per plan.md Project Structure:
 
 ### Tests for User Story 1
 
-- [ ] T024 [P] [US1] Test Lookup returns Euro sign code point for ('E', 'u') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T025 [P] [US1] Test Lookup returns Greek pi code point for ('p', '*') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T026 [P] [US1] Test Lookup returns left arrow code point for ('<', '-') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T027 [P] [US1] Test Lookup returns box drawing horizontal for ('h', 'h') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T028 [P] [US1] Test Lookup is case-sensitive (('a', '*') vs ('A', '*') return different values) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T024 [P] [US1] Test Lookup returns Euro sign code point for ('E', 'u') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T025 [P] [US1] Test Lookup returns Greek pi code point for ('p', '*') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T026 [P] [US1] Test Lookup returns left arrow code point for ('<', '-') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T027 [P] [US1] Test Lookup returns box drawing horizontal for ('h', 'h') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T028 [P] [US1] Test Lookup is case-sensitive (('a', '*') vs ('A', '*') return different values) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T029 [US1] Implement `Lookup(char char1, char char2)` method returning `int?` in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T030 [US1] Add XML documentation for Lookup method with examples in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T029 [US1] Implement `Lookup(char char1, char char2)` method returning `int?` in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T030 [US1] Add XML documentation for Lookup method with examples in `src/Stroke/KeyBinding/Digraphs.cs`
 
 **Checkpoint**: User Story 1 complete - Lookup method works for valid digraphs
 
@@ -93,14 +93,14 @@ Per plan.md Project Structure:
 
 ### Tests for User Story 2
 
-- [ ] T031 [P] [US2] Test Lookup returns null for ('Z', 'Z') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T032 [P] [US2] Test Lookup returns null for ('!', '@') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T033 [P] [US2] Test Lookup returns null for reversed order ('u', 'E') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T034 [P] [US2] Test Lookup does not throw for any invalid input in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T031 [P] [US2] Test Lookup returns null for ('Z', 'Z') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T032 [P] [US2] Test Lookup returns null for ('!', '@') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T033 [P] [US2] Test Lookup returns null for reversed order ('u', 'E') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T034 [P] [US2] Test Lookup does not throw for any invalid input in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T035 [US2] Verify Lookup implementation uses TryGetValue for null-returning behavior (no changes if already implemented correctly) in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T035 [US2] Verify Lookup implementation uses TryGetValue for null-returning behavior (no changes if already implemented correctly) in `src/Stroke/KeyBinding/Digraphs.cs`
 
 **Checkpoint**: User Story 2 complete - Invalid digraphs return null, no exceptions
 
@@ -114,16 +114,16 @@ Per plan.md Project Structure:
 
 ### Tests for User Story 3
 
-- [ ] T036 [P] [US3] Test GetString returns "€" for ('E', 'u') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T037 [P] [US3] Test GetString returns "π" for ('p', '*') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T038 [P] [US3] Test GetString returns null for invalid digraph ('Z', 'Z') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T039 [P] [US3] Test GetString handles BMP characters correctly in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T040 [P] [US3] Test GetString uses char.ConvertFromUtf32 which handles surrogate pairs correctly (per research.md, Python source has no code points >0xFFFF, so verify implementation is ready for future additions) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T036 [P] [US3] Test GetString returns "€" for ('E', 'u') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T037 [P] [US3] Test GetString returns "π" for ('p', '*') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T038 [P] [US3] Test GetString returns null for invalid digraph ('Z', 'Z') in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T039 [P] [US3] Test GetString handles BMP characters correctly in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T040 [P] [US3] Test GetString uses char.ConvertFromUtf32 which handles surrogate pairs correctly (per research.md, Python source has no code points >0xFFFF, so verify implementation is ready for future additions) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T041 [US3] Implement `GetString(char char1, char char2)` method returning `string?` using `char.ConvertFromUtf32()` in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T042 [US3] Add XML documentation for GetString method with examples in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T041 [US3] Implement `GetString(char char1, char char2)` method returning `string?` using `char.ConvertFromUtf32()` in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T042 [US3] Add XML documentation for GetString method with examples in `src/Stroke/KeyBinding/Digraphs.cs`
 
 **Checkpoint**: User Story 3 complete - GetString method works for valid digraphs and returns null for invalid
 
@@ -137,16 +137,16 @@ Per plan.md Project Structure:
 
 ### Tests for User Story 4
 
-- [ ] T043 [P] [US4] Test Map property returns non-null dictionary in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T044 [P] [US4] Test Map contains expected entry count (1,300+) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T045 [P] [US4] Test Map contains Euro sign mapping (('E', 'u'), 0x20AC) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T046 [P] [US4] Test Map is enumerable and can filter by code point range (e.g., Greek letters) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T047 [P] [US4] Test Map returns same instance on multiple accesses (reference equality) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T043 [P] [US4] Test Map property returns non-null dictionary in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T044 [P] [US4] Test Map contains expected entry count (1,300+) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T045 [P] [US4] Test Map contains Euro sign mapping (('E', 'u'), 0x20AC) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T046 [P] [US4] Test Map is enumerable and can filter by code point range (e.g., Greek letters) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T047 [P] [US4] Test Map returns same instance on multiple accesses (reference equality) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T048 [US4] Implement `Map` property returning `IReadOnlyDictionary<(char Char1, char Char2), int>` in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T049 [US4] Add XML documentation for Map property with enumeration example in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T048 [US4] Implement `Map` property returning `IReadOnlyDictionary<(char Char1, char Char2), int>` in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T049 [US4] Add XML documentation for Map property with enumeration example in `src/Stroke/KeyBinding/Digraphs.cs`
 
 **Checkpoint**: User Story 4 complete - Map property exposes full dictionary for enumeration
 
@@ -156,13 +156,13 @@ Per plan.md Project Structure:
 
 **Purpose**: Final verification, documentation, and code quality
 
-- [ ] T050 [P] Add category coverage tests verifying each Unicode block has expected approximate entry count in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T051 [P] Add thread safety test calling Lookup from multiple threads concurrently in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T052 [P] Add edge case tests for control characters (code points 0x00-0x1F) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
-- [ ] T053 Verify XML documentation is complete for all public members in `src/Stroke/KeyBinding/Digraphs.cs`
-- [ ] T054 Run quickstart.md examples to verify they work correctly
-- [ ] T055 Verify code coverage meets 80% target (SC-004)
-- [ ] T056 Final review: verify file size is under 1,000 LOC or document exception per Constitution X
+- [x] T050 [P] Add category coverage tests verifying each Unicode block has expected approximate entry count in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T051 [P] Add thread safety test calling Lookup from multiple threads concurrently in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T052 [P] Add edge case tests for control characters (code points 0x00-0x1F) in `tests/Stroke.Tests/KeyBinding/DigraphsTests.cs`
+- [x] T053 Verify XML documentation is complete for all public members in `src/Stroke/KeyBinding/Digraphs.cs`
+- [x] T054 Run quickstart.md examples to verify they work correctly
+- [x] T055 Verify code coverage meets 80% target (SC-004) - 100% line and branch coverage achieved
+- [x] T056 Final review: verify file size is under 1,000 LOC or document exception per Constitution X - 1571 LOC, documented exception for data file
 
 ---
 
