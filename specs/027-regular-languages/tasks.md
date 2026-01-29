@@ -24,8 +24,8 @@
 
 **Purpose**: Create directory structure and foundational files
 
-- [ ] T001 Create directory structure: `src/Stroke/Contrib/RegularLanguages/Nodes/`
-- [ ] T002 [P] Create directory structure: `tests/Stroke.Tests/Contrib/RegularLanguages/`
+- [x] T001 Create directory structure: `src/Stroke/Contrib/RegularLanguages/Nodes/`
+- [x] T002 [P] Create directory structure: `tests/Stroke.Tests/Contrib/RegularLanguages/`
 
 ---
 
@@ -37,20 +37,20 @@
 
 ### Parse Tree Nodes
 
-- [ ] T003 [P] Implement abstract base `Node` class with `+` and `|` operators in `src/Stroke/Contrib/RegularLanguages/Nodes/Node.cs`
-- [ ] T004 [P] Implement `AnyNode` class (OR operation) in `src/Stroke/Contrib/RegularLanguages/Nodes/AnyNode.cs`
-- [ ] T005 [P] Implement `NodeSequence` class (concatenation) in `src/Stroke/Contrib/RegularLanguages/Nodes/NodeSequence.cs`
-- [ ] T006 [P] Implement `RegexNode` class (literal pattern) in `src/Stroke/Contrib/RegularLanguages/Nodes/RegexNode.cs`
-- [ ] T007 [P] Implement `Lookahead` class (lookahead assertion) in `src/Stroke/Contrib/RegularLanguages/Nodes/Lookahead.cs`
-- [ ] T008 [P] Implement `Variable` class (named variable) in `src/Stroke/Contrib/RegularLanguages/Nodes/Variable.cs`
-- [ ] T009 [P] Implement `Repeat` class (repetition) in `src/Stroke/Contrib/RegularLanguages/Nodes/Repeat.cs`
-- [ ] T010 [P] Write unit tests for all Node classes in `tests/Stroke.Tests/Contrib/RegularLanguages/NodeTests.cs`
+- [x] T003 [P] Implement abstract base `Node` class with `+` and `|` operators in `src/Stroke/Contrib/RegularLanguages/Nodes/Node.cs`
+- [x] T004 [P] Implement `AnyNode` class (OR operation) in `src/Stroke/Contrib/RegularLanguages/Nodes/AnyNode.cs`
+- [x] T005 [P] Implement `NodeSequence` class (concatenation) in `src/Stroke/Contrib/RegularLanguages/Nodes/NodeSequence.cs`
+- [x] T006 [P] Implement `RegexNode` class (literal pattern) in `src/Stroke/Contrib/RegularLanguages/Nodes/RegexNode.cs`
+- [x] T007 [P] Implement `Lookahead` class (lookahead assertion) in `src/Stroke/Contrib/RegularLanguages/Nodes/Lookahead.cs`
+- [x] T008 [P] Implement `Variable` class (named variable) in `src/Stroke/Contrib/RegularLanguages/Nodes/Variable.cs`
+- [x] T009 [P] Implement `Repeat` class (repetition) in `src/Stroke/Contrib/RegularLanguages/Nodes/Repeat.cs`
+- [x] T010 [P] Write unit tests for all Node classes in `tests/Stroke.Tests/Contrib/RegularLanguages/NodeTests.cs`
 
 ### Regex Parser
 
-- [ ] T011 Implement `RegexParser.TokenizeRegex()` method in `src/Stroke/Contrib/RegularLanguages/RegexParser.cs` - handles Python-style `(?P<name>)`, comments, whitespace, character classes, all operators
-- [ ] T012 Implement `RegexParser.ParseRegex()` method in `src/Stroke/Contrib/RegularLanguages/RegexParser.cs` - builds parse tree from tokens
-- [ ] T013 Write unit tests for RegexParser in `tests/Stroke.Tests/Contrib/RegularLanguages/RegexParserTests.cs`
+- [x] T011 Implement `RegexParser.TokenizeRegex()` method in `src/Stroke/Contrib/RegularLanguages/RegexParser.cs` - handles Python-style `(?P<name>)`, comments, whitespace, character classes, all operators
+- [x] T012 Implement `RegexParser.ParseRegex()` method in `src/Stroke/Contrib/RegularLanguages/RegexParser.cs` - builds parse tree from tokens
+- [x] T013 Write unit tests for RegexParser in `tests/Stroke.Tests/Contrib/RegularLanguages/RegexParserTests.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -64,10 +64,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement `MatchVariable` class in `src/Stroke/Contrib/RegularLanguages/MatchVariable.cs` - VarName, Value, Start, Stop, Slice, ToString()
-- [ ] T015 [US1] Implement `Variables` class in `src/Stroke/Contrib/RegularLanguages/Variables.cs` - indexer, Get, GetAll, IEnumerable<MatchVariable>, ToString()
-- [ ] T016 [US1] Implement `Match` class in `src/Stroke/Contrib/RegularLanguages/Match.cs` - Input, Variables(), TrailingInput(), EndNodes()
-- [ ] T017 [US1] Implement `CompiledGrammar` class (core matching) in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs`:
+- [x] T014 [US1] Implement `MatchVariable` class in `src/Stroke/Contrib/RegularLanguages/MatchVariable.cs` - VarName, Value, Start, Stop, Slice, ToString()
+- [x] T015 [US1] Implement `Variables` class in `src/Stroke/Contrib/RegularLanguages/Variables.cs` - indexer, Get, GetAll, IEnumerable<MatchVariable>, ToString()
+- [x] T016 [US1] Implement `Match` class in `src/Stroke/Contrib/RegularLanguages/Match.cs` - Input, Variables(), TrailingInput(), EndNodes()
+- [x] T017 [US1] Implement `CompiledGrammar` class (core matching) in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs`:
   - Internal constructor with Node, escape/unescape funcs
   - Pattern generation: transform Node tree to regex with `(?<n0>...)` named groups
   - Full pattern with `^...$` anchors for Match()
@@ -78,9 +78,9 @@
   - `MatchPrefix(string input)` method
   - `Escape(string varname, string value)` method
   - `Unescape(string varname, string value)` method
-- [ ] T018 [US1] Implement static `Grammar.Compile()` method in `src/Stroke/Contrib/RegularLanguages/Grammar.cs` - calls RegexParser then creates CompiledGrammar
-- [ ] T019 [US1] Write unit tests for Match/Variables/MatchVariable in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs`
-- [ ] T020 [US1] Write unit tests for Grammar.Compile and CompiledGrammar in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs`
+- [x] T018 [US1] Implement static `Grammar.Compile()` method in `src/Stroke/Contrib/RegularLanguages/Grammar.cs` - calls RegexParser then creates CompiledGrammar
+- [x] T019 [US1] Write unit tests for Match/Variables/MatchVariable in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs`
+- [x] T020 [US1] Write unit tests for Grammar.Compile and CompiledGrammar in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs`
 
 **Checkpoint**: User Story 1 complete - grammar compilation and matching work
 
@@ -94,9 +94,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Extend `CompiledGrammar` variable extraction in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs` - process regex Match.Groups, apply unescape functions, build MatchVariable list with correct Start/Stop positions
-- [ ] T022 [US2] Support multiple captures with same variable name (ambiguous grammars) in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs` - internal unique group names (`n0`, `n1`...) mapped to user variable names
-- [ ] T023 [US2] Write unit tests for variable extraction in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs` - test Variables indexer, Get, GetAll, position semantics, unescape functions
+- [x] T021 [US2] Extend `CompiledGrammar` variable extraction in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs` - process regex Match.Groups, apply unescape functions, build MatchVariable list with correct Start/Stop positions
+- [x] T022 [US2] Support multiple captures with same variable name (ambiguous grammars) in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs` - internal unique group names (`n0`, `n1`...) mapped to user variable names
+- [x] T023 [US2] Write unit tests for variable extraction in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs` - test Variables indexer, Get, GetAll, position semantics, unescape functions
 
 **Checkpoint**: User Story 2 complete - variable extraction works with positions and unescape
 
@@ -110,8 +110,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement `Match.EndNodes()` in `src/Stroke/Contrib/RegularLanguages/Match.cs` - returns variables whose match ends at input end (cursor position for completion)
-- [ ] T025 [US3] Implement `GrammarCompleter` class in `src/Stroke/Contrib/RegularLanguages/GrammarCompleter.cs`:
+- [x] T024 [US3] Implement `Match.EndNodes()` in `src/Stroke/Contrib/RegularLanguages/Match.cs` - returns variables whose match ends at input end (cursor position for completion)
+- [x] T025 [US3] Implement `GrammarCompleter` class in `src/Stroke/Contrib/RegularLanguages/GrammarCompleter.cs`:
   - Constructor with CompiledGrammar and Dictionary<string, ICompleter>
   - `GetCompletions(Document, CompleteEvent)` - uses MatchPrefix, EndNodes, delegates to per-variable completers
   - Unescape variable value before passing to completer
@@ -119,7 +119,7 @@
   - Adjust StartPosition relative to original input
   - Deduplicate by (Text, StartPosition) preserving order
   - `GetCompletionsAsync()` async version
-- [ ] T026 [US3] Write unit tests for GrammarCompleter in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarCompleterTests.cs` - test completion flow, deduplication, escape/unescape, async version
+- [x] T026 [US3] Write unit tests for GrammarCompleter in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarCompleterTests.cs` - test completion flow, deduplication, escape/unescape, async version
 
 **Checkpoint**: User Story 3 complete - grammar-based autocompletion works
 
@@ -133,7 +133,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Implement `GrammarLexer` class in `src/Stroke/Contrib/RegularLanguages/GrammarLexer.cs`:
+- [x] T027 [US4] Implement `GrammarLexer` class in `src/Stroke/Contrib/RegularLanguages/GrammarLexer.cs`:
   - Constructor with CompiledGrammar, defaultStyle, Dictionary<string, ILexer>
   - `LexDocument(Document)` - returns Func<int, IReadOnlyList<StyleAndTextTuple>>
   - Uses MatchPrefix to get variable positions
@@ -142,7 +142,7 @@
   - Highlights trailing input with "class:trailing-input"
   - Handles multi-line input (split by line)
   - `InvalidationHash()` for caching
-- [ ] T028 [US4] Write unit tests for GrammarLexer in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarLexerTests.cs` - test styling, nested lexers, trailing input, multi-line
+- [x] T028 [US4] Write unit tests for GrammarLexer in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarLexerTests.cs` - test styling, nested lexers, trailing input, multi-line
 
 **Checkpoint**: User Story 4 complete - grammar-based syntax highlighting works
 
@@ -156,14 +156,14 @@
 
 ### Implementation for User Story 5
 
-- [ ] T029 [US5] Implement `GrammarValidator` class in `src/Stroke/Contrib/RegularLanguages/GrammarValidator.cs`:
+- [x] T029 [US5] Implement `GrammarValidator` class in `src/Stroke/Contrib/RegularLanguages/GrammarValidator.cs`:
   - Constructor with CompiledGrammar and Dictionary<string, IValidator>
   - `Validate(Document)` - uses Match (not MatchPrefix), throws "Invalid command" if no match
   - For each matched variable, call per-variable validator with unescaped value
   - Adjust ValidationError.CursorPosition: `matchVariable.Start + e.CursorPosition`
   - `ValidateAsync()` async version
   - Propagate non-ValidationError exceptions unchanged
-- [ ] T030 [US5] Write unit tests for GrammarValidator in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarValidatorTests.cs` - test grammar validation, per-variable validation, position adjustment, async version
+- [x] T030 [US5] Write unit tests for GrammarValidator in `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarValidatorTests.cs` - test grammar validation, per-variable validation, position adjustment, async version
 
 **Checkpoint**: User Story 5 complete - grammar-based validation works
 
@@ -177,8 +177,8 @@
 
 ### Implementation for User Story 6
 
-- [ ] T031 [US6] Implement `Match.VariableAtPosition(int cursorPosition)` method in `src/Stroke/Contrib/RegularLanguages/Match.cs` - returns MatchVariable containing cursor or null if in whitespace/no match
-- [ ] T032 [US6] Write unit tests for VariableAtPosition in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs` - test various cursor positions, boundary cases
+- [x] T031 [US6] Implement `Match.VariableAtPosition(int cursorPosition)` method in `src/Stroke/Contrib/RegularLanguages/Match.cs` - returns MatchVariable containing cursor or null if in whitespace/no match
+- [x] T032 [US6] Write unit tests for VariableAtPosition in `tests/Stroke.Tests/Contrib/RegularLanguages/MatchTests.cs` - test various cursor positions, boundary cases
 
 **Checkpoint**: User Story 6 complete - cursor position querying works
 
@@ -190,31 +190,31 @@
 
 ### Unicode & Edge Cases
 
-- [ ] T033 [P] Add Unicode tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - CJK characters, emoji, combining characters, surrogate pairs (SC-005)
-- [ ] T034 [P] Add edge case tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - empty input, invalid grammar, unsupported features (FR-025, FR-026)
+- [x] T033 [P] Add Unicode tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - CJK characters, emoji, combining characters, surrogate pairs (SC-005)
+- [x] T034 [P] Add edge case tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - empty input, invalid grammar, unsupported features (FR-025, FR-026)
 
 ### Thread Safety
 
-- [ ] T035 Add concurrent stress tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - 100 threads × 1000 match operations on shared CompiledGrammar (SC-008)
+- [x] T035 Add concurrent stress tests to `tests/Stroke.Tests/Contrib/RegularLanguages/GrammarTests.cs` - 100 threads × 1000 match operations on shared CompiledGrammar (SC-008)
 
 ### XML Documentation
 
-- [ ] T036 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Grammar.cs` - all `<summary>`, `<param>`, `<returns>`, `<exception>` tags (SC-007)
-- [ ] T037 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs`
-- [ ] T038 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Match.cs`, `Variables.cs`, `MatchVariable.cs`
-- [ ] T039 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/GrammarCompleter.cs`, `GrammarLexer.cs`, `GrammarValidator.cs`
-- [ ] T040 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Nodes/*.cs` and `RegexParser.cs`
+- [x] T036 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Grammar.cs` - all `<summary>`, `<param>`, `<returns>`, `<exception>` tags (SC-007)
+- [x] T037 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/CompiledGrammar.cs`
+- [x] T038 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Match.cs`, `Variables.cs`, `MatchVariable.cs`
+- [x] T039 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/GrammarCompleter.cs`, `GrammarLexer.cs`, `GrammarValidator.cs`
+- [x] T040 [P] Review and complete XML documentation in `src/Stroke/Contrib/RegularLanguages/Nodes/*.cs` and `RegexParser.cs`
 
 ### Performance Benchmarks
 
-- [ ] T043 [P] Add BenchmarkDotNet performance tests for grammar compilation in `tests/Stroke.Benchmarks/RegularLanguages/GrammarCompilationBenchmarks.cs` (SC-002)
-- [ ] T044 [P] Add BenchmarkDotNet performance tests for matching/parsing in `tests/Stroke.Benchmarks/RegularLanguages/MatchingBenchmarks.cs` (SC-003)
-- [ ] T045 [P] Add BenchmarkDotNet performance tests for completion in `tests/Stroke.Benchmarks/RegularLanguages/CompletionBenchmarks.cs` (SC-004)
+- [x] T043 [P] Add BenchmarkDotNet performance tests for grammar compilation in `benchmarks/Stroke.Benchmarks/GrammarCompilationBenchmarks.cs` (SC-002)
+- [x] T044 [P] Add BenchmarkDotNet performance tests for matching/parsing in `benchmarks/Stroke.Benchmarks/MatchingBenchmarks.cs` (SC-003)
+- [x] T045 [P] Add BenchmarkDotNet performance tests for completion in `benchmarks/Stroke.Benchmarks/GrammarCompletionBenchmarks.cs` (SC-004)
 
 ### Validation
 
-- [ ] T041 Run quickstart.md examples to verify documentation accuracy
-- [ ] T042 Verify test coverage meets 80% threshold (SC-006)
+- [x] T041 Run quickstart.md examples to verify documentation accuracy
+- [x] T042 Verify test coverage meets 80% threshold (SC-006)
 
 ---
 
