@@ -224,10 +224,20 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `GrammarValidator` (IValidator) validates input against grammar rules
   - Node classes: `AnyNode`, `NodeSequence`, `RegexNode`, `Lookahead`, `Variable`, `Repeat`
   - Thread-safe via immutability (162 tests, >80% coverage)
+- **Screen and Character Model** — 2D terminal buffer for rendering
+  - `Screen` sparse 2D character buffer with `Dictionary<int, Dictionary<int, Char>>` storage
+  - `Char` immutable styled character cell with `FastDictCache` interning (1M entries)
+  - `CharacterDisplayMappings` 66 control character display mappings (C0→caret, DEL→^?, C1→hex, NBSP→space)
+  - `WritePosition` readonly record struct for rectangular regions
+  - `IWindow` marker interface for per-window cursor/menu position tracking
+  - Zero-width escape sequence storage for hyperlinks and terminal extensions
+  - Z-index deferred drawing via `DrawWithZIndex`/`DrawAllFloats`
+  - Region fill with `FillArea` and `AppendStyleToContent`
+  - Thread-safe via `System.Threading.Lock` (369 tests, >80% coverage)
 
 ### Up Next
 
-- **Screen & Renderer** — Sparse screen buffer with differential updates
+- **Renderer** — Differential screen updates for efficient terminal rendering
 
 ## Requirements
 
