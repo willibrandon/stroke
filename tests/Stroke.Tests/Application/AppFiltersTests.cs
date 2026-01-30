@@ -31,7 +31,7 @@ public class AppFiltersTests
         Buffer? buffer = null,
         Stroke.KeyBinding.EditingMode editingMode = Stroke.KeyBinding.EditingMode.Emacs)
     {
-        using var input = new SimplePipeInput();
+        var input = new SimplePipeInput();
         var output = new DummyOutput();
         Application<object?> app;
         if (buffer is not null)
