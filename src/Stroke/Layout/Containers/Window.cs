@@ -45,9 +45,9 @@ public class Window : IContainer, IWindow
 
     private int _verticalScroll;
     private int _horizontalScroll;
-    #pragma warning disable CS0414 // Field assigned but never used
+#pragma warning disable CS0414 // Field assigned but never used
     private int _verticalScroll2; // For when single line exceeds height - reserved for line wrapping
-    #pragma warning restore CS0414
+#pragma warning restore CS0414
     private int _renderCounter; // Local render counter for cache invalidation
 
     /// <summary>
