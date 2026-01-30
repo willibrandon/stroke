@@ -4,6 +4,7 @@ using Stroke.Filters;
 using Stroke.FormattedText;
 using Stroke.Input;
 using Stroke.KeyBinding;
+using Stroke.Layout.Processors;
 using Stroke.Layout.Windows;
 using Stroke.Lexers;
 
@@ -37,6 +38,11 @@ public class BufferControl : IUIControl
     private readonly FilterOrBool _focusOnClick;
     private readonly IKeyBindingsBase? _keyBindings;
     private readonly Func<int?>? _menuPosition;
+    private readonly IReadOnlyList<IProcessor>? _inputProcessors;
+    private readonly bool _includeDefaultInputProcessors;
+    private readonly SearchBufferControl? _searchBufferControlDirect;
+    private readonly Func<SearchBufferControl?>? _searchBufferControlFactory;
+    private IReadOnlyList<IProcessor>? _defaultInputProcessors;
 
     // Cache for lexer fragments - keyed by (text, lexer invalidation hash)
     private readonly SimpleCache<(string Text, object LexerHash), Func<int, IReadOnlyList<StyleAndTextTuple>>> _fragmentCache = new(8);
@@ -60,29 +66,107 @@ public class BufferControl : IUIControl
     public ILexer Lexer => _lexer;
 
     /// <summary>
+    /// Custom input processors for this control.
+    /// </summary>
+    public IReadOnlyList<IProcessor>? InputProcessors => _inputProcessors;
+
+    /// <summary>
+    /// Whether to include default processors (search, selection, cursors).
+    /// </summary>
+    public bool IncludeDefaultInputProcessors => _includeDefaultInputProcessors;
+
+    /// <summary>
+    /// Default input processors, instantiated once per BufferControl.
+    /// Order: HighlightSearchProcessor, HighlightIncrementalSearchProcessor,
+    /// HighlightSelectionProcessor, DisplayMultipleCursors.
+    /// </summary>
+    public IReadOnlyList<IProcessor> DefaultInputProcessors
+    {
+        get
+        {
+            if (_defaultInputProcessors is null)
+            {
+                _defaultInputProcessors = new IProcessor[]
+                {
+                    new HighlightSearchProcessor(),
+                    new HighlightIncrementalSearchProcessor(),
+                    new HighlightSelectionProcessor(),
+                    new DisplayMultipleCursors(),
+                };
+            }
+            return _defaultInputProcessors;
+        }
+    }
+
+    /// <summary>
+    /// The SearchBufferControl linked to this control, or null.
+    /// Evaluates the callable factory if one was provided.
+    /// </summary>
+    public SearchBufferControl? SearchBufferControl
+    {
+        get
+        {
+            if (_searchBufferControlDirect is not null)
+                return _searchBufferControlDirect;
+            return _searchBufferControlFactory?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// The search buffer (from the linked SearchBufferControl), or null.
+    /// </summary>
+    public Buffer? SearchBuffer => SearchBufferControl?.Buffer;
+
+    /// <summary>
+    /// The search state associated with this control.
+    /// Returns the SearcherSearchState from the linked SearchBufferControl,
+    /// or a new empty SearchState if no search control is linked.
+    /// </summary>
+    public SearchState SearchState
+    {
+        get
+        {
+            var sbc = SearchBufferControl;
+            return sbc?.SearcherSearchState ?? new SearchState();
+        }
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="BufferControl"/> class.
     /// </summary>
     /// <param name="buffer">The buffer to display. If null, creates an empty buffer.</param>
+    /// <param name="inputProcessors">Custom input processors for this control.</param>
+    /// <param name="includeDefaultInputProcessors">Whether to include default processors.</param>
     /// <param name="lexer">Lexer for syntax highlighting. If null, uses SimpleLexer.</param>
     /// <param name="previewSearch">Whether to preview search results while typing.</param>
     /// <param name="focusable">Whether this control can receive focus.</param>
     /// <param name="focusOnClick">Whether to focus this control when clicked.</param>
+    /// <param name="searchBufferControl">The SearchBufferControl linked to this control (object form).</param>
+    /// <param name="searchBufferControlFactory">Callable returning the SearchBufferControl (factory form).</param>
     /// <param name="menuPosition">Function returning the menu anchor position.</param>
     /// <param name="keyBindings">Key bindings for this control.</param>
     public BufferControl(
         Buffer? buffer = null,
+        IReadOnlyList<IProcessor>? inputProcessors = null,
+        bool includeDefaultInputProcessors = true,
         ILexer? lexer = null,
         FilterOrBool previewSearch = default,
         FilterOrBool focusable = default,
         FilterOrBool focusOnClick = default,
+        SearchBufferControl? searchBufferControl = null,
+        Func<SearchBufferControl?>? searchBufferControlFactory = null,
         Func<int?>? menuPosition = null,
         IKeyBindingsBase? keyBindings = null)
     {
         _buffer = buffer ?? new Buffer();
+        _inputProcessors = inputProcessors;
+        _includeDefaultInputProcessors = includeDefaultInputProcessors;
         _lexer = lexer ?? new SimpleLexer();
         _previewSearch = previewSearch.HasValue ? previewSearch : new FilterOrBool(false);
         _focusable = focusable.HasValue ? focusable : new FilterOrBool(true);
         _focusOnClick = focusOnClick.HasValue ? focusOnClick : new FilterOrBool(false);
+        _searchBufferControlDirect = searchBufferControl;
+        _searchBufferControlFactory = searchBufferControlFactory;
         _menuPosition = menuPosition;
         _keyBindings = keyBindings;
     }
@@ -92,6 +176,18 @@ public class BufferControl : IUIControl
 
     /// <inheritdoc/>
     public UIContent CreateContent(int width, int height)
+    {
+        return CreateContent(width, height, previewSearch: false);
+    }
+
+    /// <summary>
+    /// Create UI content with optional search preview.
+    /// </summary>
+    /// <param name="width">The available viewport width.</param>
+    /// <param name="height">The available viewport height.</param>
+    /// <param name="previewSearch">Whether to use the search preview document.</param>
+    /// <returns>The rendered UI content.</returns>
+    public UIContent CreateContent(int width, int height, bool previewSearch)
     {
         var document = _buffer.Document;
         var getLine = GetFormattedTextForLineFunc(document);

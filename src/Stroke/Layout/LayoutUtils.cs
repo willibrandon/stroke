@@ -1,3 +1,4 @@
+using Stroke.FormattedText;
 using Stroke.Layout.Containers;
 
 namespace Stroke.Layout;
@@ -39,5 +40,42 @@ public static class LayoutUtils
                 yield return descendant;
             }
         }
+    }
+
+    /// <summary>
+    /// Turn a list of (style, text) fragments into an <see cref="ExplodedList"/> where each
+    /// element is exactly one character.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This function is idempotent: calling it on an already-exploded list
+    /// returns the same list without re-processing.
+    /// </para>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>explode_text_fragments</c> function
+    /// from <c>prompt_toolkit.layout.utils</c>.
+    /// </para>
+    /// </remarks>
+    /// <param name="fragments">The fragments to explode.</param>
+    /// <returns>An <see cref="ExplodedList"/> with single-character fragments.</returns>
+    public static ExplodedList ExplodeTextFragments(IReadOnlyList<StyleAndTextTuple> fragments)
+    {
+        // When the fragments is already exploded, don't explode again.
+        if (fragments is ExplodedList exploded)
+        {
+            return exploded;
+        }
+
+        var result = new List<StyleAndTextTuple>();
+
+        foreach (var fragment in fragments)
+        {
+            foreach (var c in fragment.Text)
+            {
+                result.Add(new StyleAndTextTuple(fragment.Style, c.ToString(), fragment.MouseHandler));
+            }
+        }
+
+        return new ExplodedList(result);
     }
 }

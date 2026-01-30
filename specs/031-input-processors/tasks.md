@@ -19,7 +19,7 @@
 
 **Purpose**: Create the Processors directory and namespace structure
 
-- [ ] T001 Create `src/Stroke/Layout/Processors/` directory structure per plan.md project layout
+- [x] T001 Create `src/Stroke/Layout/Processors/` directory structure per plan.md project layout
 
 ---
 
@@ -31,31 +31,31 @@
 
 ### Prerequisite Changes to Existing Files
 
-- [ ] T002 [P] Add `ViInsertMultipleMode` filter to `src/Stroke/Application/AppFilters.cs` per contract `prerequisite-changes.md` §AppFilters — static `IFilter` property checking Vi editing mode, no pending operator, no digraph wait, no selection, no temporary navigation, not read-only, and `InputMode == InputMode.InsertMultiple`
-- [ ] T003 [P] Add `InputProcessors`, `IncludeDefaultInputProcessors`, `SearchBufferControl` (property + factory), `SearchBuffer`, `SearchState`, and `DefaultInputProcessors` properties/parameters to `src/Stroke/Layout/Controls/BufferControl.cs` per contract `prerequisite-changes.md` §BufferControl — includes constructor parameter additions (`inputProcessors`, `includeDefaultInputProcessors`, `searchBufferControl`, `searchBufferControlFactory`) and `CreateContent` overload with `bool previewSearch = false`
-- [ ] T004 [P] Add `SearchTargetBufferControl` property to `src/Stroke/Layout/Layout.cs` per contract `prerequisite-changes.md` §Layout — returns `BufferControl?` when current focused control is `SearchBufferControl` and found in `SearchLinks`
+- [x] T002 [P] Add `ViInsertMultipleMode` filter to `src/Stroke/Application/AppFilters.cs` per contract `prerequisite-changes.md` §AppFilters — static `IFilter` property checking Vi editing mode, no pending operator, no digraph wait, no selection, no temporary navigation, not read-only, and `InputMode == InputMode.InsertMultiple`
+- [x] T003 [P] Add `InputProcessors`, `IncludeDefaultInputProcessors`, `SearchBufferControl` (property + factory), `SearchBuffer`, `SearchState`, and `DefaultInputProcessors` properties/parameters to `src/Stroke/Layout/Controls/BufferControl.cs` per contract `prerequisite-changes.md` §BufferControl — includes constructor parameter additions (`inputProcessors`, `includeDefaultInputProcessors`, `searchBufferControl`, `searchBufferControlFactory`) and `CreateContent` overload with `bool previewSearch = false`
+- [x] T004 [P] Add `SearchTargetBufferControl` property to `src/Stroke/Layout/Layout.cs` per contract `prerequisite-changes.md` §Layout — returns `BufferControl?` when current focused control is `SearchBufferControl` and found in `SearchLinks`
 
 ### Core Interface and Types
 
-- [ ] T005 [P] Implement `IProcessor` interface in `src/Stroke/Layout/Processors/IProcessor.cs` per contract `processor-interfaces.md` — single `ApplyTransformation(TransformationInput)` method returning `Transformation`
-- [ ] T006 [P] Implement `TransformationInput` sealed class in `src/Stroke/Layout/Processors/TransformationInput.cs` per contract `transformation-types.md` — immutable data carrier with `BufferControl`, `Document`, `LineNumber`, `SourceToDisplay`, `Fragments`, `Width`, `Height`, `GetLine` properties and `Unpack()` method
-- [ ] T007 [P] Implement `Transformation` sealed class in `src/Stroke/Layout/Processors/Transformation.cs` per contract `transformation-types.md` — immutable result with `Fragments`, `SourceToDisplay` (default identity), `DisplayToSource` (default identity)
+- [x] T005 [P] Implement `IProcessor` interface in `src/Stroke/Layout/Processors/IProcessor.cs` per contract `processor-interfaces.md` — single `ApplyTransformation(TransformationInput)` method returning `Transformation`
+- [x] T006 [P] Implement `TransformationInput` sealed class in `src/Stroke/Layout/Processors/TransformationInput.cs` per contract `transformation-types.md` — immutable data carrier with `BufferControl`, `Document`, `LineNumber`, `SourceToDisplay`, `Fragments`, `Width`, `Height`, `GetLine` properties and `Unpack()` method
+- [x] T007 [P] Implement `Transformation` sealed class in `src/Stroke/Layout/Processors/Transformation.cs` per contract `transformation-types.md` — immutable result with `Fragments`, `SourceToDisplay` (default identity), `DisplayToSource` (default identity)
 
 ### Utility Types
 
-- [ ] T008 [P] Implement `ExplodedList` class in `src/Stroke/Layout/ExplodedList.cs` per contract `utility-types.md` — extends `Collection<StyleAndTextTuple>` with auto-explosion on `InsertItem`, `SetItem`, `AddRange`; `Exploded` property always returns `true`
-- [ ] T009 Add `ExplodeTextFragments` static method to `src/Stroke/Layout/LayoutUtils.cs` per contract `utility-types.md` — idempotent (returns same list if already `ExplodedList`); splits each fragment into per-character fragments preserving style and mouse handler
+- [x] T008 [P] Implement `ExplodedList` class in `src/Stroke/Layout/ExplodedList.cs` per contract `utility-types.md` — extends `Collection<StyleAndTextTuple>` with auto-explosion on `InsertItem`, `SetItem`, `AddRange`; `Exploded` property always returns `true`
+- [x] T009 Add `ExplodeTextFragments` static method to `src/Stroke/Layout/LayoutUtils.cs` per contract `utility-types.md` — idempotent (returns same list if already `ExplodedList`); splits each fragment into per-character fragments preserving style and mouse handler
 
 ### Foundational Processors
 
-- [ ] T010 Implement `DummyProcessor` in `src/Stroke/Layout/Processors/DummyProcessor.cs` per contract `concrete-processors.md` §DummyProcessor — returns fragments unchanged with identity position mappings
-- [ ] T011 Implement `ProcessorUtils` static class and internal `MergedProcessor` in `src/Stroke/Layout/Processors/ProcessorUtils.cs` per contracts `concrete-processors.md` §ProcessorUtils and §_MergedProcessor — `MergeProcessors` returns `DummyProcessor` for empty, single processor for length-1, or `MergedProcessor` with list-based `SourceToDisplay` function chaining, initial function removal, and reverse `DisplayToSource` chaining (FR-030, FR-031)
+- [x] T010 Implement `DummyProcessor` in `src/Stroke/Layout/Processors/DummyProcessor.cs` per contract `concrete-processors.md` §DummyProcessor — returns fragments unchanged with identity position mappings
+- [x] T011 Implement `ProcessorUtils` static class and internal `MergedProcessor` in `src/Stroke/Layout/Processors/ProcessorUtils.cs` per contracts `concrete-processors.md` §ProcessorUtils and §_MergedProcessor — `MergeProcessors` returns `DummyProcessor` for empty, single processor for length-1, or `MergedProcessor` with list-based `SourceToDisplay` function chaining, initial function removal, and reverse `DisplayToSource` chaining (FR-030, FR-031)
 
 ### Foundational Tests
 
-- [ ] T012 [P] Write tests for `ExplodedList` and `ExplodeTextFragments` in `tests/Stroke.Tests/Layout/Processors/ExplodedListTests.cs` — auto-explosion on insert/set/addrange, idempotent explode, single-char invariant, style+handler preservation, SetItem length change behavior, multi-byte Unicode
-- [ ] T013 [P] Write tests for `TransformationInput` and `Transformation` in `tests/Stroke.Tests/Layout/Processors/ProcessorCoreTests.cs` — constructor, property access, Unpack(), identity defaults, custom mappings
-- [ ] T014 [P] Write tests for `DummyProcessor` and `ProcessorUtils`/`MergedProcessor` in `tests/Stroke.Tests/Layout/Processors/MergeProcessorsTests.cs` — DummyProcessor pass-through, empty list → DummyProcessor, single → unwrap, multi-chain with composed position mappings (bidirectional), nested MergedProcessor, initial function removal, empty fragment list input (edge case), boundary position values (0, max int)
+- [x] T012 [P] Write tests for `ExplodedList` and `ExplodeTextFragments` in `tests/Stroke.Tests/Layout/Processors/ExplodedListTests.cs` — auto-explosion on insert/set/addrange, idempotent explode, single-char invariant, style+handler preservation, SetItem length change behavior, multi-byte Unicode
+- [x] T013 [P] Write tests for `TransformationInput` and `Transformation` in `tests/Stroke.Tests/Layout/Processors/ProcessorCoreTests.cs` — constructor, property access, Unpack(), identity defaults, custom mappings
+- [x] T014 [P] Write tests for `DummyProcessor` and `ProcessorUtils`/`MergedProcessor` in `tests/Stroke.Tests/Layout/Processors/MergeProcessorsTests.cs` — DummyProcessor pass-through, empty list → DummyProcessor, single → unwrap, multi-chain with composed position mappings (bidirectional), nested MergedProcessor, initial function removal, empty fragment list input (edge case), boundary position values (0, max int)
 
 **Checkpoint**: Foundation ready — core types compiled, utility types tested, prerequisite changes in place. User story implementation can now begin.
 
@@ -71,7 +71,7 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [US1] Write pipeline composition acceptance tests in `tests/Stroke.Tests/Layout/Processors/ProcessorPipelineTests.cs` — identity processor pass-through (scenario 1), two-offset composition using simple test-only processors that shift by fixed amounts (scenario 2), TransformationInput field access (scenario 3), MergeProcessors empty/single/multi (scenarios 4-5), bidirectional mapping verification with test-only offset processors (SC-002 basic), nested MergedProcessor edge case, out-of-range/boundary position mapping values (edge case). Note: SC-002 integration chain test with real processors (BeforeInput+TabsProcessor) deferred to T048 since those processors are implemented in later phases.
+- [x] T015 [US1] Write pipeline composition acceptance tests in `tests/Stroke.Tests/Layout/Processors/ProcessorPipelineTests.cs` — identity processor pass-through (scenario 1), two-offset composition using simple test-only processors that shift by fixed amounts (scenario 2), TransformationInput field access (scenario 3), MergeProcessors empty/single/multi (scenarios 4-5), bidirectional mapping verification with test-only offset processors (SC-002 basic), nested MergedProcessor edge case, out-of-range/boundary position mapping values (edge case). Note: SC-002 integration chain test with real processors (BeforeInput+TabsProcessor) deferred to T048 since those processors are implemented in later phases.
 
 **Checkpoint**: User Story 1 complete — pipeline infrastructure validated with bidirectional mapping composition.
 
@@ -85,16 +85,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Implement `PasswordProcessor` in `src/Stroke/Layout/Processors/PasswordProcessor.cs` per contract `concrete-processors.md` §PasswordProcessor — replace each character with mask char (default `"*"`), preserve styles and handlers (FR-005)
-- [ ] T017 [P] [US2] Implement `BeforeInput` in `src/Stroke/Layout/Processors/BeforeInput.cs` per contract `concrete-processors.md` §BeforeInput — prepend `AnyFormattedText` to line 0 only, provide source-to-display/display-to-source offset mappings, `ToString()` override (FR-013, FR-014)
-- [ ] T018 [P] [US2] Implement `AfterInput` in `src/Stroke/Layout/Processors/AfterInput.cs` per contract `concrete-processors.md` §AfterInput — append `AnyFormattedText` to last line (`Document.LineCount - 1`) only, `ToString()` override (FR-015, FR-016)
-- [ ] T019 [US2] Implement `ShowArg` in `src/Stroke/Layout/Processors/ShowArg.cs` per contract `concrete-processors.md` §ShowArg — extends `BeforeInput`, passes callable that reads `KeyProcessor.Arg`, output format `[("class:prompt.arg", "(arg: "), ("class:prompt.arg.text", N), ("class:prompt.arg", ") ")]`, empty list when arg is null, `ToString()` override (FR-017)
+- [x] T016 [P] [US2] Implement `PasswordProcessor` in `src/Stroke/Layout/Processors/PasswordProcessor.cs` per contract `concrete-processors.md` §PasswordProcessor — replace each character with mask char (default `"*"`), preserve styles and handlers (FR-005)
+- [x] T017 [P] [US2] Implement `BeforeInput` in `src/Stroke/Layout/Processors/BeforeInput.cs` per contract `concrete-processors.md` §BeforeInput — prepend `AnyFormattedText` to line 0 only, provide source-to-display/display-to-source offset mappings, `ToString()` override (FR-013, FR-014)
+- [x] T018 [P] [US2] Implement `AfterInput` in `src/Stroke/Layout/Processors/AfterInput.cs` per contract `concrete-processors.md` §AfterInput — append `AnyFormattedText` to last line (`Document.LineCount - 1`) only, `ToString()` override (FR-015, FR-016)
+- [x] T019 [US2] Implement `ShowArg` in `src/Stroke/Layout/Processors/ShowArg.cs` per contract `concrete-processors.md` §ShowArg — extends `BeforeInput`, passes callable that reads `KeyProcessor.Arg`, output format `[("class:prompt.arg", "(arg: "), ("class:prompt.arg.text", N), ("class:prompt.arg", ") ")]`, empty list when arg is null, `ToString()` override (FR-017)
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Write tests for `PasswordProcessor` in `tests/Stroke.Tests/Layout/Processors/PasswordProcessorTests.cs` — default mask, custom mask ".", style preservation, multi-byte Unicode/CJK per-character replacement (scenarios 1-2, 6)
-- [ ] T021 [P] [US2] Write tests for `BeforeInput` and `ShowArg` in `tests/Stroke.Tests/Layout/Processors/BeforeInputTests.cs` — line 0 prepend, non-line-0 pass-through, position mapping offset, callable text, ShowArg with active arg, ShowArg with null arg, ShowArg styled fragments, ToString format (scenarios 3, 5; US7 scenarios 3, 7)
-- [ ] T022 [P] [US2] Write tests for `AfterInput` in `tests/Stroke.Tests/Layout/Processors/AfterInputTests.cs` — last line append, non-last-line pass-through, callable text, ToString format (scenario 4)
+- [x] T020 [P] [US2] Write tests for `PasswordProcessor` in `tests/Stroke.Tests/Layout/Processors/PasswordProcessorTests.cs` — default mask, custom mask ".", style preservation, multi-byte Unicode/CJK per-character replacement (scenarios 1-2, 6)
+- [x] T021 [P] [US2] Write tests for `BeforeInput` and `ShowArg` in `tests/Stroke.Tests/Layout/Processors/BeforeInputTests.cs` — line 0 prepend, non-line-0 pass-through, position mapping offset, callable text, ShowArg with active arg, ShowArg with null arg, ShowArg styled fragments, ToString format (scenarios 3, 5; US7 scenarios 3, 7)
+- [x] T022 [P] [US2] Write tests for `AfterInput` in `tests/Stroke.Tests/Layout/Processors/AfterInputTests.cs` — last line append, non-last-line pass-through, callable text, ToString format (scenario 4)
 
 **Checkpoint**: User Story 2 complete — password masking, prompt prefix/suffix, and arg display all working with position mappings.
 
@@ -108,15 +108,15 @@
 
 ### Implementation for User Story 3
 
-- [ ] T023 [P] [US3] Implement `HighlightSearchProcessor` in `src/Stroke/Layout/Processors/HighlightSearchProcessor.cs` per contract `concrete-processors.md` §HighlightSearchProcessor — `Regex.Escape` literal matching, explode fragments, apply `" class:search "` and `" class:search.current "` style classes, case-insensitive support, skip when app done or empty search text, virtual `GetSearchText` method (FR-006, FR-007, FR-008)
-- [ ] T024 [US3] Implement `HighlightIncrementalSearchProcessor` in `src/Stroke/Layout/Processors/HighlightIncrementalSearchProcessor.cs` per contract `concrete-processors.md` §HighlightIncrementalSearchProcessor — extends `HighlightSearchProcessor`, overrides `ClassName`/`ClassNameCurrent` to `"incsearch"`/`"incsearch.current"`, overrides `GetSearchText` to read from `SearchBuffer.Text` (FR-009)
-- [ ] T025 [P] [US3] Implement `HighlightSelectionProcessor` in `src/Stroke/Layout/Processors/HighlightSelectionProcessor.cs` per contract `concrete-processors.md` §HighlightSelectionProcessor — apply `" class:selected "` using `Document.SelectionRangeAtLine`, insert space for empty selected lines, append trailing space when selection extends past line end (FR-010, FR-011, FR-012)
+- [x] T023 [P] [US3] Implement `HighlightSearchProcessor` in `src/Stroke/Layout/Processors/HighlightSearchProcessor.cs` per contract `concrete-processors.md` §HighlightSearchProcessor — `Regex.Escape` literal matching, explode fragments, apply `" class:search "` and `" class:search.current "` style classes, case-insensitive support, skip when app done or empty search text, virtual `GetSearchText` method (FR-006, FR-007, FR-008)
+- [x] T024 [US3] Implement `HighlightIncrementalSearchProcessor` in `src/Stroke/Layout/Processors/HighlightIncrementalSearchProcessor.cs` per contract `concrete-processors.md` §HighlightIncrementalSearchProcessor — extends `HighlightSearchProcessor`, overrides `ClassName`/`ClassNameCurrent` to `"incsearch"`/`"incsearch.current"`, overrides `GetSearchText` to read from `SearchBuffer.Text` (FR-009)
+- [x] T025 [P] [US3] Implement `HighlightSelectionProcessor` in `src/Stroke/Layout/Processors/HighlightSelectionProcessor.cs` per contract `concrete-processors.md` §HighlightSelectionProcessor — apply `" class:selected "` using `Document.SelectionRangeAtLine`, insert space for empty selected lines, append trailing space when selection extends past line end (FR-010, FR-011, FR-012)
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Write tests for `HighlightSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSearchProcessorTests.cs` — multiple matches "search" class, current match "search.current" class, case-insensitive, empty search text no-op, app done no-op, regex special chars escaped (scenarios 1-3; edge case: case-insensitive, regex special chars)
-- [ ] T027 [P] [US3] Write tests for `HighlightIncrementalSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSearchProcessorTests.cs` (same file, separate test class) — "incsearch" classes, reads from search buffer (scenario 3)
-- [ ] T028 [P] [US3] Write tests for `HighlightSelectionProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSelectionProcessorTests.cs` — single-line selection, empty line space insertion, trailing space append, cross-line selection spanning 3 lines (scenarios 4-6)
+- [x] T026 [P] [US3] Write tests for `HighlightSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSearchProcessorTests.cs` — multiple matches "search" class, current match "search.current" class, case-insensitive, empty search text no-op, app done no-op, regex special chars escaped (scenarios 1-3; edge case: case-insensitive, regex special chars)
+- [x] T027 [P] [US3] Write tests for `HighlightIncrementalSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSearchProcessorTests.cs` (same file, separate test class) — "incsearch" classes, reads from search buffer (scenario 3)
+- [x] T028 [P] [US3] Write tests for `HighlightSelectionProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightSelectionProcessorTests.cs` — single-line selection, empty line space insertion, trailing space append, cross-line selection spanning 3 lines (scenarios 4-6)
 
 **Checkpoint**: User Story 3 complete — search and selection highlighting working across all line configurations.
 
@@ -130,14 +130,14 @@
 
 ### Implementation for User Story 4
 
-- [ ] T029 [P] [US4] Implement `TabsProcessor` in `src/Stroke/Layout/Processors/TabsProcessor.cs` per contract `concrete-processors.md` §TabsProcessor — column-aligned tab expansion using `ConversionUtils.ToInt`/`ConversionUtils.ToStr` for duck-typed parameters, default tab width 4, chars `"|"` and `"\u2508"`, style `"class:tab"`, source-to-display and display-to-source position mappings (FR-019, FR-020)
-- [ ] T030 [P] [US4] Implement `ShowLeadingWhiteSpaceProcessor` in `src/Stroke/Layout/Processors/ShowLeadingWhiteSpaceProcessor.cs` per contract `concrete-processors.md` §ShowLeadingWhiteSpaceProcessor — replace leading spaces with visible char (encoding-aware fallback: middot U+00B7 or period), style `"class:leading-whitespace"` (FR-021)
-- [ ] T031 [P] [US4] Implement `ShowTrailingWhiteSpaceProcessor` in `src/Stroke/Layout/Processors/ShowTrailingWhiteSpaceProcessor.cs` per contract `concrete-processors.md` §ShowTrailingWhiteSpaceProcessor — replace trailing spaces with visible char, style `"class:trailing-whitespace"` (corrected from Python typo), encoding-aware fallback (FR-022)
+- [x] T029 [P] [US4] Implement `TabsProcessor` in `src/Stroke/Layout/Processors/TabsProcessor.cs` per contract `concrete-processors.md` §TabsProcessor — column-aligned tab expansion using `ConversionUtils.ToInt`/`ConversionUtils.ToStr` for duck-typed parameters, default tab width 4, chars `"|"` and `"\u2508"`, style `"class:tab"`, source-to-display and display-to-source position mappings (FR-019, FR-020)
+- [x] T030 [P] [US4] Implement `ShowLeadingWhiteSpaceProcessor` in `src/Stroke/Layout/Processors/ShowLeadingWhiteSpaceProcessor.cs` per contract `concrete-processors.md` §ShowLeadingWhiteSpaceProcessor — replace leading spaces with visible char (encoding-aware fallback: middot U+00B7 or period), style `"class:leading-whitespace"` (FR-021)
+- [x] T031 [P] [US4] Implement `ShowTrailingWhiteSpaceProcessor` in `src/Stroke/Layout/Processors/ShowTrailingWhiteSpaceProcessor.cs` per contract `concrete-processors.md` §ShowTrailingWhiteSpaceProcessor — replace trailing spaces with visible char, style `"class:trailing-whitespace"` (corrected from Python typo), encoding-aware fallback (FR-022)
 
 ### Tests for User Story 4
 
-- [ ] T032 [P] [US4] Write tests for `TabsProcessor` in `tests/Stroke.Tests/Layout/Processors/TabsProcessorTests.cs` — tab at column 0 width 4 (4 chars), tab at column 2 width 4 (2 chars), tab at exact tab stop boundary expands to full tab width (edge case), tab width 1 (1 char, edge case), position mapping bidirectional, custom chars and width, callable parameters (scenarios 1-3; edge cases: tab width 1, tab at boundary)
-- [ ] T033 [P] [US4] Write tests for whitespace processors in `tests/Stroke.Tests/Layout/Processors/WhitespaceProcessorTests.cs` — leading space replacement, trailing space replacement, all-whitespace line (all leading), non-leading/trailing spaces unchanged, custom replacement char, style application (scenarios 4-5; edge case: all-whitespace line)
+- [x] T032 [P] [US4] Write tests for `TabsProcessor` in `tests/Stroke.Tests/Layout/Processors/TabsProcessorTests.cs` — tab at column 0 width 4 (4 chars), tab at column 2 width 4 (2 chars), tab at exact tab stop boundary expands to full tab width (edge case), tab width 1 (1 char, edge case), position mapping bidirectional, custom chars and width, callable parameters (scenarios 1-3; edge cases: tab width 1, tab at boundary)
+- [x] T033 [P] [US4] Write tests for whitespace processors in `tests/Stroke.Tests/Layout/Processors/WhitespaceProcessorTests.cs` — leading space replacement, trailing space replacement, all-whitespace line (all leading), non-leading/trailing spaces unchanged, custom replacement char, style application (scenarios 4-5; edge case: all-whitespace line)
 
 **Checkpoint**: User Story 4 complete — tab expansion and whitespace visualization working with correct position mappings.
 
@@ -151,11 +151,11 @@
 
 ### Implementation for User Story 5
 
-- [ ] T034 [US5] Implement `HighlightMatchingBracketProcessor` in `src/Stroke/Layout/Processors/HighlightMatchingBracketProcessor.cs` per contract `concrete-processors.md` §HighlightMatchingBracketProcessor — configurable chars (default `"[](){}<>"`), max distance (default 1000), `SimpleCache` for position caching, check `Document.CurrentChar` and `Document.CharBeforeCursor` (temporary doc with decremented cursor), apply `" class:matching-bracket.cursor "` and `" class:matching-bracket.other "`, skip when app done (FR-023, FR-024, FR-025, FR-026)
+- [x] T034 [US5] Implement `HighlightMatchingBracketProcessor` in `src/Stroke/Layout/Processors/HighlightMatchingBracketProcessor.cs` per contract `concrete-processors.md` §HighlightMatchingBracketProcessor — configurable chars (default `"[](){}<>"`), max distance (default 1000), `SimpleCache` for position caching, check `Document.CurrentChar` and `Document.CharBeforeCursor` (temporary doc with decremented cursor), apply `" class:matching-bracket.cursor "` and `" class:matching-bracket.other "`, skip when app done (FR-023, FR-024, FR-025, FR-026)
 
 ### Tests for User Story 5
 
-- [ ] T035 [US5] Write tests for `HighlightMatchingBracketProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightMatchingBracketProcessorTests.cs` — cursor on opening bracket, nested brackets match correct pair, cursor after closing bracket, beyond max distance no highlight, app done no highlight, custom bracket chars, unmatched brackets, concurrent cache access stress test (10+ threads per Constitution XI for SimpleCache-backed `_positionsCache`) (scenarios 1-5; edge case: unmatched)
+- [x] T035 [US5] Write tests for `HighlightMatchingBracketProcessor` in `tests/Stroke.Tests/Layout/Processors/HighlightMatchingBracketProcessorTests.cs` — cursor on opening bracket, nested brackets match correct pair, cursor after closing bracket, beyond max distance no highlight, app done no highlight, custom bracket chars, unmatched brackets, concurrent cache access stress test (10+ threads per Constitution XI for SimpleCache-backed `_positionsCache`) (scenarios 1-5; edge case: unmatched)
 
 **Checkpoint**: User Story 5 complete — bracket matching working with caching and all cursor position cases.
 
@@ -169,12 +169,12 @@
 
 ### Implementation for User Story 6
 
-- [ ] T036 [P] [US6] Implement `ConditionalProcessor` in `src/Stroke/Layout/Processors/ConditionalProcessor.cs` per contract `concrete-processors.md` §ConditionalProcessor — wraps `IProcessor` + `FilterOrBool`, applies inner when filter true, pass-through when false, `ToString()` override (FR-028)
-- [ ] T037 [P] [US6] Implement `DynamicProcessor` in `src/Stroke/Layout/Processors/DynamicProcessor.cs` per contract `concrete-processors.md` §DynamicProcessor — wraps `Func<IProcessor?>`, invokes callable per application, falls back to `DummyProcessor` when null (FR-029)
+- [x] T036 [P] [US6] Implement `ConditionalProcessor` in `src/Stroke/Layout/Processors/ConditionalProcessor.cs` per contract `concrete-processors.md` §ConditionalProcessor — wraps `IProcessor` + `FilterOrBool`, applies inner when filter true, pass-through when false, `ToString()` override (FR-028)
+- [x] T037 [P] [US6] Implement `DynamicProcessor` in `src/Stroke/Layout/Processors/DynamicProcessor.cs` per contract `concrete-processors.md` §DynamicProcessor — wraps `Func<IProcessor?>`, invokes callable per application, falls back to `DummyProcessor` when null (FR-029)
 
 ### Tests for User Story 6
 
-- [ ] T038 [US6] Write tests for `ConditionalProcessor` and `DynamicProcessor` in `tests/Stroke.Tests/Layout/Processors/ConditionalDynamicProcessorTests.cs` — filter true applies inner, filter false passes through, DynamicProcessor returns processor applies it, DynamicProcessor returns null uses DummyProcessor, ConditionalProcessor ToString, FilterOrBool implicit bool conversion (scenarios 1-4)
+- [x] T038 [US6] Write tests for `ConditionalProcessor` and `DynamicProcessor` in `tests/Stroke.Tests/Layout/Processors/ConditionalDynamicProcessorTests.cs` — filter true applies inner, filter false passes through, DynamicProcessor returns processor applies it, DynamicProcessor returns null uses DummyProcessor, ConditionalProcessor ToString, FilterOrBool implicit bool conversion (scenarios 1-4)
 
 **Checkpoint**: User Story 6 complete — conditional and dynamic processor composition working.
 
@@ -188,15 +188,15 @@
 
 ### Implementation for User Story 7
 
-- [ ] T039 [P] [US7] Implement `AppendAutoSuggestion` in `src/Stroke/Layout/Processors/AppendAutoSuggestion.cs` per contract `concrete-processors.md` §AppendAutoSuggestion — append suggestion text to last line (`Document.LineCount - 1`) with style `"class:auto-suggestion"`, only when suggestion exists AND cursor at end, empty string otherwise (FR-018)
-- [ ] T040 [P] [US7] Implement `DisplayMultipleCursors` in `src/Stroke/Layout/Processors/DisplayMultipleCursors.cs` per contract `concrete-processors.md` §DisplayMultipleCursors — apply `" class:multiple-cursors "` at cursor positions when `AppFilters.ViInsertMultipleMode` is active, append space with cursor style for positions beyond line end, pass-through when not active (FR-027)
-- [ ] T041 [US7] Implement `ReverseSearchProcessor` in `src/Stroke/Layout/Processors/ReverseSearchProcessor.cs` per contract `concrete-processors.md` §ReverseSearchProcessor — static `ExcludedInputProcessors` list (HighlightSearchProcessor, HighlightSelectionProcessor, BeforeInput, AfterInput), format line 0 with `"class:prompt.search"` and `"class:prompt.search.text"` styled fragments, direction text (`"i-search"` forward, `"reverse-i-search"` backward), recursive filtering of MergedProcessor sub-processors and ConditionalProcessor inner processors, render matched line from main buffer with filtered processors (FR-032, FR-033, FR-037)
+- [x] T039 [P] [US7] Implement `AppendAutoSuggestion` in `src/Stroke/Layout/Processors/AppendAutoSuggestion.cs` per contract `concrete-processors.md` §AppendAutoSuggestion — append suggestion text to last line (`Document.LineCount - 1`) with style `"class:auto-suggestion"`, only when suggestion exists AND cursor at end, empty string otherwise (FR-018)
+- [x] T040 [P] [US7] Implement `DisplayMultipleCursors` in `src/Stroke/Layout/Processors/DisplayMultipleCursors.cs` per contract `concrete-processors.md` §DisplayMultipleCursors — apply `" class:multiple-cursors "` at cursor positions when `AppFilters.ViInsertMultipleMode` is active, append space with cursor style for positions beyond line end, pass-through when not active (FR-027)
+- [x] T041 [US7] Implement `ReverseSearchProcessor` in `src/Stroke/Layout/Processors/ReverseSearchProcessor.cs` per contract `concrete-processors.md` §ReverseSearchProcessor — static `ExcludedInputProcessors` list (HighlightSearchProcessor, HighlightSelectionProcessor, BeforeInput, AfterInput), format line 0 with `"class:prompt.search"` and `"class:prompt.search.text"` styled fragments, direction text (`"i-search"` forward, `"reverse-i-search"` backward), recursive filtering of MergedProcessor sub-processors and ConditionalProcessor inner processors, render matched line from main buffer with filtered processors (FR-032, FR-033, FR-037)
 
 ### Tests for User Story 7
 
-- [ ] T042 [P] [US7] Write tests for `AppendAutoSuggestion` in `tests/Stroke.Tests/Layout/Processors/AppendAutoSuggestionTests.cs` — suggestion at end appends, no suggestion appends empty, cursor not at end appends empty, style application, non-last-line pass-through (scenarios 1-2, 6)
-- [ ] T043 [P] [US7] Write tests for `DisplayMultipleCursors` in `tests/Stroke.Tests/Layout/Processors/DisplayMultipleCursorsTests.cs` — Vi block insert active with positions, cursor beyond line end appends space, Vi block insert not active passes through (scenarios 4, 8; edge case: cursor beyond line)
-- [ ] T044 [US7] Write tests for `ReverseSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/ReverseSearchProcessorTests.cs` — forward direction format, backward direction format, excluded processor filtering, no main buffer pass-through, recursive MergedProcessor filtering, ConditionalProcessor inner filtering (scenario 5; edge case: no main buffer)
+- [x] T042 [P] [US7] Write tests for `AppendAutoSuggestion` in `tests/Stroke.Tests/Layout/Processors/AppendAutoSuggestionTests.cs` — suggestion at end appends, no suggestion appends empty, cursor not at end appends empty, style application, non-last-line pass-through (scenarios 1-2, 6)
+- [x] T043 [P] [US7] Write tests for `DisplayMultipleCursors` in `tests/Stroke.Tests/Layout/Processors/DisplayMultipleCursorsTests.cs` — Vi block insert active with positions, cursor beyond line end appends space, Vi block insert not active passes through (scenarios 4, 8; edge case: cursor beyond line)
+- [x] T044 [US7] Write tests for `ReverseSearchProcessor` in `tests/Stroke.Tests/Layout/Processors/ReverseSearchProcessorTests.cs` — forward direction format, backward direction format, excluded processor filtering, no main buffer pass-through, recursive MergedProcessor filtering, ConditionalProcessor inner filtering (scenario 5; edge case: no main buffer)
 
 **Checkpoint**: User Story 7 complete — all specialized processors working.
 
@@ -206,11 +206,11 @@
 
 **Purpose**: Prerequisite change tests, coverage verification, and final validation
 
-- [ ] T045 [P] Write tests for `BufferControl` prerequisite changes in `tests/Stroke.Tests/Layout/Controls/BufferControlProcessorTests.cs` — `InputProcessors` property, `IncludeDefaultInputProcessors`, `DefaultInputProcessors` ordered list (4 processors), `SearchBufferControl` property (object + factory), `SearchBuffer`, `SearchState` (with and without linked search control), `CreateContent` with `previewSearch` parameter
-- [ ] T046 [P] Write tests for `Layout.SearchTargetBufferControl` in `tests/Stroke.Tests/Layout/LayoutSearchTargetTests.cs` — returns `BufferControl` when focused on `SearchBufferControl`, returns null otherwise
-- [ ] T047 [P] Write tests for `AppFilters.ViInsertMultipleMode` in `tests/Stroke.Tests/Application/AppFiltersProcessorTests.cs` — returns true when all Vi insert-multiple conditions met, returns false for each failing condition
-- [ ] T048 Run full test suite and verify ≥80% coverage across all processor implementations per `quickstart.md` build commands — `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Processors"`. Also verify: (a) SC-002 integration chain test with real processors (BeforeInput+TabsProcessor+MergedProcessor bidirectional mapping), (b) FR-034 handler preservation across all processors that receive fragments with mouse handlers
-- [ ] T049 Verify no source file exceeds 1,000 LOC per Constitution X — check all files in `src/Stroke/Layout/Processors/`, `src/Stroke/Layout/ExplodedList.cs`, and modified files
+- [x] T045 [P] Write tests for `BufferControl` prerequisite changes in `tests/Stroke.Tests/Layout/Controls/BufferControlProcessorTests.cs` — `InputProcessors` property, `IncludeDefaultInputProcessors`, `DefaultInputProcessors` ordered list (4 processors), `SearchBufferControl` property (object + factory), `SearchBuffer`, `SearchState` (with and without linked search control), `CreateContent` with `previewSearch` parameter
+- [x] T046 [P] Write tests for `Layout.SearchTargetBufferControl` in `tests/Stroke.Tests/Layout/LayoutSearchTargetTests.cs` — returns `BufferControl` when focused on `SearchBufferControl`, returns null otherwise
+- [x] T047 [P] Write tests for `AppFilters.ViInsertMultipleMode` in `tests/Stroke.Tests/Application/AppFiltersProcessorTests.cs` — returns true when all Vi insert-multiple conditions met, returns false for each failing condition
+- [x] T048 Run full test suite and verify ≥80% coverage across all processor implementations per `quickstart.md` build commands — `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Processors"`. Also verify: (a) SC-002 integration chain test with real processors (BeforeInput+TabsProcessor+MergedProcessor bidirectional mapping), (b) FR-034 handler preservation across all processors that receive fragments with mouse handlers
+- [x] T049 Verify no source file exceeds 1,000 LOC per Constitution X — check all files in `src/Stroke/Layout/Processors/`, `src/Stroke/Layout/ExplodedList.cs`, and modified files
 
 ---
 
