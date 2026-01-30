@@ -264,6 +264,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ScrollablePane` visibility toggling
   - Thread-safe operations (6,469 tests, >80% coverage)
 
+- **Input Processors** — Fragment transformation pipeline for per-line text processing before rendering
+  - `IProcessor` interface with `TransformationInput`/`Transformation` records
+  - `ExplodedList` for single-character fragment manipulation
+  - 26 processor implementations: search/selection highlighting, bracket matching, password masking, tab expansion, whitespace visualization, auto-suggestion display, before/after input decorators, conditional/dynamic wrapping
+  - `MergedProcessor` with composable position mapping (source↔display)
+  - `BufferControl` integration with `InputProcessors` and `DefaultInputProcessors`
+  - Thread-safe via immutable records and sealed classes (6,618 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers

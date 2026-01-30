@@ -111,6 +111,31 @@ public sealed class Layout
         }
     }
 
+    /// <summary>
+    /// Return the BufferControl that is the target of the current search,
+    /// or null if not currently searching.
+    /// </summary>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>search_target_buffer_control</c> property
+    /// from <c>prompt_toolkit.layout.layout</c>.
+    /// </remarks>
+    public BufferControl? SearchTargetBufferControl
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                var control = _stack[^1].Content;
+                if (control is SearchBufferControl sbc &&
+                    _searchLinks.TryGetValue(sbc, out var bc))
+                {
+                    return bc;
+                }
+                return null;
+            }
+        }
+    }
+
     /// <summary>The UIControl of the currently focused Window.</summary>
     public IUIControl CurrentControl
     {

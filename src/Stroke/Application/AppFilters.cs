@@ -77,6 +77,31 @@ public static class AppFilters
         AppContext.GetApp().Layout.CurrentBuffer is not null);
 
     /// <summary>
+    /// True when the current application is in Vi insert-multiple mode.
+    /// Checks: Vi editing mode, no pending operator, no digraph wait,
+    /// no selection, no temporary navigation, not read-only,
+    /// and InputMode is InsertMultiple.
+    /// </summary>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>vi_insert_multiple_mode</c> filter
+    /// from <c>prompt_toolkit.filters.app</c>.
+    /// </remarks>
+    public static IFilter ViInsertMultipleMode { get; } = new Condition(() =>
+    {
+        var app = AppContext.GetApp();
+        if (app.EditingMode != EditingMode.Vi
+            || app.ViState.OperatorFunc is not null
+            || app.ViState.WaitingForDigraph
+            || app.CurrentBuffer.SelectionState is not null
+            || app.ViState.TemporaryNavigationMode
+            || app.CurrentBuffer.ReadOnly)
+        {
+            return false;
+        }
+        return app.ViState.InputMode == InputMode.InsertMultiple;
+    });
+
+    /// <summary>
     /// Create a filter that checks if a specific buffer has focus.
     /// </summary>
     /// <param name="bufferName">The buffer name to check.</param>
