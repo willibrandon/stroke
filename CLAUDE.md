@@ -312,6 +312,7 @@ The complete specification is in `docs/design.md` (~65K tokens). It contains:
 - **Nullability**: Nullable reference types enabled; explicit null handling required
 - **Testing**: Unit tests MUST accompany new public APIs; use xUnit conventions; target 80% coverage
 - **Documentation**: Triple-slash XML doc comments (`///`) required for all public types and members
+- **Commits**: Do NOT include issue numbers, PR numbers, feature numbers, or spec numbers in commit messages (e.g., no `#31`, `(#33)`, `(031)`, `Feature 031`)
 
 ## End-to-End Testing with TUI Driver
 
