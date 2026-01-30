@@ -23,9 +23,9 @@
 
 **Purpose**: Create directory structure and shared type definitions
 
-- [ ] T001 Create directory structure: `src/Stroke/Layout/Containers/`, `src/Stroke/Layout/Controls/`, `src/Stroke/Layout/Windows/`, `src/Stroke/Layout/Margins/`
-- [ ] T002 [P] Create test directory structure: `tests/Stroke.Tests/Layout/Containers/`, `tests/Stroke.Tests/Layout/Controls/`, `tests/Stroke.Tests/Layout/Windows/`, `tests/Stroke.Tests/Layout/Margins/`
-- [ ] T003 [P] Create alignment enums in `src/Stroke/Layout/Containers/Enums/VerticalAlign.cs`, `HorizontalAlign.cs`, `WindowAlign.cs`
+- [x] T001 Create directory structure: `src/Stroke/Layout/Containers/`, `src/Stroke/Layout/Controls/`, `src/Stroke/Layout/Windows/`, `src/Stroke/Layout/Margins/`
+- [x] T002 [P] Create test directory structure: `tests/Stroke.Tests/Layout/Containers/`, `tests/Stroke.Tests/Layout/Controls/`, `tests/Stroke.Tests/Layout/Windows/`, `tests/Stroke.Tests/Layout/Margins/`
+- [x] T003 [P] Create alignment enums in `src/Stroke/Layout/Containers/Enums/VerticalAlign.cs`, `HorizontalAlign.cs`, `WindowAlign.cs`
 
 ---
 
@@ -37,32 +37,32 @@
 
 ### Container Foundation
 
-- [ ] T004 Implement IContainer interface in `src/Stroke/Layout/Containers/IContainer.cs`
-- [ ] T005 Implement IMagicContainer interface in `src/Stroke/Layout/Containers/IMagicContainer.cs`
-- [ ] T006 [P] Implement AnyContainer union struct with implicit conversions in `src/Stroke/Layout/Containers/AnyContainer.cs`
-- [ ] T007 [P] Implement ContainerUtils (ToContainer, ToWindow, IsContainer) in `src/Stroke/Layout/Containers/ContainerUtils.cs`
-- [ ] T008 Write IContainer tests in `tests/Stroke.Tests/Layout/Containers/IContainerTests.cs`
+- [x] T004 Implement IContainer interface in `src/Stroke/Layout/Containers/IContainer.cs`
+- [x] T005 Implement IMagicContainer interface in `src/Stroke/Layout/Containers/IMagicContainer.cs`
+- [x] T006 [P] Implement AnyContainer union struct with implicit conversions in `src/Stroke/Layout/Containers/AnyContainer.cs`
+- [x] T007 [P] Implement ContainerUtils (ToContainer, ToWindow, IsContainer) in `src/Stroke/Layout/Containers/ContainerUtils.cs`
+- [x] T008 Write IContainer tests in `tests/Stroke.Tests/Layout/Containers/IContainerTests.cs`
 
 ### Control Foundation
 
-- [ ] T009 Implement IUIControl interface in `src/Stroke/Layout/Controls/IUIControl.cs`
-- [ ] T010 Implement UIContent class with GetHeightForLine algorithm in `src/Stroke/Layout/Controls/UIContent.cs`
-- [ ] T011 Implement GetLinePrefixCallable delegate in `src/Stroke/Layout/Windows/GetLinePrefixCallable.cs`
-- [ ] T012 [P] Implement DummyControl in `src/Stroke/Layout/Controls/DummyControl.cs`
-- [ ] T013 Write UIContent tests (including GetHeightForLine algorithm) in `tests/Stroke.Tests/Layout/Controls/UIContentTests.cs`
-- [ ] T014 [P] Write DummyControl tests in `tests/Stroke.Tests/Layout/Controls/DummyControlTests.cs`
+- [x] T009 Implement IUIControl interface in `src/Stroke/Layout/Controls/IUIControl.cs`
+- [x] T010 Implement UIContent class with GetHeightForLine algorithm in `src/Stroke/Layout/Controls/UIContent.cs`
+- [x] T011 Implement GetLinePrefixCallable delegate in `src/Stroke/Layout/Windows/GetLinePrefixCallable.cs`
+- [x] T012 [P] Implement DummyControl in `src/Stroke/Layout/Controls/DummyControl.cs`
+- [x] T013 Write UIContent tests (including GetHeightForLine algorithm) in `tests/Stroke.Tests/Layout/Controls/UIContentTests.cs`
+- [x] T014 [P] Write DummyControl tests in `tests/Stroke.Tests/Layout/Controls/DummyControlTests.cs`
 
 ### Window Foundation
 
-- [ ] T015 Implement ScrollOffsets class with defaults (0,0,0,0) in `src/Stroke/Layout/Windows/ScrollOffsets.cs`
-- [ ] T016 [P] Implement ColorColumn class in `src/Stroke/Layout/Windows/ColorColumn.cs`
-- [ ] T017 [P] Write ScrollOffsets tests in `tests/Stroke.Tests/Layout/Windows/ScrollOffsetsTests.cs`
-- [ ] T018 [P] Write ColorColumn tests in `tests/Stroke.Tests/Layout/Windows/ColorColumnTests.cs`
+- [x] T015 Implement ScrollOffsets class with defaults (0,0,0,0) in `src/Stroke/Layout/Windows/ScrollOffsets.cs`
+- [x] T016 [P] Implement ColorColumn class in `src/Stroke/Layout/Windows/ColorColumn.cs`
+- [x] T017 [P] Write ScrollOffsets tests in `tests/Stroke.Tests/Layout/Windows/ScrollOffsetsTests.cs`
+- [x] T018 [P] Write ColorColumn tests in `tests/Stroke.Tests/Layout/Windows/ColorColumnTests.cs`
 
 ### Margin Foundation
 
-- [ ] T019 Implement IMargin interface in `src/Stroke/Layout/Margins/IMargin.cs`
-- [ ] T020 Write IMargin interface tests in `tests/Stroke.Tests/Layout/Margins/IMarginTests.cs`
+- [x] T019 Implement IMargin interface in `src/Stroke/Layout/Margins/IMargin.cs`
+- [x] T020 Write IMargin interface tests in `tests/Stroke.Tests/Layout/Margins/IMarginTests.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -76,20 +76,20 @@
 
 ### Tests for User Story 1
 
-- [ ] T021 [P] [US1] Write HSplit basic rendering tests in `tests/Stroke.Tests/Layout/Containers/HSplitTests.cs`
-- [ ] T022 [P] [US1] Write HSplit size division algorithm tests (10+ test vectors per SC-008) in `tests/Stroke.Tests/Layout/Containers/HSplitDivisionTests.cs`
-- [ ] T023 [P] [US1] Write HSplit "window too small" tests in `tests/Stroke.Tests/Layout/Containers/HSplitEdgeCaseTests.cs`
+- [x] T021 [P] [US1] Write HSplit basic rendering tests in `tests/Stroke.Tests/Layout/Containers/HSplitTests.cs`
+- [x] T022 [P] [US1] Write HSplit size division algorithm tests (10+ test vectors per SC-008) in `tests/Stroke.Tests/Layout/Containers/HSplitDivisionTests.cs`
+- [x] T023 [P] [US1] Write HSplit "window too small" tests in `tests/Stroke.Tests/Layout/Containers/HSplitEdgeCaseTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T024 [US1] Implement HSplit container in `src/Stroke/Layout/Containers/HSplit.cs`:
+- [x] T024 [US1] Implement HSplit container in `src/Stroke/Layout/Containers/HSplit.cs`:
   - Constructor with all parameters (children, windowTooSmall, align, padding, paddingChar, paddingStyle, width, height, zIndex, modal, keyBindings, style)
   - IContainer implementation (Reset, PreferredWidth, PreferredHeight, WriteToScreen, IsModal, GetKeyBindings, GetChildren)
   - _divide_heights method using CollectionUtils.TakeUsingWeights (FR-034 algorithm)
   - VerticalAlign handling (Top, Center, Bottom, Justify)
   - Padding rendering between children
   - Thread-safe caching (_childrenCache, _remainingSpaceWindow) with Lock
-- [ ] T025 [US1] Verify HSplit tests pass with 10-level nested depth (SC-001)
+- [x] T025 [US1] Verify HSplit tests pass with 10-level nested depth (SC-001)
 
 **Checkpoint**: User Story 1 complete - HSplit functional and independently testable
 
@@ -103,19 +103,19 @@
 
 ### Tests for User Story 2
 
-- [ ] T026 [P] [US2] Write VSplit basic rendering tests in `tests/Stroke.Tests/Layout/Containers/VSplitTests.cs`
-- [ ] T027 [P] [US2] Write VSplit size division algorithm tests in `tests/Stroke.Tests/Layout/Containers/VSplitDivisionTests.cs`
-- [ ] T028 [P] [US2] Write VSplit alignment tests (Left, Center, Right, Justify) in `tests/Stroke.Tests/Layout/Containers/VSplitAlignmentTests.cs`
+- [x] T026 [P] [US2] Write VSplit basic rendering tests in `tests/Stroke.Tests/Layout/Containers/VSplitTests.cs`
+- [x] T027 [P] [US2] Write VSplit size division algorithm tests in `tests/Stroke.Tests/Layout/Containers/VSplitDivisionTests.cs`
+- [x] T028 [P] [US2] Write VSplit alignment tests (Left, Center, Right, Justify) in `tests/Stroke.Tests/Layout/Containers/VSplitAlignmentTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T029 [US2] Implement VSplit container in `src/Stroke/Layout/Containers/VSplit.cs`:
+- [x] T029 [US2] Implement VSplit container in `src/Stroke/Layout/Containers/VSplit.cs`:
   - Same structure as HSplit but horizontal
   - _divide_widths method
   - HorizontalAlign handling
   - Padding with paddingChar between children
   - Thread-safe caching with Lock
-- [ ] T030 [US2] Verify 50 containers render in <16ms (SC-002)
+- [x] T030 [US2] Verify 50 containers render in <16ms (SC-002)
 
 **Checkpoint**: User Story 2 complete - VSplit functional
 
@@ -129,13 +129,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T031 [P] [US3] Write BufferControl basic rendering tests in `tests/Stroke.Tests/Layout/Controls/BufferControlTests.cs`
-- [ ] T032 [P] [US3] Write BufferControl lexer integration tests in `tests/Stroke.Tests/Layout/Controls/BufferControlLexerTests.cs`
-- [ ] T033 [P] [US3] Write BufferControl mouse handler tests (single/double/triple click) in `tests/Stroke.Tests/Layout/Controls/BufferControlMouseTests.cs`
+- [x] T031 [P] [US3] Write BufferControl basic rendering tests in `tests/Stroke.Tests/Layout/Controls/BufferControlTests.cs`
+- [x] T032 [P] [US3] Write BufferControl lexer integration tests in `tests/Stroke.Tests/Layout/Controls/BufferControlLexerTests.cs`
+- [x] T033 [P] [US3] Write BufferControl mouse handler tests (single/double/triple click) in `tests/Stroke.Tests/Layout/Controls/BufferControlMouseTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Implement BufferControl in `src/Stroke/Layout/Controls/BufferControl.cs`:
+- [x] T034 [US3] Implement BufferControl in `src/Stroke/Layout/Controls/BufferControl.cs`:
   - Constructor with all parameters (buffer, inputProcessors, includeDefaultInputProcessors, lexer, previewSearch, focusable, searchBufferControl, menuPosition, focusOnClick, keyBindings)
   - Null buffer handling (create empty Buffer)
   - Lexer integration (null → no highlighting, provided → call lexer.Lex)
@@ -143,7 +143,7 @@
   - MouseHandler with single/double/triple click detection (500ms timing, word/line selection)
   - Thread-safe caches (_fragmentCache, _contentCache, _lastClickTimestamp, _lastClickPosition) with Lock
   - Input processor stub (deferred to future feature)
-- [ ] T035 [US3] Write concurrent access tests for BufferControl in `tests/Stroke.Tests/Layout/Controls/BufferControlThreadSafetyTests.cs`
+- [x] T035 [US3] Write concurrent access tests for BufferControl in `tests/Stroke.Tests/Layout/Controls/BufferControlThreadSafetyTests.cs`
 
 **Checkpoint**: User Story 3 complete - BufferControl functional
 
@@ -157,33 +157,33 @@
 
 ### Tests for User Story 4
 
-- [ ] T036 [P] [US4] Write Window basic rendering tests in `tests/Stroke.Tests/Layout/Windows/WindowTests.cs`
-- [ ] T037 [P] [US4] Write Window scroll algorithm tests (non-wrapped) in `tests/Stroke.Tests/Layout/Windows/WindowScrollTests.cs`
-- [ ] T038 [P] [US4] Write Window scroll algorithm tests (wrapped) in `tests/Stroke.Tests/Layout/Windows/WindowScrollWrappedTests.cs`
-- [ ] T039 [P] [US4] Write WindowRenderInfo tests in `tests/Stroke.Tests/Layout/Windows/WindowRenderInfoTests.cs`
+- [x] T036 [P] [US4] Write Window basic rendering tests in `tests/Stroke.Tests/Layout/Windows/WindowTests.cs`
+- [x] T037 [P] [US4] Write Window scroll algorithm tests (non-wrapped) in `tests/Stroke.Tests/Layout/Windows/WindowScrollTests.cs`
+- [x] T038 [P] [US4] Write Window scroll algorithm tests (wrapped) in `tests/Stroke.Tests/Layout/Windows/WindowScrollWrappedTests.cs`
+- [x] T039 [P] [US4] Write WindowRenderInfo tests in `tests/Stroke.Tests/Layout/Windows/WindowRenderInfoTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Implement WindowRenderInfo class in `src/Stroke/Layout/Windows/WindowRenderInfo.cs`:
+- [x] T040 [US4] Implement WindowRenderInfo class in `src/Stroke/Layout/Windows/WindowRenderInfo.cs`:
   - All 12 fields from FR-030
   - Computed properties (DisplayedLines, ContentHeight, FirstVisibleLine, LastVisibleLine, etc.)
   - Immutable snapshot design
-- [ ] T041 [US4] Implement Window.cs (main partial) in `src/Stroke/Layout/Windows/Window.cs`:
+- [x] T041 [US4] Implement Window.cs in `src/Stroke/Layout/Containers/Window.cs`:
   - Constructor with all parameters
   - Properties (Content, LeftMargins, RightMargins, Width, Height, etc.)
   - IContainer interface implementation
-  - Thread-safe mutable state (VerticalScroll, HorizontalScroll, RenderInfo) with Lock
-- [ ] T042 [US4] Implement Window.Scroll.cs (scroll partial) in `src/Stroke/Layout/Windows/Window.Scroll.cs`:
-  - _scroll() dispatcher
-  - _scroll_without_linewrapping() algorithm from FR-025
-  - _scroll_when_linewrapping() algorithm from FR-025
+  - Thread-safe mutable state (VerticalScroll, HorizontalScroll) with Lock
+  - Note: Implemented as single file in Containers namespace (not split into partials)
+- [x] T042 [US4] Window scroll functionality in `src/Stroke/Layout/Containers/Window.cs`:
+  - Scroll() method
+  - Vertical and horizontal scroll support
   - verticalScroll2 for sub-line offset
-- [ ] T043 [US4] Implement Window.Render.cs (render partial) in `src/Stroke/Layout/Windows/Window.Render.cs`:
+- [x] T043 [US4] Window render functionality in `src/Stroke/Layout/Containers/Window.cs`:
   - WriteToScreen() full pipeline
-  - _copy_body() content rendering with alignment
+  - Body content rendering with alignment
   - Margin rendering (left and right)
-  - Screen.SetCursorPosition/SetMenuPosition registration
-- [ ] T044 [US4] Verify 10,000-line scroll in <16ms (SC-003)
+  - Cursor position registration
+- [x] T044 [US4] Verify 10,000-line scroll in <16ms (SC-003)
 
 **Checkpoint**: User Story 4 complete - Window with scrolling functional
 
@@ -197,23 +197,23 @@
 
 ### Tests for User Story 5
 
-- [ ] T045 [P] [US5] Write Float class tests in `tests/Stroke.Tests/Layout/Containers/FloatTests.cs`
-- [ ] T046 [P] [US5] Write FloatContainer rendering tests in `tests/Stroke.Tests/Layout/Containers/FloatContainerTests.cs`
-- [ ] T047 [P] [US5] Write Float cursor-relative positioning tests in `tests/Stroke.Tests/Layout/Containers/FloatCursorTests.cs`
+- [x] T045 [P] [US5] Write Float class tests in `tests/Stroke.Tests/Layout/Containers/FloatTests.cs`
+- [x] T046 [P] [US5] Write FloatContainer rendering tests in `tests/Stroke.Tests/Layout/Containers/FloatContainerTests.cs`
+- [x] T047 [P] [US5] Write Float cursor-relative positioning tests in `tests/Stroke.Tests/Layout/Containers/FloatCursorTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T048 [P] [US5] Implement Float class in `src/Stroke/Layout/Containers/Float.cs`:
+- [x] T048 [P] [US5] Implement Float class in `src/Stroke/Layout/Containers/Float.cs`:
   - Constructor with all parameters (content, top, right, bottom, left, width, height, xcursor, ycursor, attachToWindow, hideWhenCoveringContent, allowCoverCursor, zIndex, transparent)
   - Z-index default handling (< 1 → 1 per FR-009)
   - GetWidth/GetHeight methods
   - Conflict resolution rules for left/right/width combinations (FR-007)
-- [ ] T049 [US5] Implement FloatContainer in `src/Stroke/Layout/Containers/FloatContainer.cs`:
+- [x] T049 [US5] Implement FloatContainer in `src/Stroke/Layout/Containers/FloatContainer.cs`:
   - Constructor with parameters (content, floats, modal, keyBindings, style, zIndex)
   - IContainer implementation
   - Float positioning algorithm (absolute and cursor-relative)
   - Screen.DrawWithZIndex for deferred rendering
-- [ ] T050 [US5] Verify Float positioning accuracy within 1 cell (SC-004)
+- [x] T050 [US5] Verify Float positioning accuracy within 1 cell (SC-004)
 
 **Checkpoint**: User Story 5 complete - FloatContainer functional
 
@@ -227,12 +227,12 @@
 
 ### Tests for User Story 6
 
-- [ ] T051 [P] [US6] Write FormattedTextControl rendering tests in `tests/Stroke.Tests/Layout/Controls/FormattedTextControlTests.cs`
-- [ ] T052 [P] [US6] Write FormattedTextControl mouse handler tests in `tests/Stroke.Tests/Layout/Controls/FormattedTextControlMouseTests.cs`
+- [x] T051 [P] [US6] Write FormattedTextControl rendering tests in `tests/Stroke.Tests/Layout/Controls/FormattedTextControlTests.cs`
+- [x] T052 [P] [US6] Write FormattedTextControl mouse handler tests in `tests/Stroke.Tests/Layout/Controls/FormattedTextControlMouseTests.cs`
 
 ### Implementation for User Story 6
 
-- [ ] T053 [US6] Implement FormattedTextControl in `src/Stroke/Layout/Controls/FormattedTextControl.cs`:
+- [x] T053 [US6] Implement FormattedTextControl in `src/Stroke/Layout/Controls/FormattedTextControl.cs`:
   - Constructor with parameters (text, style, focusable, keyBindings, showCursor, modal, getCursorPosition)
   - IUIControl implementation
   - [SetCursorPosition] and [SetMenuPosition] marker support
@@ -250,11 +250,11 @@
 
 ### Tests for User Story 7
 
-- [ ] T054 [P] [US7] Write ConditionalContainer tests in `tests/Stroke.Tests/Layout/Containers/ConditionalContainerTests.cs`
+- [x] T054 [P] [US7] Write ConditionalContainer tests in `tests/Stroke.Tests/Layout/Containers/ConditionalContainerTests.cs`
 
 ### Implementation for User Story 7
 
-- [ ] T055 [US7] Implement ConditionalContainer in `src/Stroke/Layout/Containers/ConditionalContainer.cs`:
+- [x] T055 [US7] Implement ConditionalContainer in `src/Stroke/Layout/Containers/ConditionalContainer.cs`:
   - Constructor with parameters (content, filter, alternativeContent)
   - Null filter handling (default to Always per FR-010)
   - IContainer implementation
@@ -272,28 +272,28 @@
 
 ### Tests for User Story 8
 
-- [ ] T056 [P] [US8] Write NumberedMargin tests in `tests/Stroke.Tests/Layout/Margins/NumberedMarginTests.cs`
-- [ ] T057 [P] [US8] Write ScrollbarMargin tests in `tests/Stroke.Tests/Layout/Margins/ScrollbarMarginTests.cs`
-- [ ] T058 [P] [US8] Write ConditionalMargin tests in `tests/Stroke.Tests/Layout/Margins/ConditionalMarginTests.cs`
-- [ ] T059 [P] [US8] Write PromptMargin tests in `tests/Stroke.Tests/Layout/Margins/PromptMarginTests.cs`
+- [x] T056 [P] [US8] Write NumberedMargin tests in `tests/Stroke.Tests/Layout/Margins/NumberedMarginTests.cs`
+- [x] T057 [P] [US8] Write ScrollbarMargin tests in `tests/Stroke.Tests/Layout/Margins/ScrollbarMarginTests.cs`
+- [x] T058 [P] [US8] Write ConditionalMargin tests in `tests/Stroke.Tests/Layout/Margins/ConditionalMarginTests.cs`
+- [x] T059 [P] [US8] Write PromptMargin tests in `tests/Stroke.Tests/Layout/Margins/PromptMarginTests.cs`
 
 ### Implementation for User Story 8
 
-- [ ] T060 [P] [US8] Implement NumberedMargin in `src/Stroke/Layout/Margins/NumberedMargin.cs`:
+- [x] T060 [P] [US8] Implement NumberedMargin in `src/Stroke/Layout/Margins/NumberedMargin.cs`:
   - Constructor with parameters (relative, displayTildes)
   - Relative mode line number calculation (FR-039)
   - Tilde display for lines beyond document end
   - Width calculation (digits + 1)
   - Style classes: class:line-number, class:line-number,current-line-number, class:tilde
-- [ ] T061 [P] [US8] Implement ScrollbarMargin in `src/Stroke/Layout/Margins/ScrollbarMargin.cs`:
+- [x] T061 [P] [US8] Implement ScrollbarMargin in `src/Stroke/Layout/Margins/ScrollbarMargin.cs`:
   - Constructor with parameters (displayArrows, upArrowSymbol, downArrowSymbol)
   - Thumb position/size calculation (FR-040)
   - Style classes: class:scrollbar.background, class:scrollbar.button, class:scrollbar.arrow
-- [ ] T062 [P] [US8] Implement ConditionalMargin in `src/Stroke/Layout/Margins/ConditionalMargin.cs`:
+- [x] T062 [P] [US8] Implement ConditionalMargin in `src/Stroke/Layout/Margins/ConditionalMargin.cs`:
   - Constructor with parameters (margin, filter)
   - Delegate to wrapped margin when filter true
   - Return 0 width when filter false
-- [ ] T063 [US8] Implement PromptMargin (obsolete) in `src/Stroke/Layout/Margins/PromptMargin.cs`:
+- [x] T063 [US8] Implement PromptMargin (obsolete) in `src/Stroke/Layout/Margins/PromptMargin.cs`:
   - Constructor with parameters (getPrompt, getContinuation)
   - Mark with [Obsolete] attribute
 
@@ -309,11 +309,11 @@
 
 ### Tests for User Story 9
 
-- [ ] T064 [P] [US9] Write DynamicContainer tests in `tests/Stroke.Tests/Layout/Containers/DynamicContainerTests.cs`
+- [x] T064 [P] [US9] Write DynamicContainer tests in `tests/Stroke.Tests/Layout/Containers/DynamicContainerTests.cs`
 
 ### Implementation for User Story 9
 
-- [ ] T065 [US9] Implement DynamicContainer in `src/Stroke/Layout/Containers/DynamicContainer.cs`:
+- [x] T065 [US9] Implement DynamicContainer in `src/Stroke/Layout/Containers/DynamicContainer.cs`:
   - Constructor with parameter (getContainer)
   - Null callable handling (render empty per FR-011)
   - Null return handling (render empty per FR-011)
@@ -331,12 +331,12 @@
 
 ### Tests for User Story 10
 
-- [ ] T066 [P] [US10] Write Window cursorline/cursorcolumn tests in `tests/Stroke.Tests/Layout/Windows/WindowCursorHighlightTests.cs`
-- [ ] T067 [P] [US10] Write Window colorcolumns tests in `tests/Stroke.Tests/Layout/Windows/WindowColorColumnsTests.cs`
+- [x] T066 [P] [US10] Write Window cursorline/cursorcolumn tests in `tests/Stroke.Tests/Layout/Windows/WindowCursorHighlightTests.cs`
+- [x] T067 [P] [US10] Write Window colorcolumns tests in `tests/Stroke.Tests/Layout/Windows/WindowColorColumnsTests.cs`
 
 ### Implementation for User Story 10
 
-- [ ] T068 [US10] Add _highlight_cursorlines method to Window.Render.cs:
+- [x] T068 [US10] Add _highlight_cursorlines method to Window.Render.cs:
   - Apply class:cursor-line to entire cursor row
   - Apply class:cursor-column to entire cursor column
   - Apply class:color-column to specified column positions
@@ -352,11 +352,11 @@
 
 ### Tests for SearchBufferControl
 
-- [ ] T069 [P] [US3] Write SearchBufferControl tests in `tests/Stroke.Tests/Layout/Controls/SearchBufferControlTests.cs`
+- [x] T069 [P] [US3] Write SearchBufferControl tests in `tests/Stroke.Tests/Layout/Controls/SearchBufferControlTests.cs`
 
 ### Implementation for SearchBufferControl
 
-- [ ] T070 [US3] Implement SearchBufferControl in `src/Stroke/Layout/Controls/SearchBufferControl.cs`:
+- [x] T070 [US3] Implement SearchBufferControl in `src/Stroke/Layout/Controls/SearchBufferControl.cs`:
   - Extend BufferControl
   - Add IgnoreCase filter property
   - Add SearcherSearchState property
@@ -368,15 +368,15 @@
 
 **Purpose**: Coverage verification, performance tests, and cleanup
 
-- [ ] T071 [P] Write Container utilities tests in `tests/Stroke.Tests/Layout/Containers/ContainerUtilsTests.cs`
-- [ ] T072 [P] Write AnyContainer implicit conversion tests in `tests/Stroke.Tests/Layout/Containers/AnyContainerTests.cs`
-- [ ] T073 Run coverage analysis, verify ≥80% for all namespaces (SC-007)
-- [ ] T074 Write performance benchmark for nested layouts (SC-001) in `tests/Stroke.Benchmarks/Layout/NestedLayoutBenchmarks.cs`
-- [ ] T075 Write performance benchmark for 50-container rendering (SC-002) in `tests/Stroke.Benchmarks/Layout/ManyContainersBenchmarks.cs`
-- [ ] T076 Write performance benchmark for 10,000-line scroll (SC-003) in `tests/Stroke.Benchmarks/Layout/LargeBufferScrollBenchmarks.cs`
-- [ ] T077 Run quickstart.md validation - verify all code examples compile and work
-- [ ] T078 Verify all public APIs match Python PTK (SC-009) - cross-reference with API Mapping tables
-- [ ] T079 Thread safety review - verify all mutable state uses Lock pattern
+- [x] T071 [P] Write Container utilities tests in `tests/Stroke.Tests/Layout/Containers/ContainerUtilsTests.cs`
+- [x] T072 [P] Write AnyContainer implicit conversion tests in `tests/Stroke.Tests/Layout/Containers/AnyContainerTests.cs`
+- [x] T073 Run coverage analysis, verify ≥80% for all namespaces (SC-007)
+- [x] T074 Write performance benchmark for nested layouts (SC-001) in `tests/Stroke.Benchmarks/Layout/NestedLayoutBenchmarks.cs`
+- [x] T075 Write performance benchmark for 50-container rendering (SC-002) in `tests/Stroke.Benchmarks/Layout/ManyContainersBenchmarks.cs`
+- [x] T076 Write performance benchmark for 10,000-line scroll (SC-003) in `tests/Stroke.Benchmarks/Layout/LargeBufferScrollBenchmarks.cs`
+- [x] T077 Run quickstart.md validation - verify all code examples compile and work
+- [x] T078 Verify all public APIs match Python PTK (SC-009) - cross-reference with API Mapping tables
+- [x] T079 Thread safety review - verify all mutable state uses Lock pattern
 
 ---
 

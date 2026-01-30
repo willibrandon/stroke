@@ -63,7 +63,7 @@ var window = new Window(
     leftMargins: [new NumberedMargin()],
     scrollOffsets: new ScrollOffsets(top: 3, bottom: 3),
     wrapLines: true,
-    cursorLine: true);
+    cursorline: true);
 ```
 
 ### 4. Floating Completion Menu
@@ -78,10 +78,10 @@ var completionMenu = new Window(
     dontExtendHeight: true);
 
 var layout = new FloatContainer(
-    content: mainContent,
+    new AnyContainer(mainContent),
     floats: [
         new Float(
-            content: completionMenu,
+            new AnyContainer(completionMenu),
             xcursor: true,  // Position near cursor X
             ycursor: true)  // Position near cursor Y
     ]);
@@ -97,7 +97,7 @@ var searchBar = new Window(
     height: Dimension.Exact(1));
 
 var conditionalSearch = new ConditionalContainer(
-    content: searchBar,
+    new AnyContainer(searchBar),
     filter: isSearchMode);
 
 var layout = new HSplit([mainContent, conditionalSearch]);
@@ -183,7 +183,7 @@ var layout = new HSplit([
         leftMargins: [new NumberedMargin()],
         rightMargins: [new ScrollbarMargin()],
         wrapLines: true,
-        cursorLine: true),
+        cursorline: true),
 
     // Status bar
     new Window(
@@ -205,14 +205,14 @@ var layout = new VSplit([
 
 ```csharp
 var dialog = new FloatContainer(
-    content: mainLayout,
+    new AnyContainer(mainLayout),
     floats: [
         new Float(
-            content: new HSplit([
+            new AnyContainer(new HSplit([
                 new Window(content: new FormattedTextControl("Dialog Title")),
                 new Window(content: dialogContent),
                 new Window(content: new FormattedTextControl("[OK] [Cancel]"))
-            ]),
+            ])),
             left: 10, top: 5,
             width: 50, height: 10)
     ]);
