@@ -4,7 +4,7 @@ using Xunit;
 namespace Stroke.Tests.Application;
 
 /// <summary>
-/// Tests for AppFilters.ViInsertMultipleMode (T047).
+/// Tests for ViFilters.ViInsertMultipleMode (T047).
 /// </summary>
 public class AppFiltersProcessorTests
 {
@@ -13,18 +13,18 @@ public class AppFiltersProcessorTests
     {
         // DummyApplication uses Emacs editing mode by default,
         // so ViInsertMultipleMode should return false
-        Assert.False(AppFilters.ViInsertMultipleMode.Invoke());
+        Assert.False(ViFilters.ViInsertMultipleMode.Invoke());
     }
 
     [Fact]
     public void ViInsertMultipleMode_IsIFilter()
     {
-        Assert.IsAssignableFrom<Stroke.Filters.IFilter>(AppFilters.ViInsertMultipleMode);
+        Assert.IsAssignableFrom<Stroke.Filters.IFilter>(ViFilters.ViInsertMultipleMode);
     }
 
     [Fact]
     public void ViInsertMultipleMode_NotNull()
     {
-        Assert.NotNull(AppFilters.ViInsertMultipleMode);
+        Assert.NotNull(ViFilters.ViInsertMultipleMode);
     }
 }

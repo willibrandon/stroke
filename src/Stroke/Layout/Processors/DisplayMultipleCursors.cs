@@ -23,7 +23,7 @@ public sealed class DisplayMultipleCursors : IProcessor
 
         var buff = bufferControl.Buffer;
 
-        if (Stroke.Application.AppFilters.ViInsertMultipleMode.Invoke())
+        if (Stroke.Application.ViFilters.ViInsertMultipleMode.Invoke())
         {
             var cursorPositions = buff.MultipleCursorPositions;
             var exploded = LayoutUtils.ExplodeTextFragments(fragments);
