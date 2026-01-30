@@ -21,9 +21,6 @@ public static class AppContext
 {
     private static readonly AsyncLocal<AppSession> _currentAppSession = new();
 
-    // Track previous sessions for Dispose restoration
-    private static readonly AsyncLocal<AppSession?> _previousSession = new();
-
     /// <summary>
     /// Get the current AppSession. If none has been set, creates a default one.
     /// </summary>
@@ -98,8 +95,7 @@ public static class AppContext
         output ??= currentSession.ExplicitOutput;
 
         var session = new AppSession(input, output);
-        var previous = _currentAppSession.Value;
-        _previousSession.Value = previous;
+        session.PreviousSession = _currentAppSession.Value;
         _currentAppSession.Value = session;
 
         return session;
@@ -144,9 +140,8 @@ public static class AppContext
         // Only restore if this session is currently active
         if (_currentAppSession.Value == disposedSession)
         {
-            var previous = _previousSession.Value;
-            _currentAppSession.Value = previous!;
-            _previousSession.Value = null;
+            _currentAppSession.Value = disposedSession.PreviousSession!;
+            disposedSession.PreviousSession = null;
         }
     }
 

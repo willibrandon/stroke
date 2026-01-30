@@ -87,6 +87,10 @@ public partial class Application<TResult> : IApplicationDoneCheck
     // Bounded(1) with DropWrite coalesces multiple signals into one redraw.
     internal System.Threading.Channels.Channel<bool>? _redrawChannel;
 
+    // Action channel for marshaling callbacks (flush timeout, SIGINT) to the
+    // RunAsync async context. Unbounded because actions must not be dropped.
+    internal System.Threading.Channels.Channel<Action>? _actionChannel;
+
     // RunInTerminal state
     internal bool _runningInTerminal;
     internal TaskCompletionSource<object?>? _runningInTerminalFuture;

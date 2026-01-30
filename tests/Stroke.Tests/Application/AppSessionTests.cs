@@ -111,6 +111,28 @@ public class AppSessionTests
     }
 
     [Fact]
+    public void NestedCreateAppSession_RestoresCorrectly()
+    {
+        // Verifies that nested sessions form a proper stack (A → B → C).
+        // Disposing C restores B, disposing B restores A.
+        var sessionA = AppContext.GetAppSession();
+
+        var sessionB = AppContext.CreateAppSession(new DummyInput(), new DummyOutput());
+        Assert.Same(sessionB, AppContext.GetAppSession());
+
+        var sessionC = AppContext.CreateAppSession(new DummyInput(), new DummyOutput());
+        Assert.Same(sessionC, AppContext.GetAppSession());
+
+        // Dispose C → should restore B
+        sessionC.Dispose();
+        Assert.Same(sessionB, AppContext.GetAppSession());
+
+        // Dispose B → should restore A
+        sessionB.Dispose();
+        Assert.Same(sessionA, AppContext.GetAppSession());
+    }
+
+    [Fact]
     public void ToString_ContainsApp()
     {
         var session = new AppSession();

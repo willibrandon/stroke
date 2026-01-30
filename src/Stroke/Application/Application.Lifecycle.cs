@@ -133,7 +133,11 @@ public partial class Application<TResult>
                 PrintText(displayBeforeText);
             }
 
-            // Run the command
+            // Run the command.
+            // Use ArgumentList (not Arguments) to avoid quoting issues when the
+            // command contains double quotes. ArgumentList passes each argument
+            // as a separate argv element, matching Python's Popen(shell=True)
+            // behavior which calls execvp(['/bin/sh', '-c', command]).
             var startInfo = new System.Diagnostics.ProcessStartInfo
             {
                 UseShellExecute = false,
@@ -142,12 +146,14 @@ public partial class Application<TResult>
             if (OperatingSystem.IsWindows())
             {
                 startInfo.FileName = "cmd";
-                startInfo.Arguments = $"/c \"{command}\"";
+                startInfo.ArgumentList.Add("/c");
+                startInfo.ArgumentList.Add(command);
             }
             else
             {
                 startInfo.FileName = "/bin/sh";
-                startInfo.Arguments = $"-c \"{command}\"";
+                startInfo.ArgumentList.Add("-c");
+                startInfo.ArgumentList.Add(command);
             }
 
             try

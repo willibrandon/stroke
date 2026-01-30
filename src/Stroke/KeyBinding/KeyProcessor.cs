@@ -37,6 +37,14 @@ public sealed class KeyProcessor
     private CancellationTokenSource? _flushWaitCts;
 
     /// <summary>
+    /// Callback invoked when the flush timeout fires. The Application sets this
+    /// to marshal the flush back to the RunAsync async context, avoiding a data
+    /// race on the non-thread-safe KeyProcessor.
+    /// When null, the flush executes inline (for testing or non-Application use).
+    /// </summary>
+    internal Action? OnFlushTimeout { get; set; }
+
+    /// <summary>
     /// Create a new KeyProcessor with the given key bindings registry.
     /// </summary>
     /// <param name="keyBindings">The key bindings registry to dispatch against.</param>
@@ -206,11 +214,27 @@ public sealed class KeyProcessor
 
     /// <summary>
     /// Send a SIGINT key event to the processor, as if the user pressed Ctrl+C.
+    /// Must be called on the application's async context.
     /// </summary>
     public void SendSigint()
     {
         Feed(new KeyPress(Keys.SIGINT), first: true);
         ProcessKeys();
+    }
+
+    /// <summary>
+    /// Flush pending keys in the key buffer by feeding the flush sentinel
+    /// and processing keys. Called by the application event loop when the
+    /// flush timeout fires.
+    /// Must be called on the application's async context.
+    /// </summary>
+    internal void FlushKeyBuffer()
+    {
+        if (_keyBuffer.Count > 0)
+        {
+            Feed(FlushSentinel);
+            ProcessKeys();
+        }
     }
 
     /// <summary>
@@ -224,9 +248,11 @@ public sealed class KeyProcessor
         _keyBuffer.Clear();
         Arg = null;
 
-        // Cancel any pending flush timeout
-        _flushWaitCts?.Cancel();
+        // Cancel and dispose any pending flush timeout
+        var old = _flushWaitCts;
         _flushWaitCts = null;
+        old?.Cancel();
+        old?.Dispose();
     }
 
     // --- Private helpers ---
@@ -469,21 +495,33 @@ public sealed class KeyProcessor
         if (timeout is null)
             return;
 
-        // Cancel previous timeout
-        _flushWaitCts?.Cancel();
+        // Cancel and dispose previous timeout
+        var old = _flushWaitCts;
         _flushWaitCts = new CancellationTokenSource();
         var cts = _flushWaitCts;
+        old?.Cancel();
+        old?.Dispose();
 
         _ = Task.Run(async () =>
         {
             try
             {
                 await Task.Delay(TimeSpan.FromSeconds(timeout.Value), cts.Token);
-                if (_keyBuffer.Count > 0)
+
+                // Marshal back to the application's async context if a callback is set.
+                // This avoids a data race: Feed() and ProcessKeys() are not thread-safe.
+                if (OnFlushTimeout is { } callback)
                 {
-                    // Flush keys
-                    Feed(FlushSentinel);
-                    ProcessKeys();
+                    callback();
+                }
+                else
+                {
+                    // Inline fallback for non-Application use (tests, standalone).
+                    if (_keyBuffer.Count > 0)
+                    {
+                        Feed(FlushSentinel);
+                        ProcessKeys();
+                    }
                 }
             }
             catch (OperationCanceledException)

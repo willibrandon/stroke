@@ -33,6 +33,10 @@ public sealed class AppSession : IDisposable
     // Internal: the app set by SetApp context manager
     private object? _app; // Application<object?> once Application is defined
 
+    // The session that was current when this session was created via CreateAppSession.
+    // Used to restore the previous session on Dispose, forming a proper stack.
+    internal AppSession? PreviousSession { get; set; }
+
     /// <summary>
     /// Create a new AppSession with optional input/output.
     /// </summary>

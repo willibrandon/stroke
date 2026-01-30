@@ -53,7 +53,9 @@ public partial class Application<TResult>
             }
             KeyProcessor.ProcessKeys();
 
-            Task? flushTask = null;
+            // Auto-flush debounce: a CancellationTokenSource that is cancelled
+            // when a new keystroke arrives, ensuring only the latest timer fires.
+            CancellationTokenSource? autoFlushCts = null;
 
             void ReadFromInput()
             {
@@ -81,9 +83,13 @@ public partial class Application<TResult>
                 }
                 else
                 {
-                    // Automatically flush keys after timeout
-                    flushTask?.Dispose();
-                    flushTask = CreateBackgroundTask(AutoFlushInputAsync);
+                    // Cancel previous auto-flush timer and start a new one.
+                    // This ensures only the latest timer fires (debounce).
+                    var oldCts = autoFlushCts;
+                    autoFlushCts = new CancellationTokenSource();
+                    oldCts?.Cancel();
+                    oldCts?.Dispose();
+                    _ = CreateBackgroundTask(ct => AutoFlushInputAsync(autoFlushCts.Token));
                 }
             }
 
@@ -137,6 +143,23 @@ public partial class Application<TResult>
                 });
             _redrawChannel = redrawChannel;
 
+            // Action channel for marshaling callbacks to the event loop.
+            // Used by KeyProcessor flush timeout and SIGINT handler to avoid
+            // calling non-thread-safe methods from background/signal threads.
+            var actionChannel = Channel.CreateUnbounded<Action>(
+                new UnboundedChannelOptions
+                {
+                    SingleReader = true,
+                    SingleWriter = false,
+                });
+            _actionChannel = actionChannel;
+
+            // Wire up KeyProcessor flush timeout to marshal via the action channel.
+            KeyProcessor.OnFlushTimeout = () =>
+            {
+                _actionChannel?.Writer.TryWrite(() => KeyProcessor.FlushKeyBuffer());
+            };
+
             // Request cursor position and draw initial UI
             Renderer.RequestAbsoluteCursorPosition();
             Redraw();
@@ -174,35 +197,51 @@ public partial class Application<TResult>
                 });
             }
 
-            // Main event loop: wait for either Exit (future) or redraw signals.
-            // All Redraw() calls happen here, on the RunAsync async context,
-            // ensuring thread-safety for the non-thread-safe Renderer.
-            // This mirrors Python's event loop where _redraw runs on the main thread.
+            // Main event loop: wait for Exit (future), redraw signals, or action callbacks.
+            // All Redraw() and KeyProcessor calls happen here, on the RunAsync async
+            // context, ensuring thread-safety for non-thread-safe components.
+            // This mirrors Python's event loop where callbacks run on the main thread.
             TResult result;
             try
             {
                 while (true)
                 {
                     var redrawTask = redrawChannel.Reader.WaitToReadAsync().AsTask();
-                    var completed = await Task.WhenAny(_future.Task, redrawTask);
+                    var actionTask = actionChannel.Reader.WaitToReadAsync().AsTask();
+                    var completed = await Task.WhenAny(_future.Task, redrawTask, actionTask);
 
                     if (completed == _future.Task)
                         break;
 
-                    // Consume the signal (drain in case of spurious wake)
-                    while (redrawChannel.Reader.TryRead(out _)) { }
+                    // Process any pending action callbacks (flush timeout, SIGINT, etc.)
+                    while (actionChannel.Reader.TryRead(out var action))
+                    {
+                        action();
+                    }
 
-                    Redraw();
+                    // Process redraw if signaled
+                    if (redrawChannel.Reader.TryRead(out _))
+                    {
+                        // Drain any additional signals
+                        while (redrawChannel.Reader.TryRead(out _)) { }
+                        Redraw();
+                    }
                 }
 
                 result = await _future.Task;
             }
             finally
             {
-                // Complete the redraw channel so any pending WaitToReadAsync
-                // completes cleanly, and clear the field to prevent stale writes.
+                // Complete channels so any pending WaitToReadAsync completes cleanly.
                 redrawChannel.Writer.Complete();
+                actionChannel.Writer.Complete();
                 _redrawChannel = null;
+                _actionChannel = null;
+                KeyProcessor.OnFlushTimeout = null;
+
+                // Clean up auto-flush debounce timer
+                autoFlushCts?.Cancel();
+                autoFlushCts?.Dispose();
 
                 // In any case, when the application finishes
                 try
@@ -602,7 +641,9 @@ public partial class Application<TResult>
                 ctx =>
                 {
                     ctx.Cancel = true; // Prevent default termination
-                    KeyProcessor.SendSigint();
+                    // Marshal to the RunAsync async context via the action channel.
+                    // SendSigint() calls Feed()+ProcessKeys() which are not thread-safe.
+                    _actionChannel?.Writer.TryWrite(() => KeyProcessor.SendSigint());
                 });
         }
         catch (PlatformNotSupportedException)
