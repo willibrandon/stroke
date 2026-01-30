@@ -282,6 +282,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Filter composition via `And`/`Or`/`Invert` methods
   - Thread-safe via stateless lambdas and `Condition` caching (6,708 tests, >80% coverage)
 
+- **Completion Menus** — Single-column and multi-column completion menu rendering
+  - `MenuUtils` static helpers for styled fragment generation and width-constrained text trimming with ellipsis
+  - `CompletionsMenuControl` single-column rendering with optional meta column and mouse handler
+  - `CompletionsMenu` container wrapping control in a `Window` with scrollbar margin, conditional visibility, and z-index overlay
+  - `MultiColumnCompletionMenuControl` multi-column grid with scroll arrows, column width caching, keyboard (Left/Right) navigation
+  - `MultiColumnCompletionsMenu` container with `HSplit` layout combining multi-column grid and meta row
+  - `SelectedCompletionMetaControl` for displaying selected completion's meta information
+  - Filter-based visibility: `extraFilter & HasCompletions & ~IsDone`
+  - Mouse support: click to select, scroll to navigate, arrow clicks for column scrolling
+  - Thread-safe via `System.Threading.Lock` on mutable render state (6,805 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
