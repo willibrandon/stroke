@@ -272,6 +272,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `BufferControl` integration with `InputProcessors` and `DefaultInputProcessors`
   - Thread-safe via immutable records and sealed classes (6,618 tests, >80% coverage)
 
+- **Application Filters** — Domain-specific `IFilter` queries for application state
+  - 4 static filter classes: `AppFilters`, `ViFilters`, `EmacsFilters`, `SearchFilters`
+  - `AppFilters`: selection, suggestion, completions, read-only, validation, arg, done, multiline, paste mode, editing mode (memoized), focus
+  - `ViFilters`: navigation/insert/replace/selection/digraph/text-object-wait mode filters
+  - `EmacsFilters`: emacs mode, insert, selection, search filters
+  - `SearchFilters`: searching state, searchable control, shift-selection mode
+  - `DummyApplication` graceful false for all filters when no app is running
+  - Filter composition via `And`/`Or`/`Invert` methods
+  - Thread-safe via stateless lambdas and `Condition` caching (6,708 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers

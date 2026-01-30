@@ -462,7 +462,7 @@ public sealed class KeyProcessor
         var app = AppContext.GetApp();
         var buff = app.CurrentBuffer;
 
-        if (AppFilters.ViNavigationMode.Invoke()
+        if (ViFilters.ViNavigationMode.Invoke()
             && buff.Document.IsCursorAtTheEndOfLine
             && buff.Document.CurrentLine.Length > 0)
         {
