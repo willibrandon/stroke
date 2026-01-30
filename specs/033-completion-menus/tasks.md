@@ -17,8 +17,8 @@
 
 **Purpose**: Create project structure and directory for completion menu classes
 
-- [ ] T001 Create directory `src/Stroke/Layout/Menus/`
-- [ ] T002 Create directory `tests/Stroke.Tests/Layout/Menus/`
+- [x] T001 Create directory `src/Stroke/Layout/Menus/`
+- [x] T002 Create directory `tests/Stroke.Tests/Layout/Menus/`
 
 ---
 
@@ -28,10 +28,10 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 [P] Unseal `ConditionalContainer` in `src/Stroke/Layout/Containers/ConditionalContainer.cs` — change `public sealed class ConditionalContainer` to `public class ConditionalContainer` (research.md R-002, quickstart.md prerequisite 1)
-- [ ] T004 [P] Unseal `HSplit` in `src/Stroke/Layout/Containers/HSplit.cs` — change `public sealed class HSplit` to `public class HSplit` (research.md R-002, quickstart.md prerequisite 2)
-- [ ] T005 [P] Update `ScrollbarMargin` in `src/Stroke/Layout/Margins/ScrollbarMargin.cs` — change `displayArrows` parameter from `bool` to `FilterOrBool`, store as `IFilter` internally, evaluate at render time (research.md R-003, quickstart.md prerequisite 3)
-- [ ] T006 [P] Implement `MenuUtils` static utility class in `src/Stroke/Layout/Menus/MenuUtils.cs` — port `_get_menu_item_fragments` as `GetMenuItemFragments` and `_trim_formatted_text` as `TrimFormattedText` per contract menu-utils.md (Python lines 204-258, FR-007, FR-017)
+- [x] T003 [P] Unseal `ConditionalContainer` in `src/Stroke/Layout/Containers/ConditionalContainer.cs` — change `public sealed class ConditionalContainer` to `public class ConditionalContainer` (research.md R-002, quickstart.md prerequisite 1)
+- [x] T004 [P] Unseal `HSplit` in `src/Stroke/Layout/Containers/HSplit.cs` — change `public sealed class HSplit` to `public class HSplit` (research.md R-002, quickstart.md prerequisite 2)
+- [x] T005 [P] Update `ScrollbarMargin` in `src/Stroke/Layout/Margins/ScrollbarMargin.cs` — change `displayArrows` parameter from `bool` to `FilterOrBool`, store as `IFilter` internally, evaluate at render time (research.md R-003, quickstart.md prerequisite 3)
+- [x] T006 [P] Implement `MenuUtils` static utility class in `src/Stroke/Layout/Menus/MenuUtils.cs` — port `_get_menu_item_fragments` as `GetMenuItemFragments` and `_trim_formatted_text` as `TrimFormattedText` per contract menu-utils.md (Python lines 204-258, FR-007, FR-017)
 
 **Checkpoint**: Foundation ready — prerequisite changes applied, shared utility class available. User story implementation can now begin.
 
@@ -45,12 +45,12 @@
 
 ### Tests for User Story 1
 
-- [ ] T007 [P] [US1] Write `MenuUtilsTests` in `tests/Stroke.Tests/Layout/Menus/MenuUtilsTests.cs` — test `GetMenuItemFragments` (style selection, padding, space_after variants) and `TrimFormattedText` (no-trim passthrough, ellipsis trimming, maxWidth<=3 edge case, CJK boundary, maxWidth==0 empty result) per contract menu-utils.md and spec edge cases
-- [ ] T008 [P] [US1] Write `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test `PreferredWidth` (with/without completions, returns menu+meta width or 0), `PreferredHeight` (returns completion count or 0), `CreateContent` (5 completions render 5 lines, selected item uses current style, cursor position at selected index), `HasFocus` returns false, minimum width of 7, empty completion list returns 0 dimensions per spec Story 1 scenarios 1-4
+- [x] T007 [P] [US1] Write `MenuUtilsTests` in `tests/Stroke.Tests/Layout/Menus/MenuUtilsTests.cs` — test `GetMenuItemFragments` (style selection, padding, space_after variants) and `TrimFormattedText` (no-trim passthrough, ellipsis trimming, maxWidth<=3 edge case, CJK boundary, maxWidth==0 empty result) per contract menu-utils.md and spec edge cases
+- [x] T008 [P] [US1] Write `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test `PreferredWidth` (with/without completions, returns menu+meta width or 0), `PreferredHeight` (returns completion count or 0), `CreateContent` (5 completions render 5 lines, selected item uses current style, cursor position at selected index), `HasFocus` returns false, minimum width of 7, empty completion list returns 0 dimensions per spec Story 1 scenarios 1-4
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement `CompletionsMenuControl` in `src/Stroke/Layout/Menus/CompletionsMenuControl.cs` — port Python `CompletionsMenuControl` (lines 49-201) per contract completions-menu-control.md: `MinWidth=7`, `IsFocusable=>false`, `PreferredWidth` (passes 500 to internal width calculations), `PreferredHeight` (completion count), `CreateContent` (render completion lines with cursorPosition at `Point(0, index ?? 0)`), internal methods `ShowMeta`, `GetMenuWidth`, `GetMenuMetaWidth`, `GetMenuItemMetaFragments` (FR-001, FR-006, FR-007, FR-008, FR-012, FR-013, FR-016)
+- [x] T009 [US1] Implement `CompletionsMenuControl` in `src/Stroke/Layout/Menus/CompletionsMenuControl.cs` — port Python `CompletionsMenuControl` (lines 49-201) per contract completions-menu-control.md: `MinWidth=7`, `IsFocusable=>false`, `PreferredWidth` (passes 500 to internal width calculations), `PreferredHeight` (completion count), `CreateContent` (render completion lines with cursorPosition at `Point(0, index ?? 0)`), internal methods `ShowMeta`, `GetMenuWidth`, `GetMenuMetaWidth`, `GetMenuItemMetaFragments` (FR-001, FR-006, FR-007, FR-008, FR-012, FR-013, FR-016)
 
 **Checkpoint**: Single-column menu control renders completions. Visible in tests as styled/padded text fragments.
 
@@ -64,7 +64,7 @@
 
 ### Tests for User Story 2
 
-- [ ] T010 [P] [US2] Add meta-specific tests to `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test `ShowMeta` returns true/false based on `DisplayMeta` existence, `GetMenuMetaWidth` samples at most 200 completions (FR-012), meta column rendering with current/normal styles per spec Story 2 scenarios 1-4
+- [x] T010 [P] [US2] Add meta-specific tests to `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test `ShowMeta` returns true/false based on `DisplayMeta` existence, `GetMenuMetaWidth` samples at most 200 completions (FR-012), meta column rendering with current/normal styles per spec Story 2 scenarios 1-4
 
 ### Implementation for User Story 2
 
@@ -82,11 +82,11 @@
 
 ### Tests for User Story 3
 
-- [ ] T011 [P] [US3] Write `CompletionsMenuTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuTests.cs` — test constructor with default parameters (window min width 8, scrollbar margin, style "class:completion-menu", z-index 10^8), maxHeight propagation, extraFilter integration (false hides menu), visibility filter composition (`extraFilter & HasCompletions & ~IsDone`), displayArrows pass-through per spec Story 3 scenarios 1-5
+- [x] T011 [P] [US3] Write `CompletionsMenuTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuTests.cs` — test constructor with default parameters (window min width 8, scrollbar margin, style "class:completion-menu", z-index 10^8), maxHeight propagation, extraFilter integration (false hides menu), visibility filter composition (`extraFilter & HasCompletions & ~IsDone`), displayArrows pass-through per spec Story 3 scenarios 1-5
 
 ### Implementation for User Story 3
 
-- [ ] T012 [US3] Implement `CompletionsMenu` in `src/Stroke/Layout/Menus/CompletionsMenu.cs` — port Python `CompletionsMenu(ConditionalContainer)` (lines 261-290) per contract completions-menu.md: constructor delegates to `ConditionalContainer` base with `Window(content: CompletionsMenuControl(), width: Dimension(min: 8), height: Dimension(min: 1, max: maxHeight), scrollOffsets: ScrollOffsets(top: scrollOffset, bottom: scrollOffset), rightMargins: [ScrollbarMargin(displayArrows)], dontExtendWidth: true, style: "class:completion-menu", zIndex)`, filter: `extraFilter & HasCompletions & ~IsDone` (FR-002, FR-014)
+- [x] T012 [US3] Implement `CompletionsMenu` in `src/Stroke/Layout/Menus/CompletionsMenu.cs` — port Python `CompletionsMenu(ConditionalContainer)` (lines 261-290) per contract completions-menu.md: constructor delegates to `ConditionalContainer` base with `Window(content: CompletionsMenuControl(), width: Dimension(min: 8), height: Dimension(min: 1, max: maxHeight), scrollOffsets: ScrollOffsets(top: scrollOffset, bottom: scrollOffset), rightMargins: [ScrollbarMargin(displayArrows)], dontExtendWidth: true, style: "class:completion-menu", zIndex)`, filter: `extraFilter & HasCompletions & ~IsDone` (FR-002, FR-014)
 
 **Checkpoint**: P1 stories complete. Single-column completion menu is fully functional with display, meta, and container. This is the MVP.
 
@@ -100,7 +100,7 @@
 
 ### Tests for User Story 4
 
-- [ ] T013 [P] [US4] Add mouse handler tests to `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test MOUSE_UP selects completion at position Y and clears complete state, SCROLL_DOWN calls CompleteNext(3, disableWrapAround: true), SCROLL_UP calls CompletePrevious(3, disableWrapAround: true), click beyond completion count silently returns None, all handled events return `NotImplementedOrNone.None`, unhandled events return `NotImplementedOrNone.NotImplemented` per spec Story 4 scenarios 1-3 and edge case CHK050
+- [x] T013 [P] [US4] Add mouse handler tests to `CompletionsMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/CompletionsMenuControlTests.cs` — test MOUSE_UP selects completion at position Y and clears complete state, SCROLL_DOWN calls CompleteNext(3, disableWrapAround: true), SCROLL_UP calls CompletePrevious(3, disableWrapAround: true), click beyond completion count silently returns None, all handled events return `NotImplementedOrNone.None`, unhandled events return `NotImplementedOrNone.NotImplemented` per spec Story 4 scenarios 1-3 and edge case CHK050
 
 ### Implementation for User Story 4
 
@@ -118,11 +118,11 @@
 
 ### Tests for User Story 5
 
-- [ ] T014 [P] [US5] Write `MultiColumnCompletionMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionMenuControlTests.cs` — test `PreferredWidth` (column width * ceil(count/minRows) + margin, or 0 without completions), `PreferredHeight` (ceil(count/columnCount)), `CreateContent` (20 completions at width 60 height 5 arranged in columns, scroll arrows appear when columns exceed visible area, selected completion's column visible after scroll adjustment, column width division when > suggestedMaxColumnWidth), `HasFocus` returns false, `Reset` sets scroll to 0, column width caching via ConditionalWeakTable per spec Story 5 scenarios 1-4
+- [x] T014 [P] [US5] Write `MultiColumnCompletionMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionMenuControlTests.cs` — test `PreferredWidth` (column width * ceil(count/minRows) + margin, or 0 without completions), `PreferredHeight` (ceil(count/columnCount)), `CreateContent` (20 completions at width 60 height 5 arranged in columns, scroll arrows appear when columns exceed visible area, selected completion's column visible after scroll adjustment, column width division when > suggestedMaxColumnWidth), `HasFocus` returns false, `Reset` sets scroll to 0, column width caching via ConditionalWeakTable per spec Story 5 scenarios 1-4
 
 ### Implementation for User Story 5
 
-- [ ] T015 [US5] Implement `MultiColumnCompletionMenuControl` in `src/Stroke/Layout/Menus/MultiColumnCompletionMenuControl.cs` — port Python `MultiColumnCompletionMenuControl` (lines 293-624) per contract multi-column-completion-menu-control.md: constructor with `minRows`/`suggestedMaxColumnWidth`, `RequiredMargin=3`, mutable state protected by `Lock` (Constitution XI), `Reset()`, `PreferredWidth/Height`, `CreateContent` with grouper pattern (LINQ Chunk + transpose), column width clamping, suggested width division, scroll adjustment formula, arrow rendering, position-to-completion map, `GetColumnWidth` with ConditionalWeakTable cache (FR-003, FR-009, FR-010, FR-011, FR-015, FR-016)
+- [x] T015 [US5] Implement `MultiColumnCompletionMenuControl` in `src/Stroke/Layout/Menus/MultiColumnCompletionMenuControl.cs` — port Python `MultiColumnCompletionMenuControl` (lines 293-624) per contract multi-column-completion-menu-control.md: constructor with `minRows`/`suggestedMaxColumnWidth`, `RequiredMargin=3`, mutable state protected by `Lock` (Constitution XI), `Reset()`, `PreferredWidth/Height`, `CreateContent` with grouper pattern (LINQ Chunk + transpose), column width clamping, suggested width division, scroll adjustment formula, arrow rendering, position-to-completion map, `GetColumnWidth` with ConditionalWeakTable cache (FR-003, FR-009, FR-010, FR-011, FR-015, FR-016)
 
 **Checkpoint**: Multi-column grid renders completions with scroll arrows and cached column widths.
 
@@ -136,7 +136,7 @@
 
 ### Tests for User Story 6
 
-- [ ] T016 [P] [US6] Add mouse and key binding tests to `MultiColumnCompletionMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionMenuControlTests.cs` — test mouse: SCROLL_DOWN scrolls right, SCROLL_UP scrolls left, MOUSE_UP on left arrow scrolls left, MOUSE_UP on right arrow scrolls right, MOUSE_UP on completion applies it, all handled events return `NotImplementedOrNone.None`, unhandled return `NotImplementedOrNone.NotImplemented`; key bindings: Left moves selection up by renderedRows, Right moves selection down by renderedRows, filter returns false when no completions or not visible per spec Story 6 scenarios 1-6
+- [x] T016 [P] [US6] Add mouse and key binding tests to `MultiColumnCompletionMenuControlTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionMenuControlTests.cs` — test mouse: SCROLL_DOWN scrolls right, SCROLL_UP scrolls left, MOUSE_UP on left arrow scrolls left, MOUSE_UP on right arrow scrolls right, MOUSE_UP on completion applies it, all handled events return `NotImplementedOrNone.None`, unhandled return `NotImplementedOrNone.NotImplemented`; key bindings: Left moves selection up by renderedRows, Right moves selection down by renderedRows, filter returns false when no completions or not visible per spec Story 6 scenarios 1-6
 
 ### Implementation for User Story 6
 
@@ -154,13 +154,13 @@
 
 ### Tests for User Story 7
 
-- [ ] T017 [P] [US7] Write `SelectedCompletionMetaControlTests` in `tests/Stroke.Tests/Layout/Menus/SelectedCompletionMetaControlTests.cs` — test `PreferredWidth` (returns 0 without completions, returns maxAvailableWidth with 30+ completions, returns widest meta + 2 otherwise), `PreferredHeight` returns 1, `CreateContent` renders selected completion's DisplayMeta with style "class:completion-menu.multi-column-meta" and checks DisplayMetaText for existence, no selected completion returns lineCount 0 per spec Story 7 scenarios 1-3 and FR-018
-- [ ] T018 [P] [US7] Write `MultiColumnCompletionsMenuTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionsMenuTests.cs` — test constructor creates HSplit with two ConditionalContainer children (completions window and meta window), meta window filter combines `fullFilter & showMeta & anyCompletionHasMeta`, no "class:completion-menu" style on multi-column window, z-index propagation, anyCompletionHasMeta checks DisplayMeta not DisplayMetaText per spec Story 7 and contract multi-column-completions-menu.md
+- [x] T017 [P] [US7] Write `SelectedCompletionMetaControlTests` in `tests/Stroke.Tests/Layout/Menus/SelectedCompletionMetaControlTests.cs` — test `PreferredWidth` (returns 0 without completions, returns maxAvailableWidth with 30+ completions, returns widest meta + 2 otherwise), `PreferredHeight` returns 1, `CreateContent` renders selected completion's DisplayMeta with style "class:completion-menu.multi-column-meta" and checks DisplayMetaText for existence, no selected completion returns lineCount 0 per spec Story 7 scenarios 1-3 and FR-018
+- [x] T018 [P] [US7] Write `MultiColumnCompletionsMenuTests` in `tests/Stroke.Tests/Layout/Menus/MultiColumnCompletionsMenuTests.cs` — test constructor creates HSplit with two ConditionalContainer children (completions window and meta window), meta window filter combines `fullFilter & showMeta & anyCompletionHasMeta`, no "class:completion-menu" style on multi-column window, z-index propagation, anyCompletionHasMeta checks DisplayMeta not DisplayMetaText per spec Story 7 and contract multi-column-completions-menu.md
 
 ### Implementation for User Story 7
 
-- [ ] T019 [P] [US7] Implement `SelectedCompletionMetaControl` in `src/Stroke/Layout/Menus/SelectedCompletionMetaControl.cs` — port Python `_SelectedCompletionMetaControl` (lines 683-748) per contract selected-completion-meta-control.md: `IsFocusable=>false`, `PreferredWidth` with 30+ optimization, `PreferredHeight` returns 1, `CreateContent` renders DisplayMeta with "class:completion-menu.multi-column-meta" style, internal `GetTextFragments` checks DisplayMetaText for existence but renders DisplayMeta (FR-005, FR-018)
-- [ ] T020 [US7] Implement `MultiColumnCompletionsMenu` in `src/Stroke/Layout/Menus/MultiColumnCompletionsMenu.cs` — port Python `MultiColumnCompletionsMenu(HSplit)` (lines 627-680) per contract multi-column-completions-menu.md: constructor creates `fullFilter = extraFilter & HasCompletions & ~IsDone`, `anyCompletionHasMeta` Condition checking DisplayMeta, two ConditionalContainer children (completions window without "class:completion-menu" style, meta window with combined filter), delegates to `HSplit` base with z-index (FR-004, FR-014)
+- [x] T019 [P] [US7] Implement `SelectedCompletionMetaControl` in `src/Stroke/Layout/Menus/SelectedCompletionMetaControl.cs` — port Python `_SelectedCompletionMetaControl` (lines 683-748) per contract selected-completion-meta-control.md: `IsFocusable=>false`, `PreferredWidth` with 30+ optimization, `PreferredHeight` returns 1, `CreateContent` renders DisplayMeta with "class:completion-menu.multi-column-meta" style, internal `GetTextFragments` checks DisplayMetaText for existence but renders DisplayMeta (FR-005, FR-018)
+- [x] T020 [US7] Implement `MultiColumnCompletionsMenu` in `src/Stroke/Layout/Menus/MultiColumnCompletionsMenu.cs` — port Python `MultiColumnCompletionsMenu(HSplit)` (lines 627-680) per contract multi-column-completions-menu.md: constructor creates `fullFilter = extraFilter & HasCompletions & ~IsDone`, `anyCompletionHasMeta` Condition checking DisplayMeta, two ConditionalContainer children (completions window without "class:completion-menu" style, meta window with combined filter), delegates to `HSplit` base with z-index (FR-004, FR-014)
 
 **Checkpoint**: All user stories complete. Full completion menu system functional.
 
@@ -170,10 +170,10 @@
 
 **Purpose**: Thread safety testing, build verification, and final validation
 
-- [ ] T021 [P] Write `MenuThreadSafetyTests` in `tests/Stroke.Tests/Layout/Menus/MenuThreadSafetyTests.cs` — test concurrent `CreateContent` and `MouseHandler` calls on the same `MultiColumnCompletionMenuControl` must not throw or corrupt render state, concurrent `CreateContent` and `GetKeyBindings` handler execution must read consistent `_renderedRows`, concurrent `Reset` and `CreateContent` must not deadlock, rapid sequential `CreateContent` with changing `CompletionState` must produce valid render state per plan.md thread safety scenarios and Constitution XI
-- [ ] T022 Verify build succeeds: `dotnet build src/Stroke/Stroke.csproj` and `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Layout.Menus"`
-- [ ] T023 Verify no source file exceeds 1,000 LOC (Constitution X)
-- [ ] T024 Run quickstart.md validation: build from repo root, run menu-specific tests
+- [x] T021 [P] Write `MenuThreadSafetyTests` in `tests/Stroke.Tests/Layout/Menus/MenuThreadSafetyTests.cs` — test concurrent `CreateContent` and `MouseHandler` calls on the same `MultiColumnCompletionMenuControl` must not throw or corrupt render state, concurrent `CreateContent` and `GetKeyBindings` handler execution must read consistent `_renderedRows`, concurrent `Reset` and `CreateContent` must not deadlock, rapid sequential `CreateContent` with changing `CompletionState` must produce valid render state per plan.md thread safety scenarios and Constitution XI
+- [x] T022 Verify build succeeds: `dotnet build src/Stroke/Stroke.csproj` and `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Layout.Menus"`
+- [x] T023 Verify no source file exceeds 1,000 LOC (Constitution X)
+- [x] T024 Run quickstart.md validation: build from repo root, run menu-specific tests
 
 ---
 

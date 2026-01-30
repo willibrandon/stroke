@@ -385,6 +385,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
 
 ## Recent Changes
+- 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils, 3 controls — completion menu rendering with mouse/keyboard (6805 tests)
 - 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters — IFilter-based state queries (6708 tests)
 - 031-input-processors: IProcessor pipeline, 26 processors, ExplodedList, MergedProcessor (6618 tests)
 - 030-application-system: Application<TResult> orchestration, Renderer diff updates, KeyProcessor, Layout focus, AppContext/AppSession (6469 tests)

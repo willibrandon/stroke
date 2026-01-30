@@ -206,6 +206,24 @@ public sealed partial class Buffer
     // ════════════════════════════════════════════════════════════════════════
 
     /// <summary>
+    /// Dismiss the completion menu without reverting text.
+    /// Equivalent to Python's <c>b.complete_state = None</c>.
+    /// </summary>
+    /// <remarks>
+    /// Unlike <see cref="CancelCompletion"/>, this does not revert text to the
+    /// original (before any completion was applied). Use this after
+    /// <see cref="GoToCompletion"/> to accept the currently selected completion
+    /// and close the menu.
+    /// </remarks>
+    public void DismissCompletion()
+    {
+        using (_lock.EnterScope())
+        {
+            _completeState = null;
+        }
+    }
+
+    /// <summary>
     /// Cancel completion, go back to the original text.
     /// </summary>
     public void CancelCompletion()

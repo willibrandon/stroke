@@ -32,7 +32,7 @@ namespace Stroke.Layout.Containers;
 /// Thread-safe: Internal caches are protected by <see cref="Lock"/>.
 /// </para>
 /// </remarks>
-public sealed class HSplit : IContainer
+public class HSplit : IContainer
 {
     private readonly Lock _lock = new();
     private readonly IReadOnlyList<IContainer> _children;
