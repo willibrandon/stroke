@@ -199,6 +199,44 @@ public sealed class Screen
     }
 
     /// <summary>
+    /// Gets the dictionary mapping windows to their cursor positions.
+    /// </summary>
+    /// <remarks>
+    /// Equivalent to Python Prompt Toolkit's <c>cursor_positions</c> attribute.
+    /// Used by <see cref="Containers.ScrollablePane"/> to copy cursor positions
+    /// from a virtual screen to the real screen.
+    /// </remarks>
+    public IDictionary<IWindow, Point> CursorPositions
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _cursorPositions;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the dictionary mapping windows to their menu positions.
+    /// </summary>
+    /// <remarks>
+    /// Equivalent to Python Prompt Toolkit's <c>menu_positions</c> attribute.
+    /// Used by <see cref="Containers.ScrollablePane"/> to copy menu positions
+    /// from a virtual screen to the real screen.
+    /// </remarks>
+    public IDictionary<IWindow, Point> MenuPositions
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _menuPositions;
+            }
+        }
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Screen"/> class.
     /// </summary>
     /// <param name="defaultChar">
