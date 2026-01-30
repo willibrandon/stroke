@@ -20,7 +20,7 @@ public readonly record struct WritePosition
     /// <remarks>
     /// May be negative to represent a partially visible float that extends off the left edge.
     /// </remarks>
-    public int XPos { get; }
+    public int XPos { get; init; }
 
     /// <summary>
     /// Gets the Y coordinate (row position).
@@ -28,7 +28,7 @@ public readonly record struct WritePosition
     /// <remarks>
     /// May be negative to represent a partially visible float that extends off the top edge.
     /// </remarks>
-    public int YPos { get; }
+    public int YPos { get; init; }
 
     /// <summary>
     /// Gets the region width in columns.
@@ -36,7 +36,7 @@ public readonly record struct WritePosition
     /// <remarks>
     /// Always non-negative. A width of 0 represents an empty region.
     /// </remarks>
-    public int Width { get; }
+    public int Width { get; init; }
 
     /// <summary>
     /// Gets the region height in rows.
@@ -44,7 +44,7 @@ public readonly record struct WritePosition
     /// <remarks>
     /// Always non-negative. A height of 0 represents an empty region.
     /// </remarks>
-    public int Height { get; }
+    public int Height { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WritePosition"/> struct.

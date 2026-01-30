@@ -235,6 +235,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Region fill with `FillArea` and `AppendStyleToContent`
   - Thread-safe via `System.Threading.Lock` (369 tests, >80% coverage)
 
+- **Layout Containers, Controls, and Window** — Core layout system for terminal UI
+  - Containers: `HSplit` (vertical stacking), `VSplit` (horizontal arrangement), `FloatContainer` (overlay positioning)
+  - `ConditionalContainer` (filter-based show/hide), `DynamicContainer` (runtime content switching)
+  - `AnyContainer` wrapper struct, `IContainer`/`IMagicContainer` interfaces, `ContainerUtils` utilities
+  - `Window` container wrapping `IUIControl` with scrolling, margins, cursor highlighting, style inheritance
+  - Controls: `BufferControl` (editable text with lexer/search), `FormattedTextControl` (static styled text with mouse handlers)
+  - `SearchBufferControl`, `DummyControl`, `UIContent` line-based content model, `IUIControl` interface
+  - Margins: `IMargin`, `NumberedMargin`, `ScrollbarMargin`, `PromptMargin`, `ConditionalMargin`
+  - Window support: `ScrollOffsets`, `WindowRenderInfo`, `ColorColumn`, `GetLinePrefixCallable`
+  - Alignment enums: `HorizontalAlign`, `VerticalAlign`, `WindowAlign`
+  - Weighted dimension allocation in HSplit/VSplit with min/max/preferred constraints
+  - Thread-safe via `System.Threading.Lock` (>80% coverage)
+
 ### Up Next
 
 - **Renderer** — Differential screen updates for efficient terminal rendering

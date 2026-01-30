@@ -25,9 +25,9 @@ public static class DimensionUtils
             return new Dimension(min: 0, max: 0, preferred: 0);
         }
 
-        int sumMin = 0;
-        int sumMax = 0;
-        int sumPreferred = 0;
+        long sumMin = 0;
+        long sumMax = 0;
+        long sumPreferred = 0;
 
         foreach (var d in dimensions)
         {
@@ -36,7 +36,12 @@ public static class DimensionUtils
             sumPreferred += d.Preferred;
         }
 
-        return new Dimension(min: sumMin, max: sumMax, preferred: sumPreferred);
+        // Cap at MaxDimensionValue to prevent overflow when creating new Dimension
+        int clampedMin = (int)Math.Min(sumMin, Dimension.MaxDimensionValue);
+        int clampedMax = (int)Math.Min(sumMax, Dimension.MaxDimensionValue);
+        int clampedPreferred = (int)Math.Min(sumPreferred, Dimension.MaxDimensionValue);
+
+        return new Dimension(min: clampedMin, max: clampedMax, preferred: clampedPreferred);
     }
 
     /// <summary>

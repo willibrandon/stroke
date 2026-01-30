@@ -26,6 +26,9 @@ dotnet run -c Release --filter '*KeyBinding*'
 dotnet run -c Release --filter '*Lexer*'
 dotnet run -c Release --filter '*Grammar*'
 dotnet run -c Release --filter '*Matching*'
+dotnet run -c Release --filter '*NestedLayout*'
+dotnet run -c Release --filter '*ManyContainers*'
+dotnet run -c Release --filter '*LargeBufferScroll*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -164,3 +167,8 @@ dotnet run -c Release --list flat
 - **GrammarCompilationBenchmarks** - Grammar compilation with simple, complex, nested, and escape function patterns (SC-002)
 - **MatchingBenchmarks** - Pattern matching, variable extraction, prefix matching, EndNodes, TrailingInput (SC-003)
 - **GrammarCompletionBenchmarks** - Grammar-based completion with simple and complex grammars (SC-004)
+
+### Layout System
+- **NestedLayoutBenchmarks** - Nested HSplit/VSplit rendering at 3/10/20 levels of depth (SC-003)
+- **ManyContainersBenchmarks** - Rendering with 50/100 Window containers and mixed container types (SC-003)
+- **LargeBufferScrollBenchmarks** - 10K/50K line scrolling at top/middle/bottom with scroll offsets (SC-003)
