@@ -86,13 +86,16 @@ public class BufferControl : IUIControl
         {
             if (_defaultInputProcessors is null)
             {
-                _defaultInputProcessors = new IProcessor[]
+                using (_lock.EnterScope())
                 {
-                    new HighlightSearchProcessor(),
-                    new HighlightIncrementalSearchProcessor(),
-                    new HighlightSelectionProcessor(),
-                    new DisplayMultipleCursors(),
-                };
+                    _defaultInputProcessors ??= new IProcessor[]
+                    {
+                        new HighlightSearchProcessor(),
+                        new HighlightIncrementalSearchProcessor(),
+                        new HighlightSelectionProcessor(),
+                        new DisplayMultipleCursors(),
+                    };
+                }
             }
             return _defaultInputProcessors;
         }
