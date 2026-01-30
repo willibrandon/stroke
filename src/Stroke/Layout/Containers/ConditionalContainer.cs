@@ -18,7 +18,7 @@ namespace Stroke.Layout.Containers;
 /// Port of Python Prompt Toolkit's <c>ConditionalContainer</c> class from <c>layout/containers.py</c>.
 /// </para>
 /// </remarks>
-public sealed class ConditionalContainer : IContainer
+public class ConditionalContainer : IContainer
 {
     /// <summary>
     /// Gets the primary content container.

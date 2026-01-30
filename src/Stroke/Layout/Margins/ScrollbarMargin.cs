@@ -1,3 +1,4 @@
+using Stroke.Filters;
 using Stroke.FormattedText;
 using Stroke.Layout.Controls;
 using Stroke.Layout.Windows;
@@ -18,10 +19,13 @@ namespace Stroke.Layout.Margins;
 /// </remarks>
 public sealed class ScrollbarMargin : IMargin
 {
+    private readonly IFilter _displayArrowsFilter;
+
     /// <summary>
     /// Gets whether to display arrow buttons at the top and bottom.
+    /// Evaluated dynamically from the filter at render time.
     /// </summary>
-    public bool DisplayArrows { get; }
+    public bool DisplayArrows => _displayArrowsFilter.Invoke();
 
     /// <summary>
     /// Gets the character used for the up arrow.
@@ -36,15 +40,17 @@ public sealed class ScrollbarMargin : IMargin
     /// <summary>
     /// Initializes a new instance of the <see cref="ScrollbarMargin"/> class.
     /// </summary>
-    /// <param name="displayArrows">Show arrow buttons.</param>
+    /// <param name="displayArrows">Show arrow buttons. Accepts bool or IFilter for dynamic evaluation.</param>
     /// <param name="upArrowSymbol">Character for up arrow.</param>
     /// <param name="downArrowSymbol">Character for down arrow.</param>
     public ScrollbarMargin(
-        bool displayArrows = true,
+        FilterOrBool displayArrows = default,
         char upArrowSymbol = '^',
         char downArrowSymbol = 'v')
     {
-        DisplayArrows = displayArrows;
+        _displayArrowsFilter = displayArrows.HasValue
+            ? FilterUtils.ToFilter(displayArrows)
+            : Filters.Always.Instance;
         UpArrowSymbol = upArrowSymbol;
         DownArrowSymbol = downArrowSymbol;
     }
@@ -63,30 +69,31 @@ public sealed class ScrollbarMargin : IMargin
         var contentHeight = windowRenderInfo.UIContent.LineCount;
         var verticalScroll = windowRenderInfo.VerticalScroll;
         var windowHeight = windowRenderInfo.WindowHeight;
+        var displayArrows = DisplayArrows;
 
         // Calculate scrollbar position and size.
         // When arrows are displayed, reduce the available height for the scrollbar body
         // (Python PTK: window_height -= 2 before computing scrollbar proportions).
-        var bodyHeight = DisplayArrows ? height - 2 : height;
+        var bodyHeight = displayArrows ? height - 2 : height;
         var (thumbStart, thumbEnd) = CalculateThumbPosition(
             contentHeight, verticalScroll, windowHeight, bodyHeight);
 
         // Determine height available for scrollbar (minus arrows if displayed)
-        var scrollbarStart = DisplayArrows ? 1 : 0;
-        var scrollbarEnd = DisplayArrows ? height - 1 : height;
+        var scrollbarStart = displayArrows ? 1 : 0;
+        var scrollbarEnd = displayArrows ? height - 1 : height;
 
         for (int i = 0; i < height; i++)
         {
             string style;
             char symbol;
 
-            if (DisplayArrows && i == 0)
+            if (displayArrows && i == 0)
             {
                 // Up arrow
                 style = "class:scrollbar.arrow";
                 symbol = UpArrowSymbol;
             }
-            else if (DisplayArrows && i == height - 1)
+            else if (displayArrows && i == height - 1)
             {
                 // Down arrow
                 style = "class:scrollbar.arrow";
