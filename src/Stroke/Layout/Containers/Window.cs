@@ -434,12 +434,13 @@ public class Window : IContainer, IWindow
         IReadOnlyDictionary<(int Row, int Col), (int Y, int X)> rowColToYX,
         IReadOnlyDictionary<int, (int Row, int Col)> visibleLineToRowCol)
     {
-        // NOTE: xMax subtracts totalMarginWidth (left+right) but xMin already offsets past
-        // the left margin, effectively subtracting left margin width twice. This matches
-        // the Python Prompt Toolkit source (containers.py line 1877) — upstream bug.
+        // Python PTK (containers.py:1877) uses total_margin_width here, which
+        // double-subtracts the left margin (xMin already offsets past it).
+        // We fix this by subtracting only the right margin width.
+        var rightMarginTotal = totalMarginWidth - leftMarginTotal;
         mouseHandlers.SetMouseHandlerForRange(
             xMin: writePosition.XPos + leftMarginTotal,
-            xMax: writePosition.XPos + writePosition.Width - totalMarginWidth,
+            xMax: writePosition.XPos + writePosition.Width - rightMarginTotal,
             yMin: writePosition.YPos,
             yMax: writePosition.YPos + writePosition.Height,
             handler: mouseEvent =>

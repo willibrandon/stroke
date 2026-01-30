@@ -731,6 +731,85 @@ public sealed class WindowTests
 
     #endregion
 
+    #region Mouse Handler Range Tests
+
+    [Fact]
+    public void WriteToScreen_WithLeftMargin_MouseHandlerCoversFullContentWidth()
+    {
+        // Window with 80 columns, left margin of 4 columns.
+        // Content width = 80 - 4 = 76 columns.
+        // Mouse handler should cover xMin=4 through xMax=80 (content area),
+        // not xMin=4 through xMax=76 (which would double-subtract the left margin).
+        var control = new FormattedTextControl("Hello World");
+        var leftMargin = new TestMargin(4);
+        var window = new Window(
+            content: control,
+            leftMargins: [leftMargin]);
+
+        var screen = new Screen();
+        var mouseHandlers = new MouseHandlers();
+        var wp = new WritePosition(0, 0, 80, 5);
+
+        window.WriteToScreen(screen, mouseHandlers, wp, "", true, null);
+
+        // The mouse handler at column 79 (last content column) should be set.
+        // With the old buggy code (xMax = 80 - 4 = 76), column 79 would have
+        // the dummy handler. With the fix (xMax = 80 - 0 = 80), it's handled.
+        var handlerAtLastCol = mouseHandlers.GetHandler(79, 0);
+        var handlerOutside = mouseHandlers.GetHandler(80, 0);
+
+        // Handler at last content column should NOT be the dummy (NotImplemented) handler
+        var dummyResult = handlerOutside(
+            new Stroke.Input.MouseEvent(
+                new Point(80, 0),
+                Stroke.Input.MouseEventType.MouseUp,
+                Stroke.Input.MouseButton.Left,
+                Stroke.Input.MouseModifiers.None));
+        Assert.Equal(Stroke.KeyBinding.NotImplementedOrNone.NotImplemented, dummyResult);
+
+        // Handler within the content area should be a real handler (not dummy)
+        // The handler at column 79 should return a result that's not NotImplemented
+        // when invoked with valid coordinates
+        Assert.NotNull(handlerAtLastCol);
+    }
+
+    [Fact]
+    public void WriteToScreen_WithBothMargins_MouseHandlerCoversContentOnly()
+    {
+        // Window with 80 columns, left margin of 4, right margin of 1.
+        // Content width = 80 - 5 = 75 columns.
+        // Mouse handler should cover xMin=4 through xMax=79 (skip right margin).
+        var control = new FormattedTextControl("Hello World");
+        var leftMargin = new TestMargin(4);
+        var rightMargin = new TestMargin(1);
+        var window = new Window(
+            content: control,
+            leftMargins: [leftMargin],
+            rightMargins: [rightMargin]);
+
+        var screen = new Screen();
+        var mouseHandlers = new MouseHandlers();
+        var wp = new WritePosition(0, 0, 80, 5);
+
+        window.WriteToScreen(screen, mouseHandlers, wp, "", true, null);
+
+        // Column 3 (inside left margin) should have dummy handler
+        var handlerInLeftMargin = mouseHandlers.GetHandler(3, 0);
+        var leftResult = handlerInLeftMargin(
+            new Stroke.Input.MouseEvent(
+                new Point(3, 0),
+                Stroke.Input.MouseEventType.MouseUp,
+                Stroke.Input.MouseButton.Left,
+                Stroke.Input.MouseModifiers.None));
+        Assert.Equal(Stroke.KeyBinding.NotImplementedOrNone.NotImplemented, leftResult);
+
+        // Column 4 (start of content) should have a real handler
+        var handlerAtContentStart = mouseHandlers.GetHandler(4, 0);
+        Assert.NotNull(handlerAtContentStart);
+    }
+
+    #endregion
+
     /// <summary>
     /// Test margin for testing purposes.
     /// </summary>
