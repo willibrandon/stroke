@@ -360,25 +360,32 @@ internal sealed class MultiColumnCompletionMenuControl : IUIControl
                 var x = mouseEvent.Position.X;
                 var y = mouseEvent.Position.Y;
 
-                // Mouse click on left arrow.
-                if (x == 0 && _renderLeftArrow)
+                // Python lines 558-572: if/elif/else on x position.
+                // x==0 and x==renderWidth-1 are exclusive guards that prevent
+                // fall-through to the completion lookup even when arrows aren't rendered.
+                if (x == 0)
                 {
-                    ScrollLeft();
-                    return NotImplementedOrNone.None;
+                    // Mouse click on left arrow area.
+                    if (_renderLeftArrow)
+                    {
+                        ScrollLeft();
+                    }
                 }
-
-                // Mouse click on right arrow.
-                if (x == _renderWidth - 1 && _renderRightArrow)
+                else if (x == _renderWidth - 1)
                 {
-                    ScrollRight();
-                    return NotImplementedOrNone.None;
+                    // Mouse click on right arrow area.
+                    if (_renderRightArrow)
+                    {
+                        ScrollRight();
+                    }
                 }
-
-                // Mouse click on completion.
-                if (_renderPosToCompletion.TryGetValue((x, y), out var completion))
+                else
                 {
-                    b.ApplyCompletion(completion);
-                    return NotImplementedOrNone.None;
+                    // Mouse click on completion.
+                    if (_renderPosToCompletion.TryGetValue((x, y), out var completion))
+                    {
+                        b.ApplyCompletion(completion);
+                    }
                 }
 
                 return NotImplementedOrNone.None;

@@ -356,8 +356,9 @@ public sealed class CompletionsMenuControlTests
     }
 
     [Fact]
-    public void MouseHandler_UnhandledEvent_ReturnsNotImplemented()
+    public void MouseHandler_UnhandledEvent_ReturnsNone()
     {
+        // Python line 201: unconditionally returns None for all events
         var completions = CreateSimpleCompletions(5);
         var (_, scope, _) = CreateAppWithCompletions(completions);
         using (scope)
@@ -371,7 +372,7 @@ public sealed class CompletionsMenuControlTests
 
             var result = control.MouseHandler(mouseEvent);
 
-            Assert.Same(NotImplementedOrNone.NotImplemented, result);
+            Assert.Same(NotImplementedOrNone.None, result);
         }
     }
 

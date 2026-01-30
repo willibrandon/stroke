@@ -160,7 +160,8 @@ internal sealed class CompletionsMenuControl : IUIControl
             return NotImplementedOrNone.None;
         }
 
-        return NotImplementedOrNone.NotImplemented;
+        // Python line 201: unconditionally returns None for all events.
+        return NotImplementedOrNone.None;
     }
 
     /// <summary>
