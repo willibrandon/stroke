@@ -248,9 +248,25 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Weighted dimension allocation in HSplit/VSplit with min/max/preferred constraints
   - Thread-safe via `System.Threading.Lock` (>80% coverage)
 
+- **Application System** — Central orchestration layer tying together input, rendering, layout, and key binding
+  - `Application<TResult>` with `RunAsync`/`Run` lifecycle and generic result type
+  - Channel-based event loop for thread-safe redraws (bounded channel with coalescing)
+  - Action channel for marshaling flush timeout and SIGINT callbacks to the event loop
+  - `Renderer` with differential screen updates (compares previous/current screen, emits only changes)
+  - `KeyProcessor` state machine for key binding dispatch with Vi repeat, operator-pending, prefix matching
+  - `Layout` class with focus management, walk/find utilities, window tracking
+  - `RunInTerminal` for suspending UI to run external commands
+  - `AppContext`/`AppSession` with `AsyncLocal` storage and proper nested session stack
+  - Background task tracking with automatic cancellation on exit
+  - Invalidation coalescing, configurable refresh intervals, min redraw throttling
+  - Unix signal handling: SIGWINCH (resize), SIGTSTP (suspend, platform-correct: 18 on macOS, 20 on Linux)
+  - `CombinedRegistry` for merged key bindings across system defaults, editing mode, and user bindings
+  - `ScrollablePane` visibility toggling
+  - Thread-safe operations (6,469 tests, >80% coverage)
+
 ### Up Next
 
-- **Renderer** — Differential screen updates for efficient terminal rendering
+- **Shortcuts** — High-level `PromptSession` API and dialog helpers
 
 ## Requirements
 
