@@ -142,7 +142,9 @@ public class FormattedTextControl : IUIControl
     /// <inheritdoc/>
     public void Reset()
     {
-        // Clear caches
+        // Increment render counter to invalidate caches between render passes.
+        // Within a single render pass, the counter stays constant so caches hit.
+        _renderCounter++;
     }
 
     /// <inheritdoc/>
@@ -192,9 +194,9 @@ public class FormattedTextControl : IUIControl
         var cursorPosition = GetCursorPosition?.Invoke() ?? FindSpecialPosition(lines, "[SetCursorPosition]");
         var menuPosition = FindSpecialPosition(lines, "[SetMenuPosition]");
 
-        // Create cache key
-        _renderCounter++;
-        var key = (_renderCounter, width, cursorPosition);
+        // Cache key uses fragments reference (stable within a render pass via _fragmentCache),
+        // width, and cursor position — matching Python's (tuple(fragments), width, cursor_position).
+        var key = (fragments, width, cursorPosition);
 
         return _contentCache.Get(key, () =>
         {
@@ -249,7 +251,6 @@ public class FormattedTextControl : IUIControl
 
     private IReadOnlyList<StyleAndTextTuple> GetFormattedTextCached()
     {
-        _renderCounter++;
         return _fragmentCache.Get(_renderCounter, () =>
         {
             var result = _textGetter();

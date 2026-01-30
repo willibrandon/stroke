@@ -398,7 +398,7 @@ public sealed class HSplit : IContainer
             return sizes;
         }
 
-        var childGenerator = CollectionUtils.TakeUsingWeights(
+        using var childGenerator = CollectionUtils.TakeUsingWeights(
             Enumerable.Range(0, dimensions.Count).ToList(),
             weights).GetEnumerator();
 

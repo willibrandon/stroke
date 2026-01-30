@@ -119,13 +119,11 @@ public sealed class FloatContainer : IContainer
                 ? parentStyle
                 : $"{parentStyle} {style}";
 
-        // If this container has a z-index, defer the entire rendering
-        if (ZIndex.HasValue && zIndex is null)
+        // If this container has a z-index, use it (Python unconditionally overrides
+        // with container's own z-index when set).
+        if (ZIndex.HasValue)
         {
-            screen.DrawWithZIndex(
-                zIndex: ZIndex.Value,
-                () => WriteToScreen(screen, mouseHandlers, writePosition, parentStyle, eraseBg, ZIndex.Value));
-            return;
+            zIndex = ZIndex.Value;
         }
 
         // Draw background content first
@@ -134,7 +132,7 @@ public sealed class FloatContainer : IContainer
         // Draw floats on top (in order, so later floats appear on top of earlier ones within same z-index)
         foreach (var floatElement in Floats)
         {
-            DrawFloat(screen, mouseHandlers, writePosition, fullStyle, floatElement);
+            DrawFloat(screen, mouseHandlers, writePosition, fullStyle, floatElement, zIndex);
         }
     }
 
@@ -146,7 +144,8 @@ public sealed class FloatContainer : IContainer
         MouseHandlers mouseHandlers,
         WritePosition writePosition,
         string parentStyle,
-        Float floatElement)
+        Float floatElement,
+        int? zIndex)
     {
         var floatContent = floatElement.Content.ToContainer();
         if (floatContent == null)
@@ -163,24 +162,15 @@ public sealed class FloatContainer : IContainer
         if (floatWidth <= 0 || floatHeight <= 0)
             return;
 
-        // Calculate position
+        // Calculate position (AllowCoverCursor affects Y offset for ycursor floats)
         var (floatX, floatY) = CalculateFloatPosition(
             floatElement, screen, writePosition, floatWidth, floatHeight);
 
-        // Clamp to available area
-        floatX = Math.Max(0, Math.Min(floatX, availableWidth - floatWidth));
-        floatY = Math.Max(0, Math.Min(floatY, availableHeight - floatHeight));
+        // Clamp to available area (xpos/ypos can be negative: partially visible)
+        floatWidth = Math.Min(floatWidth, availableWidth - floatX);
+        floatHeight = Math.Min(floatHeight, availableHeight - floatY);
 
-        // Check if float would be invisible
-        if (floatX >= availableWidth || floatY >= availableHeight)
-            return;
-
-        // Check hide when covering content
-        if (floatElement.HideWhenCoveringContent && WouldCoverCursor(screen, writePosition, floatX, floatY, floatWidth, floatHeight))
-            return;
-
-        // Check allow cover cursor
-        if (!floatElement.AllowCoverCursor && WouldCoverCursor(screen, writePosition, floatX, floatY, floatWidth, floatHeight))
+        if (floatWidth <= 0 || floatHeight <= 0)
             return;
 
         // Create write position for the float
@@ -190,8 +180,14 @@ public sealed class FloatContainer : IContainer
             floatWidth,
             floatHeight);
 
-        // Draw with z-index deferred rendering
-        var effectiveZIndex = floatElement.ZIndex;
+        // Check hide when covering content — checks screen cells for non-space chars
+        // (Python's _area_is_empty checks character content, not cursor positions)
+        if (floatElement.HideWhenCoveringContent && !AreaIsEmpty(screen, floatWritePosition))
+            return;
+
+        // Compute effective z-index: parent z-index + float z-index (per Python)
+        var effectiveZIndex = (zIndex ?? 0) + floatElement.ZIndex;
+
         screen.DrawWithZIndex(
             zIndex: effectiveZIndex,
             () =>
@@ -293,9 +289,26 @@ public sealed class FloatContainer : IContainer
         // Calculate Y position
         if (floatElement.YCursor)
         {
-            // Position relative to cursor
+            // Position relative to cursor. When AllowCoverCursor is false,
+            // offset by +1 to place the float below the cursor line (per Python PTK).
             var cursorPos = GetCursorPosition(screen, floatElement.AttachToWindow);
-            y = cursorPos?.Y ?? 0;
+            var cursorY = cursorPos?.Y ?? 0;
+            y = cursorY + (floatElement.AllowCoverCursor ? 0 : 1);
+
+            // If not enough space below cursor, try fitting above
+            if (y + floatHeight > availableHeight)
+            {
+                if (availableHeight - y + 1 >= y)
+                {
+                    // More space below — just reduce height (handled by caller clamping)
+                }
+                else
+                {
+                    // Fit above the cursor
+                    var aboveHeight = Math.Min(floatHeight, cursorY);
+                    y = cursorY - aboveHeight;
+                }
+            }
         }
         else if (floatElement.Top.HasValue)
         {
@@ -343,37 +356,25 @@ public sealed class FloatContainer : IContainer
     }
 
     /// <summary>
-    /// Checks if the float would cover any cursor.
+    /// Returns true when the area below the write position is still empty
+    /// (all characters are spaces). Used for floats with HideWhenCoveringContent.
     /// </summary>
-    private static bool WouldCoverCursor(
-        Screen screen,
-        WritePosition writePosition,
-        int floatX,
-        int floatY,
-        int floatWidth,
-        int floatHeight)
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>_area_is_empty</c> method.
+    /// </remarks>
+    private static bool AreaIsEmpty(Screen screen, WritePosition wp)
     {
-        // Check all visible windows' cursor positions
-        foreach (var window in screen.VisibleWindows)
+        for (int y = wp.YPos; y < wp.YPos + wp.Height; y++)
         {
-            if (window is Window w)
+            for (int x = wp.XPos; x < wp.XPos + wp.Width; x++)
             {
-                var cursorPos = screen.GetCursorPosition(w);
-                if (cursorPos != Point.Zero)
-                {
-                    var cursorX = cursorPos.X - writePosition.XPos;
-                    var cursorY = cursorPos.Y - writePosition.YPos;
-
-                    if (cursorX >= floatX && cursorX < floatX + floatWidth &&
-                        cursorY >= floatY && cursorY < floatY + floatHeight)
-                    {
-                        return true;
-                    }
-                }
+                var c = screen[y, x];
+                if (c.Character != " ")
+                    return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /// <inheritdoc/>

@@ -124,12 +124,17 @@ public sealed class ConditionalContainer : IContainer
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Returns all children (both content and alternative_content if present),
+    /// regardless of the current filter state. This matches Python PTK's behavior
+    /// where get_children() returns all possible children for container tree traversal.
+    /// </remarks>
     public IReadOnlyList<IContainer> GetChildren()
     {
-        var active = GetActiveContainer();
-        if (active != null)
-            return [active];
-        return Array.Empty<IContainer>();
+        var result = new List<IContainer> { Content };
+        if (AlternativeContent != null)
+            result.Add(AlternativeContent);
+        return result;
     }
 
     /// <summary>

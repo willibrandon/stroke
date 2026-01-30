@@ -262,7 +262,7 @@ public sealed class ConditionalContainerTests
     #region GetChildren Tests
 
     [Fact]
-    public void GetChildren_FilterTrue_ReturnsContent()
+    public void GetChildren_WithAlternative_ReturnsBothRegardlessOfFilter()
     {
         var window = new Window(content: new DummyControl());
         var alternative = new Window(content: new DummyControl());
@@ -271,14 +271,16 @@ public sealed class ConditionalContainerTests
             new FilterOrBool(true),
             new AnyContainer(alternative));
 
+        // GetChildren returns ALL children for tree traversal, regardless of filter state
         var children = container.GetChildren();
 
-        Assert.Single(children);
+        Assert.Equal(2, children.Count);
         Assert.Same(window, children[0]);
+        Assert.Same(alternative, children[1]);
     }
 
     [Fact]
-    public void GetChildren_FilterFalse_ReturnsAlternative()
+    public void GetChildren_FilterFalseWithAlternative_StillReturnsBoth()
     {
         var window = new Window(content: new DummyControl());
         var alternative = new Window(content: new DummyControl());
@@ -289,12 +291,13 @@ public sealed class ConditionalContainerTests
 
         var children = container.GetChildren();
 
-        Assert.Single(children);
-        Assert.Same(alternative, children[0]);
+        Assert.Equal(2, children.Count);
+        Assert.Same(window, children[0]);
+        Assert.Same(alternative, children[1]);
     }
 
     [Fact]
-    public void GetChildren_FilterFalseNoAlternative_ReturnsEmpty()
+    public void GetChildren_NoAlternative_ReturnsContentOnly()
     {
         var window = new Window(content: new DummyControl());
         var container = new ConditionalContainer(
@@ -303,7 +306,8 @@ public sealed class ConditionalContainerTests
 
         var children = container.GetChildren();
 
-        Assert.Empty(children);
+        Assert.Single(children);
+        Assert.Same(window, children[0]);
     }
 
     #endregion

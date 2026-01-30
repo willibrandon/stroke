@@ -64,9 +64,12 @@ public sealed class ScrollbarMargin : IMargin
         var verticalScroll = windowRenderInfo.VerticalScroll;
         var windowHeight = windowRenderInfo.WindowHeight;
 
-        // Calculate scrollbar position and size
+        // Calculate scrollbar position and size.
+        // When arrows are displayed, reduce the available height for the scrollbar body
+        // (Python PTK: window_height -= 2 before computing scrollbar proportions).
+        var bodyHeight = DisplayArrows ? height - 2 : height;
         var (thumbStart, thumbEnd) = CalculateThumbPosition(
-            contentHeight, verticalScroll, windowHeight, height);
+            contentHeight, verticalScroll, windowHeight, bodyHeight);
 
         // Determine height available for scrollbar (minus arrows if displayed)
         var scrollbarStart = DisplayArrows ? 1 : 0;

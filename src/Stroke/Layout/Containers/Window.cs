@@ -296,6 +296,10 @@ public class Window : IContainer, IWindow
         bool eraseBg,
         int? zIndex)
     {
+        // Increment render counter once per render pass so cache keys
+        // remain stable within a single render (matching Python's get_app().render_counter).
+        _renderCounter++;
+
         // Adjust write position if dont_extend flags are set
         var wp = writePosition;
 
@@ -343,7 +347,7 @@ public class Window : IContainer, IWindow
         var rightMarginWidths = RightMargins.Select(m => GetMarginWidth(m)).ToList();
         var totalMarginWidth = leftMarginWidths.Sum() + rightMarginWidths.Sum();
 
-        var contentWidth = writePosition.Width - totalMarginWidth;
+        var contentWidth = Math.Max(0, writePosition.Width - totalMarginWidth);
         var contentHeight = writePosition.Height;
 
         // Get UI content
@@ -430,6 +434,9 @@ public class Window : IContainer, IWindow
         IReadOnlyDictionary<(int Row, int Col), (int Y, int X)> rowColToYX,
         IReadOnlyDictionary<int, (int Row, int Col)> visibleLineToRowCol)
     {
+        // NOTE: xMax subtracts totalMarginWidth (left+right) but xMin already offsets past
+        // the left margin, effectively subtracting left margin width twice. This matches
+        // the Python Prompt Toolkit source (containers.py line 1877) — upstream bug.
         mouseHandlers.SetMouseHandlerForRange(
             xMin: writePosition.XPos + leftMarginTotal,
             xMax: writePosition.XPos + writePosition.Width - totalMarginWidth,
@@ -562,7 +569,6 @@ public class Window : IContainer, IWindow
 
     private UIContent GetUIContent(int width, int height)
     {
-        _renderCounter++;
         var key = (_renderCounter, width, height);
 
         return _uiContentCache.Get(key, () => Content.CreateContent(width, height));
@@ -572,7 +578,6 @@ public class Window : IContainer, IWindow
     {
         UIContent GetUIContent() => this.GetUIContent(0, 0);
 
-        _renderCounter++;
         var key = (margin, _renderCounter);
 
         return _marginWidthCache.Get(key, () => margin.GetWidth(GetUIContent));
