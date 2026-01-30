@@ -212,6 +212,25 @@ public sealed class ScrollablePane : IContainer
             parentStyle, eraseBg, zIndex);
         tempScreen.DrawAllFloats();
 
+        // If anything in the virtual screen is focused, adjust scroll.
+        // Port of Python's get_app().layout.current_window lookup.
+        var app = Application.AppContext.GetAppOrNull();
+        if (app is not null)
+        {
+            var focusedWindow = app.Layout.CurrentWindow;
+            if (tempScreen.VisibleWindowsToWritePositions.TryGetValue(
+                    focusedWindow, out var visibleWinWritePos))
+            {
+                Point? cursorPos = tempScreen.CursorPositions.TryGetValue(
+                    focusedWindow, out var cp) ? cp : null;
+                MakeWindowVisible(
+                    writePosition.Height,
+                    virtualHeight,
+                    visibleWinWritePos,
+                    cursorPos);
+            }
+        }
+
         // Copy visible region to real screen.
         CopyOverScreen(screen, tempScreen, writePosition, virtualWidth);
 
@@ -270,6 +289,72 @@ public sealed class ScrollablePane : IContainer
 
     /// <inheritdoc/>
     public override string ToString() => $"ScrollablePane({Content})";
+
+    /// <summary>
+    /// Scroll the scrollable pane so that the focused window becomes visible.
+    /// Port of Python Prompt Toolkit's <c>ScrollablePane._make_window_visible</c>.
+    /// </summary>
+    /// <param name="visibleHeight">Height of this ScrollablePane that is rendered.</param>
+    /// <param name="virtualHeight">Height of the virtual, temp screen.</param>
+    /// <param name="visibleWinWritePos">WritePosition of the nested window on the temp screen.</param>
+    /// <param name="cursorPosition">The cursor position of this window on the temp screen, or null.</param>
+    private void MakeWindowVisible(
+        int visibleHeight,
+        int virtualHeight,
+        WritePosition visibleWinWritePos,
+        Point? cursorPosition)
+    {
+        // Start with maximum allowed scroll range, then reduce.
+        int minScroll = 0;
+        int maxScroll = virtualHeight - visibleHeight;
+
+        if (KeepCursorVisible.Invoke())
+        {
+            // Reduce min/max scroll according to cursor in the focused window.
+            if (cursorPosition is not null)
+            {
+                var offsets = ScrollOffsets;
+                int cposMinScroll = cursorPosition.Value.Y - visibleHeight + 1 + offsets.Bottom;
+                int cposMaxScroll = cursorPosition.Value.Y - offsets.Top;
+                minScroll = Math.Max(minScroll, cposMinScroll);
+                maxScroll = Math.Max(0, Math.Min(maxScroll, cposMaxScroll));
+            }
+        }
+
+        if (KeepFocusedWindowVisible.Invoke())
+        {
+            // Reduce min/max scroll according to focused window position.
+            int windowMinScroll, windowMaxScroll;
+
+            if (visibleWinWritePos.Height <= visibleHeight)
+            {
+                // Window fits on screen — both top and bottom should be visible.
+                windowMinScroll = visibleWinWritePos.YPos + visibleWinWritePos.Height - visibleHeight;
+                windowMaxScroll = visibleWinWritePos.YPos;
+            }
+            else
+            {
+                // Window does not fit. Fill screen with this window entirely.
+                windowMinScroll = visibleWinWritePos.YPos;
+                windowMaxScroll = visibleWinWritePos.YPos + visibleWinWritePos.Height - visibleHeight;
+            }
+
+            minScroll = Math.Max(minScroll, windowMinScroll);
+            maxScroll = Math.Min(maxScroll, windowMaxScroll);
+        }
+
+        if (minScroll > maxScroll)
+            minScroll = maxScroll; // Should not happen.
+
+        // Clamp vertical scroll.
+        using (_lock.EnterScope())
+        {
+            if (_verticalScroll > maxScroll)
+                _verticalScroll = maxScroll;
+            if (_verticalScroll < minScroll)
+                _verticalScroll = minScroll;
+        }
+    }
 
     private static Point ClipPointToVisibleArea(Point point, WritePosition writePosition)
     {
