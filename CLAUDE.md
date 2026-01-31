@@ -391,6 +391,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory lookup tables only) (036-mouse-bindings)
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, Binding, KeyPressEvent, KeyProcessor, KeyPress, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool, Always, Never), Stroke.Application (AppFilters, ViFilters, EmacsFilters, AppContext, Application, KeyPressEventExtensions), Stroke.Core (Buffer), Stroke.Clipboard (IClipboard, ClipboardData) (037-basic-key-bindings)
 - N/A (in-memory binding registry only) (037-basic-key-bindings)
+- C# 13 / .NET 10 + Stroke.Core (Buffer, SearchState, SearchDirection), Stroke.Layout (Layout, BufferControl, SearchBufferControl, FocusableElement), Stroke.Application (AppContext, Application), Stroke.KeyBinding (KeyPressEvent, KeyHandlerCallable, NotImplementedOrNone, ViState, InputMode), Stroke.Filters (IFilter, Condition) (038-search-system-bindings)
 
 ## Recent Changes
 - 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)
