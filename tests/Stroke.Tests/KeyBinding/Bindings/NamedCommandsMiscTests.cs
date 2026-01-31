@@ -106,6 +106,21 @@ public sealed class NamedCommandsMiscTests
     }
 
     [Fact]
+    public void InsertComment_TrailingNewline_DoesNotAddExtraHash()
+    {
+        // Python: "a\nb\n".splitlines() == ['a', 'b'] (no trailing empty)
+        // So insert_comment produces "#a\n#b", not "#a\n#b\n#"
+        string? capturedText = null;
+        var buffer = new Buffer(
+            document: new Document("a\nb\n", cursorPosition: 0),
+            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+        var binding = NamedCommands.GetByName("insert-comment");
+        binding.Call(CreateEvent(buffer));
+
+        Assert.Equal("#a\n#b", capturedText);
+    }
+
+    [Fact]
     public void ViEditingMode_SwitchesToVi()
     {
         using var input = new SimplePipeInput();

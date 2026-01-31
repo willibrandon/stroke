@@ -135,6 +135,16 @@ public sealed class NamedCommandsTextEditTests
     }
 
     [Fact]
+    public void SelfInsert_NegativeArg_IsNoOp()
+    {
+        var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
+        var binding = NamedCommands.GetByName("self-insert");
+        // Python: "x" * -1 == "". Should not throw.
+        binding.Call(CreateEvent(buffer, arg: "-1", data: "x"));
+        Assert.Equal("hello", buffer.Document.Text);
+    }
+
+    [Fact]
     public void TransposeChars_AtPositionZero_IsNoOp()
     {
         var buffer = new Buffer(document: new Document("abc", cursorPosition: 0));
@@ -187,6 +197,16 @@ public sealed class NamedCommandsTextEditTests
         var binding = NamedCommands.GetByName("capitalize-word");
         binding.Call(CreateEvent(buffer));
         Assert.Equal("Hello world", buffer.Document.Text);
+    }
+
+    [Fact]
+    public void CapitalizeWord_DigitsActAsWordBoundaries()
+    {
+        // Python: "abc2def".title() == "Abc2Def"
+        var buffer = new Buffer(document: new Document("abc2def", cursorPosition: 0));
+        var binding = NamedCommands.GetByName("capitalize-word");
+        binding.Call(CreateEvent(buffer));
+        Assert.Equal("Abc2Def", buffer.Document.Text);
     }
 
     [Fact]

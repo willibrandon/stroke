@@ -343,6 +343,18 @@ public sealed partial class Buffer : IBuffer
         }
     }
 
+    /// <summary>Gets the number of working lines (history entries + current input).</summary>
+    public int WorkingLineCount
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _workingLines.Count;
+            }
+        }
+    }
+
     /// <summary>Gets the current selection state.</summary>
     public SelectionState? SelectionState
     {

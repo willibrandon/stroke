@@ -1,5 +1,4 @@
 using Stroke.Core;
-using Stroke.Layout.Controls;
 
 namespace Stroke.KeyBinding.Bindings;
 
@@ -57,9 +56,9 @@ public static partial class NamedCommands
     {
         // Port of Python: buff.history_forward(count=10**100) then
         // buff.go_to_history(len(buff._working_lines) - 1)
-        // We use a very large count to forward past all history to the current working line.
         var buff = @event.CurrentBuffer!;
         buff.HistoryForward(count: 1_000_000_000);
+        buff.GoToHistory(buff.WorkingLineCount - 1);
         return null;
     }
 
@@ -69,15 +68,7 @@ public static partial class NamedCommands
     /// </summary>
     private static NotImplementedOrNone? ReverseSearchHistory(KeyPressEvent @event)
     {
-        var app = @event.GetApp();
-        var control = app.Layout.CurrentControl;
-
-        if (control is BufferControl bc && bc.SearchBufferControl is { } sbc)
-        {
-            app.CurrentSearchState.Direction = SearchDirection.Backward;
-            app.Layout.Focus(new Layout.FocusableElement(sbc));
-        }
-
+        @event.GetApp().StartSearch(SearchDirection.Backward);
         return null;
     }
 }

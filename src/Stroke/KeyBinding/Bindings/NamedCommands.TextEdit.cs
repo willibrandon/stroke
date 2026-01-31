@@ -66,8 +66,15 @@ public static partial class NamedCommands
     /// <summary>Insert the typed character(s).</summary>
     private static NotImplementedOrNone? SelfInsert(KeyPressEvent @event)
     {
-        var data = @event.Data;
-        @event.CurrentBuffer!.InsertText(string.Concat(Enumerable.Repeat(data, @event.Arg)));
+        // Python: event.current_buffer.insert_text(event.data * event.arg)
+        // In Python, "x" * -1 returns "". Enumerable.Repeat throws on negative count.
+        var count = Math.Max(0, @event.Arg);
+        if (count > 0)
+        {
+            var data = @event.Data;
+            @event.CurrentBuffer!.InsertText(string.Concat(Enumerable.Repeat(data, count)));
+        }
+
         return null;
     }
 
@@ -170,7 +177,9 @@ public static partial class NamedCommands
             }
             else
             {
-                previousIsWordChar = char.IsDigit(chars[i]);
+                // Python's str.title() treats digits as non-cased characters that
+                // act as word boundaries: "abc2def".title() == "Abc2Def".
+                previousIsWordChar = false;
             }
         }
 

@@ -1,5 +1,7 @@
+using Stroke.Core;
 using Stroke.FormattedText;
 using Stroke.Layout.Containers;
+using Stroke.Layout.Controls;
 using Stroke.Styles;
 
 namespace Stroke.Application;
@@ -210,6 +212,25 @@ public partial class Application<TResult>
     {
         style ??= MergedStyle;
         Rendering.RendererUtils.PrintFormattedText(Output, text, style);
+    }
+
+    /// <summary>
+    /// If the current control is a <c>BufferControl</c> with a linked
+    /// <c>SearchBufferControl</c>, set the search direction and focus the search control.
+    /// </summary>
+    /// <param name="direction">The search direction to set.</param>
+    /// <remarks>
+    /// This method exists so that <c>NamedCommands</c> (KeyBinding layer) can initiate
+    /// search without importing <c>Stroke.Layout.Controls</c> types, preserving the
+    /// layered architecture (Constitution III).
+    /// </remarks>
+    public void StartSearch(SearchDirection direction)
+    {
+        if (Layout.CurrentControl is BufferControl bc && bc.SearchBufferControl is { } sbc)
+        {
+            CurrentSearchState.Direction = direction;
+            Layout.Focus(new Layout.FocusableElement(sbc));
+        }
     }
 
     /// <summary>

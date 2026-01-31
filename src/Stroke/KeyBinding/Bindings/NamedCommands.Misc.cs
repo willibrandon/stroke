@@ -48,8 +48,13 @@ public static partial class NamedCommands
             change = line => "#" + line;
         }
 
-        var newText = string.Join("\n",
-            buff.Document.Text.Split('\n').Select(change));
+        // Python uses str.splitlines() which omits trailing empty elements
+        // (e.g., "a\nb\n".splitlines() == ['a', 'b']), unlike C# Split('\n')
+        // which includes them. Strip the trailing empty to match.
+        var lines = buff.Document.Text.Split('\n');
+        if (lines.Length > 1 && lines[^1].Length == 0)
+            lines = lines[..^1];
+        var newText = string.Join("\n", lines.Select(change));
 
         buff.Document = new Document(text: newText, cursorPosition: 0);
 
