@@ -25,6 +25,15 @@ public static class SearchFilters
         return control is BufferControl bc && bc.SearchBufferControl is not null;
     });
 
+    /// <summary>True when the current buffer has empty text.</summary>
+    /// <remarks>
+    /// Typically used during search to detect when the search buffer is empty.
+    /// Port of Python Prompt Toolkit's <c>search_buffer_is_empty</c> condition
+    /// from <c>prompt_toolkit.key_binding.bindings.vi</c>.
+    /// </remarks>
+    public static IFilter SearchBufferIsEmpty { get; } = new Condition(() =>
+        AppContext.GetApp().CurrentBuffer.Text == "");
+
     /// <summary>True when the current buffer has a shift-mode selection.</summary>
     public static IFilter ShiftSelectionMode { get; } = new Condition(() =>
     {

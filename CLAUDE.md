@@ -394,6 +394,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke.Core (Buffer, SearchState, SearchDirection), Stroke.Layout (Layout, BufferControl, SearchBufferControl, FocusableElement), Stroke.Application (AppContext, Application), Stroke.KeyBinding (KeyPressEvent, KeyHandlerCallable, NotImplementedOrNone, ViState, InputMode), Stroke.Filters (IFilter, Condition) (038-search-system-bindings)
 
 ## Recent Changes
+- 038-search-system-bindings: SearchOperations relocated from Core to Application (StartSearch, StopSearch, DoIncrementalSearch, AcceptSearch), SearchBindings with 9 handler functions + 2 binding loaders (LoadEmacsSearchBindings, LoadViSearchBindings), SearchFilters.SearchBufferIsEmpty, Application.CurrentSearchState fix, SearchState ~ operator (7274 tests)
 - 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)
 - 036-mouse-bindings: MouseBindings static class, 3 FrozenDictionary lookup tables (96 XTerm SGR + 10 Typical + 4 URXVT), LoadMouseBindings() with 4 handlers, Renderer.CursorPos property (7027 tests)
 - 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)

@@ -46,7 +46,7 @@ This document provides a comprehensive mapping of every Python Prompt Toolkit pu
 | `prompt_toolkit.output` | `Stroke.Output` |
 | `prompt_toolkit.patch_stdout` | `Stroke.Application` |
 | `prompt_toolkit.renderer` | `Stroke.Rendering` |
-| `prompt_toolkit.search` | `Stroke.Core` |
+| `prompt_toolkit.search` | `Stroke.Application` |
 | `prompt_toolkit.selection` | `Stroke.Core` |
 | `prompt_toolkit.shortcuts` | `Stroke.Shortcuts` |
 | `prompt_toolkit.styles` | `Stroke.Styles` |
@@ -1762,8 +1762,11 @@ public class Renderer
 
 | Python | Stroke | Signature |
 |--------|--------|-----------|
-| `start_search(direction)` | `SearchOperations.StartSearch(direction)` | `void StartSearch(SearchDirection direction = SearchDirection.Forward)` |
-| `stop_search(...)` | `SearchOperations.StopSearch(...)` | `void StopSearch(...)` |
+| `start_search(buffer_control, direction)` | `SearchOperations.StartSearch(bufferControl, direction)` | `void StartSearch(BufferControl? bufferControl = null, SearchDirection direction = SearchDirection.Forward)` |
+| `stop_search(buffer_control)` | `SearchOperations.StopSearch(bufferControl)` | `void StopSearch(BufferControl? bufferControl = null)` |
+| `do_incremental_search(direction, count)` | `SearchOperations.DoIncrementalSearch(direction, count)` | `void DoIncrementalSearch(SearchDirection direction, int count = 1)` |
+| `accept_search()` | `SearchOperations.AcceptSearch()` | `void AcceptSearch()` |
+| `_get_reverse_search_links(layout)` | `SearchOperations.GetReverseSearchLinks(layout)` | `private static Dictionary<BufferControl, SearchBufferControl> GetReverseSearchLinks(Layout layout)` |
 
 ---
 
