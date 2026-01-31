@@ -202,6 +202,74 @@ public sealed partial class Buffer
     }
 
     // ════════════════════════════════════════════════════════════════════════
+    // START COMPLETION
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Start asynchronous autocompletion of this buffer.
+    /// (This will do nothing if a previous completion was still in progress.)
+    /// </summary>
+    /// <param name="selectFirst">Select the first completion.</param>
+    /// <param name="selectLast">Select the last completion.</param>
+    /// <param name="insertCommonPart">Insert the common prefix of all completions.</param>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>Buffer.start_completion()</c>.
+    /// Only one of <paramref name="selectFirst"/>, <paramref name="selectLast"/>,
+    /// or <paramref name="insertCommonPart"/> may be true.
+    /// </para>
+    /// </remarks>
+    public void StartCompletion(
+        bool selectFirst = false,
+        bool selectLast = false,
+        bool insertCommonPart = false)
+    {
+        // Don't complete when we already have completions or no completer.
+        if (CompleteState is not null || Completer is null)
+        {
+            return;
+        }
+
+        // Synchronous completion: get completions immediately.
+        var document = Document;
+        var completeEvent = new Stroke.Completion.CompleteEvent(CompletionRequested: true);
+        var completions = Completer.GetCompletions(document, completeEvent).ToList();
+
+        if (completions.Count == 0)
+        {
+            return;
+        }
+
+        // Set completions.
+        SetCompletions(completions);
+
+        // Handle special modes.
+        if (insertCommonPart)
+        {
+            var commonSuffix = Stroke.Completion.CompletionUtils.GetCommonCompleteSuffix(
+                document, completions);
+            if (!string.IsNullOrEmpty(commonSuffix))
+            {
+                // Cancel completions and just insert the common part.
+                CancelCompletion();
+                InsertText(commonSuffix);
+            }
+            else if (selectFirst)
+            {
+                CompleteNext();
+            }
+        }
+        else if (selectFirst)
+        {
+            CompleteNext();
+        }
+        else if (selectLast)
+        {
+            CompletePrevious();
+        }
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
     // CANCEL/APPLY COMPLETION
     // ════════════════════════════════════════════════════════════════════════
 
