@@ -29,6 +29,7 @@ dotnet run -c Release --filter '*Matching*'
 dotnet run -c Release --filter '*NestedLayout*'
 dotnet run -c Release --filter '*ManyContainers*'
 dotnet run -c Release --filter '*LargeBufferScroll*'
+dotnet run -c Release --filter '*NamedCommands*'
 
 # List available benchmarks
 dotnet run -c Release --list flat
@@ -101,6 +102,15 @@ dotnet run -c Release --list flat
 | GlobalOnlyKeyBindings.GetBindingsForKeys | N/A | ~35 ns |
 | DynamicKeyBindings.GetBindingsForKeys | N/A | ~42 ns |
 
+### Named Commands
+
+| Benchmark | Target | Measured |
+|-----------|--------|----------|
+| GetByName single lookup | O(1) | ~2.5 ns |
+| GetByName + Call dispatch | N/A | ~33.5 ns |
+| Call dispatch (cached binding) | N/A | ~30.6 ns |
+| Register command | N/A | ~24.9 ns |
+
 ### Lexer System (SC-001, SC-004)
 
 | Benchmark | Target | Measured |
@@ -158,6 +168,9 @@ dotnet run -c Release --list flat
 - **KeyBindingBenchmarks** - Core key binding lookup benchmarks (SC-001, SC-002, SC-006)
 - **KeyBindingMutationBenchmarks** - Add binding performance with and without filters
 - **KeyBindingProxyBenchmarks** - Merged, Conditional, GlobalOnly, Dynamic proxy benchmarks
+
+### Named Commands
+- **NamedCommandsBenchmarks** - NamedCommands registry lookup, dispatch, cached dispatch, and registration
 
 ### Lexer System
 - **LexerBenchmarks** - Core lexer operations: SimpleLexer, PygmentsLexer cache hit/miss, DynamicLexer delegation, RegexSync
