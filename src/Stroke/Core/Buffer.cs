@@ -197,7 +197,7 @@ public sealed partial class Buffer : IBuffer
         // Configuration
         Completer = completer ?? DummyCompleter.Instance;
         AutoSuggest = autoSuggest;
-        History = history ?? InMemoryHistory.Empty;
+        History = history ?? new InMemoryHistory();
         Validator = validator;
         Name = name;
         MaxNumberOfCompletions = maxNumberOfCompletions;

@@ -105,13 +105,14 @@ public class BufferTests
     }
 
     [Fact]
-    public void Constructor_WithoutHistory_UsesEmptyInMemoryHistory()
+    public void Constructor_WithoutHistory_CreatesNewInMemoryHistory()
     {
         // Act
         var buffer = new Buffer();
 
         // Assert
-        Assert.Same(InMemoryHistory.Empty, buffer.History);
+        Assert.IsType<InMemoryHistory>(buffer.History);
+        Assert.NotSame(InMemoryHistory.Empty, buffer.History);
     }
 
     [Fact]
