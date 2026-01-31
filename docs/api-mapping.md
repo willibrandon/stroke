@@ -1102,6 +1102,47 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 
 ---
 
+## Module: prompt_toolkit.key_binding.bindings.scroll
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `ScrollBindings` | Static class containing all 8 scroll functions |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `scroll_forward(event, half=False)` | `ScrollBindings.ScrollForward(event)` | `NotImplementedOrNone? ScrollForward(KeyPressEvent event)` |
+| `scroll_backward(event, half=False)` | `ScrollBindings.ScrollBackward(event)` | `NotImplementedOrNone? ScrollBackward(KeyPressEvent event)` |
+| `scroll_half_page_down(event)` | `ScrollBindings.ScrollHalfPageDown(event)` | `NotImplementedOrNone? ScrollHalfPageDown(KeyPressEvent event)` |
+| `scroll_half_page_up(event)` | `ScrollBindings.ScrollHalfPageUp(event)` | `NotImplementedOrNone? ScrollHalfPageUp(KeyPressEvent event)` |
+| `scroll_one_line_down(event)` | `ScrollBindings.ScrollOneLineDown(event)` | `NotImplementedOrNone? ScrollOneLineDown(KeyPressEvent event)` |
+| `scroll_one_line_up(event)` | `ScrollBindings.ScrollOneLineUp(event)` | `NotImplementedOrNone? ScrollOneLineUp(KeyPressEvent event)` |
+| `scroll_page_down(event)` | `ScrollBindings.ScrollPageDown(event)` | `NotImplementedOrNone? ScrollPageDown(KeyPressEvent event)` |
+| `scroll_page_up(event)` | `ScrollBindings.ScrollPageUp(event)` | `NotImplementedOrNone? ScrollPageUp(KeyPressEvent event)` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.page_navigation
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `PageNavigationBindings` | Static class containing all 3 binding loaders |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_page_navigation_bindings()` | `PageNavigationBindings.LoadPageNavigationBindings()` | `IKeyBindingsBase LoadPageNavigationBindings()` |
+| `load_emacs_page_navigation_bindings()` | `PageNavigationBindings.LoadEmacsPageNavigationBindings()` | `IKeyBindingsBase LoadEmacsPageNavigationBindings()` |
+| `load_vi_page_navigation_bindings()` | `PageNavigationBindings.LoadViPageNavigationBindings()` | `IKeyBindingsBase LoadViPageNavigationBindings()` |
+
+---
+
 ## Module: prompt_toolkit.keys
 
 ### Enums
