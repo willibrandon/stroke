@@ -152,6 +152,19 @@ public sealed class SearchState
     }
 
     /// <summary>
+    /// Creates a new <see cref="SearchState"/> with the direction reversed.
+    /// </summary>
+    /// <param name="state">The search state to invert.</param>
+    /// <returns>
+    /// A new <see cref="SearchState"/> instance with the direction reversed,
+    /// preserving the <see cref="Text"/> and <see cref="IgnoreCaseFilter"/> values.
+    /// </returns>
+    /// <remarks>
+    /// Maps to Python's <c>SearchState.__invert__</c>. Delegates to <see cref="Invert"/>.
+    /// </remarks>
+    public static SearchState operator ~(SearchState state) => state.Invert();
+
+    /// <summary>
     /// Creates a new <see cref="SearchState"/> where backwards becomes forwards
     /// and vice versa.
     /// </summary>

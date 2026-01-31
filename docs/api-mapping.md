@@ -46,7 +46,7 @@ This document provides a comprehensive mapping of every Python Prompt Toolkit pu
 | `prompt_toolkit.output` | `Stroke.Output` |
 | `prompt_toolkit.patch_stdout` | `Stroke.Application` |
 | `prompt_toolkit.renderer` | `Stroke.Rendering` |
-| `prompt_toolkit.search` | `Stroke.Core` |
+| `prompt_toolkit.search` | `Stroke.Application` |
 | `prompt_toolkit.selection` | `Stroke.Core` |
 | `prompt_toolkit.shortcuts` | `Stroke.Shortcuts` |
 | `prompt_toolkit.styles` | `Stroke.Styles` |
@@ -1147,6 +1147,45 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 
 ---
 
+## Module: prompt_toolkit.key_binding.bindings.search
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer (not KeyBinding) because these handler functions depend on `SearchOperations`, `AppContext`, `Buffer.ApplySearch`, and filter constants from `SearchFilters`, `AppFilters`, and `ViFilters`.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `SearchBindings` | Static class containing 9 handler functions, 1 filter, and 2 binding loaders |
+
+### Filter
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `_previous_buffer_is_returnable` | `SearchBindings.PreviousBufferIsReturnable` | `IFilter` (public, used for custom binding registration) |
+
+### Handler Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `abort_search(event)` | `SearchBindings.AbortSearch(event)` | `NotImplementedOrNone? AbortSearch(KeyPressEvent event)` |
+| `accept_search(event)` | `SearchBindings.AcceptSearch(event)` | `NotImplementedOrNone? AcceptSearch(KeyPressEvent event)` |
+| `start_reverse_incremental_search(event)` | `SearchBindings.StartReverseIncrementalSearch(event)` | `NotImplementedOrNone? StartReverseIncrementalSearch(KeyPressEvent event)` |
+| `start_forward_incremental_search(event)` | `SearchBindings.StartForwardIncrementalSearch(event)` | `NotImplementedOrNone? StartForwardIncrementalSearch(KeyPressEvent event)` |
+| `reverse_incremental_search(event)` | `SearchBindings.ReverseIncrementalSearch(event)` | `NotImplementedOrNone? ReverseIncrementalSearch(KeyPressEvent event)` |
+| `forward_incremental_search(event)` | `SearchBindings.ForwardIncrementalSearch(event)` | `NotImplementedOrNone? ForwardIncrementalSearch(KeyPressEvent event)` |
+| `accept_search_and_accept_input(event)` | `SearchBindings.AcceptSearchAndAcceptInput(event)` | `NotImplementedOrNone? AcceptSearchAndAcceptInput(KeyPressEvent event)` |
+| *(inline in emacs.py)* | `SearchBindings.JumpToNextMatch(event)` | `NotImplementedOrNone? JumpToNextMatch(KeyPressEvent event)` |
+| *(inline in emacs.py)* | `SearchBindings.JumpToPreviousMatch(event)` | `NotImplementedOrNone? JumpToPreviousMatch(KeyPressEvent event)` |
+
+### Binding Loaders
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_emacs_search_bindings()` *(in emacs.py)* | `SearchBindings.LoadEmacsSearchBindings()` | `IKeyBindingsBase LoadEmacsSearchBindings()` |
+| `load_vi_search_bindings()` *(in vi.py)* | `SearchBindings.LoadViSearchBindings()` | `IKeyBindingsBase LoadViSearchBindings()` |
+
+---
+
 ## Module: prompt_toolkit.keys
 
 ### Enums
@@ -1762,8 +1801,11 @@ public class Renderer
 
 | Python | Stroke | Signature |
 |--------|--------|-----------|
-| `start_search(direction)` | `SearchOperations.StartSearch(direction)` | `void StartSearch(SearchDirection direction = SearchDirection.Forward)` |
-| `stop_search(...)` | `SearchOperations.StopSearch(...)` | `void StopSearch(...)` |
+| `start_search(buffer_control, direction)` | `SearchOperations.StartSearch(bufferControl, direction)` | `void StartSearch(BufferControl? bufferControl = null, SearchDirection direction = SearchDirection.Forward)` |
+| `stop_search(buffer_control)` | `SearchOperations.StopSearch(bufferControl)` | `void StopSearch(BufferControl? bufferControl = null)` |
+| `do_incremental_search(direction, count)` | `SearchOperations.DoIncrementalSearch(direction, count)` | `void DoIncrementalSearch(SearchDirection direction, int count = 1)` |
+| `accept_search()` | `SearchOperations.AcceptSearch()` | `void AcceptSearch()` |
+| `_get_reverse_search_links(layout)` | `SearchOperations.GetReverseSearchLinks(layout)` | `private static Dictionary<BufferControl, SearchBufferControl> GetReverseSearchLinks(Layout layout)` |
 
 ---
 

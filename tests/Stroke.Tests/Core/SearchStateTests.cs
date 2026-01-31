@@ -265,6 +265,63 @@ public class SearchStateTests
         Assert.Equal(SearchDirection.Forward, doubleInverted.Direction);
     }
 
+    /// <summary>
+    /// Test ~ operator from Forward returns Backward.
+    /// </summary>
+    [Fact]
+    public void BitwiseComplement_FromForward_ReturnsBackward()
+    {
+        var state = new SearchState("hello", SearchDirection.Forward);
+
+        var inverted = ~state;
+
+        Assert.Equal(SearchDirection.Backward, inverted.Direction);
+        Assert.Equal("hello", inverted.Text);
+        Assert.NotSame(state, inverted);
+    }
+
+    /// <summary>
+    /// Test ~ operator from Backward returns Forward.
+    /// </summary>
+    [Fact]
+    public void BitwiseComplement_FromBackward_ReturnsForward()
+    {
+        var state = new SearchState("world", SearchDirection.Backward);
+
+        var inverted = ~state;
+
+        Assert.Equal(SearchDirection.Forward, inverted.Direction);
+        Assert.Equal("world", inverted.Text);
+    }
+
+    /// <summary>
+    /// Test ~ operator preserves IgnoreCaseFilter.
+    /// </summary>
+    [Fact]
+    public void BitwiseComplement_PreservesIgnoreCaseFilter()
+    {
+        Func<bool> filter = () => true;
+        var state = new SearchState("test", SearchDirection.Forward, filter);
+
+        var inverted = ~state;
+
+        Assert.Same(filter, inverted.IgnoreCaseFilter);
+    }
+
+    /// <summary>
+    /// Test ~ operator with empty text.
+    /// </summary>
+    [Fact]
+    public void BitwiseComplement_WithEmptyText_Works()
+    {
+        var state = new SearchState("", SearchDirection.Forward);
+
+        var inverted = ~state;
+
+        Assert.Equal("", inverted.Text);
+        Assert.Equal(SearchDirection.Backward, inverted.Direction);
+    }
+
     #endregion
 
     #region US3: Incremental Update Tests (T027-T028)

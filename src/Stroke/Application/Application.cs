@@ -498,11 +498,9 @@ public partial class Application<TResult> : IApplicationDoneCheck
         get
         {
             var control = Layout.CurrentControl;
-            if (control is BufferControl)
+            if (control is BufferControl bc)
             {
-                // BufferControl.SearchState will be added when search linking is implemented.
-                // For now, return a dummy SearchState.
-                return new SearchState();
+                return bc.SearchState;
             }
             return new SearchState();
         }

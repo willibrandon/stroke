@@ -67,9 +67,10 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 - **Search System** — Text search state and operations
   - `SearchDirection` enum (Forward, Backward)
   - `SearchState` mutable query object with thread-safe properties
-  - `Invert()` method for direction reversal (returns new instance)
+  - `Invert()` method and `~` operator for direction reversal (returns new instance)
   - `IgnoreCaseFilter` delegate for runtime case sensitivity
-  - `SearchOperations` static class (stubs until Layout/Application features)
+  - `SearchOperations` static class with `StartSearch`, `StopSearch`, `DoIncrementalSearch`, `AcceptSearch` lifecycle methods
+  - `SearchFilters.SearchBufferIsEmpty` filter for empty search buffer detection
   - Thread-safe operations (100% SearchState coverage)
 - **Keys Enum** — Input key definitions
   - `Keys` enum with 151 key values matching Python Prompt Toolkit
@@ -339,6 +340,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Filter composition: `InsertMode` (Vi insert | Emacs insert), `HasTextBeforeCursor`, `InQuotedInsert`, `~HasSelection`
   - Registration order per spec: ignored → readline → self-insert → tab → history → Ctrl+D → Enter → Ctrl+J → auto up/down → delete selection → Ctrl+Z → paste → quoted insert
   - Stateless, thread-safe (178 tests, >80% coverage)
+
+- **Search Bindings** — Incremental search key binding handlers and loaders for Emacs and Vi modes
+  - `SearchBindings` static class with 9 handler functions and 2 binding loaders
+  - Handlers: `AbortSearch`, `AcceptSearch`, `StartReverseIncrementalSearch`, `StartForwardIncrementalSearch`, `ReverseIncrementalSearch`, `ForwardIncrementalSearch`, `AcceptSearchAndAcceptInput`, `JumpToNextMatch`, `JumpToPreviousMatch`
+  - `PreviousBufferIsReturnable` filter for combined search-accept-input binding
+  - `LoadEmacsSearchBindings()` — 18 bindings (Ctrl+R/S, Ctrl+C/G, Up/Down, Enter, eager Escape, read-only /, ?, n, N) wrapped in `ConditionalKeyBindings(EmacsMode)`
+  - `LoadViSearchBindings()` — 13 bindings (/, ? with navigation/selection direction filters, Ctrl+S/R, Enter, Ctrl+C/G, Backspace-when-empty, Escape) wrapped in `ConditionalKeyBindings(ViMode)`
+  - Filter composition: `ControlIsSearchable`, `IsSearching`, `IsReadOnly`, `ViSearchDirectionReversed`, `ViNavigationMode | ViSelectionMode`
+  - Stateless, thread-safe (41 tests, >80% coverage)
 
 ### Up Next
 
