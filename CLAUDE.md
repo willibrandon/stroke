@@ -387,6 +387,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory registry only) (034-named-commands)
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, ConditionalKeyBindings, MergedKeyBindings), Stroke.Application (AppFilters, ViFilters, EmacsFilters, KeyPressEventExtensions), Stroke.Core (Buffer, Document), Stroke.Layout (Window, WindowRenderInfo) (035-scroll-bindings)
 - N/A (in-memory only) (035-scroll-bindings)
+- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyProcessor, KeyPress, KeyPressEvent, NotImplementedOrNone, KeyHandlerCallable), Stroke.Input (Keys, MouseEvent, MouseButton, MouseEventType, MouseModifiers), Stroke.Core.Primitives (Point), Stroke.Rendering (Renderer, HeightIsUnknownException), Stroke.Layout (MouseHandlers), Stroke.Application (Application) (036-mouse-bindings)
+- N/A (in-memory lookup tables only) (036-mouse-bindings)
 
 ## Recent Changes
 - 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)
