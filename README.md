@@ -350,6 +350,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Filter composition: `ControlIsSearchable`, `IsSearching`, `IsReadOnly`, `ViSearchDirectionReversed`, `ViNavigationMode | ViSelectionMode`
   - Stateless, thread-safe (41 tests, >80% coverage)
 
+- **Auto Suggest Bindings** — Fish-style auto suggestion acceptance key bindings
+  - `AutoSuggestBindings` static class with `LoadAutoSuggestBindings()` returning 4 key bindings
+  - Full suggestion acceptance: Ctrl-F, Ctrl-E, Right arrow → `AcceptSuggestion` handler inserts entire suggestion text
+  - Partial word-segment acceptance: Escape+F → `AcceptPartialSuggestion` handler inserts first word/path segment (Emacs mode only)
+  - `SuggestionAvailable` private filter: non-null suggestion, non-empty text, cursor at end of buffer
+  - Word boundary regex `([^\s/]+(?:\s+|/))` matching Python's `re.split` behavior for whitespace and path separator boundaries
+  - Must load after Vi bindings for correct Right arrow priority override
+  - Stateless, thread-safe (21 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
