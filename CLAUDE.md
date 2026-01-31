@@ -383,8 +383,11 @@ This ensures examples behave correctly in real terminal environments before mark
 - **External NuGet**: Wcwidth (v4.0.1, MIT) for character width; TextMateSharp (v1.0.70, MIT) for syntax highlighting
 - **Storage**: In-memory only (except FileHistory which uses filesystem)
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
+- C# 13 / .NET 10 + Stroke.Core (Buffer, Document, SearchState, PasteMode), Stroke.KeyBinding (Binding, KeyPressEvent, KeyPress, KeyProcessor, EmacsState, EditingMode, KeyHandlerCallable), Stroke.Clipboard (IClipboard, ClipboardData), Stroke.Application (Application, RunInTerminal), Stroke.Layout.Controls (BufferControl, SearchBufferControl), Stroke.Input (Keys), Stroke.Filters (IFilter, Always, Never) (034-named-commands)
+- N/A (in-memory registry only) (034-named-commands)
 
 ## Recent Changes
+- 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
 - 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils, 3 controls — completion menu rendering with mouse/keyboard (6805 tests)
 - 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters — IFilter-based state queries (6708 tests)
 - 031-input-processors: IProcessor pipeline, 26 processors, ExplodedList, MergedProcessor (6618 tests)

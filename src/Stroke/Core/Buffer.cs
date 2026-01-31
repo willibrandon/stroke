@@ -197,7 +197,7 @@ public sealed partial class Buffer : IBuffer
         // Configuration
         Completer = completer ?? DummyCompleter.Instance;
         AutoSuggest = autoSuggest;
-        History = history ?? InMemoryHistory.Empty;
+        History = history ?? new InMemoryHistory();
         Validator = validator;
         Name = name;
         MaxNumberOfCompletions = maxNumberOfCompletions;
@@ -339,6 +339,18 @@ public sealed partial class Buffer : IBuffer
             using (_lock.EnterScope())
             {
                 return _workingIndex;
+            }
+        }
+    }
+
+    /// <summary>Gets the number of working lines (history entries + current input).</summary>
+    public int WorkingLineCount
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return _workingLines.Count;
             }
         }
     }

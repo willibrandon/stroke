@@ -293,6 +293,20 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Mouse support: click to select, scroll to navigate, arrow clicks for column scrolling
   - Thread-safe via `System.Threading.Lock` on mutable render state (6,805 tests, >80% coverage)
 
+- **Named Commands** — 49 Readline-compatible named commands with static registry
+  - `NamedCommands` static registry with `GetByName`/`Register` API backed by `ConcurrentDictionary`
+  - Movement commands (10): `beginning-of-buffer`, `end-of-buffer`, `beginning-of-line`, `end-of-line`, `forward-char`, `backward-char`, `forward-word`, `backward-word`, `clear-screen`, `redraw-current-line`
+  - Text editing commands (9): `end-of-file`, `delete-char`, `backward-delete-char`, `self-insert`, `transpose-chars`, `uppercase-word`, `downcase-word`, `capitalize-word`, `quoted-insert`
+  - Kill/yank commands (10): `kill-line`, `kill-word`, `unix-word-rubout`, `backward-kill-word`, `delete-horizontal-space`, `unix-line-discard`, `yank`, `yank-nth-arg`, `yank-last-arg`, `yank-pop`
+  - History commands (6): `accept-line`, `previous-history`, `next-history`, `beginning-of-history`, `end-of-history`, `reverse-search-history`
+  - Completion commands (3): `complete`, `menu-complete`, `menu-complete-backward`
+  - Macro commands (4): `start-kbd-macro`, `end-kbd-macro`, `call-last-kbd-macro`, `print-last-kbd-macro`
+  - Miscellaneous commands (7): `undo`, `insert-comment`, `vi-editing-mode`, `emacs-editing-mode`, `prefix-meta`, `operate-and-get-next`, `edit-and-execute-command`
+  - `CompletionBindings` with Readline-style column display and `--MORE--` pagination
+  - Custom command registration with `recordInMacro` control
+  - Consecutive kill concatenation (forward appends, backward prepends)
+  - Thread-safe operations (122 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers

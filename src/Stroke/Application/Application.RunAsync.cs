@@ -288,7 +288,12 @@ public partial class Application<TResult>
             // Wait for background tasks
             await CancelAndWaitForBackgroundTasksAsync();
 
-            _future = null;
+            // NOTE: _future is intentionally NOT nulled here. After Exit() completes
+            // the future, RunAsync proceeds to cleanup and may clear _isRunning before
+            // a second Exit() call executes. Keeping _future alive ensures Exit() can
+            // always detect the "Result has already been set" condition via
+            // _future.Task.IsCompleted, regardless of cleanup timing. The next RunAsync
+            // call creates a new TaskCompletionSource, overwriting the old one.
             _isRunning = false;
         }
     }
