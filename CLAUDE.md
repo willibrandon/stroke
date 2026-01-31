@@ -393,6 +393,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory binding registry only) (037-basic-key-bindings)
 - C# 13 / .NET 10 + Stroke.Core (Buffer, SearchState, SearchDirection), Stroke.Layout (Layout, BufferControl, SearchBufferControl, FocusableElement), Stroke.Application (AppContext, Application), Stroke.KeyBinding (KeyPressEvent, KeyHandlerCallable, NotImplementedOrNone, ViState, InputMode), Stroke.Filters (IFilter, Condition) (038-search-system-bindings)
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyHandlerCallable, KeyPressEvent, KeyOrChar, NotImplementedOrNone, FilterOrBool), Stroke.Application (AppContext, EmacsFilters), Stroke.Core (Buffer, Document), Stroke.AutoSuggest (Suggestion), Stroke.Filters (IFilter, Filter, Condition), Stroke.Input (Keys) (039-auto-suggest-bindings)
+- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyPressEvent, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone, FilterOrBool), Stroke.Application (Application, KeyPressEventExtensions), Stroke.Input (Keys), Stroke.Rendering (Renderer), Stroke.Layout (Layout) (040-focus-cpr-bindings)
 
 ## Recent Changes
 - 039-auto-suggest-bindings: AutoSuggestBindings static class, LoadAutoSuggestBindings() with 4 bindings (3 full accept + 1 partial accept), SuggestionAvailable filter, AcceptSuggestion/AcceptPartialSuggestion handlers, regex word boundary splitting (7295 tests)
