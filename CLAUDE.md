@@ -396,6 +396,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyPressEvent, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone, FilterOrBool), Stroke.Application (Application, KeyPressEventExtensions), Stroke.Input (Keys), Stroke.Rendering (Renderer), Stroke.Layout (Layout) (040-focus-cpr-bindings)
 
 ## Recent Changes
+- 040-focus-cpr-bindings: FocusFunctions static class (FocusNext, FocusPrevious), CprBindings static class (LoadCprBindings with saveBefore disabled, CPR escape sequence parsing), focus navigation between windows, CPR response handling to renderer (7307 tests)
 - 039-auto-suggest-bindings: AutoSuggestBindings static class, LoadAutoSuggestBindings() with 4 bindings (3 full accept + 1 partial accept), SuggestionAvailable filter, AcceptSuggestion/AcceptPartialSuggestion handlers, regex word boundary splitting (7295 tests)
 - 038-search-system-bindings: SearchOperations relocated from Core to Application (StartSearch, StopSearch, DoIncrementalSearch, AcceptSearch), SearchBindings with 9 handler functions + 2 binding loaders (LoadEmacsSearchBindings, LoadViSearchBindings), SearchFilters.SearchBufferIsEmpty, Application.CurrentSearchState fix, SearchState ~ operator (7274 tests)
 - 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)

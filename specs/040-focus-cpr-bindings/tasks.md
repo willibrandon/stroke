@@ -37,11 +37,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T001 [P] [US1] Read Python source `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/bindings/focus.py` and verify all public APIs are accounted for in `contracts/api-contracts.md`
-- [ ] T002 [US1] Implement `FocusFunctions` static class in `src/Stroke/Application/Bindings/FocusFunctions.cs` with `FocusNext(KeyPressEvent)` and `FocusPrevious(KeyPressEvent)` methods per api-contracts.md — each delegates to `@event.GetApp().Layout.FocusNext()` / `FocusPrevious()`, returns `null`
-- [ ] T003 [US1] Write tests for focus navigation in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: create test class with `CreateFocusEnvironment()` helper that builds a Layout with 3 focusable windows (HSplit of 3 Windows each wrapping a BufferControl), `SimplePipeInput`, `DummyOutput`, `AppContext.SetApp()` scope, and `CreateEvent()` helper returning a `KeyPressEvent`
-- [ ] T004 [US1] Write 4 acceptance tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_ThreeWindows_MovesFromAToB, (2) FocusNext_ThreeWindows_WrapsFromCToA, (3) FocusPrevious_ThreeWindows_WrapsFromAToC, (4) FocusPrevious_ThreeWindows_MovesFromBToA — each invokes handler and asserts `app.Layout.CurrentWindow` matches expected window
-- [ ] T005 [US1] Build and run tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
+- [X] T001 [P] [US1] Read Python source `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/bindings/focus.py` and verify all public APIs are accounted for in `contracts/api-contracts.md`
+- [X] T002 [US1] Implement `FocusFunctions` static class in `src/Stroke/Application/Bindings/FocusFunctions.cs` with `FocusNext(KeyPressEvent)` and `FocusPrevious(KeyPressEvent)` methods per api-contracts.md — each delegates to `@event.GetApp().Layout.FocusNext()` / `FocusPrevious()`, returns `null`
+- [X] T003 [US1] Write tests for focus navigation in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: create test class with `CreateFocusEnvironment()` helper that builds a Layout with 3 focusable windows (HSplit of 3 Windows each wrapping a BufferControl), `SimplePipeInput`, `DummyOutput`, `AppContext.SetApp()` scope, and `CreateEvent()` helper returning a `KeyPressEvent`
+- [X] T004 [US1] Write 4 acceptance tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_ThreeWindows_MovesFromAToB, (2) FocusNext_ThreeWindows_WrapsFromCToA, (3) FocusPrevious_ThreeWindows_WrapsFromAToC, (4) FocusPrevious_ThreeWindows_MovesFromBToA — each invokes handler and asserts `app.Layout.CurrentWindow` matches expected window
+- [X] T005 [US1] Build and run tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
 
 **Checkpoint**: FocusFunctions.FocusNext and FocusPrevious work correctly for multi-window layouts
 
@@ -55,11 +55,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T006 [P] [US2] Read Python source `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/bindings/cpr.py` and verify all public APIs are accounted for in `contracts/api-contracts.md`
-- [ ] T007 [US2] Implement `CprBindings` static class in `src/Stroke/Application/Bindings/CprBindings.cs` with `LoadCprBindings()` method per api-contracts.md — creates `KeyBindings`, adds one binding for `Keys.CPRResponse` with `saveBefore: _ => false`, handler parses `@event.Data[2..^1].Split(';')` into row/col integers, calls `@event.GetApp().Renderer.ReportAbsoluteCursorRow(row)`
-- [ ] T008 [US2] Write CPR test infrastructure in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: add `CreateCprEnvironment()` helper that creates a real `Application<object>` with `DummyOutput` (40 rows, 80 cols, `RespondsToCpr = false`) and `Renderer`, sets `AppContext.SetApp()` scope, and returns `(app, scope)`. Add `InvokeCprHandler(KeyBindings kb, KeyPressEvent evt)` helper that finds the `Keys.CPRResponse` binding in the loaded bindings and invokes its handler — this is required because the CPR handler is a lambda/local function inside `LoadCprBindings()` and can only be reached through the binding system. Assertion strategy: verify `app.Renderer.HeightIsKnown` transitions from `false` to `true` after calling `ReportAbsoluteCursorRow()` for row values ≤ 40 (DummyOutput's row count)
-- [ ] T009 [US2] Write 4 acceptance tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) CprHandler_ParsesRow35Col1_ReportsRow35 — invoke CPR handler with data `"\x1b[35;1R"`, assert `app.Renderer.HeightIsKnown == true` (row 35 < 40 rows → `_minAvailableHeight = 6 > 0`), (2) CprHandler_ParsesRow1Col80_ReportsRow1 — invoke with data `"\x1b[1;80R"`, assert `HeightIsKnown == true` (row 1 < 40 → `_minAvailableHeight = 40 > 0`), (3) CprHandler_ParsesRow100Col40_NoException — invoke with data `"\x1b[100;40R"`, assert no exception is thrown (row 100 > 40 rows, matching Python behavior of passing through without bounds checking), (4) LoadCprBindings_SaveBeforeReturnsFalse — load bindings, find the `Keys.CPRResponse` binding, assert `binding.SaveBefore` invoked with any event returns `false`
-- [ ] T010 [US2] Build and run tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
+- [X] T006 [P] [US2] Read Python source `/Users/brandon/src/python-prompt-toolkit/src/prompt_toolkit/key_binding/bindings/cpr.py` and verify all public APIs are accounted for in `contracts/api-contracts.md`
+- [X] T007 [US2] Implement `CprBindings` static class in `src/Stroke/Application/Bindings/CprBindings.cs` with `LoadCprBindings()` method per api-contracts.md — creates `KeyBindings`, adds one binding for `Keys.CPRResponse` with `saveBefore: _ => false`, handler parses `@event.Data[2..^1].Split(';')` into row/col integers, calls `@event.GetApp().Renderer.ReportAbsoluteCursorRow(row)`
+- [X] T008 [US2] Write CPR test infrastructure in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: add `CreateCprEnvironment()` helper that creates a real `Application<object>` with `DummyOutput` (40 rows, 80 cols, `RespondsToCpr = false`) and `Renderer`, sets `AppContext.SetApp()` scope, and returns `(app, scope)`. Add `InvokeCprHandler(KeyBindings kb, KeyPressEvent evt)` helper that finds the `Keys.CPRResponse` binding in the loaded bindings and invokes its handler — this is required because the CPR handler is a lambda/local function inside `LoadCprBindings()` and can only be reached through the binding system. Assertion strategy: verify `app.Renderer.HeightIsKnown` transitions from `false` to `true` after calling `ReportAbsoluteCursorRow()` for row values ≤ 40 (DummyOutput's row count)
+- [X] T009 [US2] Write 4 acceptance tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) CprHandler_ParsesRow35Col1_ReportsRow35 — invoke CPR handler with data `"\x1b[35;1R"`, assert `app.Renderer.HeightIsKnown == true` (row 35 < 40 rows → `_minAvailableHeight = 6 > 0`), (2) CprHandler_ParsesRow1Col80_ReportsRow1 — invoke with data `"\x1b[1;80R"`, assert `HeightIsKnown == true` (row 1 < 40 → `_minAvailableHeight = 40 > 0`), (3) CprHandler_ParsesRow100Col40_NoException — invoke with data `"\x1b[100;40R"`, assert no exception is thrown (row 100 > 40 rows, matching Python behavior of passing through without bounds checking), (4) LoadCprBindings_SaveBeforeReturnsFalse — load bindings, find the `Keys.CPRResponse` binding, assert `binding.SaveBefore` invoked with any event returns `false`
+- [X] T010 [US2] Build and run tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
 
 **Checkpoint**: CprBindings.LoadCprBindings correctly parses CPR responses and reports to renderer
 
@@ -73,7 +73,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] Write 2 edge case tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_SingleWindow_FocusRemainsOnSameWindow — create layout with 1 window, invoke FocusNext, assert `app.Layout.CurrentWindow` unchanged, (2) FocusPrevious_SingleWindow_FocusRemainsOnSameWindow — same setup, invoke FocusPrevious, assert unchanged. Run with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
+- [X] T011 [US3] Write 2 edge case tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_SingleWindow_FocusRemainsOnSameWindow — create layout with 1 window, invoke FocusNext, assert `app.Layout.CurrentWindow` unchanged, (2) FocusPrevious_SingleWindow_FocusRemainsOnSameWindow — same setup, invoke FocusPrevious, assert unchanged. Run with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
 
 **Checkpoint**: Focus functions handle single-window layout gracefully
 
@@ -87,7 +87,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T012 [US4] Write 2 edge case tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_NoFocusableWindows_NoException — create layout where all windows are non-focusable, invoke FocusNext, assert no exception, (2) FocusPrevious_NoFocusableWindows_NoException — same setup, invoke FocusPrevious, assert no exception. Run with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
+- [X] T012 [US4] Write 2 edge case tests in `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`: (1) FocusNext_NoFocusableWindows_NoException — create layout where all windows are non-focusable, invoke FocusNext, assert no exception, (2) FocusPrevious_NoFocusableWindows_NoException — same setup, invoke FocusPrevious, assert no exception. Run with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
 
 **Checkpoint**: Focus functions handle zero-window edge case gracefully
 
@@ -97,10 +97,10 @@
 
 **Purpose**: Final validation across all user stories
 
-- [ ] T013 Run full build and all feature tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
-- [ ] T014 Verify API fidelity: compare `FocusFunctions` public methods against Python `focus.py`'s `__all__` exports (`focus_next`, `focus_previous`) and `CprBindings` public methods against `cpr.py`'s `__all__` exports (`load_cpr_bindings`) — confirm exactly 2 public static methods on `FocusFunctions` and exactly 1 public static method on `CprBindings` with correct signatures per `contracts/api-contracts.md`
-- [ ] T015 Verify file sizes under 1,000 LOC for `src/Stroke/Application/Bindings/FocusFunctions.cs`, `src/Stroke/Application/Bindings/CprBindings.cs`, and `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`. Verify test coverage ≥ 80% for the two new source files by running `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --collect:"XPlat Code Coverage" --filter "FullyQualifiedName~FocusCprBindings"` and inspecting the coverage report
-- [ ] T016 Run full project test suite: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj` to verify no regressions
+- [X] T013 Run full build and all feature tests: `dotnet build src/Stroke/Stroke.csproj && dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~FocusCprBindings"`
+- [X] T014 Verify API fidelity: compare `FocusFunctions` public methods against Python `focus.py`'s `__all__` exports (`focus_next`, `focus_previous`) and `CprBindings` public methods against `cpr.py`'s `__all__` exports (`load_cpr_bindings`) — confirm exactly 2 public static methods on `FocusFunctions` and exactly 1 public static method on `CprBindings` with correct signatures per `contracts/api-contracts.md`
+- [X] T015 Verify file sizes under 1,000 LOC for `src/Stroke/Application/Bindings/FocusFunctions.cs`, `src/Stroke/Application/Bindings/CprBindings.cs`, and `tests/Stroke.Tests/Application/Bindings/FocusCprBindingsTests.cs`. Verify test coverage ≥ 80% for the two new source files by running `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --collect:"XPlat Code Coverage" --filter "FullyQualifiedName~FocusCprBindings"` and inspecting the coverage report
+- [X] T016 Run full project test suite: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj` to verify no regressions
 
 ---
 
