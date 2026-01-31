@@ -15,7 +15,7 @@
 
 **Purpose**: Create the implementation file with static class skeleton and all private members
 
-- [ ] T001 Create `BasicBindings` static class with private static filters (`InsertMode`, `HasTextBeforeCursor`, `InQuotedInsert`), `IfNoRepeat` save-before callback, and `Ignore` no-op handler in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T001 Create `BasicBindings` static class with private static filters (`InsertMode`, `HasTextBeforeCursor`, `InQuotedInsert`), `IfNoRepeat` save-before callback, and `Ignore` no-op handler in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ---
 
@@ -29,11 +29,11 @@ Note: Although spec US3 says ignored keys "must be in place before self-insert,"
 
 ### Implementation for User Story 1
 
-- [ ] T002 [US1] Register self-insert binding (`Keys.Any` → `self-insert` named command, filter: `InsertMode`, saveBefore: `IfNoRepeat`) in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T002 [US1] Register self-insert binding (`Keys.Any` → `self-insert` named command, filter: `InsertMode`, saveBefore: `IfNoRepeat`) in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 1
 
-- [ ] T003 [US1] Write tests verifying self-insert binding registration (key mapping, filter, saveBefore behavior — confirm IfNoRepeat returns false for repeated events) and character insertion behavior in Emacs/Vi insert mode and Vi navigation mode in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T003 [US1] Write tests verifying self-insert binding registration (key mapping, filter, saveBefore behavior — confirm IfNoRepeat returns false for repeated events) and character insertion behavior in Emacs/Vi insert mode and Vi navigation mode in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
 
 **Checkpoint**: Self-insert works — printable characters can be typed into the buffer in insert mode
 
@@ -47,16 +47,16 @@ Note: Although spec US3 says ignored keys "must be in place before self-insert,"
 
 ### Implementation for User Story 2
 
-- [ ] T004 [US2] Register 7 readline movement bindings (Home → beginning-of-line, End → end-of-line, Left → backward-char, Right → forward-char, Ctrl+Up → previous-history, Ctrl+Down → next-history, Ctrl+L → clear-screen) as named commands with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T005 [US2] Register 7 readline editing bindings (Ctrl+K → kill-line, Ctrl+U → unix-line-discard, Backspace → backward-delete-char, Delete → delete-char, Ctrl+Delete → delete-char, Ctrl+T → transpose-chars, Ctrl+W → unix-word-rubout) filtered to `InsertMode` with `IfNoRepeat` saveBefore on Backspace/Delete/Ctrl+Delete in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T006 [US2] Register 2 tab completion bindings (Ctrl+I → menu-complete, Shift+Tab → menu-complete-backward) filtered to `InsertMode` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T007 [US2] Register 2 history navigation bindings (PageUp → previous-history, PageDown → next-history) filtered to `~HasSelection` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T004 [US2] Register 7 readline movement bindings (Home → beginning-of-line, End → end-of-line, Left → backward-char, Right → forward-char, Ctrl+Up → previous-history, Ctrl+Down → next-history, Ctrl+L → clear-screen) as named commands with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T005 [US2] Register 7 readline editing bindings (Ctrl+K → kill-line, Ctrl+U → unix-line-discard, Backspace → backward-delete-char, Delete → delete-char, Ctrl+Delete → delete-char, Ctrl+T → transpose-chars, Ctrl+W → unix-word-rubout) filtered to `InsertMode` with `IfNoRepeat` saveBefore on Backspace/Delete/Ctrl+Delete in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T006 [US2] Register 2 tab completion bindings (Ctrl+I → menu-complete, Shift+Tab → menu-complete-backward) filtered to `InsertMode` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T007 [US2] Register 2 history navigation bindings (PageUp → previous-history, PageDown → next-history) filtered to `~HasSelection` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 2
 
-- [ ] T008 [P] [US2] Write tests verifying all readline movement bindings (key-to-named-command mappings, no filter) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
-- [ ] T009 [P] [US2] Write tests verifying all readline editing bindings (key-to-named-command mappings, InsertMode filter, saveBefore behavior — confirm IfNoRepeat returns false for repeated events and true for non-repeated) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
-- [ ] T010 [P] [US2] Write tests verifying tab completion and history navigation bindings (key mappings, InsertMode filter, ~HasSelection filter) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T008 [P] [US2] Write tests verifying all readline movement bindings (key-to-named-command mappings, no filter) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T009 [P] [US2] Write tests verifying all readline editing bindings (key-to-named-command mappings, InsertMode filter, saveBefore behavior — confirm IfNoRepeat returns false for repeated events and true for non-repeated) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T010 [P] [US2] Write tests verifying tab completion and history navigation bindings (key mappings, InsertMode filter, ~HasSelection filter) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
 
 **Checkpoint**: All named-command bindings work — movement, editing, tab completion, history navigation
 
@@ -70,11 +70,11 @@ Note: Although spec US3 says ignored keys "must be in place before self-insert,"
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] Register all 90 ignored key bindings (26 control + 24 function + 5 ctrl-punct + 5 base nav + 4 shift-arrow + 4 home/end + 3 delete + 2 page + 2 tab + 4 ctrl+shift nav + 6 ctrl nav + 3 insert + SIGINT + Keys.Ignore) using shared `Ignore` handler in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T011 [US3] Register all 90 ignored key bindings (26 control + 24 function + 5 ctrl-punct + 5 base nav + 4 shift-arrow + 4 home/end + 3 delete + 2 page + 2 tab + 4 ctrl+shift nav + 6 ctrl nav + 3 insert + SIGINT + Keys.Ignore) using shared `Ignore` handler in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 3
 
-- [ ] T012 [US3] Write exhaustive tests verifying all 90 ignored key bindings are registered with the no-op handler and don't alter buffer content in `tests/Stroke.Tests/Application/Bindings/BasicBindingsIgnoredKeysTests.cs`
+- [x] T012 [US3] Write exhaustive tests verifying all 90 ignored key bindings are registered with the no-op handler and don't alter buffer content in `tests/Stroke.Tests/Application/Bindings/BasicBindingsIgnoredKeysTests.cs`
 
 **Checkpoint**: All 90 special keys are silently consumed — no control character leakage
 
@@ -88,15 +88,15 @@ Note: Although spec US3 says ignored keys "must be in place before self-insert,"
 
 ### Implementation for User Story 4
 
-- [ ] T013 [US4] Register Enter (Ctrl+M) multiline handler filtered to `InsertMode & IsMultiline` that calls `buffer.Newline(copyMargin: !InPasteMode)` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T014 [US4] Register Up and Down auto-navigation handlers that call `buffer.AutoUp(count: event.Arg)` and `buffer.AutoDown(count: event.Arg)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T015 [US4] Register Ctrl+J re-dispatch handler that casts `event.KeyProcessor` to `KeyProcessor` and calls `Feed(new KeyPress(Keys.ControlM, "\r"), first: true)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T013 [US4] Register Enter (Ctrl+M) multiline handler filtered to `InsertMode & IsMultiline` that calls `buffer.Newline(copyMargin: !InPasteMode)` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T014 [US4] Register Up and Down auto-navigation handlers that call `buffer.AutoUp(count: event.Arg)` and `buffer.AutoDown(count: event.Arg)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T015 [US4] Register Ctrl+J re-dispatch handler that casts `event.KeyProcessor` to `KeyProcessor` and calls `Feed(new KeyPress(Keys.ControlM, "\r"), first: true)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 4
 
-- [ ] T016 [P] [US4] Write tests for Enter multiline handler (newline insertion, copyMargin with/without paste mode, filter gating; edge cases: non-multiline buffer filtered out) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
-- [ ] T017 [P] [US4] Write tests for Up/Down auto-navigation handlers (AutoUp/AutoDown calls, event.Arg count; edge cases: single-line buffer with no history, Arg > 1 repetition count) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
-- [ ] T018 [P] [US4] Write tests for Ctrl+J re-dispatch handler (Feed call with ControlM, first: true) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T016 [P] [US4] Write tests for Enter multiline handler (newline insertion, copyMargin with/without paste mode, filter gating; edge cases: non-multiline buffer filtered out) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T017 [P] [US4] Write tests for Up/Down auto-navigation handlers (AutoUp/AutoDown calls, event.Arg count; edge cases: single-line buffer with no history, Arg > 1 repetition count) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T018 [P] [US4] Write tests for Ctrl+J re-dispatch handler (Feed call with ControlM, first: true) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
 
 **Checkpoint**: Multiline editing works — Enter, Up/Down, and Ctrl+J all functional
 
@@ -112,13 +112,13 @@ Note: Ctrl+Z (FR-013) is grouped here for convenience — it is a simple inline 
 
 ### Implementation for User Story 5
 
-- [ ] T019 [US5] Register bracketed paste handler on `Keys.BracketedPaste` that normalizes `\r\n` and `\r` to `\n` then calls `buffer.InsertText()` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T020 [US5] Register Ctrl+Z literal insert handler that calls `buffer.InsertText(event.Data)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T019 [US5] Register bracketed paste handler on `Keys.BracketedPaste` that normalizes `\r\n` and `\r` to `\n` then calls `buffer.InsertText()` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T020 [US5] Register Ctrl+Z literal insert handler that calls `buffer.InsertText(event.Data)` with no filter in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 5
 
-- [ ] T021 [P] [US5] Write tests for bracketed paste handler (line ending normalization for `\r\n`, `\r`, `\n`; edge cases: empty string no-op, pure `\r\n` normalized to `\n`) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
-- [ ] T022 [P] [US5] Write tests for Ctrl+Z literal insert handler (inserts event.Data including ASCII 26 control character; edge case: intentional literal insertion per Python source) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T021 [P] [US5] Write tests for bracketed paste handler (line ending normalization for `\r\n`, `\r`, `\n`; edge cases: empty string no-op, pure `\r\n` normalized to `\n`) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T022 [P] [US5] Write tests for Ctrl+Z literal insert handler (inserts event.Data including ASCII 26 control character; edge case: intentional literal insertion per Python source) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
 
 **Checkpoint**: Paste and Ctrl+Z work — bracketed paste normalizes line endings, Ctrl+Z inserts literal character
 
@@ -132,11 +132,11 @@ Note: Ctrl+Z (FR-013) is grouped here for convenience — it is a simple inline 
 
 ### Implementation for User Story 6
 
-- [ ] T023 [US6] Register quoted insert handler on `Keys.Any` filtered to `InQuotedInsert` with `eager: true` that calls `buffer.InsertText(event.Data, overwrite: false)` and sets `app.QuotedInsert = false` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T023 [US6] Register quoted insert handler on `Keys.Any` filtered to `InQuotedInsert` with `eager: true` that calls `buffer.InsertText(event.Data, overwrite: false)` and sets `app.QuotedInsert = false` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 6
 
-- [ ] T024 [US6] Write tests for quoted insert handler (literal insertion, mode deactivation, eager priority over self-insert; edge case: non-printable key inserted literally) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T024 [US6] Write tests for quoted insert handler (literal insertion, mode deactivation, eager priority over self-insert; edge case: non-printable key inserted literally) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
 
 **Checkpoint**: Quoted insert works — literal character insertion with automatic mode deactivation
 
@@ -150,13 +150,13 @@ Note: Ctrl+Z (FR-013) is grouped here for convenience — it is a simple inline 
 
 ### Implementation for User Story 7
 
-- [ ] T025 [US7] Register Delete selection handler filtered to `HasSelection` that calls `buffer.CutSelection()` and `clipboard.SetData()` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
-- [ ] T026 [US7] Register Ctrl+D binding filtered to `HasTextBeforeCursor & InsertMode` mapped to `delete-char` named command in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T025 [US7] Register Delete selection handler filtered to `HasSelection` that calls `buffer.CutSelection()` and `clipboard.SetData()` in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
+- [x] T026 [US7] Register Ctrl+D binding filtered to `HasTextBeforeCursor & InsertMode` mapped to `delete-char` named command in `LoadBasicBindings()` in `src/Stroke/Application/Bindings/BasicBindings.cs`
 
 ### Tests for User Story 7
 
-- [ ] T027 [P] [US7] Write tests for Delete selection handler (CutSelection call, clipboard data, HasSelection filter; edge case: Delete with selection AND InsertMode — FR-009 wins over FR-004) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
-- [ ] T028 [P] [US7] Write tests for Ctrl+D binding (delete-char named command, HasTextBeforeCursor & InsertMode filter; edge cases: empty buffer no-op, cursor at position 0 with text) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T027 [P] [US7] Write tests for Delete selection handler (CutSelection call, clipboard data, HasSelection filter; edge case: Delete with selection AND InsertMode — FR-009 wins over FR-004) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
+- [x] T028 [P] [US7] Write tests for Ctrl+D binding (delete-char named command, HasTextBeforeCursor & InsertMode filter; edge cases: empty buffer no-op, cursor at position 0 with text) in `tests/Stroke.Tests/Application/Bindings/BasicBindingsHandlerTests.cs`
 
 **Checkpoint**: Selection delete and Ctrl+D work — cut to clipboard and conditional character deletion
 
@@ -166,9 +166,9 @@ Note: Ctrl+Z (FR-013) is grouped here for convenience — it is a simple inline 
 
 **Purpose**: Validate registration order, binding count, and overall integration
 
-- [ ] T029 Verify binding registration order matches FR-019 (ignored keys first through quoted insert last) and total binding count is 118 in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
-- [ ] T030 Verify `LoadBasicBindings()` returns non-null `KeyBindings` with exactly 118 bindings, all 16 named commands resolve, and the result integrates with `MergedKeyBindings` in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
-- [ ] T031 Run full test suite and verify all tests pass with `dotnet test`
+- [x] T029 Verify binding registration order matches FR-019 (ignored keys first through quoted insert last) and total binding count is 118 in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T030 Verify `LoadBasicBindings()` returns non-null `KeyBindings` with exactly 118 bindings, all 16 named commands resolve, and the result integrates with `MergedKeyBindings` in `tests/Stroke.Tests/Application/Bindings/BasicBindingsReadlineTests.cs`
+- [x] T031 Run full test suite and verify all tests pass with `dotnet test`
 
 ---
 
