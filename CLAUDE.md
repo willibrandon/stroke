@@ -387,6 +387,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory registry only) (034-named-commands)
 
 ## Recent Changes
+- 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
 - 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils, 3 controls — completion menu rendering with mouse/keyboard (6805 tests)
 - 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters — IFilter-based state queries (6708 tests)
 - 031-input-processors: IProcessor pipeline, 26 processors, ExplodedList, MergedProcessor (6618 tests)
