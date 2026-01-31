@@ -307,6 +307,18 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Consecutive kill concatenation (forward appends, backward prepends)
   - Thread-safe operations (122 tests, >80% coverage)
 
+- **Scroll Bindings** — Viewport scrolling and page navigation key bindings
+  - `ScrollBindings` static class with 8 scroll functions ported from `scroll.py`
+  - `ScrollForward`/`ScrollBackward` — full window height with line-height accumulation
+  - `ScrollHalfPageDown`/`ScrollHalfPageUp` — half window height (integer division)
+  - `ScrollOneLineDown`/`ScrollOneLineUp` — viewport ±1 with conditional cursor adjustment
+  - `ScrollPageDown`/`ScrollPageUp` — viewport jump with cursor reposition to first non-whitespace
+  - `PageNavigationBindings` static class with 3 binding loaders ported from `page_navigation.py`
+  - Emacs bindings: Ctrl-V, Escape+V, PageDown, PageUp (filtered by EmacsMode)
+  - Vi bindings: Ctrl-F/B/D/U/E/Y, PageDown, PageUp (filtered by ViMode)
+  - Combined loader with `BufferHasFocus` guard via `MergedKeyBindings`
+  - Stateless, thread-safe (56 tests, 100% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers

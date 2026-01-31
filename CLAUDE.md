@@ -385,8 +385,11 @@ This ensures examples behave correctly in real terminal environments before mark
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
 - C# 13 / .NET 10 + Stroke.Core (Buffer, Document, SearchState, PasteMode), Stroke.KeyBinding (Binding, KeyPressEvent, KeyPress, KeyProcessor, EmacsState, EditingMode, KeyHandlerCallable), Stroke.Clipboard (IClipboard, ClipboardData), Stroke.Application (Application, RunInTerminal), Stroke.Layout.Controls (BufferControl, SearchBufferControl), Stroke.Input (Keys), Stroke.Filters (IFilter, Always, Never) (034-named-commands)
 - N/A (in-memory registry only) (034-named-commands)
+- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, ConditionalKeyBindings, MergedKeyBindings), Stroke.Application (AppFilters, ViFilters, EmacsFilters, KeyPressEventExtensions), Stroke.Core (Buffer, Document), Stroke.Layout (Window, WindowRenderInfo) (035-scroll-bindings)
+- N/A (in-memory only) (035-scroll-bindings)
 
 ## Recent Changes
+- 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)
 - 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
 - 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils, 3 controls — completion menu rendering with mouse/keyboard (6805 tests)
 - 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters — IFilter-based state queries (6708 tests)
