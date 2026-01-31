@@ -52,6 +52,13 @@ public sealed class Renderer
     private ColorDepth? _lastColorDepth;
 
     // Rendering state
+
+    /// <summary>
+    /// The current cursor position in the rendered output.
+    /// Used by the Windows mouse event handler for coordinate adjustment.
+    /// </summary>
+    internal Point CursorPos => _cursorPos;
+
     private Point _cursorPos;
     private Screen? _lastScreen;
     private Size? _lastSize;

@@ -319,6 +319,18 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Combined loader with `BufferHasFocus` guard via `MergedKeyBindings`
   - Stateless, thread-safe (56 tests, 100% coverage)
 
+- **Mouse Bindings** — Mouse event parsing and dispatch for VT100 and Windows protocols
+  - `MouseBindings` static class with `LoadMouseBindings()` returning 4 key bindings
+  - XTerm SGR protocol: 96-entry `FrozenDictionary` lookup table with button, event type, and modifier decoding
+  - Typical (X10) protocol: 10-entry lookup table with surrogate escape handling
+  - URXVT protocol: 4-entry lookup table with unknown-code fallback
+  - Scroll-without-position fallback converting ScrollUp/ScrollDown to arrow key presses
+  - Windows mouse event handler with platform guard and Win32 coordinate adjustment (ready for Win32Output)
+  - Coordinate transforms: 1-based → 0-based, surrogate escape subtraction, rows-above-layout adjustment
+  - 8 modifier combinations (Shift, Alt, Control) via bit-field decoding in XTerm SGR
+  - Renderer `CursorPos` internal property for Windows coordinate adjustment
+  - Stateless, thread-safe via immutable `FrozenDictionary` tables (47 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
