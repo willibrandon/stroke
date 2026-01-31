@@ -64,18 +64,19 @@ public sealed class NamedCommandsRegistryTests
     }
 
     [Fact]
-    public void Register_ReplacesExistingBuiltInCommand()
+    public void Register_ReplacesExistingCommand()
     {
-        var originalBinding = NamedCommands.GetByName("forward-char");
+        // Use a test-specific name to avoid polluting built-in commands
+        // that other parallel test classes depend on.
+        NotImplementedOrNone? OriginalHandler(KeyPressEvent e) => null;
+        NamedCommands.Register("test-replace-target", OriginalHandler);
+        var originalBinding = NamedCommands.GetByName("test-replace-target");
 
-        NotImplementedOrNone? CustomHandler(KeyPressEvent e) => null;
-        NamedCommands.Register("forward-char", CustomHandler);
+        NotImplementedOrNone? ReplacementHandler(KeyPressEvent e) => null;
+        NamedCommands.Register("test-replace-target", ReplacementHandler);
 
-        var newBinding = NamedCommands.GetByName("forward-char");
+        var newBinding = NamedCommands.GetByName("test-replace-target");
         Assert.NotSame(originalBinding, newBinding);
-
-        // Restore the original (other tests depend on it)
-        NamedCommands.Register("forward-char", originalBinding.Handler);
     }
 
     [Fact]
@@ -187,10 +188,12 @@ public sealed class NamedCommandsRegistryTests
     }
 
     [Fact]
-    public void CustomCommand_OverridesBuiltIn_ExecutesNewBehavior()
+    public void CustomCommand_OverridesExisting_ExecutesNewBehavior()
     {
-        // Save original
-        var original = NamedCommands.GetByName("backward-char");
+        // Use a test-specific name to avoid polluting built-in commands
+        // that other parallel test classes depend on.
+        NotImplementedOrNone? OriginalHandler(KeyPressEvent e) => null;
+        NamedCommands.Register("test-override-behavior", OriginalHandler);
 
         NotImplementedOrNone? CustomHandler(KeyPressEvent e)
         {
@@ -198,15 +201,12 @@ public sealed class NamedCommandsRegistryTests
             return null;
         }
 
-        NamedCommands.Register("backward-char", CustomHandler);
+        NamedCommands.Register("test-override-behavior", CustomHandler);
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
-        var binding = NamedCommands.GetByName("backward-char");
+        var binding = NamedCommands.GetByName("test-override-behavior");
         binding.Call(CreateEvent(buffer));
 
         Assert.Equal("OVERRIDE", buffer.Document.Text);
-
-        // Restore original
-        NamedCommands.Register("backward-char", original.Handler);
     }
 
     [Fact]
