@@ -17,7 +17,7 @@
 - [x] CHK008 Is the rows-above-layout y-adjustment requirement specified as a common post-processing step for all VT100 protocols? [Completeness, Spec §FR-011] — **Fixed**: FR-011 now explicitly states "for all three VT100 protocol formats (XTerm SGR, Typical, URXVT)".
 - [x] CHK009 Are requirements for the scroll-without-position fallback (ScrollUp/ScrollDown to arrow keys) documented? [Completeness, Spec §FR-017/018] — Yes, FR-017 and FR-018 cover both directions.
 - [x] CHK010 Is the requirement that LoadMouseBindings returns exactly 4 bindings documented? [Completeness, Spec §FR-023] — Yes, FR-023 specifies "exactly 4 key bindings".
-- [x] CHK011 Are exact entry counts specified for all three lookup tables (108, 10, 4)? [Completeness, Spec §FR-024/025/026] — Yes, FR-024 (108), FR-025 (10), FR-026 (4).
+- [x] CHK011 Are exact entry counts specified for all three lookup tables (96, 10, 4)? [Completeness, Spec §FR-024/025/026] — Yes, FR-024 (96), FR-025 (10), FR-026 (4).
 
 ## Requirement Clarity
 
@@ -35,7 +35,7 @@
 
 - [x] CHK021 Are coordinate transformation rules consistent between spec (§FR-008/009), data model (Coordinate Transformations table), and acceptance scenarios? [Consistency] — Yes, all consistent: XTerm SGR subtract 1, Typical subtract 32 then 1, acceptance scenarios show matching math (10,5→9,4).
 - [x] CHK022 Is the MouseHandlers.GetHandler parameter order documented consistently? Spec Assumption §7 says "(y, x)" but Research R8 says "(x, y)" — is the correct order clarified? [Conflict, Spec Assumptions vs Research R8] — **Fixed**: Assumption §2 now says "`GetHandler(x, y)` method (x first, then y)".
-- [x] CHK023 Are lookup table entry counts consistent between spec (§FR-024/025/026), data model, and success criteria (§SC-001/002/003)? [Consistency] — Yes, all three artifacts agree: 108, 10, 4.
+- [x] CHK023 Are lookup table entry counts consistent between spec (§FR-024/025/026), data model, and success criteria (§SC-001/002/003)? [Consistency] — Yes, all three artifacts agree: 96, 10, 4.
 - [x] CHK024 Is the modifier representation consistent between spec (§FR-006 mentioning "set" semantics) and research R1 (flags enum)? [Consistency, Spec §FR-006 vs Research R1] — **Fixed**: FR-006 now explicitly references "`MouseModifiers` flags enum". Key Entity "Modifier Set" now references "`MouseModifiers` flags enum value".
 - [x] CHK025 Are all four handler return type semantics consistently specified? (VT100 returns NotImplemented or handler result; Scroll returns null/void; Windows returns NotImplemented or handler result) [Consistency, Contract handler signatures] — **Fixed**: "Note on NotImplemented" paragraph now clarifies: "The VT100 and Windows handlers return `NotImplementedOrNone?`; the scroll handlers return void (always handled)."
 - [x] CHK026 Is the HeightIsUnknown error handling consistently specified between Spec §FR-014 ("HeightIsUnknownError"), Research R7 ("HeightIsUnknownException"), and data model? [Consistency, Naming] — **Fixed**: FR-014 and edge case now both use "`HeightIsUnknownException`" (the C# name). Python name removed from spec.

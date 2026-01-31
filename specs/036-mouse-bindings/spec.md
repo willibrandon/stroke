@@ -135,7 +135,7 @@ A developer runs their terminal application on Windows using the Win32 console A
 - **FR-021**: System MUST return NotImplemented for WindowsMouseEvent on non-Windows platforms
 - **FR-022**: System MUST provide a single public method that returns a KeyBindings instance containing all mouse-related bindings
 - **FR-023**: System MUST register exactly 4 key bindings: Vt100MouseEvent, ScrollUp, ScrollDown, and WindowsMouseEvent
-- **FR-024**: System MUST contain the complete XTerm SGR event lookup table with all 108 entries (3 buttons x 2 up/down x 8 modifier combos + 4 drag buttons x 8 modifier combos + 2 scroll directions x 8 modifier combos)
+- **FR-024**: System MUST contain the complete XTerm SGR event lookup table with all 96 entries (3 buttons x 2 up/down x 8 modifier combos + 4 drag buttons x 8 modifier combos + 2 scroll directions x 8 modifier combos)
 - **FR-025**: System MUST contain the complete Typical event lookup table with all 10 entries matching the Python reference
 - **FR-026**: System MUST contain the complete URXVT event lookup table with all 4 entries matching the Python reference
 
@@ -152,7 +152,7 @@ A developer runs their terminal application on Windows using the Win32 console A
 
 ### Measurable Outcomes
 
-- **SC-001**: All 108 XTerm SGR event table entries produce correct (button, event type, modifier) tuples when looked up — "correct" means matching the Python reference source values exactly. Tests MUST validate specific representative entries (e.g., code 0/'M' → Left/MouseDown/None, code 2/'m' → Right/MouseUp/None, code 36/'M' → Shift+Left/MouseMove/Shift, code 64/'M' → None/ScrollUp/None) in addition to total count.
+- **SC-001**: All 96 XTerm SGR event table entries produce correct (button, event type, modifier) tuples when looked up — "correct" means matching the Python reference source values exactly. Tests MUST validate specific representative entries (e.g., code 0/'M' → Left/MouseDown/None, code 2/'m' → Right/MouseUp/None, code 36/'M' → Shift+Left/MouseMove/Shift, code 64/'M' → None/ScrollUp/None) in addition to total count.
 - **SC-002**: All 10 Typical event table entries produce correct (button, event type, modifier) tuples when looked up — verified against the data model table (codes 32-35, 64-67, 96-97)
 - **SC-003**: All 4 URXVT event table entries produce correct (button, event type, modifier) tuples when looked up — verified against the data model table (codes 32, 35, 96, 97)
 - **SC-004**: Mouse coordinates are correctly transformed from protocol-specific encoding to 0-based positions for all three VT100 protocol formats. Representative test vectors: XTerm SGR (10,5) → (9,4); Typical bytes (42,37) → (9,4); URXVT (14,13) → (13,12); Typical with surrogate escape (0xDC00+42, 0xDC00+37) → (9,4).
@@ -164,7 +164,7 @@ A developer runs their terminal application on Windows using the Win32 console A
 ### Non-Functional Requirements
 
 - **NFR-001**: Lookup table access MUST be O(1) using `FrozenDictionary` for all three protocol tables. No per-event memory allocation is permitted in the lookup path.
-- **NFR-002**: The three static lookup tables (122 total entries across 3 `FrozenDictionary` instances) are allocated once at class load time and impose no ongoing memory overhead beyond their static footprint.
+- **NFR-002**: The three static lookup tables (110 total entries across 3 `FrozenDictionary` instances) are allocated once at class load time and impose no ongoing memory overhead beyond their static footprint.
 - **NFR-003**: The `MouseBindings` class MUST be a static, stateless class with no mutable fields. All lookup tables are `static readonly`. This design is inherently thread-safe per Constitution Principle XI — no synchronization is required.
 - **NFR-004**: The class MUST be safe to call from any thread without external synchronization. Thread safety for runtime dependencies (Renderer, MouseHandlers, KeyProcessor) is the responsibility of those classes, not MouseBindings.
 

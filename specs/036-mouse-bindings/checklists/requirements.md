@@ -33,4 +33,4 @@
 
 - All items pass validation. The spec is ready for `/speckit.clarify` or `/speckit.plan`.
 - The spec references escape sequence formats using protocol-standard notation (ESC[<...>M) which is domain terminology, not implementation detail.
-- Success criteria SC-001 through SC-003 reference specific table sizes (108, 10, 4) derived from the Python reference source, ensuring 1:1 fidelity per Constitution Principle I.
+- Success criteria SC-001 through SC-003 reference specific table sizes (96, 10, 4) derived from the Python reference source, ensuring 1:1 fidelity per Constitution Principle I.

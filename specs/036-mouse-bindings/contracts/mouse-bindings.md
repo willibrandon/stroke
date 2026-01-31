@@ -49,7 +49,7 @@ public static class MouseBindings
 
 /// <summary>
 /// XTerm SGR mouse event lookup table. Maps (event code, suffix character) to
-/// (button, event type, modifiers). Contains 108 entries.
+/// (button, event type, modifiers). Contains 96 entries.
 /// </summary>
 internal static readonly FrozenDictionary<(int Code, char Suffix), (MouseButton Button, MouseEventType EventType, MouseModifiers Modifiers)>
     XtermSgrMouseEvents;

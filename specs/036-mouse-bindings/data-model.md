@@ -19,11 +19,11 @@ The three lookup tables all produce the same output shape:
 
 **Key**: `(int Code, char Suffix)` — the numeric event code and the trailing 'M' (press) or 'm' (release) character.
 
-**Size**: 108 entries total:
+**Size**: 96 entries total:
 - 3 buttons × 2 directions (up/down) × 8 modifier combos = 48 (left/middle/right up + down)
 - 4 drag sources × 8 modifier combos = 32 (left/middle/right/none move)
 - 2 scroll directions × 8 modifier combos = 16 (scroll up/down)
-- Subtotal with suffix: 24 entries use 'm' suffix (up only), 84 entries use 'M' suffix (down + drag + scroll)
+- Subtotal with suffix: 24 entries use 'm' suffix (up only), 72 entries use 'M' suffix (down + drag + scroll)
 
 **Modifier encoding** (bit-field in the code value):
 - Bit 2 (value 4): Shift

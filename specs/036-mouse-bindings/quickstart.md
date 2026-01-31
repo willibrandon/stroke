@@ -11,7 +11,7 @@
    - Modifier constants (8 `const MouseModifiers` values + `UnknownModifier`)
    - Button convenience aliases (5 aliases for `MouseButton` values)
    - Event type convenience aliases (5 aliases for `MouseEventType` values)
-   - `XtermSgrMouseEvents` lookup table (108 entries) as `static readonly FrozenDictionary<(int, char), (MouseButton, MouseEventType, MouseModifiers)>`
+   - `XtermSgrMouseEvents` lookup table (96 entries) as `static readonly FrozenDictionary<(int, char), (MouseButton, MouseEventType, MouseModifiers)>`
    - `TypicalMouseEvents` lookup table (10 entries) as `static readonly FrozenDictionary<int, (MouseButton, MouseEventType, MouseModifiers)>`
    - `UrxvtMouseEvents` lookup table (4 entries) as `static readonly FrozenDictionary<int, (MouseButton, MouseEventType, MouseModifiers)>`
    - `LoadMouseBindings()` public method that creates `KeyBindings` with 4 handlers

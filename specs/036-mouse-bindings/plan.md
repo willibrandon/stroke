@@ -5,7 +5,7 @@
 
 ## Summary
 
-Implement `MouseBindings.LoadMouseBindings()` — a static method that returns a `KeyBindings` instance with 4 registered bindings for handling VT100 mouse events (XTerm SGR, Typical/X10, URXVT protocols), scroll-without-position events, and Windows mouse events. The implementation includes three lookup tables (108 XTerm SGR entries, 10 Typical entries, 4 URXVT entries), protocol-specific coordinate parsing and transformation, modifier key detection via bit-field decoding, and dispatch to the Renderer's mouse handler registry.
+Implement `MouseBindings.LoadMouseBindings()` — a static method that returns a `KeyBindings` instance with 4 registered bindings for handling VT100 mouse events (XTerm SGR, Typical/X10, URXVT protocols), scroll-without-position events, and Windows mouse events. The implementation includes three lookup tables (96 XTerm SGR entries, 10 Typical entries, 4 URXVT entries), protocol-specific coordinate parsing and transformation, modifier key detection via bit-field decoding, and dispatch to the Renderer's mouse handler registry.
 
 ## Technical Context
 
