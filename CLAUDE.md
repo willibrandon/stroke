@@ -389,6 +389,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only) (035-scroll-bindings)
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyProcessor, KeyPress, KeyPressEvent, NotImplementedOrNone, KeyHandlerCallable), Stroke.Input (Keys, MouseEvent, MouseButton, MouseEventType, MouseModifiers), Stroke.Core.Primitives (Point), Stroke.Rendering (Renderer, HeightIsUnknownException), Stroke.Layout (MouseHandlers), Stroke.Application (Application) (036-mouse-bindings)
 - N/A (in-memory lookup tables only) (036-mouse-bindings)
+- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, Binding, KeyPressEvent, KeyProcessor, KeyPress, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool, Always, Never), Stroke.Application (AppFilters, ViFilters, EmacsFilters, AppContext, Application, KeyPressEventExtensions), Stroke.Core (Buffer), Stroke.Clipboard (IClipboard, ClipboardData) (037-basic-key-bindings)
+- N/A (in-memory binding registry only) (037-basic-key-bindings)
 
 ## Recent Changes
 - 036-mouse-bindings: MouseBindings static class, 3 FrozenDictionary lookup tables (96 XTerm SGR + 10 Typical + 4 URXVT), LoadMouseBindings() with 4 handlers, Renderer.CursorPos property (7027 tests)
