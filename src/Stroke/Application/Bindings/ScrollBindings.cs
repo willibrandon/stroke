@@ -1,9 +1,10 @@
-using Stroke.Application;
 using Stroke.Core;
+using Stroke.KeyBinding;
+using Stroke.KeyBinding.Bindings;
 using Stroke.Layout.Containers;
 using Stroke.Layout.Windows;
 
-namespace Stroke.KeyBinding.Bindings;
+namespace Stroke.Application.Bindings;
 
 /// <summary>
 /// Static scroll functions for navigating through long multiline buffers.

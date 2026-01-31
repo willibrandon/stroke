@@ -1,7 +1,8 @@
-using Stroke.Application;
 using Stroke.Input;
+using Stroke.KeyBinding;
+using Stroke.KeyBinding.Bindings;
 
-namespace Stroke.KeyBinding.Bindings;
+namespace Stroke.Application.Bindings;
 
 /// <summary>
 /// Key binding loaders for page navigation in Vi and Emacs editing modes.

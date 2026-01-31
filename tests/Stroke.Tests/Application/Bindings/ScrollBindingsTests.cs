@@ -1,8 +1,8 @@
+using Stroke.Application.Bindings;
 using Stroke.Core;
 using Stroke.Core.Primitives;
 using Stroke.Input.Pipe;
 using Stroke.KeyBinding;
-using Stroke.KeyBinding.Bindings;
 using Stroke.Layout;
 using Stroke.Layout.Containers;
 using Stroke.Layout.Controls;
@@ -12,7 +12,7 @@ using AppContext = Stroke.Application.AppContext;
 using Buffer = Stroke.Core.Buffer;
 using Keys = Stroke.Input.Keys;
 
-namespace Stroke.Tests.KeyBinding.Bindings;
+namespace Stroke.Tests.Application.Bindings;
 
 /// <summary>
 /// Tests for the 8 scroll functions in <see cref="ScrollBindings"/>.

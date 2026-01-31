@@ -1,11 +1,11 @@
 using Stroke.Application;
+using Stroke.Application.Bindings;
 using Stroke.Input;
 using Stroke.KeyBinding;
-using Stroke.KeyBinding.Bindings;
 using Xunit;
 using Keys = Stroke.Input.Keys;
 
-namespace Stroke.Tests.KeyBinding.Bindings;
+namespace Stroke.Tests.Application.Bindings;
 
 /// <summary>
 /// Tests for the 3 binding loaders in <see cref="PageNavigationBindings"/>.

@@ -1104,6 +1104,8 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 
 ## Module: prompt_toolkit.key_binding.bindings.scroll
 
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer (not KeyBinding) because these functions depend on `Window`, `WindowRenderInfo`, `Buffer`, and `Application` at layers 5+.
+
 ### Classes
 
 | Python | Stroke | Notes |
@@ -1126,6 +1128,8 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 ---
 
 ## Module: prompt_toolkit.key_binding.bindings.page_navigation
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer (not KeyBinding) because these loaders depend on `AppFilters`, `EmacsFilters`, `ViFilters`, and reference `ScrollBindings`.
 
 ### Classes
 
