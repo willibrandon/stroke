@@ -359,6 +359,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Must load after Vi bindings for correct Right arrow priority override
   - Stateless, thread-safe (21 tests, >80% coverage)
 
+- **Focus & CPR Bindings** — Focus navigation and cursor position report response handling
+  - `FocusFunctions` static class with `FocusNext` and `FocusPrevious` handler functions
+  - Focus navigation cycles through visible focusable windows via `Layout.FocusNext()`/`FocusPrevious()`
+  - Wrap-around behavior: last→first (forward), first→last (backward)
+  - Graceful no-ops for single-window and zero-focusable-window layouts
+  - `CprBindings` static class with `LoadCprBindings()` factory method
+  - CPR escape sequence parsing: `\x1b[row;colR` → row/col extraction via `Data[2..^1].Split(';')`
+  - Reports parsed row to `Renderer.ReportAbsoluteCursorRow()` for accurate screen positioning
+  - `saveBefore` disabled (CPR responses are terminal state reports, not user actions)
+  - Stateless, thread-safe (12 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
