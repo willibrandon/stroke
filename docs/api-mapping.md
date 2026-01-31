@@ -1186,6 +1186,208 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 
 ---
 
+## Module: prompt_toolkit.key_binding.bindings.focus
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer because these functions depend on `Layout.FocusNext()`/`FocusPrevious()` at layer 5+.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `FocusFunctions` | Static class containing 2 focus handler functions |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `focus_next(event)` | `FocusFunctions.FocusNext(event)` | `NotImplementedOrNone? FocusNext(KeyPressEvent event)` |
+| `focus_previous(event)` | `FocusFunctions.FocusPrevious(event)` | `NotImplementedOrNone? FocusPrevious(KeyPressEvent event)` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.cpr
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer because the handler depends on `Renderer.ReportAbsoluteCursorRow()` at layer 2+.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `CprBindings` | Static class containing 1 binding loader |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_cpr_bindings()` | `CprBindings.LoadCprBindings()` | `KeyBindings LoadCprBindings()` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.auto_suggest
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer because these bindings depend on `AppFilters`, `EmacsFilters`, and `Buffer` suggestion state.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `AutoSuggestBindings` | Static class containing 2 handler functions and 1 binding loader |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_auto_suggest_bindings()` | `AutoSuggestBindings.LoadAutoSuggestBindings()` | `KeyBindings LoadAutoSuggestBindings()` |
+| *(inline accept handler)* | `AutoSuggestBindings.AcceptSuggestion(event)` | `NotImplementedOrNone? AcceptSuggestion(KeyPressEvent event)` |
+| *(inline partial accept handler)* | `AutoSuggestBindings.AcceptPartialSuggestion(event)` | `NotImplementedOrNone? AcceptPartialSuggestion(KeyPressEvent event)` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.basic
+
+> **Namespace**: `Stroke.Application.Bindings` — placed in Application layer because these bindings depend on `AppFilters`, `ViFilters`, `EmacsFilters`, and `NamedCommands`.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `BasicBindings` | Static class containing 1 binding loader |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_basic_bindings()` | `BasicBindings.LoadBasicBindings()` | `KeyBindings LoadBasicBindings()` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.mouse
+
+> **Namespace**: `Stroke.KeyBinding.Bindings` — placed in KeyBinding layer; mouse event dispatch uses `KeyBindings`, `Renderer`, and lookup tables.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `MouseBindings` | Static class containing 1 binding loader and 3 lookup tables |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_mouse_bindings()` | `MouseBindings.LoadMouseBindings()` | `KeyBindings LoadMouseBindings()` |
+
+### Constants
+
+| Python | Stroke | Type |
+|--------|--------|------|
+| `xterm_sgr_mouse_events` | `MouseBindings.XTermSgrMouseEvents` | `FrozenDictionary<int, (MouseEventType, MouseButton, MouseModifiers)>` |
+| `typical_mouse_events` | `MouseBindings.TypicalMouseEvents` | `FrozenDictionary<int, (MouseEventType, MouseButton, MouseModifiers)>` |
+| `urxvt_mouse_events` | `MouseBindings.UrxvtMouseEvents` | `FrozenDictionary<int, (MouseEventType, MouseButton, MouseModifiers)>` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.named_commands
+
+> **Namespace**: `Stroke.KeyBinding.Bindings` — placed in KeyBinding layer; registry and command handlers are independent of the Application layer.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level registry + `@register` decorator)* | `NamedCommands` | Static partial class with 49 Readline command handlers |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `get_by_name(name)` | `NamedCommands.GetByName(name)` | `Binding GetByName(string name)` |
+| `register(name)` | `NamedCommands.Register(name, handler, recordInMacro)` | `void Register(string name, KeyHandlerCallable handler, bool recordInMacro = true)` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.completion
+
+> **Namespace**: `Stroke.KeyBinding.Bindings` — placed in KeyBinding layer; completion display helpers work with `Buffer` and `Completion` types.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `CompletionBindings` | Static class containing 2 completion handler functions |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `generate_completions(event)` | `CompletionBindings.GenerateCompletions(event)` | `void GenerateCompletions(KeyPressEvent event)` |
+| `display_completions_like_readline(event)` | `CompletionBindings.DisplayCompletionsLikeReadline(event)` | `void DisplayCompletionsLikeReadline(KeyPressEvent event)` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.emacs
+
+> **Namespace**: `Stroke.Application.Bindings` *(not yet implemented)* — will be placed in Application layer because these loaders depend on `AppFilters`, `EmacsFilters`, and `SearchBindings`.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `EmacsBindings` | Static class containing 3 binding loaders *(planned)* |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_emacs_bindings()` | `EmacsBindings.LoadEmacsBindings()` | `IKeyBindingsBase LoadEmacsBindings()` |
+| `load_emacs_search_bindings()` | `SearchBindings.LoadEmacsSearchBindings()` | `IKeyBindingsBase LoadEmacsSearchBindings()` *(already implemented in SearchBindings)* |
+| `load_emacs_shift_selection_bindings()` | `EmacsBindings.LoadEmacsShiftSelectionBindings()` | `IKeyBindingsBase LoadEmacsShiftSelectionBindings()` |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.vi
+
+> **Namespace**: `Stroke.Application.Bindings` *(not yet implemented)* — will be placed in Application layer because these loaders depend on `AppFilters`, `ViFilters`, `ViState`, and `NamedCommands`.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| `TextObjectType` | `TextObjectType` | Enum: Exclusive, Inclusive, Linewise, Block |
+| `TextObject` | `TextObject` | Text object with start/end positions and type |
+| *(module-level functions)* | `ViBindings` | Static class containing 2 binding loaders *(planned)* |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_vi_bindings()` | `ViBindings.LoadViBindings()` | `IKeyBindingsBase LoadViBindings()` |
+| `load_vi_search_bindings()` | `SearchBindings.LoadViSearchBindings()` | `IKeyBindingsBase LoadViSearchBindings()` *(already implemented in SearchBindings)* |
+| `create_text_object_decorator(key_bindings)` | `ViBindings.CreateTextObjectDecorator(keyBindings)` | *(internal factory)* |
+| `create_operator_decorator(key_bindings)` | `ViBindings.CreateOperatorDecorator(keyBindings)` | *(internal factory)* |
+
+---
+
+## Module: prompt_toolkit.key_binding.bindings.open_in_editor
+
+> **Namespace**: `Stroke.Application.Bindings` *(not yet implemented)* — will be placed in Application layer because these loaders depend on `Application.RunInTerminal` and editing mode filters.
+
+### Classes
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| *(module-level functions)* | `OpenInEditorBindings` | Static class containing 3 binding loaders *(planned)* |
+
+### Functions
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `load_open_in_editor_bindings()` | `OpenInEditorBindings.LoadOpenInEditorBindings()` | `IKeyBindingsBase LoadOpenInEditorBindings()` |
+| `load_emacs_open_in_editor_bindings()` | `OpenInEditorBindings.LoadEmacsOpenInEditorBindings()` | `KeyBindings LoadEmacsOpenInEditorBindings()` |
+| `load_vi_open_in_editor_bindings()` | `OpenInEditorBindings.LoadViOpenInEditorBindings()` | `KeyBindings LoadViOpenInEditorBindings()` |
+
+---
+
 ## Module: prompt_toolkit.keys
 
 ### Enums
