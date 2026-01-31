@@ -17,9 +17,9 @@
 
 **Purpose**: Create the source and test file skeletons with correct namespace, usings, and class declarations.
 
-- [ ] T001 Create `src/Stroke/Application/Bindings/AutoSuggestBindings.cs` with namespace `Stroke.Application.Bindings`, static class declaration, XML doc comments from contract, required usings (`Stroke.Application`, `Stroke.AutoSuggest`, `Stroke.Core`, `Stroke.Filters`, `Stroke.Input`, `Stroke.KeyBinding`, `System.Text.RegularExpressions`), and stub methods returning `null`
-- [ ] T002 Create `tests/Stroke.Tests/Application/Bindings/AutoSuggestBindingsTests.cs` with namespace `Stroke.Tests.Application.Bindings`, sealed test class implementing `IDisposable`, `SimplePipeInput`/`DummyOutput` fields, `Dispose()` method, `CreateEnvironment()` helper (Buffer + BufferControl + Window + Layout + Application + AppContext.SetApp scope), and `CreateEvent()` helper following the pattern in `SearchBindingsTests.cs`
-- [ ] T003 Verify build succeeds: `dotnet build src/Stroke/Stroke.csproj` and `dotnet build tests/Stroke.Tests/Stroke.Tests.csproj`
+- [x] T001 Create `src/Stroke/Application/Bindings/AutoSuggestBindings.cs` with namespace `Stroke.Application.Bindings`, static class declaration, XML doc comments from contract, required usings (`Stroke.Application`, `Stroke.AutoSuggest`, `Stroke.Core`, `Stroke.Filters`, `Stroke.Input`, `Stroke.KeyBinding`, `System.Text.RegularExpressions`), and stub methods returning `null`
+- [x] T002 Create `tests/Stroke.Tests/Application/Bindings/AutoSuggestBindingsTests.cs` with namespace `Stroke.Tests.Application.Bindings`, sealed test class implementing `IDisposable`, `SimplePipeInput`/`DummyOutput` fields, `Dispose()` method, `CreateEnvironment()` helper (Buffer + BufferControl + Window + Layout + Application + AppContext.SetApp scope), and `CreateEvent()` helper following the pattern in `SearchBindingsTests.cs`
+- [x] T003 Verify build succeeds: `dotnet build src/Stroke/Stroke.csproj` and `dotnet build tests/Stroke.Tests/Stroke.Tests.csproj`
 
 **Checkpoint**: Skeleton files compile. No functionality yet.
 
@@ -31,10 +31,10 @@
 
 **Why foundational**: Every binding registration uses `SuggestionAvailable` as its filter (or composed with `EmacsMode`). No user story can be implemented or tested without this filter.
 
-- [ ] T004 Implement `SuggestionAvailable` private static `IFilter` field in `AutoSuggestBindings.cs` using `new Condition(() => { ... })` with three-condition conjunction: `buffer.Suggestion is not null && buffer.Suggestion.Text.Length > 0 && buffer.Document.IsCursorAtTheEnd` (per contract §Internal Members)
-- [ ] T005 [P] Write filter-positive tests in `AutoSuggestBindingsTests.cs`: test that `SuggestionAvailable` evaluates to `true` when all three conditions are met (non-null suggestion, non-empty text, cursor at end) — since the filter is private, test indirectly by calling `LoadAutoSuggestBindings()` and verifying binding activation via the returned `KeyBindings` instance (depends on T001 stub providing a minimal `LoadAutoSuggestBindings()` that registers at least one binding)
-- [ ] T006 [P] Write filter-negative tests in `AutoSuggestBindingsTests.cs`: test that filter evaluates to `false` when (a) no suggestion is set, (b) suggestion text is empty string, (c) cursor is NOT at the end of the buffer — three separate test methods, each tested indirectly via `LoadAutoSuggestBindings()` binding behavior (same indirect approach as T005)
-- [ ] T007 Verify filter tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
+- [x] T004 Implement `SuggestionAvailable` private static `IFilter` field in `AutoSuggestBindings.cs` using `new Condition(() => { ... })` with three-condition conjunction: `buffer.Suggestion is not null && buffer.Suggestion.Text.Length > 0 && buffer.Document.IsCursorAtTheEnd` (per contract §Internal Members)
+- [x] T005 [P] Write filter-positive tests in `AutoSuggestBindingsTests.cs`: test that `SuggestionAvailable` evaluates to `true` when all three conditions are met (non-null suggestion, non-empty text, cursor at end) — since the filter is private, test indirectly by calling `LoadAutoSuggestBindings()` and verifying binding activation via the returned `KeyBindings` instance (depends on T001 stub providing a minimal `LoadAutoSuggestBindings()` that registers at least one binding)
+- [x] T006 [P] Write filter-negative tests in `AutoSuggestBindingsTests.cs`: test that filter evaluates to `false` when (a) no suggestion is set, (b) suggestion text is empty string, (c) cursor is NOT at the end of the buffer — three separate test methods, each tested indirectly via `LoadAutoSuggestBindings()` binding behavior (same indirect approach as T005)
+- [x] T007 Verify filter tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
 
 **Checkpoint**: Filter logic is implemented and tested. User story implementation can begin.
 
@@ -50,16 +50,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T008 [P] [US1] Write `AcceptSuggestion_InsertsSuggestionText` test in `AutoSuggestBindingsTests.cs`: buffer with text "git" at cursor position 3, suggestion " commit -m 'fix bug'", call `AcceptSuggestion(event)`, assert buffer text equals "git commit -m 'fix bug'"
-- [ ] T009 [P] [US1] Write `AcceptSuggestion_ReturnsNull_WhenSuggestionIsNull` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion set, call `AcceptSuggestion(event)`, assert return value is `null` and buffer text is unchanged (null-guard per contract)
-- [ ] T010 [P] [US1] Write `AcceptSuggestion_SingleCharacterSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "x", call handler, assert single character is inserted (edge case from spec)
+- [x] T008 [P] [US1] Write `AcceptSuggestion_InsertsSuggestionText` test in `AutoSuggestBindingsTests.cs`: buffer with text "git" at cursor position 3, suggestion " commit -m 'fix bug'", call `AcceptSuggestion(event)`, assert buffer text equals "git commit -m 'fix bug'"
+- [x] T009 [P] [US1] Write `AcceptSuggestion_ReturnsNull_WhenSuggestionIsNull` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion set, call `AcceptSuggestion(event)`, assert return value is `null` and buffer text is unchanged (null-guard per contract)
+- [x] T010 [P] [US1] Write `AcceptSuggestion_SingleCharacterSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "x", call handler, assert single character is inserted (edge case from spec)
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement `AcceptSuggestion` handler in `AutoSuggestBindings.cs`: read `event.CurrentBuffer.Suggestion`, null-guard (`if (suggestion is not null)`), call `buffer.InsertText(suggestion.Text)`, return `null` (per contract §Public API, maps to Python's `_accept`)
-- [ ] T012 [US1] Implement `LoadAutoSuggestBindings()` factory method in `AutoSuggestBindings.cs` with the first 3 binding registrations: Ctrl-F → `AcceptSuggestion` (filter: `SuggestionAvailable`), Ctrl-E → `AcceptSuggestion` (filter: `SuggestionAvailable`), Right → `AcceptSuggestion` (filter: `SuggestionAvailable`) — using `kb.Add<KeyHandlerCallable>([new KeyOrChar(Keys.X)], filter: new FilterOrBool(SuggestionAvailable))(AcceptSuggestion)` pattern
-- [ ] T013 [US1] Write `LoadAutoSuggestBindings_ReturnsKeyBindingsWithFullAcceptBindings` test in `AutoSuggestBindingsTests.cs`: call `LoadAutoSuggestBindings()`, verify the returned `KeyBindings` instance is not null and contains bindings (assert count or exercise bindings via key processor)
-- [ ] T014 [US1] Verify US1 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
+- [x] T011 [US1] Implement `AcceptSuggestion` handler in `AutoSuggestBindings.cs`: read `event.CurrentBuffer.Suggestion`, null-guard (`if (suggestion is not null)`), call `buffer.InsertText(suggestion.Text)`, return `null` (per contract §Public API, maps to Python's `_accept`)
+- [x] T012 [US1] Implement `LoadAutoSuggestBindings()` factory method in `AutoSuggestBindings.cs` with the first 3 binding registrations: Ctrl-F → `AcceptSuggestion` (filter: `SuggestionAvailable`), Ctrl-E → `AcceptSuggestion` (filter: `SuggestionAvailable`), Right → `AcceptSuggestion` (filter: `SuggestionAvailable`) — using `kb.Add<KeyHandlerCallable>([new KeyOrChar(Keys.X)], filter: new FilterOrBool(SuggestionAvailable))(AcceptSuggestion)` pattern
+- [x] T013 [US1] Write `LoadAutoSuggestBindings_ReturnsKeyBindingsWithFullAcceptBindings` test in `AutoSuggestBindingsTests.cs`: call `LoadAutoSuggestBindings()`, verify the returned `KeyBindings` instance is not null and contains bindings (assert count or exercise bindings via key processor)
+- [x] T014 [US1] Verify US1 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
 
 **Checkpoint**: Full suggestion acceptance works for all three keys. MVP is functional.
 
@@ -75,20 +75,20 @@
 
 ### Tests for User Story 2
 
-- [ ] T015 [P] [US2] Write `AcceptPartialSuggestion_InsertsFirstWordSegment` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "commit -m 'message'", call `AcceptPartialSuggestion(event)`, assert buffer text ends with "commit " (first non-empty segment from regex split)
-- [ ] T016 [P] [US2] Write `AcceptPartialSuggestion_InsertsPathSegment` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "home/user/documents/", call handler, assert only "home/" is inserted
-- [ ] T017 [P] [US2] Write `AcceptPartialSuggestion_LeadingSpaceSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion " commit -m 'fix'", call handler, assert only " " (single space) is inserted (per corrected data model)
-- [ ] T018 [P] [US2] Write `AcceptPartialSuggestion_LeadingSlashSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "/home/user/", call handler, assert only "/" is inserted (per corrected contract word boundary table)
-- [ ] T019 [P] [US2] Write `AcceptPartialSuggestion_NoWordBoundary` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "abc", call handler, assert entire "abc" is inserted (single segment, no boundary match — behaves like full accept per spec edge case)
-- [ ] T020 [P] [US2] Write `AcceptPartialSuggestion_WhitespaceOnlySuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "   " (whitespace), call handler, assert entire "   " is inserted (per spec edge case)
-- [ ] T021 [P] [US2] Write `AcceptPartialSuggestion_ReturnsNull_WhenSuggestionIsNull` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion, call handler, assert return `null` and buffer unchanged (null-guard)
+- [x] T015 [P] [US2] Write `AcceptPartialSuggestion_InsertsFirstWordSegment` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "commit -m 'message'", call `AcceptPartialSuggestion(event)`, assert buffer text ends with "commit " (first non-empty segment from regex split)
+- [x] T016 [P] [US2] Write `AcceptPartialSuggestion_InsertsPathSegment` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "home/user/documents/", call handler, assert only "home/" is inserted
+- [x] T017 [P] [US2] Write `AcceptPartialSuggestion_LeadingSpaceSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion " commit -m 'fix'", call handler, assert only " " (single space) is inserted (per corrected data model)
+- [x] T018 [P] [US2] Write `AcceptPartialSuggestion_LeadingSlashSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "/home/user/", call handler, assert only "/" is inserted (per corrected contract word boundary table)
+- [x] T019 [P] [US2] Write `AcceptPartialSuggestion_NoWordBoundary` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "abc", call handler, assert entire "abc" is inserted (single segment, no boundary match — behaves like full accept per spec edge case)
+- [x] T020 [P] [US2] Write `AcceptPartialSuggestion_WhitespaceOnlySuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion "   " (whitespace), call handler, assert entire "   " is inserted (per spec edge case)
+- [x] T021 [P] [US2] Write `AcceptPartialSuggestion_ReturnsNull_WhenSuggestionIsNull` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion, call handler, assert return `null` and buffer unchanged (null-guard)
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement `AcceptPartialSuggestion` handler in `AutoSuggestBindings.cs`: read suggestion, null-guard, apply `Regex.Split(@"([^\s/]+(?:\s+|/))", suggestion.Text)`, select first non-empty element via `.First(x => !string.IsNullOrEmpty(x))`, call `buffer.InsertText(firstSegment)`, return `null` (per contract §Public API, maps to Python's `_fill`)
-- [ ] T023 [US2] Add 4th binding registration to `LoadAutoSuggestBindings()`: Escape+F → `AcceptPartialSuggestion` with composed filter `((Filter)SuggestionAvailable).And(EmacsFilters.EmacsMode)` (per contract §Key Binding Registration)
-- [ ] T024 [US2] Write `LoadAutoSuggestBindings_ContainsFourBindings` test in `AutoSuggestBindingsTests.cs`: call factory, verify the returned `KeyBindings` contains exactly 4 bindings
-- [ ] T025 [US2] Verify US2 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
+- [x] T022 [US2] Implement `AcceptPartialSuggestion` handler in `AutoSuggestBindings.cs`: read suggestion, null-guard, apply `Regex.Split(@"([^\s/]+(?:\s+|/))", suggestion.Text)`, select first non-empty element via `.First(x => !string.IsNullOrEmpty(x))`, call `buffer.InsertText(firstSegment)`, return `null` (per contract §Public API, maps to Python's `_fill`)
+- [x] T023 [US2] Add 4th binding registration to `LoadAutoSuggestBindings()`: Escape+F → `AcceptPartialSuggestion` with composed filter `((Filter)SuggestionAvailable).And(EmacsFilters.EmacsMode)` (per contract §Key Binding Registration)
+- [x] T024 [US2] Write `LoadAutoSuggestBindings_ContainsFourBindings` test in `AutoSuggestBindingsTests.cs`: call factory, verify the returned `KeyBindings` contains exactly 4 bindings
+- [x] T025 [US2] Verify US2 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
 
 **Checkpoint**: Partial word-segment acceptance works with correct regex splitting for all edge cases.
 
@@ -106,10 +106,10 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenNoSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion, verify `AcceptSuggestion` handler is not reached when processing Right arrow key through the returned `KeyBindings` (handler returns `NotImplemented` or binding doesn't match)
-- [ ] T027 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenSuggestionTextEmpty` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion whose text is empty string, verify binding does not activate
-- [ ] T028 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenCursorNotAtEnd` test in `AutoSuggestBindingsTests.cs`: buffer with text "git co" at cursor position 3 (not at end) and a valid suggestion, verify binding does not activate
-- [ ] T029 [P] [US3] Write `PartialAcceptBinding_DoesNotActivate_WhenNoSuggestion` test in `AutoSuggestBindingsTests.cs`: same as T026 but for Escape+F binding
+- [x] T026 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenNoSuggestion` test in `AutoSuggestBindingsTests.cs`: buffer with no suggestion, verify `AcceptSuggestion` handler is not reached when processing Right arrow key through the returned `KeyBindings` (handler returns `NotImplemented` or binding doesn't match)
+- [x] T027 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenSuggestionTextEmpty` test in `AutoSuggestBindingsTests.cs`: buffer with suggestion whose text is empty string, verify binding does not activate
+- [x] T028 [P] [US3] Write `FullAcceptBinding_DoesNotActivate_WhenCursorNotAtEnd` test in `AutoSuggestBindingsTests.cs`: buffer with text "git co" at cursor position 3 (not at end) and a valid suggestion, verify binding does not activate
+- [x] T029 [P] [US3] Write `PartialAcceptBinding_DoesNotActivate_WhenNoSuggestion` test in `AutoSuggestBindingsTests.cs`: same as T026 but for Escape+F binding
 
 **Checkpoint**: All negative filter scenarios verified at binding integration level.
 
@@ -125,8 +125,8 @@
 
 ### Tests for User Story 4
 
-- [ ] T030 [US4] Write `LoadAutoSuggestBindings_RightArrowBinding_HasSuggestionAvailableFilter` test in `AutoSuggestBindingsTests.cs`: verify the Right arrow binding in the returned `KeyBindings` is conditional on the `SuggestionAvailable` filter (when suggestion is present, it activates; when absent, it falls through — enabling Vi bindings loaded earlier to handle the key)
-- [ ] T031 [US4] Verify XML doc remark on `LoadAutoSuggestBindings()` confirms that callers must load these bindings AFTER Vi bindings for correct priority (per contract §Key Binding Registration notes and Python L25-27) — this remark should already exist from T001's stub creation using contract XML docs; verify and strengthen if needed
+- [x] T030 [US4] Write `LoadAutoSuggestBindings_RightArrowBinding_HasSuggestionAvailableFilter` test in `AutoSuggestBindingsTests.cs`: verify the Right arrow binding in the returned `KeyBindings` is conditional on the `SuggestionAvailable` filter (when suggestion is present, it activates; when absent, it falls through — enabling Vi bindings loaded earlier to handle the key)
+- [x] T031 [US4] Verify XML doc remark on `LoadAutoSuggestBindings()` confirms that callers must load these bindings AFTER Vi bindings for correct priority (per contract §Key Binding Registration notes and Python L25-27) — this remark should already exist from T001's stub creation using contract XML docs; verify and strengthen if needed
 
 **Checkpoint**: Vi override behavior is documented and the conditional activation enabling fallthrough is tested.
 
@@ -136,12 +136,12 @@
 
 **Purpose**: Final verification, code quality, and documentation.
 
-- [ ] T032 Verify all tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
-- [ ] T033 Run full test suite to verify no regressions: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj`
-- [ ] T034 Verify file sizes: `AutoSuggestBindings.cs` should be ~80 LOC (well under 1,000 LOC limit per Constitution X), `AutoSuggestBindingsTests.cs` should be ~250 LOC
-- [ ] T035 Verify XML doc comments are present on all public members per Constitution standards: class summary, `AcceptSuggestion`, `AcceptPartialSuggestion`, `LoadAutoSuggestBindings` — each with `<summary>`, `<param>`, `<returns>`, `<remarks>` tags matching the contract (includes Vi loading order remark from T031)
-- [ ] T036 Measure code coverage: run `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings" --collect:"XPlat Code Coverage"` and verify ≥80% line coverage of `AutoSuggestBindings.cs` per SC-005
-- [ ] T037 Run quickstart.md validation: verify build command `dotnet build src/Stroke/Stroke.csproj` succeeds and filtered test command `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"` passes
+- [x] T032 Verify all tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"`
+- [x] T033 Run full test suite to verify no regressions: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj`
+- [x] T034 Verify file sizes: `AutoSuggestBindings.cs` should be ~80 LOC (well under 1,000 LOC limit per Constitution X), `AutoSuggestBindingsTests.cs` should be ~250 LOC
+- [x] T035 Verify XML doc comments are present on all public members per Constitution standards: class summary, `AcceptSuggestion`, `AcceptPartialSuggestion`, `LoadAutoSuggestBindings` — each with `<summary>`, `<param>`, `<returns>`, `<remarks>` tags matching the contract (includes Vi loading order remark from T031)
+- [x] T036 Measure code coverage: run `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings" --collect:"XPlat Code Coverage"` and verify ≥80% line coverage of `AutoSuggestBindings.cs` per SC-005
+- [x] T037 Run quickstart.md validation: verify build command `dotnet build src/Stroke/Stroke.csproj` succeeds and filtered test command `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~AutoSuggestBindings"` passes
 
 ---
 
