@@ -389,8 +389,11 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only) (035-scroll-bindings)
 - C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyProcessor, KeyPress, KeyPressEvent, NotImplementedOrNone, KeyHandlerCallable), Stroke.Input (Keys, MouseEvent, MouseButton, MouseEventType, MouseModifiers), Stroke.Core.Primitives (Point), Stroke.Rendering (Renderer, HeightIsUnknownException), Stroke.Layout (MouseHandlers), Stroke.Application (Application) (036-mouse-bindings)
 - N/A (in-memory lookup tables only) (036-mouse-bindings)
+- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, Binding, KeyPressEvent, KeyProcessor, KeyPress, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool, Always, Never), Stroke.Application (AppFilters, ViFilters, EmacsFilters, AppContext, Application, KeyPressEventExtensions), Stroke.Core (Buffer), Stroke.Clipboard (IClipboard, ClipboardData) (037-basic-key-bindings)
+- N/A (in-memory binding registry only) (037-basic-key-bindings)
 
 ## Recent Changes
+- 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)
 - 036-mouse-bindings: MouseBindings static class, 3 FrozenDictionary lookup tables (96 XTerm SGR + 10 Typical + 4 URXVT), LoadMouseBindings() with 4 handlers, Renderer.CursorPos property (7027 tests)
 - 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)
 - 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
