@@ -331,6 +331,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Renderer `CursorPos` internal property for Windows coordinate adjustment
   - Stateless, thread-safe via immutable `FrozenDictionary` tables (47 tests, >80% coverage)
 
+- **Basic Key Bindings** — 118 default key bindings for Emacs and Vi insert modes
+  - `BasicBindings` static class with `LoadBasicBindings()` returning all default bindings
+  - 90 ignored key bindings (control, function, navigation, shift-arrow, delete, insert, tab, SIGINT) with shared no-op handler
+  - 16 named command bindings: movement (Home, End, Left, Right), editing (Ctrl+K/U/T/W, Backspace, Delete), tab completion, history navigation, self-insert, Ctrl+D
+  - 12 inline handler bindings: Enter multiline, Ctrl+J re-dispatch, Up/Down auto-navigation, bracketed paste with line ending normalization, Ctrl+Z literal insert, quoted insert, delete selection with clipboard
+  - Filter composition: `InsertMode` (Vi insert | Emacs insert), `HasTextBeforeCursor`, `InQuotedInsert`, `~HasSelection`
+  - Registration order per spec: ignored → readline → self-insert → tab → history → Ctrl+D → Enter → Ctrl+J → auto up/down → delete selection → Ctrl+Z → paste → quoted insert
+  - Stateless, thread-safe (178 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers

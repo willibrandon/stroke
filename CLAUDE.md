@@ -393,6 +393,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory binding registry only) (037-basic-key-bindings)
 
 ## Recent Changes
+- 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)
 - 036-mouse-bindings: MouseBindings static class, 3 FrozenDictionary lookup tables (96 XTerm SGR + 10 Typical + 4 URXVT), LoadMouseBindings() with 4 handlers, Renderer.CursorPos property (7027 tests)
 - 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)
 - 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
