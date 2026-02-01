@@ -25,8 +25,8 @@
 
 **Purpose**: Create directory structure and extend SearchBufferControl to support inputProcessors
 
-- [ ] T001 Create source directory `src/Stroke/Widgets/Toolbars/` and test directory `tests/Stroke.Tests/Widgets/Toolbars/`
-- [ ] T002 Extend `SearchBufferControl` constructor to accept and forward `IReadOnlyList<IProcessor>? inputProcessors = null` parameter to `BufferControl.base()` in `src/Stroke/Layout/Controls/SearchBufferControl.cs` (RT-09 integration gap — exposes existing BufferControl parameter, backward-compatible)
+- [x] T001 Create source directory `src/Stroke/Widgets/Toolbars/` and test directory `tests/Stroke.Tests/Widgets/Toolbars/`
+- [x] T002 Extend `SearchBufferControl` constructor to accept and forward `IReadOnlyList<IProcessor>? inputProcessors = null` parameter to `BufferControl.base()` in `src/Stroke/Layout/Controls/SearchBufferControl.cs` (RT-09 integration gap — exposes existing BufferControl parameter, backward-compatible)
 
 **Checkpoint**: Directory structure exists and SearchBufferControl accepts inputProcessors
 
@@ -48,11 +48,11 @@
 
 ### Tests for User Story 1
 
-- [ ] T003 [P] [US1] Write FormattedTextToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/FormattedTextToolbarTests.cs`: construction with plain string text, construction with style parameter applied to Window, construction with Func-based dynamic text, verify `dontExtendHeight: true`, verify `height: Dimension(min: 1)`, verify inner content is FormattedTextControl with Func constructor, verify default style is empty string
+- [x] T003 [P] [US1] Write FormattedTextToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/FormattedTextToolbarTests.cs`: construction with plain string text, construction with style parameter applied to Window, construction with Func-based dynamic text, verify `dontExtendHeight: true`, verify `height: Dimension(min: 1)`, verify inner content is FormattedTextControl with Func constructor, verify default style is empty string
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Implement `FormattedTextToolbar` class extending `Window` in `src/Stroke/Widgets/Toolbars/FormattedTextToolbar.cs` — constructor accepts `(AnyFormattedText text, string style = "")`, calls base Window with `FormattedTextControl(() => FormattedTextUtils.ToFormattedText(text))`, `style`, `dontExtendHeight: true`, `height: new Dimension(min: 1)` per FR-001, contracts, and RT-01
+- [x] T004 [US1] Implement `FormattedTextToolbar` class extending `Window` in `src/Stroke/Widgets/Toolbars/FormattedTextToolbar.cs` — constructor accepts `(AnyFormattedText text, string style = "")`, calls base Window with `FormattedTextControl(() => FormattedTextUtils.ToFormattedText(text))`, `style`, `dontExtendHeight: true`, `height: new Dimension(min: 1)` per FR-001, contracts, and RT-01
 
 **Checkpoint**: FormattedTextToolbar is constructable, renders text in a single-line window, passes all US1 tests
 
@@ -66,11 +66,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T005 [P] [US2] Write SystemToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/SystemToolbarTests.cs`: construction with default prompt ("Shell command: "), construction with custom prompt, construction with enableGlobalBindings=false, verify SystemBuffer created with BufferNames.System, verify BufferControl has BeforeInput processor with lazily-evaluated prompt, verify Window has height=1 and style="class:system-toolbar", verify Container filter is HasFocus(SystemBuffer), verify PtContainer() returns Container, verify Emacs binding group has 4 bindings (Escape, Ctrl-G, Ctrl-C, Enter) gated by EmacsMode with HasFocus filter, verify Vi binding group has 3 bindings (Escape, Ctrl-C, Enter) gated by ViMode with HasFocus filter, verify global binding group has 2 bindings (M-! as two-key sequence `Keys.Escape`+`"!"` for Emacs, `"!"` single key for Vi) gated by EnableGlobalBindings with correct filters and isGlobal=true, verify three groups merged via MergedKeyBindings, verify Prompt and EnableGlobalBindings properties
+- [x] T005 [P] [US2] Write SystemToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/SystemToolbarTests.cs`: construction with default prompt ("Shell command: "), construction with custom prompt, construction with enableGlobalBindings=false, verify SystemBuffer created with BufferNames.System, verify BufferControl has BeforeInput processor with lazily-evaluated prompt, verify Window has height=1 and style="class:system-toolbar", verify Container filter is HasFocus(SystemBuffer), verify PtContainer() returns Container, verify Emacs binding group has 4 bindings (Escape, Ctrl-G, Ctrl-C, Enter) gated by EmacsMode with HasFocus filter, verify Vi binding group has 3 bindings (Escape, Ctrl-C, Enter) gated by ViMode with HasFocus filter, verify global binding group has 2 bindings (M-! as two-key sequence `Keys.Escape`+`"!"` for Emacs, `"!"` single key for Vi) gated by EnableGlobalBindings with correct filters and isGlobal=true, verify three groups merged via MergedKeyBindings, verify Prompt and EnableGlobalBindings properties
 
 ### Implementation for User Story 2
 
-- [ ] T006 [US2] Implement `SystemToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/SystemToolbar.cs` — constructor creates Buffer(name: BufferNames.System), builds three-group key bindings via private BuildKeyBindings() method, creates BufferControl with BeforeInput(lazy prompt) and SimpleLexer and merged bindings, creates Window(height=1, style="class:system-toolbar"), creates ConditionalContainer with HasFocus(SystemBuffer) filter. Emacs group: Escape/Ctrl-G/Ctrl-C cancel (Reset + FocusLast), Enter async execute (RunSystemCommandAsync + Reset(appendToHistory:true) + FocusLast). Vi group: Escape/Ctrl-C cancel (Navigation + Reset + FocusLast), Enter async execute (Navigation + RunSystemCommandAsync + Reset + FocusLast). Global group: M-! (Keys.Escape+"!") with ~HasFocus & EmacsMode isGlobal, "!" with ~HasFocus & ViMode & ViNavigationMode isGlobal. Private GetDisplayBeforeText() returns hard-coded "Shell command: " text. Per FR-002 through FR-006, contracts, and RT-03.
+- [x] T006 [US2] Implement `SystemToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/SystemToolbar.cs` — constructor creates Buffer(name: BufferNames.System), builds three-group key bindings via private BuildKeyBindings() method, creates BufferControl with BeforeInput(lazy prompt) and SimpleLexer and merged bindings, creates Window(height=1, style="class:system-toolbar"), creates ConditionalContainer with HasFocus(SystemBuffer) filter. Emacs group: Escape/Ctrl-G/Ctrl-C cancel (Reset + FocusLast), Enter async execute (RunSystemCommandAsync + Reset(appendToHistory:true) + FocusLast). Vi group: Escape/Ctrl-C cancel (Navigation + Reset + FocusLast), Enter async execute (Navigation + RunSystemCommandAsync + Reset + FocusLast). Global group: M-! (Keys.Escape+"!") with ~HasFocus & EmacsMode isGlobal, "!" with ~HasFocus & ViMode & ViNavigationMode isGlobal. Private GetDisplayBeforeText() returns hard-coded "Shell command: " text. Per FR-002 through FR-006, contracts, and RT-03.
 
 **Checkpoint**: SystemToolbar is constructable, key bindings are properly registered, PtContainer() works, passes all US2 tests
 
@@ -84,11 +84,11 @@
 
 ### Tests for User Story 3
 
-- [ ] T007 [P] [US3] Write ArgToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/ArgToolbarTests.cs`: construction creates Window with height=1, construction creates ConditionalContainer with HasArg filter, verify PtContainer() returns Container, verify display format produces `[("class:arg-toolbar", "Repeat: "), ("class:arg-toolbar.text", arg)]`, verify "-" arg displays "-1", verify null arg uses empty string fallback, verify multi-digit arg "42" displays as-is
+- [x] T007 [P] [US3] Write ArgToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/ArgToolbarTests.cs`: construction creates Window with height=1, construction creates ConditionalContainer with HasArg filter, verify PtContainer() returns Container, verify display format produces `[("class:arg-toolbar", "Repeat: "), ("class:arg-toolbar.text", arg)]`, verify "-" arg displays "-1", verify null arg uses empty string fallback, verify multi-digit arg "42" displays as-is
 
 ### Implementation for User Story 3
 
-- [ ] T008 [US3] Implement `ArgToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/ArgToolbar.cs` — constructor creates FormattedTextControl with Func that reads AppContext.GetApp().KeyProcessor.Arg, converts null to "" via `arg ?? ""`, converts "-" to "-1", formats as styled fragments, creates Window(height=1), creates ConditionalContainer with AppFilters.HasArg filter. Per FR-007, FR-008, contracts, and data-model.
+- [x] T008 [US3] Implement `ArgToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/ArgToolbar.cs` — constructor creates FormattedTextControl with Func that reads AppContext.GetApp().KeyProcessor.Arg, converts null to "" via `arg ?? ""`, converts "-" to "-1", formats as styled fragments, creates Window(height=1), creates ConditionalContainer with AppFilters.HasArg filter. Per FR-007, FR-008, contracts, and data-model.
 
 **Checkpoint**: ArgToolbar displays repeat count correctly, handles edge cases, passes all US3 tests
 
@@ -102,11 +102,11 @@
 
 ### Tests for User Story 4
 
-- [ ] T009 [P] [US4] Write SearchToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/SearchToolbarTests.cs`: construction with default params creates new Buffer, construction with provided searchBuffer uses it, construction with viMode=true selects "/" and "?" prompts, construction with viMode=false selects "I-search: " and "I-search backward: " prompts, construction with custom forward/backward prompts uses them, verify SearchBufferControl has BeforeInput inputProcessor with style "class:search-toolbar.prompt", verify Container filter is is_searching Condition that checks Layout.SearchLinks.ContainsKey(control), verify PtContainer() returns Container, verify BeforeInput prompt returns textIfNotSearching when not searching (avoids null SearcherSearchState), verify default textIfNotSearching is empty string, verify ignoreCase is forwarded to SearchBufferControl
+- [x] T009 [P] [US4] Write SearchToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/SearchToolbarTests.cs`: construction with default params creates new Buffer, construction with provided searchBuffer uses it, construction with viMode=true selects "/" and "?" prompts, construction with viMode=false selects "I-search: " and "I-search backward: " prompts, construction with custom forward/backward prompts uses them, verify SearchBufferControl has BeforeInput inputProcessor with style "class:search-toolbar.prompt", verify Container filter is is_searching Condition that checks Layout.SearchLinks.ContainsKey(control), verify PtContainer() returns Container, verify BeforeInput prompt returns textIfNotSearching when not searching (avoids null SearcherSearchState), verify default textIfNotSearching is empty string, verify ignoreCase is forwarded to SearchBufferControl
 
 ### Implementation for User Story 4
 
-- [ ] T010 [US4] Implement `SearchToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/SearchToolbar.cs` — constructor creates or uses provided Buffer, creates is_searching Condition via `() => AppContext.GetApp().Layout.SearchLinks.ContainsKey(control)`, creates BeforeInput with dynamic prompt function (if !is_searching → textIfNotSearching, else check direction for forward/backward prompts based on viMode), creates SearchBufferControl with buffer, ignoreCase, SimpleLexer, and inputProcessors=[BeforeInput(...)], creates Window with style="class:search-toolbar", creates ConditionalContainer with is_searching filter. Default prompts: "I-search: " / "I-search backward: " (emacs) or "/" / "?" (vi). Per FR-009 through FR-012, contracts, RT-05, RT-06, and RT-09.
+- [x] T010 [US4] Implement `SearchToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/SearchToolbar.cs` — constructor creates or uses provided Buffer, creates is_searching Condition via `() => AppContext.GetApp().Layout.SearchLinks.ContainsKey(control)`, creates BeforeInput with dynamic prompt function (if !is_searching → textIfNotSearching, else check direction for forward/backward prompts based on viMode), creates SearchBufferControl with buffer, ignoreCase, SimpleLexer, and inputProcessors=[BeforeInput(...)], creates Window with style="class:search-toolbar", creates ConditionalContainer with is_searching filter. Default prompts: "I-search: " / "I-search backward: " (emacs) or "/" / "?" (vi). Per FR-009 through FR-012, contracts, RT-05, RT-06, and RT-09.
 
 **Checkpoint**: SearchToolbar displays correct prompts based on mode and direction, handles all constructor variants, passes all US4 tests
 
@@ -120,13 +120,13 @@
 
 ### Tests for User Story 5
 
-- [ ] T011 [P] [US5] Write CompletionsToolbarControl tests in `tests/Stroke.Tests/Widgets/Toolbars/CompletionsToolbarControlTests.cs`: verify IsFocusable is false, verify CreateContent returns empty content when no CompleteState, verify CreateContent returns empty content when CompleteState has 0 completions, verify all completions fit within content width (no arrows), verify completions overflow right (> arrow shown), verify completions overflow left after page-forward (< arrow shown), verify both arrows shown when page is in middle, verify current completion uses "class:completion-toolbar.completion.current" style, verify non-current uses "class:completion-toolbar.completion", verify arrow style is "class:completion-toolbar.arrow", verify content width is total width minus 6, verify graceful handling of width <= 6, verify null CompleteIndex treated as 0, verify space separators between completions, verify safety trim of fragments to contentWidth
-- [ ] T012 [P] [US5] Write CompletionsToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/CompletionsToolbarTests.cs`: verify construction creates Window with height=1 and style="class:completion-toolbar", verify ConditionalContainer uses HasCompletions filter, verify PtContainer() returns Container
+- [x] T011 [P] [US5] Write CompletionsToolbarControl tests in `tests/Stroke.Tests/Widgets/Toolbars/CompletionsToolbarControlTests.cs`: verify IsFocusable is false, verify CreateContent returns empty content when no CompleteState, verify CreateContent returns empty content when CompleteState has 0 completions, verify all completions fit within content width (no arrows), verify completions overflow right (> arrow shown), verify completions overflow left after page-forward (< arrow shown), verify both arrows shown when page is in middle, verify current completion uses "class:completion-toolbar.completion.current" style, verify non-current uses "class:completion-toolbar.completion", verify arrow style is "class:completion-toolbar.arrow", verify content width is total width minus 6, verify graceful handling of width <= 6, verify null CompleteIndex treated as 0, verify space separators between completions, verify safety trim of fragments to contentWidth
+- [x] T012 [P] [US5] Write CompletionsToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/CompletionsToolbarTests.cs`: verify construction creates Window with height=1 and style="class:completion-toolbar", verify ConditionalContainer uses HasCompletions filter, verify PtContainer() returns Container
 
 ### Implementation for User Story 5
 
-- [ ] T013 [US5] Implement `CompletionsToolbarControl` internal class implementing `IUIControl` in `src/Stroke/Widgets/Toolbars/CompletionsToolbarControl.cs` — IsFocusable returns false, CreateContent reads AppContext.GetApp().CurrentBuffer.CompleteState, handles null/empty gracefully, calculates contentWidth = width - 6, iterates completions accumulating fragments with ToFormattedText(c.DisplayText, style) and space separators, paginates when accumulated width + DisplayText.Length >= contentWidth (page-forward if i <= index??0, else break), pads to contentWidth, safety-trims fragments to contentWidth entries (NOTE: this is a fragment-count trim via list slicing `fragments[:contentWidth]`, NOT a character-width trim — matches Python's `fragments = fragments[:content_width]`), wraps with 3-char margins containing arrow indicators. Per FR-013 through FR-015, contracts, and RT-04.
-- [ ] T014 [US5] Implement `CompletionsToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/CompletionsToolbar.cs` — constructor creates Window wrapping CompletionsToolbarControl with height=1 and style="class:completion-toolbar", creates ConditionalContainer with AppFilters.HasCompletions filter. Per FR-016 and contracts.
+- [x] T013 [US5] Implement `CompletionsToolbarControl` internal class implementing `IUIControl` in `src/Stroke/Widgets/Toolbars/CompletionsToolbarControl.cs` — IsFocusable returns false, CreateContent reads AppContext.GetApp().CurrentBuffer.CompleteState, handles null/empty gracefully, calculates contentWidth = width - 6, iterates completions accumulating fragments with ToFormattedText(c.DisplayText, style) and space separators, paginates when accumulated width + DisplayText.Length >= contentWidth (page-forward if i <= index??0, else break), pads to contentWidth, safety-trims fragments to contentWidth entries (NOTE: this is a fragment-count trim via list slicing `fragments[:contentWidth]`, NOT a character-width trim — matches Python's `fragments = fragments[:content_width]`), wraps with 3-char margins containing arrow indicators. Per FR-013 through FR-015, contracts, and RT-04.
+- [x] T014 [US5] Implement `CompletionsToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/CompletionsToolbar.cs` — constructor creates Window wrapping CompletionsToolbarControl with height=1 and style="class:completion-toolbar", creates ConditionalContainer with AppFilters.HasCompletions filter. Per FR-016 and contracts.
 
 **Checkpoint**: CompletionsToolbarControl correctly paginates completions, CompletionsToolbar wraps it with conditional visibility, passes all US5 tests
 
@@ -140,11 +140,11 @@
 
 ### Tests for User Story 6
 
-- [ ] T015 [P] [US6] Write ValidationToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/ValidationToolbarTests.cs`: verify construction creates FormattedTextControl, verify ConditionalContainer uses HasValidationError filter, verify PtContainer() returns Container, verify display returns empty fragments when no validation error, verify display returns `[("class:validation-toolbar", message)]` when error exists and showPosition=false, verify display returns `[("class:validation-toolbar", "message (line=R column=C)")]` with 1-indexed position when showPosition=true using Document.TranslateIndexToPosition(), verify empty error message still displays with style, verify default showPosition is false, verify style applied to text fragments not the Window
+- [x] T015 [P] [US6] Write ValidationToolbar tests in `tests/Stroke.Tests/Widgets/Toolbars/ValidationToolbarTests.cs`: verify construction creates FormattedTextControl, verify ConditionalContainer uses HasValidationError filter, verify PtContainer() returns Container, verify display returns empty fragments when no validation error, verify display returns `[("class:validation-toolbar", message)]` when error exists and showPosition=false, verify display returns `[("class:validation-toolbar", "message (line=R column=C)")]` with 1-indexed position when showPosition=true using Document.TranslateIndexToPosition(), verify empty error message still displays with style, verify default showPosition is false, verify style applied to text fragments not the Window
 
 ### Implementation for User Story 6
 
-- [ ] T016 [US6] Implement `ValidationToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/ValidationToolbar.cs` — constructor accepts `bool showPosition = false`, creates FormattedTextControl with Func that reads AppContext.GetApp().CurrentBuffer.ValidationError, returns empty fragments if null, formats message with optional position via Document.TranslateIndexToPosition() (0-indexed → 1-indexed display), creates Window(height=1) wrapping control, creates ConditionalContainer with AppFilters.HasValidationError filter. Style "class:validation-toolbar" applied to text fragments, not the Window. Per FR-017, FR-018, contracts, and RT-08.
+- [x] T016 [US6] Implement `ValidationToolbar` class implementing `IMagicContainer` in `src/Stroke/Widgets/Toolbars/ValidationToolbar.cs` — constructor accepts `bool showPosition = false`, creates FormattedTextControl with Func that reads AppContext.GetApp().CurrentBuffer.ValidationError, returns empty fragments if null, formats message with optional position via Document.TranslateIndexToPosition() (0-indexed → 1-indexed display), creates Window(height=1) wrapping control, creates ConditionalContainer with AppFilters.HasValidationError filter. Style "class:validation-toolbar" applied to text fragments, not the Window. Per FR-017, FR-018, contracts, and RT-08.
 
 **Checkpoint**: ValidationToolbar displays errors correctly with and without position, passes all US6 tests
 
@@ -154,11 +154,11 @@
 
 **Purpose**: Verify coverage, constitution compliance, and cross-cutting quality
 
-- [ ] T017 Run full test suite with `dotnet test` and verify all toolbar tests pass in `tests/Stroke.Tests/Widgets/Toolbars/`
-- [ ] T018 Verify test coverage meets 80% target across all files in `Stroke.Widgets.Toolbars` namespace
-- [ ] T019 Verify no source file in `src/Stroke/Widgets/Toolbars/` exceeds 1000 LOC (Constitution X)
-- [ ] T020 Verify all style classes match Python Prompt Toolkit reference per FR-019 and contracts style table
-- [ ] T021 Run quickstart.md validation: verify build sequence steps 1-8 complete successfully
+- [x] T017 Run full test suite with `dotnet test` and verify all toolbar tests pass in `tests/Stroke.Tests/Widgets/Toolbars/`
+- [x] T018 Verify test coverage meets 80% target across all files in `Stroke.Widgets.Toolbars` namespace
+- [x] T019 Verify no source file in `src/Stroke/Widgets/Toolbars/` exceeds 1000 LOC (Constitution X)
+- [x] T020 Verify all style classes match Python Prompt Toolkit reference per FR-019 and contracts style table
+- [x] T021 Run quickstart.md validation: verify build sequence steps 1-8 complete successfully
 
 ---
 

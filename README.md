@@ -410,6 +410,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Misc: p/P paste, register-aware paste, u/Ctrl-R undo/redo, q/@/. macros, Ctrl-A/X increment, z scroll, Ctrl-O temp nav
   - Stateless, thread-safe (204 tests, >80% coverage)
 
+- **Toolbar Widgets** — 7 toolbar components ported from Python Prompt Toolkit's `widgets/toolbars.py`
+  - `FormattedTextToolbar` — Window subclass displaying styled text with lazy evaluation
+  - `SystemToolbar` — Shell command toolbar with Emacs/Vi/global key bindings, async execution via `RunSystemCommandAsync`, `IMagicContainer` protocol
+  - `ArgToolbar` — Numeric repeat argument display ("Repeat: N") with `HasArg` conditional visibility and "-" → "-1" conversion
+  - `SearchToolbar` — Incremental search with direction-aware prompts ("I-search: " / "I-search backward: " or "/" / "?" in Vi mode), `SearchBufferControl` with `BeforeInput` processor
+  - `CompletionsToolbarControl` — Internal `IUIControl` with horizontal pagination, arrow indicators, current-item highlighting
+  - `CompletionsToolbar` — Public `IMagicContainer` wrapper with `HasCompletions` conditional visibility
+  - `ValidationToolbar` — Validation error display with optional line/column position formatting
+  - `SearchBufferControl` extended with `inputProcessors` parameter for toolbar integration
+  - All toolbars use `ConditionalContainer` with appropriate `AppFilters` for visibility control
+  - 12 style classes matching Python Prompt Toolkit exactly
+  - Thread-safe via immutable construction patterns (152 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
