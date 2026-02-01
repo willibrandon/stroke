@@ -253,7 +253,7 @@ public static partial class ViBindings
         var positions = new List<int>();
 
         int index = 0;
-        foreach (var (from, to) in buff.Document.SelectionRanges())
+        foreach (var (from, to) in buff.Document.SelectionRanges(viMode: true))
         {
             var pos = after ? to : from;
             positions.Add(pos);

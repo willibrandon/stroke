@@ -51,7 +51,7 @@ public static partial class ViBindings
             filter: new FilterOrBool(viSelMode))(
             (@event) =>
             {
-                var clipboardData = @event.CurrentBuffer!.CutSelection();
+                var clipboardData = @event.CurrentBuffer!.CutSelection(viMode: true);
                 @event.GetApp().Clipboard.SetData(clipboardData);
                 return null;
             });

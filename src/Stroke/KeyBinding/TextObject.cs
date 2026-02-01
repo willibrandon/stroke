@@ -146,43 +146,27 @@ public sealed class TextObject
         from += buffer.CursorPosition;
         to += buffer.CursorPosition;
 
-        if (Type == TextObjectType.Linewise)
+        // Zero-range text object (no motion): nothing to cut.
+        if (from == to && Type != TextObjectType.Linewise)
         {
-            // For linewise cuts, include the trailing newline so the entire
-            // line (including its terminator) is removed. In Python, this
-            // happens because selection_ranges() adds +1 for Vi mode after
-            // the LINES boundary adjustment, and cut() intentionally does NOT
-            // subtract 1 for linewise. Since our SelectionRanges() doesn't
-            // have the Vi mode +1, we compute the linewise cut directly.
-            if (to < buffer.Text.Length)
-                to += 1;
-
-            var cutText = buffer.Text[from..to];
-            var remaining = string.Concat(
-                buffer.Text.AsSpan(0, from),
-                buffer.Text.AsSpan(to));
-
-            // Strip trailing newline from clipboard data (matches Python's
-            // CutSelection behavior for LINES selections).
-            if (cutText.EndsWith('\n'))
-                cutText = cutText[..^1];
-
-            var newCursor = Math.Min(from, remaining.Length);
-            return (
-                new Document(remaining, newCursor),
-                new ClipboardData(cutText, SelectionType.Lines));
+            return (buffer.Document, new ClipboardData("", SelectionType));
         }
 
-        // For non-linewise types, Python's cut() subtracts 1 from 'to' and
-        // selection_ranges() adds +1 for Vi mode, netting to zero. Since our
-        // SelectionRanges() doesn't add +1, we also skip the subtraction —
-        // the OperatorRange result is already the correct exclusive upper bound.
+        // For Vi mode, SelectionRanges includes the upper position (vi_mode +1),
+        // while OperatorRange does not. Subtract 1 to compensate, unless we're in
+        // linewise mode — linewise intentionally keeps the +1 so the trailing
+        // newline is included in the cut. This matches Python's cut() exactly.
+        if (Type != TextObjectType.Linewise)
+        {
+            to -= 1;
+        }
+
         var document = new Document(
             buffer.Text,
             to,
             new SelectionState(originalCursorPosition: from, type: SelectionType));
 
-        var (newDocument, clipboardData) = document.CutSelection();
+        var (newDocument, clipboardData) = document.CutSelection(viMode: true);
         return (newDocument, clipboardData);
     }
 }
