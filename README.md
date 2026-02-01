@@ -378,6 +378,24 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Delegates to `edit-and-execute-command` named command → `Buffer.OpenInEditorAsync(validateAndHandle: true)`
   - Stateless, thread-safe (14 tests, >80% coverage)
 
+- **Emacs Key Bindings** — Full Emacs editing mode with 112 key bindings (78 core + 34 shift-selection)
+  - `LoadEmacsBindings()` — 78 core bindings across movement, editing, kill ring, completion, selection, numeric args, word case
+  - Movement: Ctrl-A/E/F/B, Meta-F/B, arrow keys, sentence navigation, character search (Ctrl-]/Ctrl-Meta-])
+  - Editing: undo (Ctrl-_), transpose (Ctrl-T), word case (Meta-U/L/C uppercase/lowercase/capitalize)
+  - Kill ring: Ctrl-K/U/W, Meta-D/Backspace, yank (Ctrl-Y) with rotate (Meta-Y)
+  - Completion: Tab, Meta-?, insert-all-completions (Meta-*)
+  - Selection: Ctrl-Space start, Ctrl-W/Meta-W cut/copy, Ctrl-G cancel with validation dismiss
+  - Numeric args: Meta-0..9 digit accumulation, Meta-dash negative prefix
+  - Escape consumed as silent no-op to prevent passthrough to Vi mode
+  - `LoadEmacsShiftSelectionBindings()` — 34 shift-selection bindings for Windows-style Shift+movement selection
+  - 10 start-selection bindings (Shift+arrows/Home/End/Ctrl-Shift, filter: ~has_selection)
+  - 10 extend-selection bindings (filter: shift_selection_mode)
+  - 4 replace/cancel bindings (Any, Ctrl-M newline, Ctrl-H delete, Ctrl-Y yank)
+  - 10 cancel-movement bindings (unshifted keys re-fed via KeyProcessor)
+  - `Buffer.DismissValidation()` for clearing validation error state on Ctrl-G cancel
+  - All bindings gated on `EmacsFilters.EmacsMode` via `ConditionalKeyBindings`
+  - Stateless, thread-safe (149 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
