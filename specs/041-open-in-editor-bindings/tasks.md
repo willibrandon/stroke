@@ -33,16 +33,16 @@
 
 > **Note**: Filter tests (T004–T006) require a `CreateEnvironment` helper that sets up `AppContext.SetApp` scope — see `quickstart.md` §Step 2 for the pattern. This helper is part of the test class fixture and is created when writing the first test.
 
-- [ ] T001 [P] [US1] Write test `LoadEmacs_ReturnsKeyBindingsWithOneBinding` verifying `LoadEmacsOpenInEditorBindings()` returns `KeyBindings` with exactly 1 binding in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T002 [P] [US1] Write test `LoadEmacs_BindingHasCorrectKeySequence` verifying the binding has 2-key sequence `[Keys.ControlX, Keys.ControlE]` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T003 [P] [US1] Write test `LoadEmacs_BindingHandlerIsEditAndExecuteCommand` verifying the handler is `NamedCommands.GetByName("edit-and-execute-command")` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T004 [P] [US1] Write test `LoadEmacs_FilterActivatesInEmacsModeWithoutSelection` verifying filter returns true when in Emacs mode with no selection in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T005 [P] [US1] Write test `LoadEmacs_FilterDeactivatesWhenSelectionActive` verifying filter returns false when selection is active in Emacs mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T006 [P] [US1] Write test `LoadEmacs_FilterDeactivatesInViMode` verifying filter returns false when in Vi editing mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T001 [P] [US1] Write test `LoadEmacs_ReturnsKeyBindingsWithOneBinding` verifying `LoadEmacsOpenInEditorBindings()` returns `KeyBindings` with exactly 1 binding in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T002 [P] [US1] Write test `LoadEmacs_BindingHasCorrectKeySequence` verifying the binding has 2-key sequence `[Keys.ControlX, Keys.ControlE]` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T003 [P] [US1] Write test `LoadEmacs_BindingHandlerIsEditAndExecuteCommand` verifying the handler is `NamedCommands.GetByName("edit-and-execute-command")` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T004 [P] [US1] Write test `LoadEmacs_FilterActivatesInEmacsModeWithoutSelection` verifying filter returns true when in Emacs mode with no selection in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T005 [P] [US1] Write test `LoadEmacs_FilterDeactivatesWhenSelectionActive` verifying filter returns false when selection is active in Emacs mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T006 [P] [US1] Write test `LoadEmacs_FilterDeactivatesInViMode` verifying filter returns false when in Vi editing mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Implement `LoadEmacsOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — create static class, add method that creates `KeyBindings`, registers `[Keys.ControlX, Keys.ControlE]` with filter `EmacsFilters.EmacsMode & AppFilters.HasSelection.Invert()` and handler `NamedCommands.GetByName("edit-and-execute-command")` via `Add<Binding>`
+- [X] T007 [US1] Implement `LoadEmacsOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — create static class, add method that creates `KeyBindings`, registers `[Keys.ControlX, Keys.ControlE]` with filter `EmacsFilters.EmacsMode & AppFilters.HasSelection.Invert()` and handler `NamedCommands.GetByName("edit-and-execute-command")` via `Add<Binding>`
 
 **Checkpoint**: Emacs binding loader is functional — all T001–T006 tests pass.
 
@@ -60,15 +60,15 @@
 
 > **Note**: Filter tests (T011–T012) require `CreateEnvironment` with `EditingMode.Vi` and `AppContext.SetApp` scope — same helper as US1.
 
-- [ ] T008 [P] [US2] Write test `LoadVi_ReturnsKeyBindingsWithOneBinding` verifying `LoadViOpenInEditorBindings()` returns `KeyBindings` with exactly 1 binding in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T009 [P] [US2] Write test `LoadVi_BindingHasCorrectKey` verifying the binding has single character key `'v'` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T010 [P] [US2] Write test `LoadVi_BindingHandlerIsEditAndExecuteCommand` verifying the handler is `NamedCommands.GetByName("edit-and-execute-command")` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T011 [P] [US2] Write test `LoadVi_FilterActivatesInViNavigationMode` verifying filter returns true when in Vi navigation mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T012 [P] [US2] Write test `LoadVi_FilterDeactivatesInViInsertMode` verifying filter returns false when in Vi insert mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T008 [P] [US2] Write test `LoadVi_ReturnsKeyBindingsWithOneBinding` verifying `LoadViOpenInEditorBindings()` returns `KeyBindings` with exactly 1 binding in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T009 [P] [US2] Write test `LoadVi_BindingHasCorrectKey` verifying the binding has single character key `'v'` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T010 [P] [US2] Write test `LoadVi_BindingHandlerIsEditAndExecuteCommand` verifying the handler is `NamedCommands.GetByName("edit-and-execute-command")` in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T011 [P] [US2] Write test `LoadVi_FilterActivatesInViNavigationMode` verifying filter returns true when in Vi navigation mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T012 [P] [US2] Write test `LoadVi_FilterDeactivatesInViInsertMode` verifying filter returns false when in Vi insert mode in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Implement `LoadViOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — add method that creates `KeyBindings`, registers `[new KeyOrChar('v')]` with filter `ViFilters.ViNavigationMode` and handler `NamedCommands.GetByName("edit-and-execute-command")` via `Add<Binding>`
+- [X] T013 [US2] Implement `LoadViOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — add method that creates `KeyBindings`, registers `[new KeyOrChar('v')]` with filter `ViFilters.ViNavigationMode` and handler `NamedCommands.GetByName("edit-and-execute-command")` via `Add<Binding>`
 
 **Checkpoint**: Both Emacs and Vi binding loaders are functional — all T001–T012 tests pass.
 
@@ -84,13 +84,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T014 [P] [US3] Write test `LoadCombined_ReturnsMergedKeyBindings` verifying `LoadOpenInEditorBindings()` returns a `MergedKeyBindings` instance in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T015 [P] [US3] Write test `LoadCombined_ContainsTwoBindingsTotal` verifying the flattened `.Bindings` collection has exactly 2 bindings in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
-- [ ] T016 [P] [US3] Write test `LoadCombined_ContainsBothEmacsAndViBindings` verifying one binding has `[ControlX, ControlE]` keys and the other has `'v'` key in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T014 [P] [US3] Write test `LoadCombined_ReturnsMergedKeyBindings` verifying `LoadOpenInEditorBindings()` returns a `MergedKeyBindings` instance in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T015 [P] [US3] Write test `LoadCombined_ContainsTwoBindingsTotal` verifying the flattened `.Bindings` collection has exactly 2 bindings in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
+- [X] T016 [P] [US3] Write test `LoadCombined_ContainsBothEmacsAndViBindings` verifying one binding has `[ControlX, ControlE]` keys and the other has `'v'` key in `tests/Stroke.Tests/Application/Bindings/OpenInEditorBindingsTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Implement `LoadOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — add method that returns `new MergedKeyBindings(LoadEmacsOpenInEditorBindings(), LoadViOpenInEditorBindings())`
+- [X] T017 [US3] Implement `LoadOpenInEditorBindings()` in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` — add method that returns `new MergedKeyBindings(LoadEmacsOpenInEditorBindings(), LoadViOpenInEditorBindings())`
 
 **Checkpoint**: All three binding loaders are functional — all T001–T016 tests pass.
 
@@ -100,8 +100,8 @@
 
 **Purpose**: Final validation and XML documentation
 
-- [ ] T018 Verify all tests pass via `dotnet test tests/Stroke.Tests --filter "FullyQualifiedName~OpenInEditorBindings"`
-- [ ] T019 Add XML documentation comments (`<summary>`, `<returns>`, `<remarks>` with Python source reference and thread safety note) to all three public methods and the class declaration in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` per contract in `specs/041-open-in-editor-bindings/contracts/OpenInEditorBindings.md`
+- [X] T018 Verify all tests pass via `dotnet test tests/Stroke.Tests --filter "FullyQualifiedName~OpenInEditorBindings"`
+- [X] T019 Add XML documentation comments (`<summary>`, `<returns>`, `<remarks>` with Python source reference and thread safety note) to all three public methods and the class declaration in `src/Stroke/Application/Bindings/OpenInEditorBindings.cs` per contract in `specs/041-open-in-editor-bindings/contracts/OpenInEditorBindings.md`
 
 ---
 

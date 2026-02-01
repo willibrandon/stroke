@@ -370,6 +370,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `saveBefore` disabled (CPR responses are terminal state reports, not user actions)
   - Stateless, thread-safe (12 tests, >80% coverage)
 
+- **Open in Editor Bindings** — Key bindings for opening the current buffer in an external editor
+  - `OpenInEditorBindings` static class with 3 binding loaders ported from `open_in_editor.py`
+  - `LoadEmacsOpenInEditorBindings()` — Ctrl-X Ctrl-E with `EmacsMode & ~HasSelection` per-binding filter
+  - `LoadViOpenInEditorBindings()` — `'v'` with `ViNavigationMode` per-binding filter
+  - `LoadOpenInEditorBindings()` — combined via `MergedKeyBindings` (no outer `ConditionalKeyBindings`, matching Python source)
+  - Delegates to `edit-and-execute-command` named command → `Buffer.OpenInEditorAsync(validateAndHandle: true)`
+  - Stateless, thread-safe (14 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
