@@ -113,8 +113,12 @@ public sealed partial class Document
     /// Returns null if the selection doesn't cover this line at all.
     /// </summary>
     /// <param name="row">The row to check.</param>
+    /// <param name="viMode">
+    /// When <c>true</c>, the upper column boundary is included (Vi mode behavior).
+    /// In Python Prompt Toolkit this is determined by calling <c>vi_mode()</c>.
+    /// </param>
     /// <returns>A tuple of (fromColumn, toColumn) or null if not selected.</returns>
-    public (int FromColumn, int ToColumn)? SelectionRangeAtLine(int row)
+    public (int FromColumn, int ToColumn)? SelectionRangeAtLine(int row, bool viMode = false)
     {
         if (_selection == null)
         {
@@ -168,6 +172,12 @@ public sealed partial class Document
 
             var (_, fromColumn) = TranslateIndexToPosition(intersectionStart);
             var (_, toColumn) = TranslateIndexToPosition(intersectionEnd);
+
+            // In Vi mode, the upper boundary is always included.
+            if (viMode)
+            {
+                toColumn += 1;
+            }
 
             return (fromColumn, toColumn);
         }

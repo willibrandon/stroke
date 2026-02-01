@@ -320,8 +320,10 @@ public static class BasicBindings
         kb.Add<KeyHandlerCallable>([new KeyOrChar(Keys.Delete)],
             filter: new FilterOrBool(AppFilters.HasSelection))(@event =>
         {
-            ClipboardData data = @event.CurrentBuffer!.CutSelection();
-            @event.GetApp().Clipboard.SetData(data);
+            var app = @event.GetApp();
+            ClipboardData data = @event.CurrentBuffer!.CutSelection(
+                viMode: app.EditingMode == EditingMode.Vi);
+            app.Clipboard.SetData(data);
             return null;
         });
 

@@ -1,4 +1,6 @@
 using Stroke.FormattedText;
+using Stroke.KeyBinding;
+using AppContext = Stroke.Application.AppContext;
 
 namespace Stroke.Layout.Processors;
 
@@ -21,7 +23,8 @@ public sealed class HighlightSelectionProcessor : IProcessor
             transformationInput.Unpack();
 
         // In case of selection, highlight all matches.
-        var selectionAtLine = document.SelectionRangeAtLine(lineNumber);
+        var viMode = AppContext.GetAppOrNull()?.EditingMode == EditingMode.Vi;
+        var selectionAtLine = document.SelectionRangeAtLine(lineNumber, viMode);
 
         if (selectionAtLine is not null)
         {
