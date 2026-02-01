@@ -77,7 +77,7 @@ public class SystemToolbar : IMagicContainer
 
         Window = new Window(
             content: BufferControl,
-            height: new Dimension(preferred: 1),
+            height: Dimension.Exact(1),
             style: "class:system-toolbar");
 
         Container = new ConditionalContainer(

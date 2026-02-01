@@ -50,7 +50,7 @@ public class ArgToolbar : IMagicContainer
 
         Window = new Window(
             content: new FormattedTextControl(GetFormattedText),
-            height: new Dimension(preferred: 1));
+            height: Dimension.Exact(1));
 
         Container = new ConditionalContainer(
             content: new AnyContainer(Window),

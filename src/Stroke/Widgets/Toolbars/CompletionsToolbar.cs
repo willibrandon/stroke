@@ -30,7 +30,7 @@ public class CompletionsToolbar : IMagicContainer
         Container = new ConditionalContainer(
             content: new AnyContainer(new Window(
                 content: new CompletionsToolbarControl(),
-                height: new Dimension(preferred: 1),
+                height: Dimension.Exact(1),
                 style: "class:completion-toolbar")),
             filter: new FilterOrBool(AppFilters.HasCompletions));
     }

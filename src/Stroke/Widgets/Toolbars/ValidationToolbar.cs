@@ -67,7 +67,7 @@ public class ValidationToolbar : IMagicContainer
         Container = new ConditionalContainer(
             content: new AnyContainer(new Window(
                 content: Control,
-                height: new Dimension(preferred: 1))),
+                height: Dimension.Exact(1))),
             filter: new FilterOrBool(AppFilters.HasValidationError));
     }
 

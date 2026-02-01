@@ -101,7 +101,7 @@ public class SearchToolbar : IMagicContainer
         Container = new ConditionalContainer(
             content: new AnyContainer(new Window(
                 content: Control,
-                height: new Dimension(preferred: 1),
+                height: Dimension.Exact(1),
                 style: "class:search-toolbar")),
             filter: new FilterOrBool(isSearching));
     }

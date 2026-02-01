@@ -57,11 +57,40 @@ public sealed class SearchBufferControlTests
     }
 
     [Fact]
-    public void Constructor_WithoutSearcherSearchState_IsNull()
+    public void Constructor_WithoutSearcherSearchState_AutoCreatesSearchState()
     {
         var control = new SearchBufferControl();
 
-        Assert.Null(control.SearcherSearchState);
+        // Python auto-creates SearchState(ignore_case=ignore_case) at controls.py:956
+        Assert.NotNull(control.SearcherSearchState);
+        Assert.Equal(SearchDirection.Forward, control.SearcherSearchState.Direction);
+    }
+
+    [Fact]
+    public void Constructor_WithoutSearcherSearchState_IgnoreCaseForwarded()
+    {
+        var control = new SearchBufferControl(ignoreCase: new FilterOrBool(true));
+
+        // Auto-created SearchState should respect the ignoreCase setting
+        Assert.NotNull(control.SearcherSearchState);
+        Assert.True(control.SearcherSearchState.IgnoreCase());
+    }
+
+    [Fact]
+    public void Constructor_FocusOnClick_DefaultIsFalse()
+    {
+        var control = new SearchBufferControl();
+
+        // Default focusOnClick is false (matches Python: focus_on_click=False)
+        Assert.NotNull(control);
+    }
+
+    [Fact]
+    public void Constructor_WithFocusOnClick_Accepted()
+    {
+        var control = new SearchBufferControl(focusOnClick: new FilterOrBool(true));
+
+        Assert.NotNull(control);
     }
 
     #endregion
