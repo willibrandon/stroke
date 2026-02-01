@@ -53,10 +53,15 @@ public class KeyPressEvent
     public bool IsRepeat { get; }
 
     /// <summary>
-    /// Gets the repetition argument. Defaults to 1.
+    /// Gets or sets the repetition argument. Defaults to 1.
     /// Special value: -1 when arg is "-" (negative prefix).
     /// Clamped to avoid exceeding 1,000,000.
     /// </summary>
+    /// <remarks>
+    /// The setter allows internal code (e.g., Vi operator-pending handlers) to
+    /// multiply counts before delegating to text object handlers, matching
+    /// Python Prompt Toolkit's <c>event._arg = str(...)</c> pattern.
+    /// </remarks>
     public int Arg
     {
         get
@@ -195,6 +200,21 @@ public class KeyPressEvent
             // Parse and clamp
             _ = Arg; // Force evaluation and clamping
         }
+    }
+
+    /// <summary>
+    /// Sets the repetition argument to a specific integer value.
+    /// </summary>
+    /// <param name="value">The new argument value.</param>
+    /// <remarks>
+    /// Used by Vi operator-pending handlers to multiply counts:
+    /// <c>(ViState.OperatorArg ?? 1) * (event.Arg ?? 1)</c> before calling text object handlers.
+    /// Port of Python Prompt Toolkit's <c>event._arg = str(...)</c> pattern.
+    /// </remarks>
+    internal void SetArg(int value)
+    {
+        _argString = value.ToString();
+        _cachedArg = null;
     }
 
     /// <summary>Backwards compatibility alias for App.</summary>
