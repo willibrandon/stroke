@@ -19,9 +19,9 @@
 
 **Purpose**: Create the partial class files with correct namespace, usings, private filters, and the ConditionalKeyBindings wrapper pattern — the skeleton that all user story phases will fill.
 
-- [ ] T001 Create `EmacsBindings.cs` partial class skeleton with namespace, usings, XML doc comments, private static filters (`IsReturnable`, `IsArg`), empty `LoadEmacsBindings()` method returning `ConditionalKeyBindings(kb, EmacsFilters.EmacsMode)`, and the Escape no-op handler (first binding per FR-015/FR-028/NFR-003) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T002 [P] Create `EmacsBindings.ShiftSelection.cs` partial class skeleton with namespace, usings, XML doc comments, empty `LoadEmacsShiftSelectionBindings()` method returning `ConditionalKeyBindings(kb, EmacsFilters.EmacsMode)`, and the `UnshiftMove` helper method in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T003 [P] Create test directory and empty test file `LoadEmacsBindingsTests.cs` with namespace, usings, `IDisposable` pattern, `CreateEnvironment` helper (matching `BasicBindingsHandlerTests` pattern), and verify both loader methods return `ConditionalKeyBindings` and compile successfully in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T001 Create `EmacsBindings.cs` partial class skeleton with namespace, usings, XML doc comments, private static filters (`IsReturnable`, `IsArg`), empty `LoadEmacsBindings()` method returning `ConditionalKeyBindings(kb, EmacsFilters.EmacsMode)`, and the Escape no-op handler (first binding per FR-015/FR-028/NFR-003) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T002 [P] Create `EmacsBindings.ShiftSelection.cs` partial class skeleton with namespace, usings, XML doc comments, empty `LoadEmacsShiftSelectionBindings()` method returning `ConditionalKeyBindings(kb, EmacsFilters.EmacsMode)`, and the `UnshiftMove` helper method in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T003 [P] Create test directory and empty test file `LoadEmacsBindingsTests.cs` with namespace, usings, `IDisposable` pattern, `CreateEnvironment` helper (matching `BasicBindingsHandlerTests` pattern), and verify both loader methods return `ConditionalKeyBindings` and compile successfully in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
 
 **Checkpoint**: Both loaders compile and return `ConditionalKeyBindings` wrapping empty `KeyBindings`. Tests verify return types.
 
@@ -35,16 +35,16 @@
 
 ### Tests for User Story 1
 
-- [ ] T004 [P] [US1] Write registration tests verifying all 12 movement bindings (Ctrl-A, Ctrl-B, Ctrl-E, Ctrl-F, Ctrl-N, Ctrl-P, Ctrl-Left, Ctrl-Right, Meta-b, Meta-f, Ctrl-Home, Ctrl-End) and 5 editing bindings (Ctrl-_, Ctrl-X Ctrl-U, Meta-c, Meta-l, Meta-u) are registered with correct key sequences and filters in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T005 [P] [US1] Write handler behavior tests for movement: Ctrl-A moves to beginning-of-line, Ctrl-E to end-of-line, Ctrl-F/B forward/backward char, Meta-f/b forward/backward word, Ctrl-Home/End to buffer start/end, Ctrl-N calls AutoDown (no count), Ctrl-P calls AutoUp (with count) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsMovementHandlerTests.cs`
-- [ ] T006 [P] [US1] Write handler behavior tests for editing: Ctrl-_ undoes (saveBefore: false), Meta-u uppercases word, Meta-l lowercases word, Meta-c capitalizes word, Escape is silently consumed, Vi mode does not activate any Emacs bindings in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsEditingHandlerTests.cs`
+- [X] T004 [P] [US1] Write registration tests verifying all 12 movement bindings (Ctrl-A, Ctrl-B, Ctrl-E, Ctrl-F, Ctrl-N, Ctrl-P, Ctrl-Left, Ctrl-Right, Meta-b, Meta-f, Ctrl-Home, Ctrl-End) and 5 editing bindings (Ctrl-_, Ctrl-X Ctrl-U, Meta-c, Meta-l, Meta-u) are registered with correct key sequences and filters in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T005 [P] [US1] Write handler behavior tests for movement: Ctrl-A moves to beginning-of-line, Ctrl-E to end-of-line, Ctrl-F/B forward/backward char, Meta-f/b forward/backward word, Ctrl-Home/End to buffer start/end, Ctrl-N calls AutoDown (no count), Ctrl-P calls AutoUp (with count) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsMovementHandlerTests.cs`
+- [X] T006 [P] [US1] Write handler behavior tests for editing: Ctrl-_ undoes (saveBefore: false), Meta-u uppercases word, Meta-l lowercases word, Meta-c capitalizes word, Escape is silently consumed, Vi mode does not activate any Emacs bindings in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsEditingHandlerTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Implement 12 movement binding registrations in `LoadEmacsBindings()`: 10 named commands (Ctrl-A beginning-of-line, Ctrl-B backward-char, Ctrl-E end-of-line, Ctrl-F forward-char, Ctrl-Left backward-word, Ctrl-Right forward-word, Meta-b backward-word, Meta-f forward-word, Ctrl-Home beginning-of-buffer, Ctrl-End end-of-buffer — all with no per-binding filter) and 2 inline handlers (Ctrl-N AutoDown with no count, Ctrl-P AutoUp with count=event.Arg) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T008 [US1] Implement 5 editing binding registrations: Ctrl-_ undo (filter: insert_mode, saveBefore: false), Ctrl-X Ctrl-U undo (filter: insert_mode, saveBefore: false), Meta-c capitalize-word (filter: insert_mode), Meta-l downcase-word (filter: insert_mode), Meta-u uppercase-word (filter: insert_mode) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T009 [US1] Implement private handler methods `Ignore`, `AutoDown`, `AutoUp` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T010 [US1] Run tests and verify all US1 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~EmacsBindings"`
+- [X] T007 [US1] Implement 12 movement binding registrations in `LoadEmacsBindings()`: 10 named commands (Ctrl-A beginning-of-line, Ctrl-B backward-char, Ctrl-E end-of-line, Ctrl-F forward-char, Ctrl-Left backward-word, Ctrl-Right forward-word, Meta-b backward-word, Meta-f forward-word, Ctrl-Home beginning-of-buffer, Ctrl-End end-of-buffer — all with no per-binding filter) and 2 inline handlers (Ctrl-N AutoDown with no count, Ctrl-P AutoUp with count=event.Arg) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T008 [US1] Implement 5 editing binding registrations: Ctrl-_ undo (filter: insert_mode, saveBefore: false), Ctrl-X Ctrl-U undo (filter: insert_mode, saveBefore: false), Meta-c capitalize-word (filter: insert_mode), Meta-l downcase-word (filter: insert_mode), Meta-u uppercase-word (filter: insert_mode) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T009 [US1] Implement private handler methods `Ignore`, `AutoDown`, `AutoUp` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T010 [US1] Run tests and verify all US1 tests pass: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~EmacsBindings"`
 
 **Checkpoint**: 18 bindings registered (12 movement + 5 editing + 1 Escape). Users can navigate and edit text in Emacs mode. All US1 tests pass.
 
@@ -58,13 +58,13 @@
 
 ### Tests for User Story 2
 
-- [ ] T011 [P] [US2] Write registration tests verifying all 7 kill ring bindings (Meta-d, Ctrl-Delete, Meta-Backspace, Ctrl-Y, Meta-y, Ctrl-X r y, Meta-\\) are registered with correct key sequences (including 3-key sequence for Ctrl-X r y) and all have insert_mode filter in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T012 [P] [US2] Write handler behavior tests for kill ring: Meta-d kills forward word, Ctrl-Delete kills forward word, Meta-Backspace kills backward word, Ctrl-Y yanks from clipboard, Meta-y cycles yank-pop, Ctrl-X r y yanks (3-key sequence), Meta-\\ deletes horizontal space in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsKillRingHandlerTests.cs`
+- [X] T011 [P] [US2] Write registration tests verifying all 7 kill ring bindings (Meta-d, Ctrl-Delete, Meta-Backspace, Ctrl-Y, Meta-y, Ctrl-X r y, Meta-\\) are registered with correct key sequences (including 3-key sequence for Ctrl-X r y) and all have insert_mode filter in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T012 [P] [US2] Write handler behavior tests for kill ring: Meta-d kills forward word, Ctrl-Delete kills forward word, Meta-Backspace kills backward word, Ctrl-Y yanks from clipboard, Meta-y cycles yank-pop, Ctrl-X r y yanks (3-key sequence), Meta-\\ deletes horizontal space in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsKillRingHandlerTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Implement 7 kill ring named command registrations in `LoadEmacsBindings()`: Meta-d kill-word, Ctrl-Delete kill-word, Meta-Backspace backward-kill-word, Ctrl-Y yank, Meta-y yank-pop, Ctrl-X r y yank (3-key sequence), Meta-\\ delete-horizontal-space — all with filter: insert_mode in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T014 [US2] Run tests and verify all US2 tests pass
+- [X] T013 [US2] Implement 7 kill ring named command registrations in `LoadEmacsBindings()`: Meta-d kill-word, Ctrl-Delete kill-word, Meta-Backspace backward-kill-word, Ctrl-Y yank, Meta-y yank-pop, Ctrl-X r y yank (3-key sequence), Meta-\\ delete-horizontal-space — all with filter: insert_mode in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T014 [US2] Run tests and verify all US2 tests pass
 
 **Checkpoint**: 25 bindings total (18 + 7). Kill ring operations functional. All US1+US2 tests pass.
 
@@ -78,14 +78,14 @@
 
 ### Tests for User Story 8
 
-- [ ] T015 [P] [US8] Write registration tests verifying 7 history bindings (Meta-< ~has_selection, Meta-> ~has_selection, Meta-. insert_mode, Meta-_ insert_mode, Meta-Ctrl-Y insert_mode, Meta-# insert_mode, Ctrl-O no filter) and 2 accept-line bindings (Enter with insert_mode & is_returnable & ~is_multiline, Meta-Enter with insert_mode & is_returnable) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T016 [P] [US8] Write handler behavior tests for history and accept: Meta-< shows oldest entry, Meta-> returns to newest, Meta-. inserts last arg, Enter accepts in single-line mode, Meta-Enter always accepts when returnable, Ctrl-O accepts and gets next in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsEditingHandlerTests.cs`
+- [X] T015 [P] [US8] Write registration tests verifying 7 history bindings (Meta-< ~has_selection, Meta-> ~has_selection, Meta-. insert_mode, Meta-_ insert_mode, Meta-Ctrl-Y insert_mode, Meta-# insert_mode, Ctrl-O no filter) and 2 accept-line bindings (Enter with insert_mode & is_returnable & ~is_multiline, Meta-Enter with insert_mode & is_returnable) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T016 [P] [US8] Write handler behavior tests for history and accept: Meta-< shows oldest entry, Meta-> returns to newest, Meta-. inserts last arg, Enter accepts in single-line mode, Meta-Enter always accepts when returnable, Ctrl-O accepts and gets next in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsEditingHandlerTests.cs`
 
 ### Implementation for User Story 8
 
-- [ ] T017 [US8] Implement 7 history named command registrations: Meta-< beginning-of-history (~has_selection), Meta-> end-of-history (~has_selection), Meta-. yank-last-arg (insert_mode), Meta-_ yank-last-arg (insert_mode), Meta-Ctrl-Y yank-nth-arg (insert_mode), Meta-# insert-comment (insert_mode), Ctrl-O operate-and-get-next (no filter) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T018 [US8] Implement 2 accept-line registrations: Enter with composite filter `insert_mode & is_returnable & ~is_multiline`, Meta-Enter with composite filter `insert_mode & is_returnable` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T019 [US8] Run tests and verify all US8 tests pass
+- [X] T017 [US8] Implement 7 history named command registrations: Meta-< beginning-of-history (~has_selection), Meta-> end-of-history (~has_selection), Meta-. yank-last-arg (insert_mode), Meta-_ yank-last-arg (insert_mode), Meta-Ctrl-Y yank-nth-arg (insert_mode), Meta-# insert-comment (insert_mode), Ctrl-O operate-and-get-next (no filter) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T018 [US8] Implement 2 accept-line registrations: Enter with composite filter `insert_mode & is_returnable & ~is_multiline`, Meta-Enter with composite filter `insert_mode & is_returnable` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T019 [US8] Run tests and verify all US8 tests pass
 
 **Checkpoint**: 34 bindings total (25 + 9). History navigation and input acceptance functional. All US1+US2+US8 tests pass.
 
@@ -99,14 +99,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [P] [US3] Write registration tests verifying 6 selection bindings: Ctrl-@ no filter, Ctrl-G ~has_selection, Ctrl-G has_selection, Ctrl-W has_selection, Ctrl-X r k has_selection (3-key), Meta-w has_selection in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T021 [P] [US3] Write handler behavior tests for selection: Ctrl-@ starts character selection on non-empty buffer, Ctrl-@ no-ops on empty buffer, Ctrl-G cancels selection, Ctrl-G cancels completion when no selection, Ctrl-W cuts selection to clipboard, Ctrl-X r k also cuts, Meta-w copies without removing in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsSelectionHandlerTests.cs`
+- [X] T020 [P] [US3] Write registration tests verifying 6 selection bindings: Ctrl-@ no filter, Ctrl-G ~has_selection, Ctrl-G has_selection, Ctrl-W has_selection, Ctrl-X r k has_selection (3-key), Meta-w has_selection in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T021 [P] [US3] Write handler behavior tests for selection: Ctrl-@ starts character selection on non-empty buffer, Ctrl-@ no-ops on empty buffer, Ctrl-G cancels selection, Ctrl-G cancels completion when no selection, Ctrl-W cuts selection to clipboard, Ctrl-X r k also cuts, Meta-w copies without removing in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsSelectionHandlerTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Implement 6 selection inline handler registrations: Ctrl-@ StartSelection (no filter), Ctrl-G Cancel (~has_selection), Ctrl-G CancelSelection (has_selection), Ctrl-W CutSelection (has_selection), Ctrl-X r k CutSelection (has_selection, 3-key), Meta-w CopySelection (has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T023 [US3] Implement private handler methods `StartSelection`, `Cancel`, `CancelSelection`, `CutSelection`, `CopySelection` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T024 [US3] Run tests and verify all US3 tests pass
+- [X] T022 [US3] Implement 6 selection inline handler registrations: Ctrl-@ StartSelection (no filter), Ctrl-G Cancel (~has_selection), Ctrl-G CancelSelection (has_selection), Ctrl-W CutSelection (has_selection), Ctrl-X r k CutSelection (has_selection, 3-key), Meta-w CopySelection (has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T023 [US3] Implement private handler methods `StartSelection`, `Cancel`, `CancelSelection`, `CutSelection`, `CopySelection` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T024 [US3] Run tests and verify all US3 tests pass
 
 **Checkpoint**: 40 bindings total (34 + 6). Selection operations functional. All US1+US2+US8+US3 tests pass.
 
@@ -120,17 +120,17 @@
 
 ### Tests for User Story 5
 
-- [ ] T025 [P] [US5] Write registration tests verifying 34 shift-selection bindings: 10 start-selection (~has_selection), 10 extend-selection (shift_selection_mode), 4 replace/cancel (Any/Enter/Backspace/Ctrl-Y with shift_selection_mode), 10 cancel-movement (shift_selection_mode) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsShiftSelectionBindingsTests.cs`
-- [ ] T026 [P] [US5] Write handler behavior tests for shift-selection state machine: start selection with Shift-Right, extend selection, cancel with Right (verify re-feed), type to replace, Backspace to delete, Ctrl-Y to paste, empty buffer no-op, cancel when cursor doesn't move (Shift-Right at end), extend cancel when selection becomes empty, Enter in multiline with copy_margin ~in_paste_mode in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsShiftSelectionHandlerTests.cs`
+- [X] T025 [P] [US5] Write registration tests verifying 34 shift-selection bindings: 10 start-selection (~has_selection), 10 extend-selection (shift_selection_mode), 4 replace/cancel (Any/Enter/Backspace/Ctrl-Y with shift_selection_mode), 10 cancel-movement (shift_selection_mode) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsShiftSelectionBindingsTests.cs`
+- [X] T026 [P] [US5] Write handler behavior tests for shift-selection state machine: start selection with Shift-Right, extend selection, cancel with Right (verify re-feed), type to replace, Backspace to delete, Ctrl-Y to paste, empty buffer no-op, cancel when cursor doesn't move (Shift-Right at end), extend cancel when selection becomes empty, Enter in multiline with copy_margin ~in_paste_mode in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsShiftSelectionHandlerTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T027 [US5] Implement 10 start-selection bindings for Shift-Left/Right/Up/Down/Home/End and Ctrl-Shift-Left/Right/Home/End with filter: ~has_selection, handler: `ShiftStartSelection` in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T028 [US5] Implement 10 extend-selection bindings for same 10 Shift keys with filter: shift_selection_mode, handler: `ShiftExtendSelection` in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T029 [US5] Implement 4 replace/cancel bindings: Any ShiftReplaceSelection, Enter ShiftNewline (shift_selection_mode & is_multiline), Backspace ShiftDelete, Ctrl-Y ShiftYank — all with filter: shift_selection_mode in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T030 [US5] Implement 10 cancel-movement bindings for Left/Right/Up/Down/Home/End and Ctrl-Left/Right/Home/End with filter: shift_selection_mode, handler: `ShiftCancelMove` (exit selection + re-feed via `KeyProcessor.Feed(keyPress, first: true)`) in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T031 [US5] Implement private handler methods: `ShiftStartSelection` (empty buffer guard, start_selection + enter_shift_mode + unshift_move + cancel if cursor didn't move), `ShiftExtendSelection` (unshift_move + cancel if empty), `ShiftReplaceSelection` (cut + self-insert), `ShiftNewline` (cut + newline with copy_margin: !in_paste_mode), `ShiftDelete` (cut), `ShiftYank` (conditional cut + yank named command), `ShiftCancelMove` (exit selection + re-feed) in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
-- [ ] T032 [US5] Run tests and verify all US5 tests pass
+- [X] T027 [US5] Implement 10 start-selection bindings for Shift-Left/Right/Up/Down/Home/End and Ctrl-Shift-Left/Right/Home/End with filter: ~has_selection, handler: `ShiftStartSelection` in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T028 [US5] Implement 10 extend-selection bindings for same 10 Shift keys with filter: shift_selection_mode, handler: `ShiftExtendSelection` in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T029 [US5] Implement 4 replace/cancel bindings: Any ShiftReplaceSelection, Enter ShiftNewline (shift_selection_mode & is_multiline), Backspace ShiftDelete, Ctrl-Y ShiftYank — all with filter: shift_selection_mode in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T030 [US5] Implement 10 cancel-movement bindings for Left/Right/Up/Down/Home/End and Ctrl-Left/Right/Home/End with filter: shift_selection_mode, handler: `ShiftCancelMove` (exit selection + re-feed via `KeyProcessor.Feed(keyPress, first: true)`) in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T031 [US5] Implement private handler methods: `ShiftStartSelection` (empty buffer guard, start_selection + enter_shift_mode + unshift_move + cancel if cursor didn't move), `ShiftExtendSelection` (unshift_move + cancel if empty), `ShiftReplaceSelection` (cut + self-insert), `ShiftNewline` (cut + newline with copy_margin: !in_paste_mode), `ShiftDelete` (cut), `ShiftYank` (conditional cut + yank named command), `ShiftCancelMove` (exit selection + re-feed) in `src/Stroke/Application/Bindings/EmacsBindings.ShiftSelection.cs`
+- [X] T032 [US5] Run tests and verify all US5 tests pass
 
 **Checkpoint**: 74 bindings total (40 + 34). Shift-selection fully functional. All tests pass.
 
@@ -144,15 +144,15 @@
 
 ### Tests for User Story 6
 
-- [ ] T033 [P] [US6] Write registration tests verifying 22 numeric arg bindings (10 Meta+digit no filter, 10 digit has_arg filter, Meta-- ~has_arg, dash is_arg) and 2 character search bindings (Ctrl-] Any no filter, Meta-Ctrl-] Any no filter) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T034 [P] [US6] Write handler behavior tests for numeric arguments: Meta-5 sets arg to 5, Meta-5 then 3 accumulates to 53, Meta-- sets negative prefix, dash-when-arg maintains "-" state, _arg null check in MetaDash, and character search: Ctrl-] 'l' finds forward, Meta-Ctrl-] 'l' finds backward, no match doesn't move cursor in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsNumericArgHandlerTests.cs`
+- [X] T033 [P] [US6] Write registration tests verifying 22 numeric arg bindings (10 Meta+digit no filter, 10 digit has_arg filter, Meta-- ~has_arg, dash is_arg) and 2 character search bindings (Ctrl-] Any no filter, Meta-Ctrl-] Any no filter) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T034 [P] [US6] Write handler behavior tests for numeric arguments: Meta-5 sets arg to 5, Meta-5 then 3 accumulates to 53, Meta-- sets negative prefix, dash-when-arg maintains "-" state, _arg null check in MetaDash, and character search: Ctrl-] 'l' finds forward, Meta-Ctrl-] 'l' finds backward, no match doesn't move cursor in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsNumericArgHandlerTests.cs`
 
 ### Implementation for User Story 6
 
-- [ ] T035 [US6] Implement 22 numeric argument registrations: 10 Meta+digit (Escape + '0'..'9', no filter, HandleDigit), 10 plain digits ('0'..'9', filter: has_arg, HandleDigit), Meta-- MetaDash (~has_arg), dash DashWhenArg (is_arg) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T036 [US6] Implement 2 character search registrations: Ctrl-] + Any GotoChar (no filter), Meta-Ctrl-] + Any GotoCharBackwards (no filter) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T037 [US6] Implement private handler methods: `HandleDigit` (AppendToArgCount), `MetaDash` (_arg null guard, AppendToArgCount("-")), `DashWhenArg` (KeyProcessor.Arg = "-"), `CharacterSearch` (Document.Find/FindBackwards with inCurrentLine), `GotoChar`, `GotoCharBackwards` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T038 [US6] Run tests and verify all US6 tests pass
+- [X] T035 [US6] Implement 22 numeric argument registrations: 10 Meta+digit (Escape + '0'..'9', no filter, HandleDigit), 10 plain digits ('0'..'9', filter: has_arg, HandleDigit), Meta-- MetaDash (~has_arg), dash DashWhenArg (is_arg) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T036 [US6] Implement 2 character search registrations: Ctrl-] + Any GotoChar (no filter), Meta-Ctrl-] + Any GotoCharBackwards (no filter) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T037 [US6] Implement private handler methods: `HandleDigit` (AppendToArgCount), `MetaDash` (_arg null guard, AppendToArgCount("-")), `DashWhenArg` (KeyProcessor.Arg = "-"), `CharacterSearch` (Document.Find/FindBackwards with inCurrentLine), `GotoChar`, `GotoCharBackwards` in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T038 [US6] Run tests and verify all US6 tests pass
 
 **Checkpoint**: 98 bindings total (74 + 24). Numeric arguments and character search functional. All tests pass.
 
@@ -166,12 +166,12 @@
 
 ### Tests for User Story 7
 
-- [ ] T039 [P] [US7] Write registration tests verifying 3 macro bindings (Ctrl-X ( start-kbd-macro no filter, Ctrl-X ) end-kbd-macro no filter, Ctrl-X e call-last-kbd-macro no filter) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T039 [P] [US7] Write registration tests verifying 3 macro bindings (Ctrl-X ( start-kbd-macro no filter, Ctrl-X ) end-kbd-macro no filter, Ctrl-X e call-last-kbd-macro no filter) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
 
 ### Implementation for User Story 7
 
-- [ ] T040 [US7] Implement 3 macro named command registrations: Ctrl-X ( start-kbd-macro, Ctrl-X ) end-kbd-macro, Ctrl-X e call-last-kbd-macro — all with no per-binding filter in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T041 [US7] Run tests and verify all US7 tests pass
+- [X] T040 [US7] Implement 3 macro named command registrations: Ctrl-X ( start-kbd-macro, Ctrl-X ) end-kbd-macro, Ctrl-X e call-last-kbd-macro — all with no per-binding filter in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T041 [US7] Run tests and verify all US7 tests pass
 
 **Checkpoint**: 101 bindings total (98 + 3). Macro recording and playback functional. All tests pass.
 
@@ -185,16 +185,16 @@
 
 ### Tests for User Story 9
 
-- [ ] T042 [P] [US9] Write registration tests verifying remaining 11 bindings: Ctrl-Q quoted-insert (~has_selection), Meta-/ Complete (insert_mode), Meta-* InsertAllCompletions (insert_mode), Ctrl-X Ctrl-X ToggleStartEnd (no filter), Meta-Left StartOfWord (no filter), Meta-Right StartNextWord (no filter), Ctrl-C > IndentSelection (has_selection), Ctrl-C < UnindentSelection (has_selection), Meta-a PrevSentence (no filter), Meta-e EndOfSentence (no filter), Meta-t SwapCharacters (insert_mode) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T043 [P] [US9] Write handler behavior tests for completion: Meta-/ starts completion when none active (select_first=true), Meta-/ cycles next when active, Meta-* inserts all completions, and miscellaneous: Ctrl-X Ctrl-X toggles cursor between line start/end, Meta-Left moves to prev word beginning, Meta-Right moves to next word beginning, Ctrl-C > indents selected lines, Ctrl-C < unindents, Ctrl-Q triggers quoted-insert mode in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsCompletionHandlerTests.cs`
+- [X] T042 [P] [US9] Write registration tests verifying remaining 11 bindings: Ctrl-Q quoted-insert (~has_selection), Meta-/ Complete (insert_mode), Meta-* InsertAllCompletions (insert_mode), Ctrl-X Ctrl-X ToggleStartEnd (no filter), Meta-Left StartOfWord (no filter), Meta-Right StartNextWord (no filter), Ctrl-C > IndentSelection (has_selection), Ctrl-C < UnindentSelection (has_selection), Meta-a PrevSentence (no filter), Meta-e EndOfSentence (no filter), Meta-t SwapCharacters (insert_mode) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T043 [P] [US9] Write handler behavior tests for completion: Meta-/ starts completion when none active (select_first=true), Meta-/ cycles next when active, Meta-* inserts all completions, and miscellaneous: Ctrl-X Ctrl-X toggles cursor between line start/end, Meta-Left moves to prev word beginning, Meta-Right moves to next word beginning, Ctrl-C > indents selected lines, Ctrl-C < unindents, Ctrl-Q triggers quoted-insert mode in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/EmacsCompletionHandlerTests.cs`
 
 ### Implementation for User Story 9
 
-- [ ] T044 [US9] Implement 1 named command registration: Ctrl-Q quoted-insert (~has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T045 [US9] Implement 7 inline handler registrations: Meta-/ Complete (insert_mode), Meta-* InsertAllCompletions (insert_mode), Ctrl-X Ctrl-X ToggleStartEnd (no filter), Meta-Left StartOfWord (no filter), Meta-Right StartNextWord (no filter), Ctrl-C > IndentSelection (has_selection), Ctrl-C < UnindentSelection (has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T046 [US9] Implement 3 placeholder handler registrations: Meta-a PrevSentence (no filter), Meta-e EndOfSentence (no filter), Meta-t SwapCharacters (insert_mode) — all with empty handler bodies matching Python TODO comments in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T047 [US9] Implement private handler methods: `Complete` (start completion or cycle next), `InsertAllCompletions` (list completions via CompleteEvent, insert all joined by spaces), `ToggleStartEnd` (check IsCursorAtTheEndOfLine, move to start or end), `StartOfWord` (FindPreviousWordBeginning), `StartNextWord` (FindNextWordBeginning), `IndentSelection` (BufferOperations.Indent on SelectionRange rows), `UnindentSelection` (BufferOperations.Unindent), `PrevSentence` (no-op), `EndOfSentence` (no-op), `SwapCharacters` (no-op) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
-- [ ] T048 [US9] Run tests and verify all US9 tests pass
+- [X] T044 [US9] Implement 1 named command registration: Ctrl-Q quoted-insert (~has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T045 [US9] Implement 7 inline handler registrations: Meta-/ Complete (insert_mode), Meta-* InsertAllCompletions (insert_mode), Ctrl-X Ctrl-X ToggleStartEnd (no filter), Meta-Left StartOfWord (no filter), Meta-Right StartNextWord (no filter), Ctrl-C > IndentSelection (has_selection), Ctrl-C < UnindentSelection (has_selection) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T046 [US9] Implement 3 placeholder handler registrations: Meta-a PrevSentence (no filter), Meta-e EndOfSentence (no filter), Meta-t SwapCharacters (insert_mode) — all with empty handler bodies matching Python TODO comments in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T047 [US9] Implement private handler methods: `Complete` (start completion or cycle next), `InsertAllCompletions` (list completions via CompleteEvent, insert all joined by spaces), `ToggleStartEnd` (check IsCursorAtTheEndOfLine, move to start or end), `StartOfWord` (FindPreviousWordBeginning), `StartNextWord` (FindNextWordBeginning), `IndentSelection` (BufferOperations.Indent on SelectionRange rows), `UnindentSelection` (BufferOperations.Unindent), `PrevSentence` (no-op), `EndOfSentence` (no-op), `SwapCharacters` (no-op) in `src/Stroke/Application/Bindings/EmacsBindings.cs`
+- [X] T048 [US9] Run tests and verify all US9 tests pass
 
 **Checkpoint**: 112 bindings total (78 core + 34 shift). ALL binding registrations complete. All tests pass.
 
@@ -204,13 +204,13 @@
 
 **Purpose**: Final verification, binding count validation, and file size compliance.
 
-- [ ] T049 Write binding count assertion test verifying exactly 78 registrations in `LoadEmacsBindings()` and exactly 34 registrations in `LoadEmacsShiftSelectionBindings()` (total 112 per FR-028/SC-002) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T050 Write Vi-mode isolation test verifying zero Emacs bindings fire when editing mode is Vi (SC-003) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T051 Verify Escape binding is registered first in the binding list (NFR-003/FR-028) by checking binding order in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
-- [ ] T052 [P] Verify `EmacsBindings.cs` does not exceed 1,000 LOC (Constitution Principle X)
-- [ ] T053 [P] Verify `EmacsBindings.ShiftSelection.cs` does not exceed 1,000 LOC (Constitution Principle X)
-- [ ] T054 Run full test suite: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj` and verify no regressions
-- [ ] T055 Run quickstart.md validation: `dotnet build src/Stroke/Stroke.csproj` compiles successfully
+- [X] T049 Write binding count assertion test verifying exactly 78 registrations in `LoadEmacsBindings()` and exactly 34 registrations in `LoadEmacsShiftSelectionBindings()` (total 112 per FR-028/SC-002) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T050 Write Vi-mode isolation test verifying zero Emacs bindings fire when editing mode is Vi (SC-003) in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T051 Verify Escape binding is registered first in the binding list (NFR-003/FR-028) by checking binding order in `tests/Stroke.Tests/Application/Bindings/EmacsBindings/LoadEmacsBindingsTests.cs`
+- [X] T052 [P] Verify `EmacsBindings.cs` does not exceed 1,000 LOC (Constitution Principle X)
+- [X] T053 [P] Verify `EmacsBindings.ShiftSelection.cs` does not exceed 1,000 LOC (Constitution Principle X)
+- [X] T054 Run full test suite: `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj` and verify no regressions
+- [X] T055 Run quickstart.md validation: `dotnet build src/Stroke/Stroke.csproj` compiles successfully
 
 ---
 
