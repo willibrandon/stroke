@@ -173,6 +173,19 @@ public sealed partial class Buffer
     }
 
     /// <summary>
+    /// Dismiss the current validation error without re-validating.
+    /// Equivalent to Python's <c>b.validation_error = None</c>.
+    /// </summary>
+    public void DismissValidation()
+    {
+        using (_lock.EnterScope())
+        {
+            _validationError = null;
+            _validationState = ValidationState.Unknown;
+        }
+    }
+
+    /// <summary>
     /// Start async validation when validate_while_typing is enabled.
     /// </summary>
     internal void StartAsyncValidation()
