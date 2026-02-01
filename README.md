@@ -396,6 +396,20 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - All bindings gated on `EmacsFilters.EmacsMode` via `ConditionalKeyBindings`
   - Stateless, thread-safe (149 tests, >80% coverage)
 
+- **Vi Key Bindings** — Complete Vi editing mode with all bindings
+  - `ViBindings` static partial class split across 8 source files (~300 bindings total)
+  - `LoadViBindings()` returns `ConditionalKeyBindings` gated on `ViFilters.ViMode`
+  - `RegisterOperator` helper: creates navigation-mode (set pending) + selection-mode (execute) bindings per operator
+  - `RegisterTextObject` helper: creates up to 3 bindings per text object (operator-pending, navigation, selection)
+  - Navigation: h/l/j/k/w/b/e/W/B/E/0/$, gg/G/H/M/L, f/F/t/T/;/,, {/}/%/^, arrows, +/-, n/N/#/*
+  - Operators: d/c/y/>/< with doubled-key variants (dd/yy/cc/>>/<</Y/S/C/D), g,q reshape, g,?/g,u/g,U/g,~/~ transforms
+  - Text objects: iw/aw/iW/aW, i"/a"/i'/a'/i`/a`, i(/a(/i[/a[/i{/a{/i</a< with aliases (b/B)
+  - Mode switch: Escape, i/I/a/A/o/O, v/V/Ctrl-V, r/R, Insert toggle
+  - Visual mode: j/k extend, x cut, J/g,J join, v/V/Ctrl-V toggle, I/A block, a,w/a,W auto-word
+  - Insert mode: Ctrl-V quoted-insert, Ctrl-N/P completion, Ctrl-T/D indent, Ctrl-K digraph, replace/insert-multiple
+  - Misc: p/P paste, register-aware paste, u/Ctrl-R undo/redo, q/@/. macros, Ctrl-A/X increment, z scroll, Ctrl-O temp nav
+  - Stateless, thread-safe (204 tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
