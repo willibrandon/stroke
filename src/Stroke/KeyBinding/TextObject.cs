@@ -146,12 +146,37 @@ public sealed class TextObject
         from += buffer.CursorPosition;
         to += buffer.CursorPosition;
 
-        // In Python Prompt Toolkit, SelectionRanges adds +1 for Vi mode, so
-        // the original Python code subtracts 1 here to compensate. In Stroke,
-        // SelectionRanges does NOT have a Vi mode adjustment, so we skip the
-        // subtraction — the OperatorRange result is already the correct
-        // exclusive upper bound for CutSelection.
+        if (Type == TextObjectType.Linewise)
+        {
+            // For linewise cuts, include the trailing newline so the entire
+            // line (including its terminator) is removed. In Python, this
+            // happens because selection_ranges() adds +1 for Vi mode after
+            // the LINES boundary adjustment, and cut() intentionally does NOT
+            // subtract 1 for linewise. Since our SelectionRanges() doesn't
+            // have the Vi mode +1, we compute the linewise cut directly.
+            if (to < buffer.Text.Length)
+                to += 1;
 
+            var cutText = buffer.Text[from..to];
+            var remaining = string.Concat(
+                buffer.Text.AsSpan(0, from),
+                buffer.Text.AsSpan(to));
+
+            // Strip trailing newline from clipboard data (matches Python's
+            // CutSelection behavior for LINES selections).
+            if (cutText.EndsWith('\n'))
+                cutText = cutText[..^1];
+
+            var newCursor = Math.Min(from, remaining.Length);
+            return (
+                new Document(remaining, newCursor),
+                new ClipboardData(cutText, SelectionType.Lines));
+        }
+
+        // For non-linewise types, Python's cut() subtracts 1 from 'to' and
+        // selection_ranges() adds +1 for Vi mode, netting to zero. Since our
+        // SelectionRanges() doesn't add +1, we also skip the subtraction —
+        // the OperatorRange result is already the correct exclusive upper bound.
         var document = new Document(
             buffer.Text,
             to,

@@ -258,14 +258,47 @@ public class TextObjectTests
     {
         var buffer = new Buffer(
             document: new Document("abc\ndef\nghi", cursorPosition: 4));
-        // Text object covers line 1 ("def")
+        // Text object covers line 1 ("def") — linewise must remove the
+        // trailing newline so no spurious blank line remains.
         var obj = new TextObject(0, type: TextObjectType.Linewise);
 
         var (newDoc, data) = obj.Cut(buffer);
 
-        Assert.Contains("abc", newDoc.Text);
-        Assert.Contains("ghi", newDoc.Text);
-        Assert.DoesNotContain("def", newDoc.Text);
+        Assert.Equal("abc\nghi", newDoc.Text);
+        Assert.Equal("def", data.Text);
+        Assert.Equal(SelectionType.Lines, data.Type);
+    }
+
+    [Fact]
+    public void Cut_LinewiseDeletesLastLine()
+    {
+        var buffer = new Buffer(
+            document: new Document("abc\ndef\nghi", cursorPosition: 8));
+        // Text object covers last line ("ghi") — no trailing newline exists,
+        // so only the line content is removed; the preceding \n remains.
+        // This matches Python Prompt Toolkit behavior.
+        var obj = new TextObject(0, type: TextObjectType.Linewise);
+
+        var (newDoc, data) = obj.Cut(buffer);
+
+        Assert.Equal("abc\ndef\n", newDoc.Text);
+        Assert.Equal("ghi", data.Text);
+        Assert.Equal(SelectionType.Lines, data.Type);
+    }
+
+    [Fact]
+    public void Cut_LinewiseDeletesMultipleLines()
+    {
+        // Cursor at start of "def", motion spans to "ghi" line
+        var buffer = new Buffer(
+            document: new Document("abc\ndef\nghi\njkl", cursorPosition: 4));
+        // end=7 reaches into "ghi" line (offset 7 from cursor 4 = position 11)
+        var obj = new TextObject(0, end: 7, type: TextObjectType.Linewise);
+
+        var (newDoc, data) = obj.Cut(buffer);
+
+        Assert.Equal("abc\njkl", newDoc.Text);
+        Assert.Equal("def\nghi", data.Text);
         Assert.Equal(SelectionType.Lines, data.Type);
     }
 
