@@ -355,7 +355,12 @@ public sealed partial class Buffer : IBuffer
         }
     }
 
-    /// <summary>Gets the current selection state.</summary>
+    /// <summary>Gets or sets the current selection state.</summary>
+    /// <remarks>
+    /// Setting to null clears the selection (equivalent to <see cref="ExitSelection"/>).
+    /// Setting to a non-null value replaces the current selection state directly.
+    /// Port of Python Prompt Toolkit's mutable <c>buffer.selection_state</c> property.
+    /// </remarks>
     public SelectionState? SelectionState
     {
         get
@@ -363,6 +368,13 @@ public sealed partial class Buffer : IBuffer
             using (_lock.EnterScope())
             {
                 return _selectionState;
+            }
+        }
+        set
+        {
+            using (_lock.EnterScope())
+            {
+                _selectionState = value;
             }
         }
     }

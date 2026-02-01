@@ -23,3 +23,5 @@ hellow = "hellow"
 hel = "hel"
 # Technical term: plural of IEnumerable (multiple enumerable objects)
 enumerables = "enumerables"
+# Vi command: "fo" means f (find char) + o (the character to find)
+fo = "fo"

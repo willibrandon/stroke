@@ -31,8 +31,14 @@ public sealed partial class Document
     /// The upper boundary is not included.
     /// This will yield several (from, to) tuples in case of a BLOCK selection.
     /// </summary>
+    /// <param name="viMode">
+    /// When <c>true</c>, the upper boundary is always included (Vi mode behavior).
+    /// In Python Prompt Toolkit this is determined by calling <c>vi_mode()</c> which
+    /// checks the current app's editing mode. Since <c>Document</c> is in the Core
+    /// layer and cannot access Application state, callers pass the flag explicitly.
+    /// </param>
     /// <returns>Enumerable of (from, to) tuples.</returns>
-    public IEnumerable<(int From, int To)> SelectionRanges()
+    public IEnumerable<(int From, int To)> SelectionRanges(bool viMode = false)
     {
         if (_selection == null)
         {
@@ -56,6 +62,12 @@ public sealed partial class Document
             toColumn = columns[1];
 
             var lines = Lines;
+
+            // In Vi mode, the upper column boundary is included.
+            if (viMode)
+            {
+                toColumn += 1;
+            }
 
             for (int line = fromLine; line <= toLine; line++)
             {
@@ -84,6 +96,13 @@ public sealed partial class Document
                 to = lineEnd >= 0 ? lineEnd : _text.Length;
             }
 
+            // In Vi mode, the upper boundary is always included.
+            // Clamp to text length so we don't exceed bounds on the last line.
+            if (viMode)
+            {
+                to = Math.Min(to + 1, _text.Length);
+            }
+
             yield return (from, to);
         }
     }
@@ -94,8 +113,12 @@ public sealed partial class Document
     /// Returns null if the selection doesn't cover this line at all.
     /// </summary>
     /// <param name="row">The row to check.</param>
+    /// <param name="viMode">
+    /// When <c>true</c>, the upper column boundary is included (Vi mode behavior).
+    /// In Python Prompt Toolkit this is determined by calling <c>vi_mode()</c>.
+    /// </param>
     /// <returns>A tuple of (fromColumn, toColumn) or null if not selected.</returns>
-    public (int FromColumn, int ToColumn)? SelectionRangeAtLine(int row)
+    public (int FromColumn, int ToColumn)? SelectionRangeAtLine(int row, bool viMode = false)
     {
         if (_selection == null)
         {
@@ -150,6 +173,12 @@ public sealed partial class Document
             var (_, fromColumn) = TranslateIndexToPosition(intersectionStart);
             var (_, toColumn) = TranslateIndexToPosition(intersectionEnd);
 
+            // In Vi mode, the upper boundary is always included.
+            if (viMode)
+            {
+                toColumn += 1;
+            }
+
             return (fromColumn, toColumn);
         }
 
@@ -161,8 +190,12 @@ public sealed partial class Document
     /// the new document when the selection is cut, and the clipboard data
     /// represents whatever has to be put on the clipboard.
     /// </summary>
+    /// <param name="viMode">
+    /// When <c>true</c>, passes Vi mode semantics to <see cref="SelectionRanges"/>
+    /// so the upper boundary is included. See <see cref="SelectionRanges"/> for details.
+    /// </param>
     /// <returns>A tuple of (Document, ClipboardData).</returns>
-    public (Document Document, ClipboardData Data) CutSelection()
+    public (Document Document, ClipboardData Data) CutSelection(bool viMode = false)
     {
         if (_selection != null)
         {
@@ -172,7 +205,7 @@ public sealed partial class Document
 
             int lastTo = 0;
             bool first = true;
-            foreach (var (from, to) in SelectionRanges())
+            foreach (var (from, to) in SelectionRanges(viMode))
             {
                 if (first)
                 {

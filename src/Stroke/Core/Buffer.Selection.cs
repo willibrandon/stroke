@@ -52,25 +52,33 @@ public sealed partial class Buffer
     /// Notice that this doesn't store the copied data on the clipboard yet.
     /// You need to store it on a clipboard instance yourself.
     /// </remarks>
+    /// <param name="viMode">
+    /// When <c>true</c>, passes Vi mode semantics so the upper selection
+    /// boundary is included. See <see cref="Document.SelectionRanges"/> for details.
+    /// </param>
     /// <returns>The copied clipboard data.</returns>
-    public ClipboardData CopySelection()
+    public ClipboardData CopySelection(bool viMode = false)
     {
-        return CopySelectionInternal(cut: false);
+        return CopySelectionInternal(cut: false, viMode: viMode);
     }
 
     /// <summary>
     /// Delete selected text and return ClipboardData instance.
     /// </summary>
+    /// <param name="viMode">
+    /// When <c>true</c>, passes Vi mode semantics so the upper selection
+    /// boundary is included. See <see cref="Document.SelectionRanges"/> for details.
+    /// </param>
     /// <returns>The cut clipboard data.</returns>
-    public ClipboardData CutSelection()
+    public ClipboardData CutSelection(bool viMode = false)
     {
-        return CopySelectionInternal(cut: true);
+        return CopySelectionInternal(cut: true, viMode: viMode);
     }
 
     /// <summary>
     /// Internal implementation for copy/cut selection.
     /// </summary>
-    private ClipboardData CopySelectionInternal(bool cut)
+    private ClipboardData CopySelectionInternal(bool cut, bool viMode = false)
     {
         bool textChanged = false;
         bool cursorChanged = false;
@@ -79,7 +87,7 @@ public sealed partial class Buffer
         using (_lock.EnterScope())
         {
             var doc = Document;
-            (var newDocument, clipboardData) = doc.CutSelection();
+            (var newDocument, clipboardData) = doc.CutSelection(viMode);
 
             if (cut)
             {

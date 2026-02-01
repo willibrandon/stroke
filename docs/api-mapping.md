@@ -1366,6 +1366,13 @@ public readonly record struct KeyPress(Keys Key, string? Data = null);
 | `create_text_object_decorator(key_bindings)` | `ViBindings.CreateTextObjectDecorator(keyBindings)` | *(internal factory)* |
 | `create_operator_decorator(key_bindings)` | `ViBindings.CreateOperatorDecorator(keyBindings)` | *(internal factory)* |
 
+### Type Aliases
+
+| Python | Stroke | Notes |
+|--------|--------|-------|
+| `TextObjectFunction` (`Callable[[E], TextObject]`) | `Func<KeyPressEvent, TextObject>` | Inline delegate type (no named delegate needed) |
+| `OperatorFunction` (`Callable[[E, TextObject], None]`) | `OperatorFuncDelegate` | Named delegate in `Stroke.KeyBinding` (already exists) |
+
 ---
 
 ## Module: prompt_toolkit.key_binding.bindings.open_in_editor

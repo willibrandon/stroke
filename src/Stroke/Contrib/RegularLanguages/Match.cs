@@ -1,5 +1,5 @@
 using System.Collections.Frozen;
-using System.Text.RegularExpressions;
+using System.Collections.Immutable;
 
 namespace Stroke.Contrib.RegularLanguages;
 
@@ -7,12 +7,25 @@ namespace Stroke.Contrib.RegularLanguages;
 /// Result of matching input against a compiled grammar.
 /// This class is immutable and thread-safe.
 /// </summary>
+/// <remarks>
+/// All regex group data is eagerly extracted at construction time and stored
+/// in immutable collections. This ensures thread safety since
+/// <see cref="System.Text.RegularExpressions.Match.Groups"/> uses lazy
+/// initialization internally and is not safe for concurrent reads.
+/// </remarks>
 public sealed class Match
 {
-    private const string InvalidTrailingInput = "invalid_trailing";
+    /// <summary>
+    /// Eagerly extracted data from a single regex group match.
+    /// </summary>
+    private readonly record struct GroupData(string VarName, bool Success, int Index, int Length);
 
-    private readonly List<(Regex Pattern, System.Text.RegularExpressions.Match ReMatch)> _reMatches;
-    private readonly FrozenDictionary<string, string> _groupNamesToVarNames;
+    /// <summary>
+    /// Eagerly extracted data from a single regex match (all its named groups).
+    /// </summary>
+    private readonly record struct MatchData(ImmutableArray<GroupData> Groups, int? TrailingStart, int? TrailingStop);
+
+    private readonly ImmutableArray<MatchData> _matchData;
     private readonly FrozenDictionary<string, Func<string, string>> _unescapeFuncs;
 
     /// <summary>
@@ -20,14 +33,54 @@ public sealed class Match
     /// </summary>
     internal Match(
         string input,
-        List<(Regex Pattern, System.Text.RegularExpressions.Match ReMatch)> reMatches,
+        List<(System.Text.RegularExpressions.Regex Pattern, System.Text.RegularExpressions.Match ReMatch)> reMatches,
         FrozenDictionary<string, string> groupNamesToVarNames,
         FrozenDictionary<string, Func<string, string>> unescapeFuncs)
     {
         Input = input;
-        _reMatches = reMatches;
-        _groupNamesToVarNames = groupNamesToVarNames;
         _unescapeFuncs = unescapeFuncs;
+
+        // Eagerly extract all regex group data at construction time.
+        // This avoids any concurrent access to System.Text.RegularExpressions.Match
+        // objects, whose GroupCollection indexer is not thread-safe.
+        var matchDataBuilder = ImmutableArray.CreateBuilder<MatchData>(reMatches.Count);
+
+        foreach (var (pattern, reMatch) in reMatches)
+        {
+            var groupNames = pattern.GetGroupNames();
+            var groupDataBuilder = ImmutableArray.CreateBuilder<GroupData>(groupNames.Length);
+            int? trailingStart = null;
+            int? trailingStop = null;
+
+            foreach (var groupName in groupNames)
+            {
+                // Skip numeric groups
+                if (groupName == "0")
+                    continue;
+
+                // Handle trailing input group separately
+                if (groupName == "invalid_trailing")
+                {
+                    var trailingGroup = reMatch.Groups[groupName];
+                    if (trailingGroup.Success && trailingGroup.Index >= 0)
+                    {
+                        trailingStart = trailingGroup.Index;
+                        trailingStop = trailingGroup.Index + trailingGroup.Length;
+                    }
+                    continue;
+                }
+
+                if (!groupNamesToVarNames.TryGetValue(groupName, out var varName))
+                    continue;
+
+                var group = reMatch.Groups[groupName];
+                groupDataBuilder.Add(new GroupData(varName, group.Success, group.Index, group.Length));
+            }
+
+            matchDataBuilder.Add(new MatchData(groupDataBuilder.ToImmutable(), trailingStart, trailingStop));
+        }
+
+        _matchData = matchDataBuilder.ToImmutable();
     }
 
     /// <summary>
@@ -47,27 +100,15 @@ public sealed class Match
     {
         var tuples = new List<(string VarName, string Value, int Start, int Stop)>();
 
-        foreach (var (pattern, reMatch) in _reMatches)
+        foreach (var matchData in _matchData)
         {
-            foreach (var groupName in pattern.GetGroupNames())
+            foreach (var group in matchData.Groups)
             {
-                // Skip numeric groups and the trailing input group
-                if (groupName == "0" || groupName == InvalidTrailingInput)
-                {
-                    continue;
-                }
-
-                if (!_groupNamesToVarNames.TryGetValue(groupName, out var varName))
-                {
-                    continue;
-                }
-
-                var group = reMatch.Groups[groupName];
                 if (group.Success && group.Index >= 0)
                 {
                     var rawValue = Input.Substring(group.Index, group.Length);
-                    var value = Unescape(varName, rawValue);
-                    tuples.Add((varName, value, group.Index, group.Index + group.Length));
+                    var value = Unescape(group.VarName, rawValue);
+                    tuples.Add((group.VarName, value, group.Index, group.Index + group.Length));
                 }
             }
         }
@@ -91,12 +132,11 @@ public sealed class Match
     {
         var slices = new List<(int Start, int Stop)>();
 
-        foreach (var (pattern, reMatch) in _reMatches)
+        foreach (var matchData in _matchData)
         {
-            var group = reMatch.Groups[InvalidTrailingInput];
-            if (group.Success && group.Index >= 0)
+            if (matchData.TrailingStart is not null && matchData.TrailingStop is not null)
             {
-                slices.Add((group.Index, group.Index + group.Length));
+                slices.Add((matchData.TrailingStart.Value, matchData.TrailingStop.Value));
             }
         }
 
@@ -122,30 +162,18 @@ public sealed class Match
     /// </returns>
     public IEnumerable<MatchVariable> EndNodes()
     {
-        foreach (var (pattern, reMatch) in _reMatches)
+        foreach (var matchData in _matchData)
         {
-            foreach (var groupName in pattern.GetGroupNames())
+            foreach (var group in matchData.Groups)
             {
-                // Skip numeric groups and the trailing input group
-                if (groupName == "0" || groupName == InvalidTrailingInput)
-                {
-                    continue;
-                }
-
-                if (!_groupNamesToVarNames.TryGetValue(groupName, out var varName))
-                {
-                    continue;
-                }
-
-                var group = reMatch.Groups[groupName];
                 if (group.Success && group.Index >= 0)
                 {
                     // If this part goes until the end of the input string
                     if (group.Index + group.Length == Input.Length)
                     {
                         var rawValue = Input.Substring(group.Index, group.Length);
-                        var value = Unescape(varName, rawValue);
-                        yield return new MatchVariable(varName, value, group.Index, group.Index + group.Length);
+                        var value = Unescape(group.VarName, rawValue);
+                        yield return new MatchVariable(group.VarName, value, group.Index, group.Index + group.Length);
                     }
                 }
             }
@@ -171,22 +199,10 @@ public sealed class Match
     /// </remarks>
     public MatchVariable? VariableAtPosition(int cursorPosition)
     {
-        foreach (var (pattern, reMatch) in _reMatches)
+        foreach (var matchData in _matchData)
         {
-            foreach (var groupName in pattern.GetGroupNames())
+            foreach (var group in matchData.Groups)
             {
-                // Skip numeric groups and the trailing input group
-                if (groupName == "0" || groupName == InvalidTrailingInput)
-                {
-                    continue;
-                }
-
-                if (!_groupNamesToVarNames.TryGetValue(groupName, out var varName))
-                {
-                    continue;
-                }
-
-                var group = reMatch.Groups[groupName];
                 if (group.Success && group.Index >= 0)
                 {
                     var start = group.Index;
@@ -196,8 +212,8 @@ public sealed class Match
                     if (cursorPosition >= start && cursorPosition < stop)
                     {
                         var rawValue = Input.Substring(start, group.Length);
-                        var value = Unescape(varName, rawValue);
-                        return new MatchVariable(varName, value, start, stop);
+                        var value = Unescape(group.VarName, rawValue);
+                        return new MatchVariable(group.VarName, value, start, stop);
                     }
                 }
             }
