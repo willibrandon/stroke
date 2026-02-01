@@ -1,6 +1,7 @@
 using Stroke.Core;
 using Stroke.Filters;
 using Stroke.KeyBinding;
+using Stroke.Layout.Processors;
 using Stroke.Lexers;
 
 // Alias to avoid ambiguity with System.Buffer
@@ -39,26 +40,32 @@ public class SearchBufferControl : BufferControl
     /// <param name="buffer">The search buffer, or null to create one.</param>
     /// <param name="ignoreCase">Filter controlling case-insensitive search.</param>
     /// <param name="searcherSearchState">The associated SearchState.</param>
+    /// <param name="inputProcessors">Optional input processors forwarded to BufferControl.</param>
     /// <param name="lexer">Optional lexer for syntax highlighting.</param>
+    /// <param name="focusOnClick">Whether to focus this control when clicked. Default is false.</param>
     /// <param name="focusable">Whether the control is focusable. Default is false for search controls.</param>
     /// <param name="keyBindings">Optional key bindings.</param>
     public SearchBufferControl(
         Buffer? buffer = null,
         FilterOrBool ignoreCase = default,
         SearchState? searcherSearchState = null,
+        IReadOnlyList<IProcessor>? inputProcessors = null,
         ILexer? lexer = null,
+        FilterOrBool focusOnClick = default,
         FilterOrBool focusable = default,
         IKeyBindingsBase? keyBindings = null)
         : base(
             buffer: buffer,
+            inputProcessors: inputProcessors,
             lexer: lexer,
+            focusOnClick: focusOnClick.HasValue ? focusOnClick : new FilterOrBool(false),
             focusable: focusable.HasValue ? focusable : new FilterOrBool(false),
             keyBindings: keyBindings)
     {
         IgnoreCase = ignoreCase.HasValue
             ? FilterUtils.ToFilter(ignoreCase)
             : Never.Instance;
-        SearcherSearchState = searcherSearchState;
+        SearcherSearchState = searcherSearchState ?? new SearchState(ignoreCase: () => IgnoreCase.Invoke());
     }
 
     /// <summary>
