@@ -19,11 +19,11 @@
 
 **Purpose**: Cross-feature prerequisite changes and shared types needed by all user stories
 
-- [ ] T001 Make `Application.RefreshInterval` settable with Lock protection in `src/Stroke/Application/Application.cs` — change from `{ get; }` to Lock-protected `{ get; set; }` property (cross-feature change per plan.md Complexity Tracking; required by FR-010 per-prompt override of refreshInterval)
-- [ ] T002 [P] Create `CompleteStyle` enum (Column, MultiColumn, ReadlineLike) in `src/Stroke/Shortcuts/CompleteStyle.cs` per contract `contracts/complete-style.md` → FR-001
-- [ ] T003 [P] Create `KeyboardInterruptException` sealed class in `src/Stroke/Shortcuts/KeyboardInterruptException.cs` per contract `contracts/internal-helpers.md` — three constructor overloads (parameterless, message, message+inner) → FR-027, FR-037
-- [ ] T004 [P] Create `EOFException` sealed class in `src/Stroke/Shortcuts/EOFException.cs` per contract `contracts/internal-helpers.md` — three constructor overloads (parameterless, message, message+inner) → FR-027, FR-037
-- [ ] T005 [P] Create `PromptContinuationCallable` delegate in `src/Stroke/Shortcuts/PromptContinuationCallable.cs` — `delegate AnyFormattedText PromptContinuationCallable(int promptWidth, int lineNumber, int wrapCount)` per contract `contracts/internal-helpers.md` → FR-013, FR-030
+- [X] T001 Make `Application.RefreshInterval` settable with Lock protection in `src/Stroke/Application/Application.cs` — change from `{ get; }` to Lock-protected `{ get; set; }` property (cross-feature change per plan.md Complexity Tracking; required by FR-010 per-prompt override of refreshInterval)
+- [X] T002 [P] Create `CompleteStyle` enum (Column, MultiColumn, ReadlineLike) in `src/Stroke/Shortcuts/CompleteStyle.cs` per contract `contracts/complete-style.md` → FR-001
+- [X] T003 [P] Create `KeyboardInterruptException` sealed class in `src/Stroke/Shortcuts/KeyboardInterruptException.cs` per contract `contracts/internal-helpers.md` — three constructor overloads (parameterless, message, message+inner) → FR-027, FR-037
+- [X] T004 [P] Create `EOFException` sealed class in `src/Stroke/Shortcuts/EOFException.cs` per contract `contracts/internal-helpers.md` — three constructor overloads (parameterless, message, message+inner) → FR-027, FR-037
+- [X] T005 [P] Create `PromptContinuationCallable` delegate in `src/Stroke/Shortcuts/PromptContinuationCallable.cs` — `delegate AnyFormattedText PromptContinuationCallable(int promptWidth, int lineNumber, int wrapCount)` per contract `contracts/internal-helpers.md` → FR-013, FR-030
 
 **Checkpoint**: Shared types ready — PromptSession implementation can begin
 
@@ -35,16 +35,16 @@
 
 **⚠️ CRITICAL**: All user stories depend on the PromptSession core being functional
 
-- [ ] T006 Implement `PromptSession<TResult>` constructor and all 36 Lock-protected mutable properties in `src/Stroke/Shortcuts/PromptSession.cs` — 44 constructor parameters per contract `contracts/prompt-session.md`; `FilterOrBool` defaults with `HasValue` sentinel detection for wrapLines/completeWhileTyping/validateWhileTyping/includeDefaultPygmentsStyle (Edge Case 7); exception type validation at construction time via reflection (FR-037); viMode→EditingMode.Vi precedence (Edge Case 1); History defaults to InMemoryHistory, Clipboard defaults to InMemoryClipboard; computed delegation properties: EditingMode delegates to App.EditingMode (get/set), Input delegates to App.Input (get), Output delegates to App.Output (get) → FR-002, FR-003, FR-016, FR-022, FR-023, FR-037
-- [ ] T007 Implement `DynCond` factory method in `src/Stroke/Shortcuts/PromptSession.cs` — creates `Condition` lambdas that capture session instance and read Lock-protected `FilterOrBool` properties at render time, resolving via `ToFilter()` → FR-016
-- [ ] T008 Implement `CreateDefaultBuffer` in `src/Stroke/Shortcuts/PromptSession.Buffers.cs` — Buffer with accept handler that exits App with buffer text; DynamicCompleter whose lambda returns `ThreadedCompleter(completer)` when `completeInThread && completer != null`, otherwise returns completer directly (ThreadedCompleter wraps the actual completer, not the DynamicCompleter); DynamicValidator; DynamicAutoSuggest; completeWhileTyping as Condition (true when completeWhileTyping AND NOT enableHistorySearch AND NOT ReadlineLike per FR-018); History reference → FR-004, FR-018, FR-031, FR-032
-- [ ] T009 Implement `CreateSearchBuffer` in `src/Stroke/Shortcuts/PromptSession.Buffers.cs` — simple Buffer for incremental search → FR-005
-- [ ] T010 Implement `CreateLayout` in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — FloatContainer with HSplit containing: multiline prompt area (ConditionalContainer), main input Window (BufferControl with 7 processors: HighlightIncrementalSearchProcessor, HighlightSelectionProcessor, ConditionalProcessor(PasswordProcessor), ConditionalProcessor(DisplayMultipleCursors), AppendAutoSuggestion, ConditionalProcessor(HighlightMatchingBracketProcessor), BeforeInput; BufferControl also receives `DynamicLexer(() => session.Lexer)` as its lexer parameter), search buffer control (non-multiline), Floats for CompletionsMenu/MultiColumnCompletionsMenu (visibility gated on CompleteStyle)/RPrompt, ValidationToolbar, SystemToolbar, SearchToolbar (multiline), ArgToolbar (multiline), bottom toolbar Window, optional Frame wrapper (showFrame); GetDefaultBufferControlHeight with reserveSpaceForMenu logic (Edge Case 4) → FR-006, FR-012, FR-017, FR-025, FR-028, FR-029, FR-031
-- [ ] T011 Implement `SplitMultilinePrompt` internal static helper in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — returns (HasBeforeFragments, Before, FirstInputLine) tuple; uses LayoutUtils.ExplodeTextFragments for newline detection (Edge Case 8) → FR-012, FR-029
-- [ ] T012 Implement `RPrompt` internal Window subclass in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — FormattedTextControl with WindowAlign.Right, style "class:rprompt" per contract `contracts/internal-helpers.md` → FR-028
-- [ ] T013 Implement `CreateApplication` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — Application<TResult> with: DynamicStyle, DynamicClipboard, DynamicCursorShapeConfig, style transformation merger (user + SwapLightAndDarkStyleTransformation conditional on swapLightAndDarkColors), eraseWhenDone passthrough; merged key bindings in priority order: inner [auto-suggest, conditional open-in-editor, prompt-specific], outer [DynamicKeyBindings(user)] → FR-007, FR-024, FR-031, FR-033, FR-034
-- [ ] T014 Implement `CreatePromptBindings` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — prompt-specific key bindings: Enter (accept in single-line or when multiline filter allows), Ctrl-C (Activator.CreateInstance of InterruptException → App.Exit with exception), Ctrl-D (EOF on empty buffer via Activator.CreateInstance of EofException), Tab (DisplayCompletionsLikeReadline when ReadlineLike style), Ctrl-Z (suspend gated on SuspendToBackgroundSupported AND enableSuspend per FR-041) → FR-011, FR-027, FR-041
-- [ ] T015 Implement helper methods in `src/Stroke/Shortcuts/PromptSession.Helpers.cs` — GetPrompt, GetContinuation (Edge Case 9), GetLinePrefix, GetArgText, InlineArg per contract `contracts/prompt-session.md` → FR-013, FR-030
+- [X] T006 Implement `PromptSession<TResult>` constructor and all 36 Lock-protected mutable properties in `src/Stroke/Shortcuts/PromptSession.cs` — 44 constructor parameters per contract `contracts/prompt-session.md`; `FilterOrBool` defaults with `HasValue` sentinel detection for wrapLines/completeWhileTyping/validateWhileTyping/includeDefaultPygmentsStyle (Edge Case 7); exception type validation at construction time via reflection (FR-037); viMode→EditingMode.Vi precedence (Edge Case 1); History defaults to InMemoryHistory, Clipboard defaults to InMemoryClipboard; computed delegation properties: EditingMode delegates to App.EditingMode (get/set), Input delegates to App.Input (get), Output delegates to App.Output (get) → FR-002, FR-003, FR-016, FR-022, FR-023, FR-037
+- [X] T007 Implement `DynCond` factory method in `src/Stroke/Shortcuts/PromptSession.cs` — creates `Condition` lambdas that capture session instance and read Lock-protected `FilterOrBool` properties at render time, resolving via `ToFilter()` → FR-016
+- [X] T008 Implement `CreateDefaultBuffer` in `src/Stroke/Shortcuts/PromptSession.Buffers.cs` — Buffer with accept handler that exits App with buffer text; DynamicCompleter whose lambda returns `ThreadedCompleter(completer)` when `completeInThread && completer != null`, otherwise returns completer directly (ThreadedCompleter wraps the actual completer, not the DynamicCompleter); DynamicValidator; DynamicAutoSuggest; completeWhileTyping as Condition (true when completeWhileTyping AND NOT enableHistorySearch AND NOT ReadlineLike per FR-018); History reference → FR-004, FR-018, FR-031, FR-032
+- [X] T009 Implement `CreateSearchBuffer` in `src/Stroke/Shortcuts/PromptSession.Buffers.cs` — simple Buffer for incremental search → FR-005
+- [X] T010 Implement `CreateLayout` in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — FloatContainer with HSplit containing: multiline prompt area (ConditionalContainer), main input Window (BufferControl with 7 processors: HighlightIncrementalSearchProcessor, HighlightSelectionProcessor, ConditionalProcessor(PasswordProcessor), ConditionalProcessor(DisplayMultipleCursors), AppendAutoSuggestion, ConditionalProcessor(HighlightMatchingBracketProcessor), BeforeInput; BufferControl also receives `DynamicLexer(() => session.Lexer)` as its lexer parameter), search buffer control (non-multiline), Floats for CompletionsMenu/MultiColumnCompletionsMenu (visibility gated on CompleteStyle)/RPrompt, ValidationToolbar, SystemToolbar, SearchToolbar (multiline), ArgToolbar (multiline), bottom toolbar Window, optional Frame wrapper (showFrame); GetDefaultBufferControlHeight with reserveSpaceForMenu logic (Edge Case 4) → FR-006, FR-012, FR-017, FR-025, FR-028, FR-029, FR-031
+- [X] T011 Implement `SplitMultilinePrompt` internal static helper in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — returns (HasBeforeFragments, Before, FirstInputLine) tuple; uses LayoutUtils.ExplodeTextFragments for newline detection (Edge Case 8) → FR-012, FR-029
+- [X] T012 Implement `RPrompt` internal Window subclass in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — FormattedTextControl with WindowAlign.Right, style "class:rprompt" per contract `contracts/internal-helpers.md` → FR-028
+- [X] T013 Implement `CreateApplication` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — Application<TResult> with: DynamicStyle, DynamicClipboard, DynamicCursorShapeConfig, style transformation merger (user + SwapLightAndDarkStyleTransformation conditional on swapLightAndDarkColors), eraseWhenDone passthrough; merged key bindings in priority order: inner [auto-suggest, conditional open-in-editor, prompt-specific], outer [DynamicKeyBindings(user)] → FR-007, FR-024, FR-031, FR-033, FR-034
+- [X] T014 Implement `CreatePromptBindings` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — prompt-specific key bindings: Enter (accept in single-line or when multiline filter allows), Ctrl-C (Activator.CreateInstance of InterruptException → App.Exit with exception), Ctrl-D (EOF on empty buffer via Activator.CreateInstance of EofException), Tab (DisplayCompletionsLikeReadline when ReadlineLike style), Ctrl-Z (suspend gated on SuspendToBackgroundSupported AND enableSuspend per FR-041) → FR-011, FR-027, FR-041
+- [X] T015 Implement helper methods in `src/Stroke/Shortcuts/PromptSession.Helpers.cs` — GetPrompt, GetContinuation (Edge Case 9), GetLinePrefix, GetArgText, InlineArg per contract `contracts/prompt-session.md` → FR-013, FR-030
 
 **Checkpoint**: PromptSession core infrastructure complete — all owned objects (Buffer, Layout, Application) created in constructor. User story implementation can now begin.
 
@@ -58,15 +58,15 @@
 
 ### Tests for User Story 1
 
-- [ ] T016 [P] [US1] Write `CompleteStyleTests` in `tests/Stroke.Tests/Shortcuts/CompleteStyleTests.cs` — enum value existence and count tests → FR-001
-- [ ] T017 [P] [US1] Write `PromptSessionTests` constructor and property default tests in `tests/Stroke.Tests/Shortcuts/PromptSessionTests.cs` — verify 44 constructor params, Lock-protected property get/set, DynCond resolution, FilterOrBool HasValue defaults, exception type validation (FR-037), viMode precedence (Edge Case 1), computed delegation properties (EditingMode/Input/Output delegate to App), eraseWhenDone passed to CreateApplication (not stored as mutable property) → FR-002, FR-003, FR-016, FR-022, FR-023, FR-024, FR-037
-- [ ] T018 [P] [US1] Write `PromptSessionBindingsTests` in `tests/Stroke.Tests/Shortcuts/PromptSessionBindingsTests.cs` — test Enter accept, Ctrl-C throws KeyboardInterruptException, Ctrl-D throws EOFException on empty buffer, Ctrl-D no-op on non-empty buffer → FR-011, FR-027
+- [X] T016 [P] [US1] Write `CompleteStyleTests` in `tests/Stroke.Tests/Shortcuts/CompleteStyleTests.cs` — enum value existence and count tests → FR-001
+- [X] T017 [P] [US1] Write `PromptSessionTests` constructor and property default tests in `tests/Stroke.Tests/Shortcuts/PromptSessionTests.cs` — verify 44 constructor params, Lock-protected property get/set, DynCond resolution, FilterOrBool HasValue defaults, exception type validation (FR-037), viMode precedence (Edge Case 1), computed delegation properties (EditingMode/Input/Output delegate to App), eraseWhenDone passed to CreateApplication (not stored as mutable property) → FR-002, FR-003, FR-016, FR-022, FR-023, FR-024, FR-037
+- [X] T018 [P] [US1] Write `PromptSessionBindingsTests` in `tests/Stroke.Tests/Shortcuts/PromptSessionBindingsTests.cs` — test Enter accept, Ctrl-C throws KeyboardInterruptException, Ctrl-D throws EOFException on empty buffer, Ctrl-D no-op on non-empty buffer → FR-011, FR-027
 
 ### Implementation for User Story 1
 
-- [ ] T019 [US1] Implement `Prompt` (blocking) method in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — per-prompt override logic (explicit property-by-property null checks per Research R4), DefaultBuffer.Reset with default_ document (FR-038), App.RefreshInterval assignment, dumb terminal placeholder branch (`// Dumb terminal branch — implemented in T040`) returning early if conditions met, AddPreRunCallables, App.Run() with setExceptionHandler/handleSigint/inThread/inputHook passthrough, exception propagation (FR-039) → FR-008, FR-010, FR-036, FR-038, FR-039, FR-040
-- [ ] T020 [US1] Implement `PromptAsync` method in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — same override logic as Prompt, App.RunAsync() with handleSigint passthrough (no inThread/inputHook), exception propagation → FR-009, FR-010, FR-039, FR-040
-- [ ] T021 [US1] Implement `AddPreRunCallables` in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — append to App.PreRunCallables: execute preRun first, then if acceptDefault schedule DefaultBuffer.ValidateAndHandle via CallSoon → FR-035, FR-040
+- [X] T019 [US1] Implement `Prompt` (blocking) method in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — per-prompt override logic (explicit property-by-property null checks per Research R4), DefaultBuffer.Reset with default_ document (FR-038), App.RefreshInterval assignment, dumb terminal placeholder branch (`// Dumb terminal branch — implemented in T040`) returning early if conditions met, AddPreRunCallables, App.Run() with setExceptionHandler/handleSigint/inThread/inputHook passthrough, exception propagation (FR-039) → FR-008, FR-010, FR-036, FR-038, FR-039, FR-040
+- [X] T020 [US1] Implement `PromptAsync` method in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — same override logic as Prompt, App.RunAsync() with handleSigint passthrough (no inThread/inputHook), exception propagation → FR-009, FR-010, FR-039, FR-040
+- [X] T021 [US1] Implement `AddPreRunCallables` in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — append to App.PreRunCallables: execute preRun first, then if acceptDefault schedule DefaultBuffer.ValidateAndHandle via CallSoon → FR-035, FR-040
 
 **Checkpoint**: US1 complete — single-line prompt with Ctrl-C/Ctrl-D works. Run `dotnet test --filter "FullyQualifiedName~Shortcuts"` to verify.
 
@@ -80,11 +80,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T022 [US2] Write session reuse tests in `tests/Stroke.Tests/Shortcuts/PromptSessionTests.cs` — verify History persists across Prompt calls, buffer resets between calls (text, completion state, cursor per FR-038), session properties persist, per-prompt overrides apply permanently → US-2, US-6, FR-038
+- [X] T022 [US2] Write session reuse tests in `tests/Stroke.Tests/Shortcuts/PromptSessionReuseTests.cs` — verify History persists across Prompt calls, buffer resets between calls (text, completion state, cursor per FR-038), session properties persist, per-prompt overrides apply permanently → US-2, US-6, FR-038
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Integration-verify buffer reset behavior in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — run through the Prompt→Reset→Prompt cycle: confirm DefaultBuffer.Reset() clears text/completion/cursor at start of each call while History persists; add any missing edge case handling discovered during integration (e.g., completion state cleanup, cursor position reset to 0) → FR-038
+- [X] T023 [US2] Integration-verify buffer reset behavior in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — run through the Prompt→Reset→Prompt cycle: confirm DefaultBuffer.Reset() clears text/completion/cursor at start of each call while History persists; add any missing edge case handling discovered during integration (e.g., completion state cleanup, cursor position reset to 0) → FR-038
 
 **Checkpoint**: US1+US2 complete — REPL-style session reuse with history works.
 
@@ -98,12 +98,12 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Write `PromptFunctionsTests` in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — static Prompt creates temp session with History param only, delegates all other params to session.Prompt(); PromptAsync equivalent → FR-019, FR-036
+- [X] T024 [P] [US3] Write `PromptFunctionsTests` in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — static Prompt creates temp session with History param only, delegates all other params to session.Prompt(); PromptAsync equivalent → FR-019, FR-036
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Implement `PromptFunctions.Prompt` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — creates `PromptSession<string>(history: history)`, calls `session.Prompt(message, ...)` with all remaining params per contract `contracts/prompt-functions.md` → FR-019
-- [ ] T026 [US3] Implement `PromptFunctions.PromptAsync` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — same pattern as Prompt but calls session.PromptAsync → FR-019
+- [X] T025 [US3] Implement `PromptFunctions.Prompt` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — creates `PromptSession<string>(history: history)`, calls `session.Prompt(message, ...)` with all remaining params per contract `contracts/prompt-functions.md` → FR-019
+- [X] T026 [US3] Implement `PromptFunctions.PromptAsync` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — same pattern as Prompt but calls session.PromptAsync → FR-019
 
 **Checkpoint**: US3 complete — one-shot prompt works.
 
@@ -117,11 +117,11 @@
 
 ### Tests for User Story 4
 
-- [ ] T027 [US4] Write completion display tests in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — verify CompletionsMenu Float visible when Column, MultiColumnCompletionsMenu visible when MultiColumn, Tab triggers DisplayCompletionsLikeReadline when ReadlineLike; completeWhileTyping Condition logic (true AND NOT historySearch AND NOT ReadlineLike per FR-018); reserveSpaceForMenu=0 behavior (Edge Case 4); completeInThread wraps in ThreadedCompleter → FR-006, FR-017, FR-018, FR-025, FR-032
+- [X] T027 [US4] Write completion display tests in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — verify CompletionsMenu Float visible when Column, MultiColumnCompletionsMenu visible when MultiColumn, Tab triggers DisplayCompletionsLikeReadline when ReadlineLike; completeWhileTyping Condition logic (true AND NOT historySearch AND NOT ReadlineLike per FR-018); reserveSpaceForMenu=0 behavior (Edge Case 4); completeInThread wraps in ThreadedCompleter → FR-006, FR-017, FR-018, FR-025, FR-032
 
 ### Implementation for User Story 4
 
-- [ ] T028 [US4] Integration-verify layout completion menu visibility in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise all 3 CompleteStyle values end-to-end: confirm Column→CompletionsMenu visible, MultiColumn→MultiColumnCompletionsMenu visible, ReadlineLike→neither visible; fix any filter logic gaps found during integration → FR-017, FR-018
+- [X] T028 [US4] Integration-verify layout completion menu visibility in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise all 3 CompleteStyle values end-to-end: confirm Column→CompletionsMenu visible, MultiColumn→MultiColumnCompletionsMenu visible, ReadlineLike→neither visible; fix any filter logic gaps found during integration → FR-017, FR-018
 
 **Checkpoint**: US4 complete — all three completion styles work correctly.
 
@@ -135,12 +135,12 @@
 
 ### Tests for User Story 5
 
-- [ ] T029 [P] [US5] Write confirm tests in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — CreateConfirmSession bindings (y/Y→true, n/N→false, Keys.Any→no-op), Confirm delegates to CreateConfirmSession.Prompt, ConfirmAsync delegates to PromptAsync, custom suffix → FR-020, FR-021
+- [X] T029 [P] [US5] Write confirm tests in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — CreateConfirmSession bindings (y/Y→true, n/N→false, Keys.Any→no-op), Confirm delegates to CreateConfirmSession.Prompt, ConfirmAsync delegates to PromptAsync, custom suffix → FR-020, FR-021
 
 ### Implementation for User Story 5
 
-- [ ] T030 [US5] Implement `PromptFunctions.CreateConfirmSession` in `src/Stroke/Shortcuts/PromptFunctions.cs` — KeyBindings with y/Y/n/N bindings + Keys.Any catch-all; merges message+suffix via FormattedTextUtils.Merge; returns PromptSession<bool> per contract `contracts/prompt-functions.md` → FR-021
-- [ ] T031 [US5] Implement `PromptFunctions.Confirm` and `ConfirmAsync` in `src/Stroke/Shortcuts/PromptFunctions.cs` — Confirm calls CreateConfirmSession.Prompt(), ConfirmAsync calls CreateConfirmSession.PromptAsync() → FR-020
+- [X] T030 [US5] Implement `PromptFunctions.CreateConfirmSession` in `src/Stroke/Shortcuts/PromptFunctions.cs` — KeyBindings with y/Y/n/N bindings + Keys.Any catch-all; merges message+suffix via FormattedTextUtils.Merge; returns PromptSession<bool> per contract `contracts/prompt-functions.md` → FR-021
+- [X] T031 [US5] Implement `PromptFunctions.Confirm` and `ConfirmAsync` in `src/Stroke/Shortcuts/PromptFunctions.cs` — Confirm calls CreateConfirmSession.Prompt(), ConfirmAsync calls CreateConfirmSession.PromptAsync() → FR-020
 
 **Checkpoint**: US5 complete — confirmation prompt works.
 
@@ -154,11 +154,11 @@
 
 ### Tests for User Story 6
 
-- [ ] T032 [US6] Write per-prompt override tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — non-null message updates permanently, null preserves current, completer/style/validator overrides persist, all ~36 overridable params tested for null vs non-null behavior; also test inThread=true passes through to App.Run (FR-026), setExceptionHandler passes through → FR-010, FR-026
+- [X] T032 [US6] Write per-prompt override tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — non-null message updates permanently, null preserves current, completer/style/validator overrides persist, all ~36 overridable params tested for null vs non-null behavior; also test inThread=true passes through to App.Run (FR-026), setExceptionHandler passes through → FR-010, FR-026
 
 ### Implementation for User Story 6
 
-- [ ] T033 [US6] Audit per-prompt override logic completeness in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — systematically compare all ~36 overridable parameters against Python source lines 966-1041; verify each has `if (param is not null) this.Property = param` in both Prompt and PromptAsync; flag and fix any missing or mismatched overrides → FR-010
+- [X] T033 [US6] Audit per-prompt override logic completeness in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — systematically compare all ~36 overridable parameters against Python source lines 966-1041; verify each has `if (param is not null) this.Property = param` in both Prompt and PromptAsync; flag and fix any missing or mismatched overrides → FR-010
 
 **Checkpoint**: US6 complete — per-prompt overrides work for all parameters.
 
@@ -172,11 +172,11 @@
 
 ### Tests for User Story 7
 
-- [ ] T034 [US7] Write multiline and layout tests in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — SplitMultilinePrompt with "Line1\nLine2\n> " (HasBefore=true, Before="Line1\nLine2\n", FirstInputLine="> "); newline-only prompt "\n\n" (Edge Case 8); continuation callback receives correct width/lineNumber/wrapCount; continuation without multiline is ignored (Edge Case 9); showFrame wraps in Frame widget → FR-012, FR-013, FR-029
+- [X] T034 [US7] Write multiline and layout tests in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — SplitMultilinePrompt with "Line1\nLine2\n> " (HasBefore=true, Before="Line1\nLine2\n", FirstInputLine="> "); newline-only prompt "\n\n" (Edge Case 8); continuation callback receives correct width/lineNumber/wrapCount; continuation without multiline is ignored (Edge Case 9); showFrame wraps in Frame widget → FR-012, FR-013, FR-029
 
 ### Implementation for User Story 7
 
-- [ ] T035 [US7] Integration-verify multiline layout in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise multiline=true end-to-end: confirm ConditionalContainer shows prompt area above input, SearchToolbar/ArgToolbar positioned below input (not replacing prompt), continuation text renders correctly for wrapped lines; fix any layout gaps discovered → FR-006, FR-012, FR-013
+- [X] T035 [US7] Integration-verify multiline layout in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise multiline=true end-to-end: confirm ConditionalContainer shows prompt area above input, SearchToolbar/ArgToolbar positioned below input (not replacing prompt), continuation text renders correctly for wrapped lines; fix any layout gaps discovered → FR-006, FR-012, FR-013
 
 **Checkpoint**: US7 complete — multiline input with continuation text works.
 
@@ -190,11 +190,11 @@
 
 ### Tests for User Story 8
 
-- [ ] T036 [US8] Write password display test in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — verify PasswordProcessor included in layout processors when isPassword is true via DynCond → FR-006
+- [X] T036 [US8] Write password display test in `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` — verify PasswordProcessor included in layout processors when isPassword is true via DynCond → FR-006
 
 ### Implementation for User Story 8
 
-- [ ] T037 [US8] Integration-verify PasswordProcessor in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise isPassword=true end-to-end: confirm ConditionalProcessor(PasswordProcessor) activates when DynCond(isPassword) is true, asterisks display for typed text, Prompt still returns actual text; fix any wiring issues → FR-006
+- [X] T037 [US8] Integration-verify PasswordProcessor in `src/Stroke/Shortcuts/PromptSession.Layout.cs` — exercise isPassword=true end-to-end: confirm ConditionalProcessor(PasswordProcessor) activates when DynCond(isPassword) is true, asterisks display for typed text, Prompt still returns actual text; fix any wiring issues → FR-006
 
 **Checkpoint**: US8 complete — password masking works.
 
@@ -208,12 +208,12 @@
 
 ### Tests for User Story 9
 
-- [ ] T038 [US9] Write dumb terminal tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — _output null + IsDumbTerminal → DumbPrompt; explicit output provided → NOT dumb mode; DumbPrompt echoes typed characters via OnTextChanged subscription → FR-014
+- [X] T038 [US9] Write dumb terminal tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — _output null + IsDumbTerminal → DumbPrompt; explicit output provided → NOT dumb mode; DumbPrompt echoes typed characters via OnTextChanged subscription → FR-014
 
 ### Implementation for User Story 9
 
-- [ ] T039 [US9] Implement `DumbPrompt` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — creates temporary Application with DummyOutput, writes prompt message to real output, subscribes to DefaultBuffer.OnTextChanged to echo characters, writes "\r\n" when done; returns IDisposable for cleanup → FR-014
-- [ ] T040 [US9] Complete dumb terminal branch in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — replace the placeholder from T019/T020 with full implementation: if `_output==null && PlatformUtils.IsDumbTerminal()` → call `DumbPrompt` (from T039) and return its result instead of `App.Run()`/`App.RunAsync()` → FR-014
+- [X] T039 [US9] Implement `DumbPrompt` in `src/Stroke/Shortcuts/PromptSession.Application.cs` — creates temporary Application with DummyOutput, writes prompt message to real output, subscribes to DefaultBuffer.OnTextChanged to echo characters, writes "\r\n" when done; returns IDisposable for cleanup → FR-014
+- [X] T040 [US9] Complete dumb terminal branch in `src/Stroke/Shortcuts/PromptSession.Prompt.cs` — replace the placeholder from T019/T020 with full implementation: if `_output==null && PlatformUtils.IsDumbTerminal()` → call `DumbPrompt` (from T039) and return its result instead of `App.Run()`/`App.RunAsync()` → FR-014
 
 **Checkpoint**: US9 complete — dumb terminal fallback works.
 
@@ -227,7 +227,7 @@
 
 ### Tests for User Story 10
 
-- [ ] T041 [US10] Write async prompt tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — PromptAsync returns Task<TResult>, Ctrl-C throws KeyboardInterruptException from Task, per-prompt overrides work in async → FR-009
+- [X] T041 [US10] Write async prompt tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — PromptAsync returns Task<TResult>, Ctrl-C throws KeyboardInterruptException from Task, per-prompt overrides work in async → FR-009
 
 ### Implementation for User Story 10
 
@@ -245,7 +245,7 @@ No additional implementation needed — PromptAsync implemented in T020. This ph
 
 ### Tests for User Story 11
 
-- [ ] T042 [US11] Write default value and accept-default tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — default_ as string wraps in Document; default_ as Document preserves cursor; acceptDefault triggers ValidateAndHandle via CallSoon (FR-035); preRun callback executes before acceptDefault → FR-015, FR-035
+- [X] T042 [US11] Write default value and accept-default tests in `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` — default_ as string wraps in Document; default_ as Document preserves cursor; acceptDefault triggers ValidateAndHandle via CallSoon (FR-035); preRun callback executes before acceptDefault → FR-015, FR-035
 
 ### Implementation for User Story 11
 
@@ -259,13 +259,13 @@ No additional implementation needed — default_ and acceptDefault handling impl
 
 **Purpose**: Thread safety verification, concurrency tests, build validation, coverage check
 
-- [ ] T043 [P] Write `PromptSessionConcurrencyTests` in `tests/Stroke.Tests/Shortcuts/PromptSessionConcurrencyTests.cs` — concurrent property reads/writes across threads verify Lock protection; DynCond read from render thread while main thread writes; no deadlocks under contention → Constitution XI, FR-016
-- [ ] T044 [P] Verify all source files stay under 1,000 LOC — check `PromptSession.cs`, `PromptSession.Layout.cs`, `PromptSession.Buffers.cs`, `PromptSession.Application.cs`, `PromptSession.Prompt.cs`, `PromptSession.Helpers.cs`, `PromptFunctions.cs`; split if any exceed limit → Constitution X
-- [ ] T045 Verify `dotnet build src/Stroke/Stroke.csproj` compiles with zero warnings
-- [ ] T046 Verify `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Shortcuts"` passes all tests; confirm success criteria SC-001 (≤5 lines), SC-002 (no accumulation), SC-003 (3 styles), SC-004 (16ms), SC-005 (dumb terminal), SC-006 (overrides), SC-007 (confirm y/n) are exercised by at least one passing test
-- [ ] T047 Verify test coverage ≥80% via `dotnet test --collect:"XPlat Code Coverage"` across PromptSession, PromptFunctions, CompleteStyle, KeyboardInterruptException, EOFException → SC-008
-- [ ] T048 Run quickstart.md validation — verify all code examples from `specs/047-prompt-session/quickstart.md` are consistent with implemented API signatures
-- [ ] T049 Verify 1:1 Python API fidelity — compare all public APIs in Python's `prompt_toolkit.shortcuts.prompt.__all__` against implemented C# types: CompleteStyle, PromptSession, prompt (→PromptFunctions.Prompt), confirm (→PromptFunctions.Confirm), create_confirm_session (→PromptFunctions.CreateConfirmSession) → SC-009, SC-010
+- [X] T043 [P] Write `PromptSessionConcurrencyTests` in `tests/Stroke.Tests/Shortcuts/PromptSessionConcurrencyTests.cs` — concurrent property reads/writes across threads verify Lock protection; DynCond read from render thread while main thread writes; no deadlocks under contention → Constitution XI, FR-016
+- [X] T044 [P] Verify all source files stay under 1,000 LOC — check `PromptSession.cs`, `PromptSession.Layout.cs`, `PromptSession.Buffers.cs`, `PromptSession.Application.cs`, `PromptSession.Prompt.cs`, `PromptSession.Helpers.cs`, `PromptFunctions.cs`; split if any exceed limit → Constitution X
+- [X] T045 Verify `dotnet build src/Stroke/Stroke.csproj` compiles with zero warnings
+- [X] T046 Verify `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Shortcuts"` passes all tests; confirm success criteria SC-001 (≤5 lines), SC-002 (no accumulation), SC-003 (3 styles), SC-004 (16ms), SC-005 (dumb terminal), SC-006 (overrides), SC-007 (confirm y/n) are exercised by at least one passing test
+- [X] T047 Verify test coverage ≥80% via `dotnet test --collect:"XPlat Code Coverage"` across PromptSession, PromptFunctions, CompleteStyle, KeyboardInterruptException, EOFException → SC-008
+- [X] T048 Run quickstart.md validation — verify all code examples from `specs/047-prompt-session/quickstart.md` are consistent with implemented API signatures
+- [X] T049 Verify 1:1 Python API fidelity — compare all public APIs in Python's `prompt_toolkit.shortcuts.prompt.__all__` against implemented C# types: CompleteStyle, PromptSession, prompt (→PromptFunctions.Prompt), confirm (→PromptFunctions.Confirm), create_confirm_session (→PromptFunctions.CreateConfirmSession) → SC-009, SC-010
 
 ---
 
