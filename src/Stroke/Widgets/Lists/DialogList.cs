@@ -44,8 +44,11 @@ public class DialogList<T> : IMagicContainer
     /// <summary>Gets or sets whether to show numbers.</summary>
     public bool ShowNumbers { get; set; }
 
-    /// <summary>Gets the selected index (lock-protected).</summary>
-    public int SelectedIndex
+    /// <summary>Gets or sets the selected index (lock-protected).</summary>
+    /// <remarks>
+    /// Internal because Python's <c>_selected_index</c> is a private field.
+    /// </remarks>
+    internal int SelectedIndex
     {
         get { using (_lock.EnterScope()) return _selectedIndex; }
         set { using (_lock.EnterScope()) _selectedIndex = value; }

@@ -109,8 +109,12 @@ public sealed partial class Buffer : IBuffer
     /// <summary>Gets the temp file path function.</summary>
     public Func<string> Tempfile { get; }
 
-    /// <summary>Gets the accept handler.</summary>
-    public Func<Buffer, bool>? AcceptHandler { get; }
+    /// <summary>Gets or sets the accept handler.</summary>
+    /// <remarks>
+    /// This is mutable to match Python Prompt Toolkit's <c>Buffer.accept_handler</c>,
+    /// which is a plain attribute that can be reassigned after construction.
+    /// </remarks>
+    public Func<Buffer, bool>? AcceptHandler { get; set; }
 
     // ════════════════════════════════════════════════════════════════════════
     // FILTERS

@@ -94,7 +94,7 @@ public class TextArea : IMagicContainer
     public Func<Buffer, bool>? AcceptHandler
     {
         get => Buffer.AcceptHandler;
-        set { /* Buffer.AcceptHandler is readonly after construction in C# */ }
+        set => Buffer.AcceptHandler = value;
     }
 
     // ════════════════════════════════════════════════════════════════════════

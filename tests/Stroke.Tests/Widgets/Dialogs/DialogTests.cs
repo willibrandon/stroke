@@ -140,4 +140,16 @@ public class DialogTests
         var dialog = new Dialog(body, width: Dimension.Exact(50));
         Assert.NotNull(dialog.PtContainer());
     }
+
+    [Fact]
+    public void Width_WithBackground_PassedToBothFrameAndBox()
+    {
+        // Regression: width must be passed to Frame unconditionally,
+        // not gated on withBackground. Python's `None if with_background is None else width`
+        // always evaluates to `width` because with_background is bool, never None.
+        var body = new AnyContainer(new Window());
+        var dialog = new Dialog(body, width: Dimension.Exact(60), withBackground: true);
+        Assert.IsType<Box>(dialog.Container, exactMatch: false);
+        Assert.NotNull(dialog.PtContainer());
+    }
 }

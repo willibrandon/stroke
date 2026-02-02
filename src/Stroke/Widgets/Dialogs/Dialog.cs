@@ -117,7 +117,7 @@ public class Dialog : IMagicContainer
                 body: frameBody,
                 title: (Func<AnyFormattedText>)(() => this.Title),
                 style: "class:dialog.body",
-                width: withBackground ? null : width,
+                width: width,
                 keyBindings: kb,
                 modal: modal)));
 

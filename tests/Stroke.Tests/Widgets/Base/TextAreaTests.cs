@@ -181,4 +181,37 @@ public class TextAreaTests
         Assert.NotNull(ta.Control);
         Assert.IsType<BufferControl>(ta.Control);
     }
+
+    [Fact]
+    public void AcceptHandler_SetAfterConstruction_DelegatesToBuffer()
+    {
+        var ta = new TextArea();
+        Assert.Null(ta.AcceptHandler);
+
+        Func<Buffer, bool> handler = _ => true;
+        ta.AcceptHandler = handler;
+
+        Assert.Same(handler, ta.AcceptHandler);
+        Assert.Same(handler, ta.Buffer.AcceptHandler);
+    }
+
+    [Fact]
+    public void AcceptHandler_Constructor_IsReadableViaProperty()
+    {
+        Func<Buffer, bool> handler = _ => false;
+        var ta = new TextArea(acceptHandler: handler);
+
+        Assert.Same(handler, ta.AcceptHandler);
+    }
+
+    [Fact]
+    public void AcceptHandler_SetToNull_ClearsHandler()
+    {
+        Func<Buffer, bool> handler = _ => true;
+        var ta = new TextArea(acceptHandler: handler);
+
+        ta.AcceptHandler = null;
+        Assert.Null(ta.AcceptHandler);
+        Assert.Null(ta.Buffer.AcceptHandler);
+    }
 }
