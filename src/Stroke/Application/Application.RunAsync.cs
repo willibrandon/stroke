@@ -41,6 +41,18 @@ public partial class Application<TResult>
 
         try
         {
+            // Create action channel early so pre-run callables can schedule
+            // callbacks via _actionChannel (e.g., acceptDefault in PromptSession).
+            // Actions queued here are drained once the event loop starts,
+            // matching Python's get_running_loop().call_soon() semantics.
+            var actionChannel = Channel.CreateUnbounded<Action>(
+                new UnboundedChannelOptions
+                {
+                    SingleReader = true,
+                    SingleWriter = false,
+                });
+            _actionChannel = actionChannel;
+
             // Reset
             Reset();
             PreRun(preRun);
@@ -142,17 +154,6 @@ public partial class Application<TResult>
                     SingleWriter = false,
                 });
             _redrawChannel = redrawChannel;
-
-            // Action channel for marshaling callbacks to the event loop.
-            // Used by KeyProcessor flush timeout and SIGINT handler to avoid
-            // calling non-thread-safe methods from background/signal threads.
-            var actionChannel = Channel.CreateUnbounded<Action>(
-                new UnboundedChannelOptions
-                {
-                    SingleReader = true,
-                    SingleWriter = false,
-                });
-            _actionChannel = actionChannel;
 
             // Wire up KeyProcessor flush timeout to marshal via the action channel.
             KeyProcessor.OnFlushTimeout = () =>

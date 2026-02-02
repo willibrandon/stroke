@@ -72,6 +72,7 @@ public partial class Application<TResult> : IApplicationDoneCheck
     private double _ttimeoutLen;
     private double? _timeoutLen;
     private string _exitStyle;
+    private double? _refreshInterval;
 
     // Internal state
     internal bool _isRunning;
@@ -191,7 +192,7 @@ public partial class Application<TResult> : IApplicationDoneCheck
         // Timing
         MinRedrawInterval = minRedrawInterval;
         MaxRenderPostponeTime = maxRenderPostponeTime;
-        RefreshInterval = refreshInterval;
+        _refreshInterval = refreshInterval;
         TerminalSizePollingInterval = terminalSizePollingInterval;
 
         // Cursor
@@ -429,7 +430,15 @@ public partial class Application<TResult> : IApplicationDoneCheck
     public double? MaxRenderPostponeTime { get; }
 
     /// <summary>Auto-invalidation interval in seconds.</summary>
-    public double? RefreshInterval { get; }
+    /// <remarks>
+    /// Settable to allow per-prompt override from <c>PromptSession</c>.
+    /// Protected by Lock for thread safety.
+    /// </remarks>
+    public double? RefreshInterval
+    {
+        get { using (_lock.EnterScope()) { return _refreshInterval; } }
+        set { using (_lock.EnterScope()) { _refreshInterval = value; } }
+    }
 
     /// <summary>Terminal size polling interval in seconds.</summary>
     public double? TerminalSizePollingInterval { get; }
