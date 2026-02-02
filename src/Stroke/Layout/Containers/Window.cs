@@ -174,11 +174,15 @@ public class Window : IContainer, IWindow
         WindowAlign align = WindowAlign.Left,
         string style = "",
         string? @char = null,
-        GetLinePrefixCallable? getLinePrefix = null)
+        GetLinePrefixCallable? getLinePrefix = null,
+        Func<Dimension?>? widthGetter = null,
+        Func<Dimension?>? heightGetter = null,
+        Func<string>? styleGetter = null,
+        Func<string?>? charGetter = null)
     {
         Content = content ?? new DummyControl();
-        _widthGetter = width != null ? () => width : () => null;
-        _heightGetter = height != null ? () => height : () => null;
+        _widthGetter = widthGetter ?? (width != null ? () => width : () => null);
+        _heightGetter = heightGetter ?? (height != null ? () => height : () => null);
         ZIndex = zIndex;
 
         DontExtendWidth = FilterUtils.ToFilter(dontExtendWidth.HasValue ? dontExtendWidth : new FilterOrBool(false));
@@ -202,8 +206,8 @@ public class Window : IContainer, IWindow
 
         _colorColumnsGetter = colorcolumns != null ? () => colorcolumns : () => Array.Empty<ColorColumn>();
         _alignGetter = () => align;
-        _styleGetter = () => style;
-        _charGetter = () => @char;
+        _styleGetter = styleGetter ?? (() => style);
+        _charGetter = charGetter ?? (() => @char);
 
         GetLinePrefix = getLinePrefix;
     }

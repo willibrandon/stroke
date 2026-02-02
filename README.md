@@ -423,6 +423,25 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - 12 style classes matching Python Prompt Toolkit exactly
   - Thread-safe via immutable construction patterns (152 tests, >80% coverage)
 
+- **Base Widgets** — 15 reusable widget classes ported from Python Prompt Toolkit's `widgets/base.py` and `widgets/dialogs.py`
+  - `Border` — Static class with 6 Unicode box-drawing constants (─ │ ┌ ┐ └ ┘)
+  - `Label` — Non-focusable text display with auto-calculated width via `UnicodeWidth.GetWidth()`
+  - `Button` — Clickable widget with Enter/Space/mouse handlers, focus-based styling, centered text
+  - `Frame` — Border decorator with optional title using `Template`-based formatting, `ConditionalContainer` title switching
+  - `Shadow` — Visual depth effect using `FloatContainer` with 2 transparent overlay `Float` windows
+  - `Box` — Padding container with per-side fallback logic (HSplit/VSplit composition)
+  - `TextArea` — Full-featured text input (22 constructor parameters) wrapping Buffer + BufferControl + Window
+  - `ProgressBar` — Thread-safe percentage bar with `FloatContainer` and weighted `VSplit` proportional rendering
+  - `VerticalLine` / `HorizontalLine` — Simple line widgets using Border constants
+  - `DialogList<T>` — Generic selection base class with thread-safe Lock, 8 key binding groups, mouse handlers
+  - `RadioList<T>` — Single-selection list (always `multipleSelection=false`)
+  - `CheckboxList<T>` — Multi-selection list (always `multipleSelection=true`)
+  - `Checkbox` — Convenience wrapper creating a 1-item `CheckboxList<string>`
+  - `Dialog` — Composed dialog window (Frame + Shadow + Box + Buttons) with Tab/Shift-Tab focus cycling
+  - All widgets implement `IMagicContainer` for container protocol integration
+  - Thread-safe mutable state in DialogList and ProgressBar via `System.Threading.Lock`
+  - 141 new widget tests (8,015 total tests, >80% coverage)
+
 ### Up Next
 
 - **Shortcuts** — High-level `PromptSession` API and dialog helpers
