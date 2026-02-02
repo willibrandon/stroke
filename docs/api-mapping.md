@@ -2082,14 +2082,28 @@ public sealed record SelectionState(
 
 ### Functions - Dialogs
 
+#### Factory Methods (return Application&lt;T&gt;)
+
 | Python | Stroke | Signature |
 |--------|--------|-----------|
+| `yes_no_dialog(title, text, yes_text, no_text)` | `Dialogs.YesNoDialog(...)` | `Application<bool> YesNoDialog(...)` |
+| `message_dialog(title, text, ok_text)` | `Dialogs.MessageDialog(...)` | `Application<object?> MessageDialog(...)` |
+| `input_dialog(title, text, ok_text, cancel_text)` | `Dialogs.InputDialog(...)` | `Application<string?> InputDialog(...)` |
+| `button_dialog(title, text, buttons)` | `Dialogs.ButtonDialog<T>(...)` | `Application<T> ButtonDialog<T>(...)` |
+| `radiolist_dialog(title, text, values)` | `Dialogs.RadioListDialog<T>(...)` | `Application<T?> RadioListDialog<T>(...)` |
+| `checkboxlist_dialog(title, text, values)` | `Dialogs.CheckboxListDialog<T>(...)` | `Application<IReadOnlyList<T>?> CheckboxListDialog<T>(...)` |
+| `progress_dialog(title, text, run_callback)` | `Dialogs.ProgressDialog(...)` | `Application<object?> ProgressDialog(...)` |
+
+#### Async Wrappers (create + run in one call)
+
+| Python | Stroke | Signature |
+|--------|--------|-----------|
+| `yes_no_dialog(title, text, yes_text, no_text)` | `Dialogs.YesNoDialogAsync(...)` | `Task<bool> YesNoDialogAsync(...)` |
 | `message_dialog(title, text, ok_text)` | `Dialogs.MessageDialogAsync(title, text, okText)` | `Task MessageDialogAsync(...)` |
 | `input_dialog(title, text, ok_text, cancel_text)` | `Dialogs.InputDialogAsync(...)` | `Task<string?> InputDialogAsync(...)` |
-| `yes_no_dialog(title, text, yes_text, no_text)` | `Dialogs.YesNoDialogAsync(...)` | `Task<bool> YesNoDialogAsync(...)` |
 | `button_dialog(title, text, buttons)` | `Dialogs.ButtonDialogAsync<T>(...)` | `Task<T> ButtonDialogAsync<T>(...)` |
-| `radiolist_dialog(title, text, values)` | `Dialogs.RadioListDialogAsync<T>(...)` | `Task<T> RadioListDialogAsync<T>(...)` |
-| `checkboxlist_dialog(title, text, values)` | `Dialogs.CheckboxListDialogAsync<T>(...)` | `Task<IReadOnlyList<T>> CheckboxListDialogAsync<T>(...)` |
+| `radiolist_dialog(title, text, values)` | `Dialogs.RadioListDialogAsync<T>(...)` | `Task<T?> RadioListDialogAsync<T>(...)` |
+| `checkboxlist_dialog(title, text, values)` | `Dialogs.CheckboxListDialogAsync<T>(...)` | `Task<IReadOnlyList<T>?> CheckboxListDialogAsync<T>(...)` |
 | `progress_dialog(title, text, run_callback)` | `Dialogs.ProgressDialogAsync(...)` | `Task ProgressDialogAsync(...)` |
 
 ### Functions - Prompt

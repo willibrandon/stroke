@@ -436,72 +436,56 @@ This ensures examples behave correctly in real terminal environments before mark
 - **External NuGet**: Wcwidth (v4.0.1, MIT) for character width; TextMateSharp (v1.0.70, MIT) for syntax highlighting
 - **Storage**: In-memory only (except FileHistory which uses filesystem)
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
-- C# 13 / .NET 10 + Stroke.Core (Buffer, Document, SearchState, PasteMode), Stroke.KeyBinding (Binding, KeyPressEvent, KeyPress, KeyProcessor, EmacsState, EditingMode, KeyHandlerCallable), Stroke.Clipboard (IClipboard, ClipboardData), Stroke.Application (Application, RunInTerminal), Stroke.Layout.Controls (BufferControl, SearchBufferControl), Stroke.Input (Keys), Stroke.Filters (IFilter, Always, Never) (034-named-commands)
-- N/A (in-memory registry only) (034-named-commands)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, ConditionalKeyBindings, MergedKeyBindings), Stroke.Application (AppFilters, ViFilters, EmacsFilters, KeyPressEventExtensions), Stroke.Core (Buffer, Document), Stroke.Layout (Window, WindowRenderInfo) (035-scroll-bindings)
-- N/A (in-memory only) (035-scroll-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyProcessor, KeyPress, KeyPressEvent, NotImplementedOrNone, KeyHandlerCallable), Stroke.Input (Keys, MouseEvent, MouseButton, MouseEventType, MouseModifiers), Stroke.Core.Primitives (Point), Stroke.Rendering (Renderer, HeightIsUnknownException), Stroke.Layout (MouseHandlers), Stroke.Application (Application) (036-mouse-bindings)
-- N/A (in-memory lookup tables only) (036-mouse-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, Binding, KeyPressEvent, KeyProcessor, KeyPress, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool, Always, Never), Stroke.Application (AppFilters, ViFilters, EmacsFilters, AppContext, Application, KeyPressEventExtensions), Stroke.Core (Buffer), Stroke.Clipboard (IClipboard, ClipboardData) (037-basic-key-bindings)
-- N/A (in-memory binding registry only) (037-basic-key-bindings)
-- C# 13 / .NET 10 + Stroke.Core (Buffer, SearchState, SearchDirection), Stroke.Layout (Layout, BufferControl, SearchBufferControl, FocusableElement), Stroke.Application (AppContext, Application), Stroke.KeyBinding (KeyPressEvent, KeyHandlerCallable, NotImplementedOrNone, ViState, InputMode), Stroke.Filters (IFilter, Condition) (038-search-system-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyHandlerCallable, KeyPressEvent, KeyOrChar, NotImplementedOrNone, FilterOrBool), Stroke.Application (AppContext, EmacsFilters), Stroke.Core (Buffer, Document), Stroke.AutoSuggest (Suggestion), Stroke.Filters (IFilter, Filter, Condition), Stroke.Input (Keys) (039-auto-suggest-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, KeyPressEvent, KeyOrChar, KeyHandlerCallable, NotImplementedOrNone, FilterOrBool), Stroke.Application (Application, KeyPressEventExtensions), Stroke.Input (Keys), Stroke.Rendering (Renderer), Stroke.Layout (Layout) (040-focus-cpr-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, MergedKeyBindings, Binding, KeyOrChar), Stroke.Application (EmacsFilters, ViFilters, AppFilters), Stroke.Input (Keys), Stroke.KeyBinding.Bindings (NamedCommands) (041-open-in-editor-bindings)
-- C# 13 / .NET 10 + Stroke.KeyBinding (KeyBindings, ConditionalKeyBindings, Binding, KeyOrChar, KeyPressEvent, KeyHandlerCallable, NotImplementedOrNone), Stroke.Application (AppFilters, EmacsFilters, SearchFilters, AppContext), Stroke.Core (Buffer, BufferOperations, Document, SelectionState), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool), Stroke.Completion (CompleteEvent, ICompleter), Stroke.Clipboard (IClipboard, ClipboardData), Stroke.KeyBinding.Bindings (NamedCommands) (042-emacs-key-bindings)
-- C# 13 / .NET 10 + Stroke.Core (Buffer, Document, SelectionState, PasteMode), Stroke.KeyBinding (Binding, KeyPressEvent, KeyPress, KeyProcessor, ViState, InputMode, CharacterFind, OperatorFuncDelegate, EditingMode), Stroke.Clipboard (IClipboard, ClipboardData), Stroke.Application (Application, AppContext, AppFilters, ViFilters, SearchFilters, KeyPressEventExtensions), Stroke.Layout (Window, WindowRenderInfo, BufferControl, SearchBufferControl), Stroke.Input (Keys), Stroke.Filters (IFilter, Filter, Condition, FilterOrBool, Always, Never), Stroke.KeyBinding.Bindings (NamedCommands, SearchBindings) (043-vi-key-bindings)
-- C# 13 / .NET 10 + Stroke.Layout.Containers (Window, ConditionalContainer, IMagicContainer), Stroke.Layout.Controls (FormattedTextControl, BufferControl, SearchBufferControl, UIControl, UIContent), Stroke.Layout.Processors (BeforeInput), Stroke.Layout (Dimension, Layout), Stroke.Core (Buffer, Document, SearchState, SearchDirection, CompletionState), Stroke.KeyBinding (KeyBindings, ConditionalKeyBindings, MergedKeyBindings, KeyPressEvent, InputMode), Stroke.Filters (IFilter, Condition, FilterOrBool), Stroke.Application (AppFilters, EmacsFilters, ViFilters, AppContext), Stroke.FormattedText (AnyFormattedText, StyleAndTextTuple, FormattedTextUtils), Stroke.Lexers (SimpleLexer), Stroke.Input (Keys), Stroke.Completion (Completion) (044-toolbar-widgets)
-- C# 13 / .NET 10+ + Stroke.Core (Buffer, Document), Stroke.Layout (Window, HSplit, VSplit, FloatContainer, ConditionalContainer, DynamicContainer, Float), Stroke.Layout.Controls (FormattedTextControl, BufferControl), Stroke.Layout.Margins (ScrollbarMargin, NumberedMargin, ConditionalMargin), Stroke.Layout.Processors (PasswordProcessor, AppendAutoSuggestion, BeforeInput, ConditionalProcessor), Stroke.Completion (DynamicCompleter), Stroke.Validation (DynamicValidator), Stroke.AutoSuggest (DynamicAutoSuggest), Stroke.Lexers (DynamicLexer), Stroke.FormattedText (AnyFormattedText, Template, FormattedTextUtils), Stroke.Filters (IFilter, Condition, FilterOrBool), Stroke.KeyBinding (KeyBindings), Stroke.Input (Keys), Stroke.Widgets.Toolbars (SearchToolbar) (045-base-widgets)
-- C# 13 / .NET 10+ + Stroke.Application (AppContext, RunInTerminal, Application), Stroke.Rendering (RendererUtils), Stroke.Styles (StyleMerger, DefaultStyles, IStyle, IStyleTransformation), Stroke.Output (IOutput, OutputFactory, ColorDepth), Stroke.FormattedText (AnyFormattedText, FormattedText, FormattedTextUtils), Stroke.Input (DummyInput), Stroke.Layout (Layout) (046-shortcut-utils)
-- N/A (stateless utility functions) (046-shortcut-utils)
-- C# 13 / .NET 10 + Stroke.Application, Stroke.Core (Buffer, Document), Stroke.Layout (HSplit, FloatContainer, Window, ConditionalContainer), Stroke.Layout.Controls (BufferControl, FormattedTextControl, SearchBufferControl), Stroke.Layout.Menus (CompletionsMenu, MultiColumnCompletionsMenu), Stroke.Layout.Processors (7 processor types), Stroke.KeyBinding (KeyBindings, MergedKeyBindings, ConditionalKeyBindings, DynamicKeyBindings), Stroke.Completion (DynamicCompleter, ThreadedCompleter), Stroke.Validation (DynamicValidator), Stroke.AutoSuggest (DynamicAutoSuggest), Stroke.Lexers (DynamicLexer), Stroke.Styles (DynamicStyle, DynamicStyleTransformation, ConditionalStyleTransformation, SwapLightAndDarkStyleTransformation, StyleTransformationMerger), Stroke.Clipboard (DynamicClipboard, InMemoryClipboard), Stroke.CursorShapes (DynamicCursorShapeConfig), Stroke.History (IHistory, InMemoryHistory), Stroke.Widgets (Frame, SearchToolbar, SystemToolbar, ValidationToolbar), Stroke.FormattedText (AnyFormattedText, FormattedTextUtils), Stroke.Filters (IFilter, Condition, FilterOrBool), Stroke.Output (DummyOutput), Stroke.Input (IInput) (047-prompt-session)
-- N/A (in-memory session state only; history persistence delegated to IHistory implementations) (047-prompt-session)
 
 ## Recent Changes
-- 047-prompt-session: PromptSession<TResult> (6 partial class files: core 44-param constructor with 36 Lock-protected mutable properties, DynCond factory, FilterOrBool HasValue sentinel detection, viMode→EditingMode.Vi precedence, exception type validation via reflection; Buffers with DynamicCompleter/DynamicValidator/DynamicAutoSuggest and completeWhileTyping Condition logic; Layout with FloatContainer/HSplit/ConditionalContainer, SplitMultilinePrompt, RPromptWindow, CompletionsMenu/MultiColumnCompletionsMenu visibility gated on CompleteStyle, PasswordProcessor via DynCond, showFrame Frame wrapping; Application with DynamicStyle/DynamicClipboard/DynamicCursorShapeConfig, style transformation merger, merged key bindings in priority order, CreatePromptBindings with Enter/Ctrl-C/Ctrl-D/Tab/Ctrl-Z handlers; Prompt/PromptAsync with per-prompt permanent overrides 38/38 parity, buffer reset, dumb terminal branch, AddPreRunCallables with acceptDefault; Helpers with GetPrompt/GetContinuation/GetLinePrefix/GetArgText/InlineArg), Prompt static class (Prompt/PromptAsync creating temp session, CreateConfirmSession with y/Y→true n/N→false Keys.Any→no-op bindings, Confirm/ConfirmAsync), CompleteStyle enum (Column/MultiColumn/ReadlineLike), KeyboardInterruptException, EOFException, PromptContinuationCallable delegate (8224 tests)
-- 046-shortcut-utils: FormattedTextOutput static class (Print single-value and multi-value overloads with sep/end/file/flush/style/output/colorDepth/styleTransformation/includeDefaultPygmentsStyle params, PrintContainer with DummyInput→EndOfStreamException termination pattern, CreateMergedStyle private helper merging DefaultUI→Pygments→user styles via StyleMerger, ToText/ToAnyFormattedText private helpers bridging object→AnyFormattedText via implicit conversions), TerminalUtils static class (Clear with EraseScreen+CursorGoto+Flush, SetTitle, ClearTitle), DummyInput.Attach bug fix (now invokes callback immediately matching Python source) (8051 tests)
-- 045-base-widgets: 15 widget classes across 3 namespaces (Base, Lists, Dialogs) — Border (6 Unicode box-drawing constants), Label (auto-width via UnicodeWidth), Button (Enter/Space/mouse handlers, focus-based styling), Frame (ConditionalContainer title switching, Template-based title, DynamicContainer body), Shadow (FloatContainer with 2 transparent Floats), Box (HSplit/VSplit padding with per-side fallback, DynamicContainer body), TextArea (22-param constructor, FilterOrBool→Func<bool> bridging, processor pipeline, dynamic margins), ProgressBar (Lock-protected percentage, FloatContainer with weighted VSplit), VerticalLine/HorizontalLine (Border constant wrappers), DialogList<T> (Lock-protected state, 8 key binding groups, text fragment generation with mouse handlers, compound HandleEnter atomicity), RadioList<T> (single-select, always multipleSelection=false), CheckboxList<T> (multi-select, always multipleSelection=true), Checkbox (1-item CheckboxList<string> wrapper), Dialog (Frame+Shadow+Box+Button composition, Tab/Shift-Tab focus cycling with ~HasCompletions filter, Left/Right button navigation) (8015 tests)
-- 044-toolbar-widgets: FormattedTextToolbar (Window subclass), SystemToolbar (shell command with Emacs/Vi/global key bindings, async RunSystemCommandAsync, IMagicContainer), ArgToolbar (repeat count display with HasArg filter), SearchToolbar (direction-aware prompts, SearchBufferControl with BeforeInput, is_searching Condition), CompletionsToolbarControl (internal IUIControl with horizontal pagination algorithm), CompletionsToolbar (HasCompletions filter wrapper), ValidationToolbar (error display with optional line/column position), SearchBufferControl extended with inputProcessors parameter (7888 tests)
-- 043-vi-key-bindings: ViBindings static partial class split across 8 files, LoadViBindings() with ~300 bindings (navigation, operators, text objects, mode switch, visual mode, insert mode, misc), RegisterOperator/RegisterTextObject helpers creating multi-mode bindings, ConditionalKeyBindings gated on ViMode, ViBindings.VisualMode.cs extracted for visual mode bindings (7707 tests)
-- 042-emacs-key-bindings: EmacsBindings static partial class, LoadEmacsBindings() with 78 core bindings (movement, editing, kill ring, completion, selection, numeric args, word case, escape no-op), LoadEmacsShiftSelectionBindings() with 34 shift-selection bindings (start, extend, replace/cancel, cancel-movement), 23 private handler methods, Buffer.DismissValidation() for Ctrl-G cancel, ConditionalKeyBindings gated on EmacsMode (7470 tests)
-- 041-open-in-editor-bindings: OpenInEditorBindings static class, 3 binding loaders (LoadEmacsOpenInEditorBindings with Ctrl-X Ctrl-E + EmacsMode & ~HasSelection filter, LoadViOpenInEditorBindings with 'v' + ViNavigationMode filter, LoadOpenInEditorBindings combined via MergedKeyBindings), per-binding filters matching Python source, delegates to edit-and-execute-command named command (7321 tests)
-- 040-focus-cpr-bindings: FocusFunctions static class (FocusNext, FocusPrevious), CprBindings static class (LoadCprBindings with saveBefore disabled, CPR escape sequence parsing), focus navigation between windows, CPR response handling to renderer (7307 tests)
-- 039-auto-suggest-bindings: AutoSuggestBindings static class, LoadAutoSuggestBindings() with 4 bindings (3 full accept + 1 partial accept), SuggestionAvailable filter, AcceptSuggestion/AcceptPartialSuggestion handlers, regex word boundary splitting (7295 tests)
-- 038-search-system-bindings: SearchOperations relocated from Core to Application (StartSearch, StopSearch, DoIncrementalSearch, AcceptSearch), SearchBindings with 9 handler functions + 2 binding loaders (LoadEmacsSearchBindings, LoadViSearchBindings), SearchFilters.SearchBufferIsEmpty, Application.CurrentSearchState fix, SearchState ~ operator (7274 tests)
-- 037-basic-key-bindings: BasicBindings static class, LoadBasicBindings() with 118 bindings (90 ignored + 28 specific), 14 registration groups, filter composition, named commands + inline handlers (7205 tests)
-- 036-mouse-bindings: MouseBindings static class, 3 FrozenDictionary lookup tables (96 XTerm SGR + 10 Typical + 4 URXVT), LoadMouseBindings() with 4 handlers, Renderer.CursorPos property (7027 tests)
-- 035-scroll-bindings: ScrollBindings (8 scroll functions), PageNavigationBindings (3 binding loaders), Vi/Emacs key binding registration (6980 tests)
-- 034-named-commands: NamedCommands static registry, 49 Readline commands (movement, text edit, kill/yank, history, completion, macro, misc), CompletionBindings, KeyPressEventExtensions (6927 tests)
-- 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils, 3 controls — completion menu rendering with mouse/keyboard (6805 tests)
-- 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters — IFilter-based state queries (6708 tests)
-- 031-input-processors: IProcessor pipeline, 26 processors, ExplodedList, MergedProcessor (6618 tests)
-- 030-application-system: Application<TResult> orchestration, Renderer diff updates, KeyProcessor, Layout focus, AppContext/AppSession (6469 tests)
-- 029-layout-containers-controls-window: HSplit, VSplit, FloatContainer, ConditionalContainer, Window, BufferControl, UIContent, margins (6066 tests)
-- 028-screen-character-model: Screen sparse 2D buffer, Char interning, z-index drawing (369 tests)
-- 027-regular-languages: Grammar.Compile, GrammarCompleter/Lexer/Validator (162 tests)
-- 026-vi-digraphs: 1,356 RFC1345 digraph mappings (36 tests)
-- 025-lexer-system: ILexer, SimpleLexer, DynamicLexer, PygmentsLexer with line caching (163 tests)
-- 024-utilities: Event<T>, UnicodeWidth, PlatformUtils, CollectionUtils (146 tests)
-- 023-editing-modes-state: EditingMode, InputMode, ViState, EmacsState (116 tests)
-- 022-key-bindings-system: KeyBindings registry, Binding, proxy types, FilterOrBool.HasValue (365 tests)
-- 021-output-system: IOutput, Vt100Output, ColorDepth, CursorShape (420 tests)
-- 020-ansi-formatted-text: Ansi % operator with escape neutralization (63 tests)
-- 019-html-formatted-text: Html % operator with HTML escaping (46 tests)
-- 018-styles-system: Style, Attrs, named/ANSI colors, transformations, default styles (542 tests)
-- 017-filter-system-core: IFilter, Filter operators, Always/Never, Condition, FilterOrBool (279 tests)
-- 016-layout-dimensions: Dimension class, DimensionUtils, D alias (95 tests)
-- 015-formatted-text-system: Html, Ansi, Template, PygmentsTokens, FormattedTextUtils (281 tests)
+
+Most recent first. Total test count: **8,271 tests**.
+
+- 048-dialog-shortcuts: Dialogs static class — 7 factory methods + 7 async wrappers, thread-safe ProgressDialog
+- 047-prompt-session: PromptSession<TResult> 44-param constructor, Prompt static class, CompleteStyle enum, confirm dialogs
+- 046-shortcut-utils: FormattedTextOutput.Print/PrintContainer, TerminalUtils.Clear/SetTitle/ClearTitle
+- 045-base-widgets: 15 widgets — Label, Button, Frame, Shadow, Box, TextArea, ProgressBar, DialogList<T>, RadioList<T>, CheckboxList<T>, Checkbox, Dialog
+- 044-toolbar-widgets: 7 toolbars — FormattedText, System, Arg, Search, CompletionsControl, Completions, Validation
+- 043-vi-key-bindings: ViBindings ~300 bindings across 8 files (navigation, operators, text objects, visual mode)
+- 042-emacs-key-bindings: EmacsBindings 78 core + 34 shift-selection bindings
+- 041-open-in-editor: 3 binding loaders (Emacs Ctrl-X Ctrl-E, Vi 'v', combined)
+- 040-focus-cpr-bindings: FocusFunctions (FocusNext/Previous), CprBindings (CPR escape parsing)
+- 039-auto-suggest-bindings: 4 bindings (3 full accept + 1 partial word accept)
+- 038-search-system-bindings: SearchOperations lifecycle, SearchBindings (Emacs + Vi loaders)
+- 037-basic-key-bindings: BasicBindings 118 bindings (90 ignored + 28 specific)
+- 036-mouse-bindings: MouseBindings, 3 FrozenDictionary lookup tables (XTerm SGR/Typical/URXVT)
+- 035-scroll-bindings: ScrollBindings (8 functions), PageNavigationBindings (3 loaders)
+- 034-named-commands: NamedCommands 49 Readline commands, CompletionBindings
+- 033-completion-menus: CompletionsMenu, MultiColumnCompletionsMenu, MenuUtils
+- 032-application-filters: AppFilters, ViFilters, EmacsFilters, SearchFilters
+- 031-input-processors: IProcessor pipeline, 26 processors, ExplodedList, MergedProcessor
+- 030-application-system: Application<TResult>, Renderer diff updates, KeyProcessor, Layout, AppContext
+- 029-layout-containers: HSplit, VSplit, FloatContainer, ConditionalContainer, Window, BufferControl, margins
+- 028-screen-character: Screen sparse 2D buffer, Char interning, z-index drawing
+- 027-regular-languages: Grammar.Compile, GrammarCompleter/Lexer/Validator
+- 026-vi-digraphs: 1,356 RFC1345 digraph mappings
+- 025-lexer-system: ILexer, SimpleLexer, DynamicLexer, PygmentsLexer
+- 024-utilities: Event<T>, UnicodeWidth, PlatformUtils, CollectionUtils
+- 023-editing-modes: EditingMode, InputMode, ViState, EmacsState
+- 022-key-bindings: KeyBindings registry, Binding, proxy types, FilterOrBool.HasValue
+- 021-output-system: IOutput, Vt100Output, ColorDepth, CursorShape
+- 020-ansi-formatted-text: Ansi % operator with escape neutralization
+- 019-html-formatted-text: Html % operator with HTML escaping
+- 018-styles-system: Style, Attrs, named/ANSI colors, transformations
+- 017-filter-system: IFilter, Filter operators, Always/Never, Condition, FilterOrBool
+- 016-layout-dimensions: Dimension, DimensionUtils, D alias
+- 015-formatted-text: Html, Ansi, Template, PygmentsTokens, FormattedTextUtils
 - 014-input-system: IInput, Vt100Parser, Win32Input/Vt100Input, pipe input
-- 013-mouse-events: MouseEvent, MouseHandlers, NotImplementedOrNone (106 tests)
-- 012-completion-system: ICompleter, 12 completers, Completion/CompleteEvent records (267 tests)
+- 013-mouse-events: MouseEvent, MouseHandlers, NotImplementedOrNone
+- 012-completion-system: ICompleter, 12 completers, Completion/CompleteEvent records
 - 011-keys-enum: Keys enum, 151 values
-- 010-search-system: SearchState, SearchOperations stubs (41 tests)
-- 009-validation-system: IValidator, 5 implementations (142 tests)
-- 008-history-system: IHistory, 4 implementations (119 tests)
-- 007-mutable-buffer: Buffer with undo/redo, navigation, completion, validation (87% coverage)
-- 006-cache-utilities: SimpleCache, FastDictCache, Memoization (92 tests)
-- 005-auto-suggest-system: AutoSuggest with history-based suggestions
-- 004-clipboard-system: IClipboard, InMemoryClipboard, DummyClipboard (59 tests)
-- 003-selection-system: SelectionState, SelectionType, PasteMode (45 tests)
-- 002-immutable-document: Immutable Document with cursor model (310 tests)
-- 001-project-setup-primitives: Project structure, primitives, CI/CD
+- 010-search-system: SearchState, SearchOperations
+- 009-validation: IValidator, 5 implementations
+- 008-history: IHistory, 4 implementations
+- 007-mutable-buffer: Buffer with undo/redo, navigation, completion, validation
+- 006-cache-utilities: SimpleCache, FastDictCache, Memoization
+- 005-auto-suggest: AutoSuggest with history-based suggestions
+- 004-clipboard: IClipboard, InMemoryClipboard, DummyClipboard
+- 003-selection: SelectionState, SelectionType, PasteMode
+- 002-immutable-document: Immutable Document with cursor model
+- 001-project-setup: Project structure, primitives, CI/CD
