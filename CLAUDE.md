@@ -436,6 +436,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - **External NuGet**: Wcwidth (v4.0.1, MIT) for character width; TextMateSharp (v1.0.70, MIT) for syntax highlighting
 - **Storage**: In-memory only (except FileHistory which uses filesystem)
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
+- C# 13 / .NET 10+ + `Stroke.Application` (AppSession, AppContext, RunInTerminal), `Stroke.Output` (IOutput) (049-patch-stdout)
+- N/A (in-memory buffering only) (049-patch-stdout)
 
 ## Recent Changes
 
