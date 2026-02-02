@@ -24,7 +24,7 @@
 
 **Purpose**: Create the FlushItem discriminated union — shared by all user stories.
 
-- [ ] T001 [P] Implement `FlushItem` sealed record hierarchy (Text/Done variants) in `src/Stroke/Application/FlushItem.cs` per contract `contracts/stdout-patching.md` (§FlushItem). Include XML doc comments. ~20 LOC.
+- [x] T001 [P] Implement `FlushItem` sealed record hierarchy (Text/Done variants) in `src/Stroke/Application/FlushItem.cs` per contract `contracts/stdout-patching.md` (§FlushItem). Include XML doc comments. ~20 LOC.
 
 ---
 
@@ -36,14 +36,14 @@
 
 ### StdoutProxy Implementation
 
-- [ ] T002 Implement `StdoutProxy` class skeleton in `src/Stroke/Application/StdoutProxy.cs` — sealed class extending `TextWriter`, constructor capturing `AppSession` via `AppContext.GetAppSession()` and `IOutput` via `appSession.Output` (FR-013), immutable config properties `SleepBetweenWrites` (TimeSpan, default 200ms, must be non-negative per FR-005) and `Raw` (bool, default false), `Closed` property guarded by `Lock`, `_buffer` as `List<string>`, `_flushQueue` as `BlockingCollection<FlushItem>`, `Encoding` property delegating to `_output.Encoding`. Validate `SleepBetweenWrites` is non-negative in constructor (throw `ArgumentOutOfRangeException`). Wire `OriginalStdout` property to return `_output.Stdout`. ~60 LOC.
-- [ ] T003 Implement newline-gated buffering in `StdoutProxy.Write(string?)` in `src/Stroke/Application/StdoutProxy.cs` — under `Lock`: silently ignore null/empty (FR-018), silently ignore if `Closed` (FR-019), use `LastIndexOf('\n')` to split (FR-003): everything up to and including last `\n` is joined from `_buffer` and queued as `FlushItem.Text`, remainder stays in buffer. No-newline text appends to buffer. Port of Python's `_write()` method. ~30 LOC.
-- [ ] T004 Implement `StdoutProxy.Write(char)` override in `src/Stroke/Application/StdoutProxy.cs` — convert char to string via `char.ToString()`, delegate to `Write(string)` (FR-023). ~5 LOC.
-- [ ] T005 Implement `StdoutProxy.Flush()` override in `src/Stroke/Application/StdoutProxy.cs` — under `Lock`: silently ignore if `Closed` (FR-019), join `_buffer` contents, queue as `FlushItem.Text`, clear buffer (FR-015). Port of Python's `_flush()`. ~10 LOC.
-- [ ] T006 Implement `StdoutProxy.Close()` and `Dispose(bool)` in `src/Stroke/Application/StdoutProxy.cs` — `Close()` is idempotent (FR-011): if not closed, acquire lock, flush remaining buffer, set `Closed=true`, release lock, queue `FlushItem.Done` sentinel, `_flushThread.Join()`. `Dispose(bool disposing)` calls `Close()`. ~20 LOC.
-- [ ] T007 Implement background flush thread in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — `_StartWriteThread()` creates `Thread(IsBackground=true, Name="patch-stdout-flush-thread")` and starts it (RT-002). `_WriteThread()` main loop: `Take()` from queue (blocks), drain remaining via `TryTake()`, skip empty strings (FR-018), detect `Done` sentinel, call `_WriteAndFlush()` with concatenated text. Sleep `SleepBetweenWrites` after each write cycle when app is running (FR-005). Wrap entire write cycle in try/catch to swallow exceptions and continue (FR-022). Port of Python's `_write_thread()`. ~50 LOC.
-- [ ] T008 Implement `_WriteAndFlush()` in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — detect whether an app is running by checking the captured `_appSession`'s app (matching Python's `self.app_session.app` pattern, FR-007/FR-008, RT-005). If app running: call `RunInTerminal.RunAsync(writeAction, inExecutor: false)` and block synchronously via `.GetAwaiter().GetResult()` (flush thread is a dedicated Thread, not a thread pool thread, so synchronous blocking is appropriate). The writeAction calls `_output.EnableAutowrap()` (FR-014), then `_output.WriteRaw(text)` if `Raw` else `_output.Write(text)` (FR-006), then `_output.Flush()`. If no app running: call writeAction directly (FR-008). ~30 LOC.
-- [ ] T009 Implement `Fileno()` and `IsAtty()` methods in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — `Fileno()` delegates to `_output.Fileno()` (FR-021). `IsAtty()` checks `_output.Stdout` (a `TextWriter?` property on `IOutput`): returns `false` if null, otherwise checks if the underlying stream is a console/TTY (matching Python's `stdout.isatty()` — note: .NET's `TextWriter` has no `IsAtty()`, so use stream-type check or `Console.IsOutputRedirected` equivalent). Both operate on captured `_output`, do not require proxy to be open (FR-021). ~10 LOC.
+- [x] T002 Implement `StdoutProxy` class skeleton in `src/Stroke/Application/StdoutProxy.cs` — sealed class extending `TextWriter`, constructor capturing `AppSession` via `AppContext.GetAppSession()` and `IOutput` via `appSession.Output` (FR-013), immutable config properties `SleepBetweenWrites` (TimeSpan, default 200ms, must be non-negative per FR-005) and `Raw` (bool, default false), `Closed` property guarded by `Lock`, `_buffer` as `List<string>`, `_flushQueue` as `BlockingCollection<FlushItem>`, `Encoding` property delegating to `_output.Encoding`. Validate `SleepBetweenWrites` is non-negative in constructor (throw `ArgumentOutOfRangeException`). Wire `OriginalStdout` property to return `_output.Stdout`. ~60 LOC.
+- [x] T003 Implement newline-gated buffering in `StdoutProxy.Write(string?)` in `src/Stroke/Application/StdoutProxy.cs` — under `Lock`: silently ignore null/empty (FR-018), silently ignore if `Closed` (FR-019), use `LastIndexOf('\n')` to split (FR-003): everything up to and including last `\n` is joined from `_buffer` and queued as `FlushItem.Text`, remainder stays in buffer. No-newline text appends to buffer. Port of Python's `_write()` method. ~30 LOC.
+- [x] T004 Implement `StdoutProxy.Write(char)` override in `src/Stroke/Application/StdoutProxy.cs` — convert char to string via `char.ToString()`, delegate to `Write(string)` (FR-023). ~5 LOC.
+- [x] T005 Implement `StdoutProxy.Flush()` override in `src/Stroke/Application/StdoutProxy.cs` — under `Lock`: silently ignore if `Closed` (FR-019), join `_buffer` contents, queue as `FlushItem.Text`, clear buffer (FR-015). Port of Python's `_flush()`. ~10 LOC.
+- [x] T006 Implement `StdoutProxy.Close()` and `Dispose(bool)` in `src/Stroke/Application/StdoutProxy.cs` — `Close()` is idempotent (FR-011): if not closed, acquire lock, flush remaining buffer, set `Closed=true`, release lock, queue `FlushItem.Done` sentinel, `_flushThread.Join()`. `Dispose(bool disposing)` calls `Close()`. ~20 LOC.
+- [x] T007 Implement background flush thread in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — `_StartWriteThread()` creates `Thread(IsBackground=true, Name="patch-stdout-flush-thread")` and starts it (RT-002). `_WriteThread()` main loop: `Take()` from queue (blocks), drain remaining via `TryTake()`, skip empty strings (FR-018), detect `Done` sentinel, call `_WriteAndFlush()` with concatenated text. Sleep `SleepBetweenWrites` after each write cycle when app is running (FR-005). Wrap entire write cycle in try/catch to swallow exceptions and continue (FR-022). Port of Python's `_write_thread()`. ~50 LOC.
+- [x] T008 Implement `_WriteAndFlush()` in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — detect whether an app is running by checking the captured `_appSession`'s app (matching Python's `self.app_session.app` pattern, FR-007/FR-008, RT-005). If app running: call `RunInTerminal.RunAsync(writeAction, inExecutor: false)` and block synchronously via `.GetAwaiter().GetResult()` (flush thread is a dedicated Thread, not a thread pool thread, so synchronous blocking is appropriate). The writeAction calls `_output.EnableAutowrap()` (FR-014), then `_output.WriteRaw(text)` if `Raw` else `_output.Write(text)` (FR-006), then `_output.Flush()`. If no app running: call writeAction directly (FR-008). ~30 LOC.
+- [x] T009 Implement `Fileno()` and `IsAtty()` methods in `StdoutProxy` in `src/Stroke/Application/StdoutProxy.cs` — `Fileno()` delegates to `_output.Fileno()` (FR-021). `IsAtty()` checks `_output.Stdout` (a `TextWriter?` property on `IOutput`): returns `false` if null, otherwise checks if the underlying stream is a console/TTY (matching Python's `stdout.isatty()` — note: .NET's `TextWriter` has no `IsAtty()`, so use stream-type check or `Console.IsOutputRedirected` equivalent). Both operate on captured `_output`, do not require proxy to be open (FR-021). ~10 LOC.
 
 **Checkpoint**: StdoutProxy is fully implemented. All internal mechanics (buffering, threading, flush coordination) are ready.
 
@@ -57,12 +57,12 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Write `StdoutPatchingTests` in `tests/Stroke.Tests/Application/StdoutPatchingTests.cs` — test `PatchStdout()` replaces `Console.Out` and `Console.Error` with a `StdoutProxy` instance, test disposal restores original streams (SC-005), test both stdout and stderr redirect to the same proxy (FR-017), test nesting: call PatchStdout while already patched, verify new proxy wraps current output, inner dispose restores outer proxy (FR-020). Use real `AppSession` and `IOutput` (no mocks per Constitution VIII). ~120 LOC.
-- [ ] T011 [P] [US1] Write core `StdoutProxyTests` in `tests/Stroke.Tests/Application/StdoutProxyTests.cs` — test construction captures AppSession and IOutput, test `SleepBetweenWrites` defaults to 200ms, test `Raw` defaults to false, test `Encoding` property returns output encoding, test `OriginalStdout` property, test constructor rejects negative `SleepBetweenWrites` (throws `ArgumentOutOfRangeException`), test constructor accepts zero `SleepBetweenWrites`. ~80 LOC.
+- [x] T010 [P] [US1] Write `StdoutPatchingTests` in `tests/Stroke.Tests/Application/StdoutPatchingTests.cs` — test `PatchStdout()` replaces `Console.Out` and `Console.Error` with a `StdoutProxy` instance, test disposal restores original streams (SC-005), test both stdout and stderr redirect to the same proxy (FR-017), test nesting: call PatchStdout while already patched, verify new proxy wraps current output, inner dispose restores outer proxy (FR-020). Use real `AppSession` and `IOutput` (no mocks per Constitution VIII). ~120 LOC.
+- [x] T011 [P] [US1] Write core `StdoutProxyTests` in `tests/Stroke.Tests/Application/StdoutProxyTests.cs` — test construction captures AppSession and IOutput, test `SleepBetweenWrites` defaults to 200ms, test `Raw` defaults to false, test `Encoding` property returns output encoding, test `OriginalStdout` property, test constructor rejects negative `SleepBetweenWrites` (throws `ArgumentOutOfRangeException`), test constructor accepts zero `SleepBetweenWrites`. ~80 LOC.
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement `StdoutPatching` static class in `src/Stroke/Application/StdoutPatching.cs` — `PatchStdout(bool raw = false)` method: create `StdoutProxy`, save `Console.Out` and `Console.Error`, call `Console.SetOut(proxy)` and `Console.SetError(proxy)` (FR-017), return `IDisposable` that restores originals first then disposes proxy (FR-001, edge case: disposal ordering). Support nesting per FR-020. Port of Python's `patch_stdout()` context manager. ~50 LOC.
+- [x] T012 [US1] Implement `StdoutPatching` static class in `src/Stroke/Application/StdoutPatching.cs` — `PatchStdout(bool raw = false)` method: create `StdoutProxy`, save `Console.Out` and `Console.Error`, call `Console.SetOut(proxy)` and `Console.SetError(proxy)` (FR-017), return `IDisposable` that restores originals first then disposes proxy (FR-001, edge case: disposal ordering). Support nesting per FR-020. Port of Python's `patch_stdout()` context manager. ~50 LOC.
 
 **Checkpoint**: User Story 1 complete — PatchStdout works end-to-end.
 
@@ -76,8 +76,8 @@
 
 ### Tests for User Story 2
 
-- [ ] T013 [P] [US2] Write buffering tests in `tests/Stroke.Tests/Application/StdoutProxyBufferingTests.cs` — test partial write (no newline) does not flush, test newline triggers flush of accumulated buffer (US2 scenario 2), test embedded newlines split correctly (`"line1\nline2\nline3"` → `"line1\nline2\n"` flushed, `"line3"` buffered per FR-003), test only-newlines (`"\n\n\n"`) each trigger flush, test `\r` is NOT treated as line terminator (FR-003), test `\r\n` on Windows buffers until `\n` (FR-003), test whitespace-only (no newlines) stays buffered (FR-003 edge case), test `Flush()` forces buffer to queue without newline (FR-015), test `Write(null)` is silently ignored (FR-018), test `Write("")` is silently ignored (FR-018), test `Write(char)` delegates correctly (FR-023), test direct IOutput write path when no Stroke application is running (FR-008), test writing a very large string (1MB+) is processed without error (NFR-001). ~160 LOC.
-- [ ] T014 [P] [US2] Write batching tests in `tests/Stroke.Tests/Application/StdoutProxyBatchingTests.cs` — test rapid writes (10+ within 50ms) are batched into ≤2 repaints (SC-002), test configurable `SleepBetweenWrites` affects batch timing, test zero `SleepBetweenWrites` disables delay. Use real `Thread` and timing with tolerant assertions. ~80 LOC.
+- [x] T013 [P] [US2] Write buffering tests in `tests/Stroke.Tests/Application/StdoutProxyBufferingTests.cs` — test partial write (no newline) does not flush, test newline triggers flush of accumulated buffer (US2 scenario 2), test embedded newlines split correctly (`"line1\nline2\nline3"` → `"line1\nline2\n"` flushed, `"line3"` buffered per FR-003), test only-newlines (`"\n\n\n"`) each trigger flush, test `\r` is NOT treated as line terminator (FR-003), test `\r\n` on Windows buffers until `\n` (FR-003), test whitespace-only (no newlines) stays buffered (FR-003 edge case), test `Flush()` forces buffer to queue without newline (FR-015), test `Write(null)` is silently ignored (FR-018), test `Write("")` is silently ignored (FR-018), test `Write(char)` delegates correctly (FR-023), test direct IOutput write path when no Stroke application is running (FR-008), test writing a very large string (1MB+) is processed without error (NFR-001). ~160 LOC.
+- [x] T014 [P] [US2] Write batching tests in `tests/Stroke.Tests/Application/StdoutProxyBatchingTests.cs` — test rapid writes (10+ within 50ms) are batched into ≤2 repaints (SC-002), test configurable `SleepBetweenWrites` affects batch timing, test zero `SleepBetweenWrites` disables delay. Use real `Thread` and timing with tolerant assertions. ~80 LOC.
 
 **Checkpoint**: User Story 2 complete — buffering and batching verified.
 
@@ -91,7 +91,7 @@
 
 ### Tests for User Story 3
 
-- [ ] T015 [P] [US3] Write lifecycle tests in `tests/Stroke.Tests/Application/StdoutProxyLifecycleTests.cs` — test `Close()` flushes remaining buffer and terminates flush thread within 1 second (SC-004), test `Close()` is idempotent (FR-011), test `Write()` after `Close()` is silently ignored (FR-019), test `Flush()` after `Close()` is silently ignored (FR-019), test `Dispose()` calls `Close()`, test that `Write()` returns without blocking on flush thread processing (FR-004 non-blocking verification), test `Fileno()` delegates to output (FR-021), test `IsAtty()` returns false when output has no stdout, test `IsAtty()` delegates when stdout available (FR-021), test `Fileno()` and `IsAtty()` work after `Close()` (FR-021). ~110 LOC.
+- [x] T015 [P] [US3] Write lifecycle tests in `tests/Stroke.Tests/Application/StdoutProxyLifecycleTests.cs` — test `Close()` flushes remaining buffer and terminates flush thread within 1 second (SC-004), test `Close()` is idempotent (FR-011), test `Write()` after `Close()` is silently ignored (FR-019), test `Flush()` after `Close()` is silently ignored (FR-019), test `Dispose()` calls `Close()`, test that `Write()` returns without blocking on flush thread processing (FR-004 non-blocking verification), test `Fileno()` delegates to output (FR-021), test `IsAtty()` returns false when output has no stdout, test `IsAtty()` delegates when stdout available (FR-021), test `Fileno()` and `IsAtty()` work after `Close()` (FR-021). ~110 LOC.
 
 **Checkpoint**: User Story 3 complete — standalone proxy lifecycle verified.
 
@@ -105,7 +105,7 @@
 
 ### Tests for User Story 4
 
-- [ ] T016 [P] [US4] Write raw mode tests in `tests/Stroke.Tests/Application/StdoutProxyRawModeTests.cs` — test `raw=true` routes through `IOutput.WriteRaw()` (escape sequences unmodified), test `raw=false` (default) routes through `IOutput.Write()` (escapes 0x1B → '?'), test raw mode toggle at construction time is immutable, test `EnableAutowrap()` called before each write in both modes (FR-014). ~60 LOC.
+- [x] T016 [P] [US4] Write raw mode tests in `tests/Stroke.Tests/Application/StdoutProxyRawModeTests.cs` — test `raw=true` routes through `IOutput.WriteRaw()` (escape sequences unmodified), test `raw=false` (default) routes through `IOutput.Write()` (escapes 0x1B → '?'), test raw mode toggle at construction time is immutable, test `EnableAutowrap()` called before each write in both modes (FR-014). ~60 LOC.
 
 **Checkpoint**: User Story 4 complete — raw/non-raw routing verified.
 
@@ -117,7 +117,7 @@
 
 ### Tests for Thread Safety
 
-- [ ] T017 [P] [US1] Write thread safety tests in `tests/Stroke.Tests/Application/StdoutProxyConcurrencyTests.cs` — test 4 threads writing unique identifiable strings concurrently, verify all strings appear in output without interleaving corruption (SC-003), test 8 threads for scalability (SC-003 SHOULD), test 16 threads for stress, test concurrent Write + Flush from different threads (edge case), test concurrent Write + Close (thread safety edge case), test no deadlock under contention. Use real `Thread` instances, `CountdownEvent` for synchronization, timeout-based deadlock detection. ~120 LOC.
+- [x] T017 [P] [US1] Write thread safety tests in `tests/Stroke.Tests/Application/StdoutProxyConcurrencyTests.cs` — test 4 threads writing unique identifiable strings concurrently, verify all strings appear in output without interleaving corruption (SC-003), test 8 threads for scalability (SC-003 SHOULD), test 16 threads for stress, test concurrent Write + Flush from different threads (edge case), test concurrent Write + Close (thread safety edge case), test no deadlock under contention. Use real `Thread` instances, `CountdownEvent` for synchronization, timeout-based deadlock detection. ~120 LOC.
 
 **Checkpoint**: Thread safety verified across all user stories.
 
@@ -127,9 +127,9 @@
 
 **Purpose**: Improvements that affect multiple user stories.
 
-- [ ] T018 Run all tests, verify ≥80% code coverage across `StdoutProxy.cs`, `StdoutPatching.cs`, `FlushItem.cs` (SC-006). Fix any failing tests.
-- [ ] T019 Run `quickstart.md` code examples mentally or via build verification — ensure API usage in quickstart matches actual implementation.
-- [ ] T020 Verify no source file exceeds 1,000 LOC (Constitution X). If `StdoutProxy.cs` approaches limit (~215 LOC estimated), no split needed.
+- [x] T018 Run all tests, verify ≥80% code coverage across `StdoutProxy.cs`, `StdoutPatching.cs`, `FlushItem.cs` (SC-006). Fix any failing tests.
+- [x] T019 Run `quickstart.md` code examples mentally or via build verification — ensure API usage in quickstart matches actual implementation.
+- [x] T020 Verify no source file exceeds 1,000 LOC (Constitution X). If `StdoutProxy.cs` approaches limit (~215 LOC estimated), no split needed.
 
 ---
 
