@@ -56,11 +56,22 @@ public sealed class DummyInput : IInput
     public IDisposable CookedMode() => NoOpDisposable.Instance;
 
     /// <inheritdoc/>
-    /// <remarks>Returns a no-op disposable for DummyInput. The callback is never invoked.</remarks>
+    /// <remarks>
+    /// Calls the callback immediately once after attaching, then returns a no-op disposable.
+    /// This tells the application to call <see cref="ReadKeys"/> and check the
+    /// <see cref="Closed"/> flag, which triggers <see cref="EndOfStreamException"/>
+    /// to signal normal termination. This unblocks the application's input reading loop.
+    /// </remarks>
     public IDisposable Attach(Action inputReadyCallback)
     {
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
+
+        // Call the callback immediately once. This tells the callback to call
+        // ReadKeys and check the Closed flag, after which it won't receive any
+        // keys but knows that EndOfStreamException should be raised.
+        inputReadyCallback();
+
         return NoOpDisposable.Instance;
     }
 

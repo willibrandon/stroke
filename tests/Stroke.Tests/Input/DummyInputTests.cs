@@ -70,14 +70,17 @@ public class DummyInputTests
     }
 
     [Fact]
-    public void Attach_CallbackIsNeverInvoked()
+    public void Attach_CallbackIsInvokedImmediately()
     {
+        // DummyInput.Attach calls the callback immediately once, matching Python's
+        // behavior. This triggers the application to check Input.Closed and raise
+        // EndOfStreamException, enabling clean termination for PrintContainer.
         using var input = new DummyInput();
         var invoked = false;
 
         using var attachment = input.Attach(() => invoked = true);
 
-        Assert.False(invoked);
+        Assert.True(invoked);
     }
 
     [Fact]
