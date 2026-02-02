@@ -13,6 +13,7 @@ namespace Stroke.KeyBinding;
 /// </remarks>
 public class KeyPressEvent
 {
+    private readonly Lock _lock = new();
     private readonly WeakReference<object>? _keyProcessorRef;
     private string? _argString;
     private int? _cachedArg;
@@ -66,38 +67,50 @@ public class KeyPressEvent
     {
         get
         {
-            if (_cachedArg.HasValue)
+            using (_lock.EnterScope())
             {
-                return _cachedArg.Value;
-            }
+                if (_cachedArg.HasValue)
+                {
+                    return _cachedArg.Value;
+                }
 
-            if (string.IsNullOrEmpty(_argString))
-            {
+                if (string.IsNullOrEmpty(_argString))
+                {
+                    return 1;
+                }
+
+                if (_argString == "-")
+                {
+                    return -1;
+                }
+
+                if (int.TryParse(_argString, out int parsed))
+                {
+                    // Clamp to MaxArgValue
+                    _cachedArg = Math.Min(Math.Abs(parsed), MaxArgValue);
+                    if (parsed < 0 || _argString.StartsWith('-'))
+                    {
+                        _cachedArg = -_cachedArg.Value;
+                    }
+                    return _cachedArg.Value;
+                }
+
                 return 1;
             }
-
-            if (_argString == "-")
-            {
-                return -1;
-            }
-
-            if (int.TryParse(_argString, out int parsed))
-            {
-                // Clamp to MaxArgValue
-                _cachedArg = Math.Min(Math.Abs(parsed), MaxArgValue);
-                if (parsed < 0 || _argString.StartsWith('-'))
-                {
-                    _cachedArg = -_cachedArg.Value;
-                }
-                return _cachedArg.Value;
-            }
-
-            return 1;
         }
     }
 
     /// <summary>Gets whether a repetition argument was explicitly provided.</summary>
-    public bool ArgPresent => !string.IsNullOrEmpty(_argString);
+    public bool ArgPresent
+    {
+        get
+        {
+            using (_lock.EnterScope())
+            {
+                return !string.IsNullOrEmpty(_argString);
+            }
+        }
+    }
 
     /// <summary>
     /// Gets the current application.
@@ -172,33 +185,35 @@ public class KeyPressEvent
 
         char c = data[0];
 
-        if (c == '-')
-        {
-            // Handle negative prefix
-            if (string.IsNullOrEmpty(_argString))
-            {
-                _argString = "-";
-                _cachedArg = null;
-                return;
-            }
-            // If already has content, ignore additional minus
-            return;
-        }
-
-        if (c < '0' || c > '9')
+        if ((c < '0' || c > '9') && c != '-')
         {
             throw new ArgumentException($"Invalid digit: '{c}'. Must be '0'-'9' or '-'.", nameof(data));
         }
 
-        // Append digit
-        _argString = (_argString ?? "") + c;
-        _cachedArg = null;
-
-        // Check if we've exceeded max and truncate
-        if (_argString.Length > 7) // "-" + 6 digits = 7 chars for up to 1M
+        using (_lock.EnterScope())
         {
-            // Parse and clamp
-            _ = Arg; // Force evaluation and clamping
+            if (c == '-')
+            {
+                // Handle negative prefix
+                if (string.IsNullOrEmpty(_argString))
+                {
+                    _argString = "-";
+                    _cachedArg = null;
+                }
+                // If already has content, ignore additional minus
+                return;
+            }
+
+            // Append digit
+            _argString = (_argString ?? "") + c;
+            _cachedArg = null;
+
+            // Check if we've exceeded max and truncate
+            if (_argString.Length > 7) // "-" + 6 digits = 7 chars for up to 1M
+            {
+                // Force evaluation and clamping (already under lock, access fields directly)
+                ForceClamp();
+            }
         }
     }
 
@@ -213,8 +228,33 @@ public class KeyPressEvent
     /// </remarks>
     internal void SetArg(int value)
     {
-        _argString = value.ToString();
-        _cachedArg = null;
+        using (_lock.EnterScope())
+        {
+            _argString = value.ToString();
+            _cachedArg = null;
+        }
+    }
+
+    /// <summary>
+    /// Clamps the current arg string to MaxArgValue. Must be called while holding the lock.
+    /// </summary>
+    private void ForceClamp()
+    {
+        if (string.IsNullOrEmpty(_argString) || _argString == "-")
+        {
+            return;
+        }
+
+        if (int.TryParse(_argString, out int parsed))
+        {
+            int clamped = Math.Min(Math.Abs(parsed), MaxArgValue);
+            if (parsed < 0 || _argString.StartsWith('-'))
+            {
+                clamped = -clamped;
+            }
+            _cachedArg = clamped;
+            _argString = clamped.ToString();
+        }
     }
 
     /// <summary>Backwards compatibility alias for App.</summary>
