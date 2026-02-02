@@ -469,9 +469,23 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Partial class split across 6 files (max 548 LOC, Constitution X compliant)
   - 173 new tests (8,224 total tests, >80% coverage)
 
+- **Dialog Shortcuts** — Pre-built dialog shortcut functions ported from `shortcuts/dialogs.py`
+  - `Dialogs` static class with 7 factory methods and 7 async wrappers
+  - `YesNoDialog` — Yes/No confirmation returning `Application<bool>`
+  - `MessageDialog` — Simple message box returning `Application<object?>`
+  - `InputDialog` — Text input with validation, completion, password masking returning `Application<string?>`
+  - `ButtonDialog<T>` — Generic button choices returning `Application<T>`
+  - `RadioListDialog<T>` — Single-selection radio list returning `Application<T?>`
+  - `CheckboxListDialog<T>` — Multi-selection checkbox list returning `Application<IReadOnlyList<T>?>`
+  - `ProgressDialog` — Background task with thread-safe progress bar and log area
+  - `CreateApp<T>` private helper with Tab/Shift-Tab focus cycling and merged key bindings
+  - All dialogs compose Dialog widget with `withBackground: true`
+  - Thread-safe `ProgressDialog` via Lock-protected `setPercentage` and `_actionChannel`-marshaled `logText`
+  - 47 new tests (8,271 total tests, >80% coverage)
+
 ### Up Next
 
-- **Dialog Shortcuts** — `shortcuts/dialogs.py` high-level dialog functions
+- **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)
 
 ## Requirements
 

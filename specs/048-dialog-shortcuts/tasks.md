@@ -25,8 +25,8 @@
 
 **Purpose**: Create the source and test files with class scaffolding
 
-- [ ] T001 Create `src/Stroke/Shortcuts/Dialogs.cs` with namespace `Stroke.Shortcuts`, static class declaration, required using directives (Stroke.Application, Stroke.Widgets, Stroke.Layout, Stroke.KeyBinding, Stroke.Filters, Stroke.Completion, Stroke.Validation, Stroke.FormattedText, Stroke.Styles), and XML doc comment on the class
-- [ ] T002 [P] Create `tests/Stroke.Tests/Shortcuts/DialogsTests.cs` with namespace, test class declaration, and required using directives
+- [x] T001 Create `src/Stroke/Shortcuts/Dialogs.cs` with namespace `Stroke.Shortcuts`, static class declaration, required using directives (Stroke.Application, Stroke.Widgets, Stroke.Layout, Stroke.KeyBinding, Stroke.Filters, Stroke.Completion, Stroke.Validation, Stroke.FormattedText, Stroke.Styles), and XML doc comment on the class
+- [x] T002 [P] Create `tests/Stroke.Tests/Shortcuts/DialogsTests.cs` with namespace, test class declaration, and required using directives
 
 ---
 
@@ -36,8 +36,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Implement `CreateApp<T>(IContainer dialog, IStyle? style)` private static method in `src/Stroke/Shortcuts/Dialogs.cs` — creates `var bindings = new KeyBindings()`, adds Tab via `bindings.Add<KeyHandlerCallable>([new KeyOrChar(Keys.Tab)], handler => handler.Set(FocusFunctions.FocusNext))`, adds BackTab via `bindings.Add<KeyHandlerCallable>([new KeyOrChar(Keys.BackTab)], handler => handler.Set(FocusFunctions.FocusPrevious))`, returns `new Application<T>(layout: new Layout.Layout(dialog), keyBindings: new MergedKeyBindings(DefaultKeyBindings.Load(), bindings), mouseSupport: true, style: style, fullScreen: true)`. Note: DefaultKeyBindings first, dialog bindings second — last wins in KeyProcessor (matches Python). Reference: Python `_create_app()` lines 313–325, quickstart.md lines 48–62
-- [ ] T004 Implement `ReturnNone()` private static method in `src/Stroke/Shortcuts/Dialogs.cs` — calls `AppContext.GetApp().Exit()` with no arguments (exits with default(T)). Reference: Python `_return_none()` at lines 328–330
+- [x] T003 Implement `CreateApp<T>(IContainer dialog, IStyle? style)` private static method in `src/Stroke/Shortcuts/Dialogs.cs` — creates `var bindings = new KeyBindings()`, adds Tab via `bindings.Add<KeyHandlerCallable>([new KeyOrChar(Keys.Tab)], handler => handler.Set(FocusFunctions.FocusNext))`, adds BackTab via `bindings.Add<KeyHandlerCallable>([new KeyOrChar(Keys.BackTab)], handler => handler.Set(FocusFunctions.FocusPrevious))`, returns `new Application<T>(layout: new Layout.Layout(dialog), keyBindings: new MergedKeyBindings(DefaultKeyBindings.Load(), bindings), mouseSupport: true, style: style, fullScreen: true)`. Note: DefaultKeyBindings first, dialog bindings second — last wins in KeyProcessor (matches Python). Reference: Python `_create_app()` lines 313–325, quickstart.md lines 48–62
+- [x] T004 Implement `ReturnNone()` private static method in `src/Stroke/Shortcuts/Dialogs.cs` — calls `AppContext.GetApp().Exit()` with no arguments (exits with default(T)). Reference: Python `_return_none()` at lines 328–330
 
 **Checkpoint**: Foundation ready — CreateApp and ReturnNone are available for all dialog factory methods
 
@@ -51,13 +51,13 @@
 
 ### Tests for US1 & US2
 
-- [ ] T005 [P] [US1] Write tests for YesNoDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains Label + 2 Buttons with correct text), Yes button handler exits with `true`, No button handler exits with `false`, custom button text (yesText="Confirm", noText="Deny"), default parameter values match ("Yes"/"No"), Tab scenario (application has Tab/BackTab key bindings)
-- [ ] T006 [P] [US2] Write tests for MessageDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains Label + 1 Button with "Ok" text), Ok button handler exits the application, custom ok text (okText="Got it"), default "Ok" casing (capital O, lowercase k)
+- [x] T005 [P] [US1] Write tests for YesNoDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains Label + 2 Buttons with correct text), Yes button handler exits with `true`, No button handler exits with `false`, custom button text (yesText="Confirm", noText="Deny"), default parameter values match ("Yes"/"No"), Tab scenario (application has Tab/BackTab key bindings)
+- [x] T006 [P] [US2] Write tests for MessageDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains Label + 1 Button with "Ok" text), Ok button handler exits the application, custom ok text (okText="Got it"), default "Ok" casing (capital O, lowercase k)
 
 ### Implementation for US1 & US2
 
-- [ ] T007 [US1] Implement `YesNoDialog(AnyFormattedText title, AnyFormattedText text, string yesText, string noText, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates yes/no handlers calling AppContext.GetApp().Exit(result: true/false), builds Dialog with Label body + 2 Buttons, withBackground: true, returns CreateApp<bool>(dialog.Container, style). Include XML doc comment. Reference: Python lines 44–72
-- [ ] T008 [US2] Implement `MessageDialog(AnyFormattedText title, AnyFormattedText text, string okText, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — builds Dialog with Label body + 1 Button (handler=ReturnNone), withBackground: true, returns CreateApp<object?>(dialog.Container, style). Include XML doc comment. Reference: Python lines 157–173
+- [x] T007 [US1] Implement `YesNoDialog(AnyFormattedText title, AnyFormattedText text, string yesText, string noText, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates yes/no handlers calling AppContext.GetApp().Exit(result: true/false), builds Dialog with Label body + 2 Buttons, withBackground: true, returns CreateApp<bool>(dialog.Container, style). Include XML doc comment. Reference: Python lines 44–72
+- [x] T008 [US2] Implement `MessageDialog(AnyFormattedText title, AnyFormattedText text, string okText, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — builds Dialog with Label body + 1 Button (handler=ReturnNone), withBackground: true, returns CreateApp<object?>(dialog.Container, style). Include XML doc comment. Reference: Python lines 157–173
 
 **Checkpoint**: YesNoDialog and MessageDialog work independently. Simplest dialog types validated.
 
@@ -71,11 +71,11 @@
 
 ### Tests for US3
 
-- [ ] T009 [US3] Write tests for InputDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body is HSplit with Label + TextArea + ValidationToolbar), default text ("hello") populates TextArea, OK handler exits with text content, Cancel handler exits with null (ReturnNone), default "OK" casing (both uppercase), password mode parameter propagation, AcceptHandler returns true (keep text), accept handler focuses OK button via Layout.Focus
+- [x] T009 [US3] Write tests for InputDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body is HSplit with Label + TextArea + ValidationToolbar), default text ("hello") populates TextArea, OK handler exits with text content, Cancel handler exits with null (ReturnNone), default "OK" casing (both uppercase), password mode parameter propagation, AcceptHandler returns true (keep text), accept handler focuses OK button via Layout.Focus
 
 ### Implementation for US3
 
-- [ ] T010 [US3] Implement `InputDialog(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, ICompleter? completer, IValidator? validator, FilterOrBool password, IStyle? style, string default_)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates TextArea(text: default_, multiline: false, password, completer, validator, acceptHandler: accept), accept handler calls AppContext.GetApp().Layout.Focus(okButton.Window) and returns true, OK handler exits with textfield.Text, Cancel handler is ReturnNone, Dialog body is HSplit([Label, textfield, ValidationToolbar()], padding: new Dimension(preferred: 1, max: 1)), withBackground: true. Include XML doc comment. Reference: Python lines 105–154
+- [x] T010 [US3] Implement `InputDialog(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, ICompleter? completer, IValidator? validator, FilterOrBool password, IStyle? style, string default_)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates TextArea(text: default_, multiline: false, password, completer, validator, acceptHandler: accept), accept handler calls AppContext.GetApp().Layout.Focus(okButton.Window) and returns true, OK handler exits with textfield.Text, Cancel handler is ReturnNone, Dialog body is HSplit([Label, textfield, ValidationToolbar()], padding: new Dimension(preferred: 1, max: 1)), withBackground: true. Include XML doc comment. Reference: Python lines 105–154
 
 **Checkpoint**: InputDialog works with text entry, validation, and cancel.
 
@@ -89,11 +89,11 @@
 
 ### Tests for US4
 
-- [ ] T011 [US4] Write tests for ButtonDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains buttons matching tuple count), button handler exits with correct typed value, empty buttons list (dialog renders with no buttons), generic type works with int and string
+- [x] T011 [US4] Write tests for ButtonDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog contains buttons matching tuple count), button handler exits with correct typed value, empty buttons list (dialog renders with no buttons), generic type works with int and string
 
 ### Implementation for US4
 
-- [ ] T012 [US4] Implement `ButtonDialog<T>(AnyFormattedText title, AnyFormattedText text, IReadOnlyList<(string Text, T Value)>? buttons, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — for each (text, value) tuple create Button with handler that calls AppContext.GetApp().Exit(result: value) (use closure capture for value), Dialog body is Label, withBackground: true. Handle null buttons as empty list. Include XML doc comment. Reference: Python lines 78–102
+- [x] T012 [US4] Implement `ButtonDialog<T>(AnyFormattedText title, AnyFormattedText text, IReadOnlyList<(string Text, T Value)>? buttons, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — for each (text, value) tuple create Button with handler that calls AppContext.GetApp().Exit(result: value) (use closure capture for value), Dialog body is Label, withBackground: true. Handle null buttons as empty list. Include XML doc comment. Reference: Python lines 78–102
 
 **Checkpoint**: ButtonDialog works with typed button values.
 
@@ -107,11 +107,11 @@
 
 ### Tests for US5
 
-- [ ] T013 [US5] Write tests for RadioListDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Label + RadioList), OK handler exits with current_value, Cancel handler exits with null/default (ReturnNone), null values defaults to empty list, default_ parameter pre-selects value, "Ok" casing (capital O, lowercase k)
+- [x] T013 [US5] Write tests for RadioListDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Label + RadioList), OK handler exits with current_value, Cancel handler exits with null/default (ReturnNone), null values defaults to empty list, default_ parameter pre-selects value, "Ok" casing (capital O, lowercase k)
 
 ### Implementation for US5
 
-- [ ] T014 [US5] Implement `RadioListDialog<T>(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, IReadOnlyList<(T Value, AnyFormattedText Label)>? values, T? default_, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — null-coalesce values to empty list, create RadioList<T>(values, @default: default_), OK handler exits with radioList.CurrentValue, Cancel handler is ReturnNone, Dialog body is HSplit([Label, radioList], padding: 1), withBackground: true. Include XML doc comment. Reference: Python lines 176–212
+- [x] T014 [US5] Implement `RadioListDialog<T>(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, IReadOnlyList<(T Value, AnyFormattedText Label)>? values, T? default_, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — null-coalesce values to empty list, create RadioList<T>(values, @default: default_), OK handler exits with radioList.CurrentValue, Cancel handler is ReturnNone, Dialog body is HSplit([Label, radioList], padding: 1), withBackground: true. Include XML doc comment. Reference: Python lines 176–212
 
 **Checkpoint**: RadioListDialog works with single selection and cancel.
 
@@ -125,11 +125,11 @@
 
 ### Tests for US6
 
-- [ ] T015 [US6] Write tests for CheckboxListDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Label + CheckboxList), OK handler exits with current_values list, Cancel handler exits with null (ReturnNone), null values defaults to empty list, defaultValues pre-checks items, "Ok" casing (capital O, lowercase k)
+- [x] T015 [US6] Write tests for CheckboxListDialog<T> in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Label + CheckboxList), OK handler exits with current_values list, Cancel handler exits with null (ReturnNone), null values defaults to empty list, defaultValues pre-checks items, "Ok" casing (capital O, lowercase k)
 
 ### Implementation for US6
 
-- [ ] T016 [US6] Implement `CheckboxListDialog<T>(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, IReadOnlyList<(T Value, AnyFormattedText Label)>? values, IReadOnlyList<T>? defaultValues, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — null-coalesce values to empty list, create CheckboxList<T>(values, defaultValues: defaultValues), OK handler exits with cbList.CurrentValues, Cancel handler is ReturnNone, Dialog body is HSplit([Label, cbList], padding: 1), withBackground: true. Include XML doc comment. Reference: Python lines 215–251
+- [x] T016 [US6] Implement `CheckboxListDialog<T>(AnyFormattedText title, AnyFormattedText text, string okText, string cancelText, IReadOnlyList<(T Value, AnyFormattedText Label)>? values, IReadOnlyList<T>? defaultValues, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — null-coalesce values to empty list, create CheckboxList<T>(values, defaultValues: defaultValues), OK handler exits with cbList.CurrentValues, Cancel handler is ReturnNone, Dialog body is HSplit([Label, cbList], padding: 1), withBackground: true. Include XML doc comment. Reference: Python lines 215–251
 
 **Checkpoint**: CheckboxListDialog works with multi-selection and cancel.
 
@@ -143,11 +143,11 @@
 
 ### Tests for US7
 
-- [ ] T017 [US7] Write tests for ProgressDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Box(Label) + Box(TextArea) + ProgressBar, no buttons), PreRunCallables has one entry registered, null runCallback handled (no exception), setPercentage callback updates ProgressBar.Percentage, logText callback marshals via _actionChannel when available, logText callback handles null _actionChannel gracefully (silent drop)
+- [x] T017 [US7] Write tests for ProgressDialog in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: structure verification (dialog body HSplit with Box(Label) + Box(TextArea) + ProgressBar, no buttons), PreRunCallables has one entry registered, null runCallback handled (no exception), setPercentage callback updates ProgressBar.Percentage, logText callback marshals via _actionChannel when available, logText callback handles null _actionChannel gracefully (silent drop)
 
 ### Implementation for US7
 
-- [ ] T018 [US7] Implement `ProgressDialog(AnyFormattedText title, AnyFormattedText text, Action<Action<int>, Action<string>>? runCallback, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates ProgressBar(), TextArea(focusable: false, height: Dimension(preferred: int.MaxValue)), Dialog body is HSplit([Box(Label(text)), Box(textArea, padding: Dimension.Exact(1)), progressBar]) with title, withBackground: true, no buttons. Create app via CreateApp<object?>. Define setPercentage: sets progressBar.Percentage + app.Invalidate(). Define logText: checks app._actionChannel is not null, then TryWrite(() => textArea.Buffer.InsertText(text)) + app.Invalidate(). Register PreRunCallables callback that calls app.CreateBackgroundTask wrapping Task.Run(() => (runCallback ?? noOp)(setPercentage, logText)) in try/finally with app.Exit() in finally. Include XML doc comment. Reference: Python lines 254–310
+- [x] T018 [US7] Implement `ProgressDialog(AnyFormattedText title, AnyFormattedText text, Action<Action<int>, Action<string>>? runCallback, IStyle? style)` in `src/Stroke/Shortcuts/Dialogs.cs` — creates ProgressBar(), TextArea(focusable: false, height: Dimension(preferred: int.MaxValue)), Dialog body is HSplit([Box(Label(text)), Box(textArea, padding: Dimension.Exact(1)), progressBar]) with title, withBackground: true, no buttons. Create app via CreateApp<object?>. Define setPercentage: sets progressBar.Percentage + app.Invalidate(). Define logText: checks app._actionChannel is not null, then TryWrite(() => textArea.Buffer.InsertText(text)) + app.Invalidate(). Register PreRunCallables callback that calls app.CreateBackgroundTask wrapping Task.Run(() => (runCallback ?? noOp)(setPercentage, logText)) in try/finally with app.Exit() in finally. Include XML doc comment. Reference: Python lines 254–310
 
 **Checkpoint**: ProgressDialog works with background execution, thread-safe updates, and automatic exit.
 
@@ -157,8 +157,8 @@
 
 **Purpose**: Implement all 7 async convenience methods that create-and-run in one call
 
-- [ ] T019 [P] Implement all 7 async wrapper methods in `src/Stroke/Shortcuts/Dialogs.cs`: YesNoDialogAsync (returns Task<bool>), MessageDialogAsync (returns Task), InputDialogAsync (returns Task<string?>), ButtonDialogAsync<T> (returns Task<T>), RadioListDialogAsync<T> (returns Task<T?>), CheckboxListDialogAsync<T> (returns Task<IReadOnlyList<T>?>), ProgressDialogAsync (returns Task). Each method calls the corresponding factory method, then .RunAsync(). Include XML doc comments on all 7 methods. Reference: contracts/dialogs-api.md §Async Convenience Methods
-- [ ] T020 [P] Write tests for async wrapper methods in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: verify each async method compiles with correct return type, verify method signatures match contracts (parameter names and defaults identical to factory methods)
+- [x] T019 [P] Implement all 7 async wrapper methods in `src/Stroke/Shortcuts/Dialogs.cs`: YesNoDialogAsync (returns Task<bool>), MessageDialogAsync (returns Task), InputDialogAsync (returns Task<string?>), ButtonDialogAsync<T> (returns Task<T>), RadioListDialogAsync<T> (returns Task<T?>), CheckboxListDialogAsync<T> (returns Task<IReadOnlyList<T>?>), ProgressDialogAsync (returns Task). Each method calls the corresponding factory method, then .RunAsync(). Include XML doc comments on all 7 methods. Reference: contracts/dialogs-api.md §Async Convenience Methods
+- [x] T020 [P] Write tests for async wrapper methods in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: verify each async method compiles with correct return type, verify method signatures match contracts (parameter names and defaults identical to factory methods)
 
 **Checkpoint**: All 14 public methods (7 factory + 7 async) are implemented and tested.
 
@@ -168,12 +168,12 @@
 
 **Purpose**: Edge cases, validation, and final quality checks
 
-- [ ] T021 Write edge case tests in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: empty buttons list for ButtonDialog, empty values for RadioListDialog (OK returns default), empty values for CheckboxListDialog (OK returns empty list), custom button text for YesNoDialog/MessageDialog, InputDialog with multi-line default_ text in single-line TextArea, Left/Right arrow key navigation between buttons in multi-button dialogs (FR-010 — inherited from Dialog widget, verify it works in shortcut context)
-- [ ] T022 Verify all public methods have XML doc comments (`///`) in `src/Stroke/Shortcuts/Dialogs.cs` — check 7 factory methods + 7 async wrappers match contracts/dialogs-api.md signatures and documentation
-- [ ] T023 Run `dotnet build src/Stroke/Stroke.csproj` and verify zero warnings
-- [ ] T024 Run `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Shortcuts.Dialogs"` and verify all tests pass
-- [ ] T025 Verify `src/Stroke/Shortcuts/Dialogs.cs` stays under 1,000 LOC (target ~250 LOC per NF-001)
-- [ ] T026 Verify `tests/Stroke.Tests/Shortcuts/DialogsTests.cs` stays under 1,000 LOC (target ~400 LOC per plan.md)
+- [x] T021 Write edge case tests in `tests/Stroke.Tests/Shortcuts/DialogsTests.cs`: empty buttons list for ButtonDialog, empty values for RadioListDialog (OK returns default), empty values for CheckboxListDialog (OK returns empty list), custom button text for YesNoDialog/MessageDialog, InputDialog with multi-line default_ text in single-line TextArea, Left/Right arrow key navigation between buttons in multi-button dialogs (FR-010 — inherited from Dialog widget, verify it works in shortcut context)
+- [x] T022 Verify all public methods have XML doc comments (`///`) in `src/Stroke/Shortcuts/Dialogs.cs` — check 7 factory methods + 7 async wrappers match contracts/dialogs-api.md signatures and documentation
+- [x] T023 Run `dotnet build src/Stroke/Stroke.csproj` and verify zero warnings
+- [x] T024 Run `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~Shortcuts.Dialogs"` and verify all tests pass
+- [x] T025 Verify `src/Stroke/Shortcuts/Dialogs.cs` stays under 1,000 LOC (target ~250 LOC per NF-001)
+- [x] T026 Verify `tests/Stroke.Tests/Shortcuts/DialogsTests.cs` stays under 1,000 LOC (target ~400 LOC per plan.md)
 
 ---
 
