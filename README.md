@@ -451,9 +451,27 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Running-app dispatch: auto-routes through `RunInTerminal.RunAsync` when `Application` is active
   - 32 new tests (8,051 total tests, >80% coverage)
 
+- **Prompt Session** — High-level `PromptSession` API ported from `shortcuts/prompt.py`
+  - `PromptSession<TResult>` generic class with 44-parameter constructor covering all Python Prompt Toolkit options
+  - `Prompt()` and `PromptAsync()` with per-prompt permanent overrides (38 parameter parity with Python)
+  - `PromptFunctions` static class: `Prompt`, `PromptAsync`, `Confirm`, `ConfirmAsync`, `CreateConfirmSession`
+  - `CompleteStyle` enum (Column, MultiColumn, ReadlineLike) for completion menu display modes
+  - Layout construction: `FloatContainer` + `HSplit` + completion menus + toolbars + conditional containers
+  - `SplitMultilinePrompt` for multi-line prompt rendering (before/after newline splitting)
+  - DynCond pattern: `Condition` lambdas closing over session for reactive Lock-protected `FilterOrBool` property reads
+  - `CompleteWhileTyping` condition composition: `completeWhileTyping & ~enableHistorySearch & ~ReadlineLike`
+  - Dumb terminal fallback via `PlatformUtils.IsDumbTerminal()` with Console.ReadLine degradation
+  - Default value and accept-default logic with `ResolveDefaultDocument()`
+  - Prompt key bindings: Enter (accept), Ctrl-C (abort), Ctrl-D (EOF), Tab (complete), Ctrl-Z (suspend)
+  - Confirm session with y/n/Y/N key bindings and configurable suffix
+  - `KeyboardInterruptException` and `EOFException` for signal-like prompt termination
+  - Thread-safe via `System.Threading.Lock` on all 36 mutable properties
+  - Partial class split across 6 files (max 548 LOC, Constitution X compliant)
+  - 173 new tests (8,224 total tests, >80% coverage)
+
 ### Up Next
 
-- **Shortcuts** — `PromptSession` API and dialog helpers
+- **Dialog Shortcuts** — `shortcuts/dialogs.py` high-level dialog functions
 
 ## Requirements
 
