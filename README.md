@@ -442,9 +442,18 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Thread-safe mutable state in DialogList and ProgressBar via `System.Threading.Lock`
   - 141 new widget tests (8,015 total tests, >80% coverage)
 
+- **Shortcut Utilities** — High-level print and terminal control functions ported from `shortcuts/utils.py`
+  - `FormattedTextOutput.Print` — Single-value and multi-value overloads with `sep`/`end`/`file`/`flush`/`style`/`output`/`colorDepth`/`styleTransformation`/`includeDefaultPygmentsStyle` parameters
+  - `FormattedTextOutput.PrintContainer` — One-shot container rendering using temporary `Application` with `DummyInput` → `EndOfStreamException` termination
+  - `TerminalUtils.Clear` — Erase screen + cursor home + flush
+  - `TerminalUtils.SetTitle` / `ClearTitle` — VT100 window title control
+  - Style merging: DefaultUI → Pygments → user style precedence via `StyleMerger.MergeStyles`
+  - Running-app dispatch: auto-routes through `RunInTerminal.RunAsync` when `Application` is active
+  - 32 new tests (8,051 total tests, >80% coverage)
+
 ### Up Next
 
-- **Shortcuts** — High-level `PromptSession` API and dialog helpers
+- **Shortcuts** — `PromptSession` API and dialog helpers
 
 ## Requirements
 
