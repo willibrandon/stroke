@@ -86,12 +86,10 @@ public partial class PromptSession<TResult>
             rprompt, bottomToolbar, mouseSupport, inputProcessors, placeholder,
             keyBindings, tempfileSuffix, tempfile, refreshInterval, showFrame);
 
-        // Reset buffer with default document
+        // Add pre-run callables, then reset buffer (matching Python source ordering)
+        AddPreRunCallables(preRun, acceptDefault);
         var defaultDoc = ResolveDefaultDocument(default_);
         DefaultBuffer.Reset(document: defaultDoc);
-
-        // Add pre-run callables (before dumb terminal check, matching Python source)
-        AddPreRunCallables(preRun, acceptDefault);
 
         // Set app refresh interval
         App.RefreshInterval = RefreshInterval == 0 ? null : RefreshInterval;
@@ -174,12 +172,10 @@ public partial class PromptSession<TResult>
             rprompt, bottomToolbar, mouseSupport, inputProcessors, placeholder,
             keyBindings, tempfileSuffix, tempfile, refreshInterval, showFrame);
 
-        // Reset buffer with default document
+        // Add pre-run callables, then reset buffer (matching Python source ordering)
+        AddPreRunCallables(preRun, acceptDefault);
         var defaultDoc = ResolveDefaultDocument(default_);
         DefaultBuffer.Reset(document: defaultDoc);
-
-        // Add pre-run callables (before dumb terminal check, matching Python source)
-        AddPreRunCallables(preRun, acceptDefault);
 
         // Set app refresh interval
         App.RefreshInterval = RefreshInterval == 0 ? null : RefreshInterval;
