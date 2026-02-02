@@ -156,11 +156,15 @@ public static class FormattedTextOutput
             }
         }
 
-        // Dispatch: if an Application is running, coordinate through RunInTerminal.
+        // Dispatch: if an Application is running, post to the event loop via
+        // RunInTerminal and return immediately (fire-and-forget). This matches
+        // Python's `loop.call_soon_threadsafe(lambda: run_in_terminal(render))`
+        // which posts and returns without blocking. Blocking here would deadlock
+        // if Print is called from within a RunInTerminal context.
         var app = Stroke.Application.AppContext.GetAppOrNull();
         if (app is not null)
         {
-            RunInTerminal.RunAsync(Render).GetAwaiter().GetResult();
+            _ = RunInTerminal.RunAsync(Render);
         }
         else
         {
@@ -193,10 +197,11 @@ public static class FormattedTextOutput
             ? OutputFactory.Create(stdout: file)
             : Stroke.Application.AppContext.GetAppSession().Output;
 
+        using var input = new DummyInput();
         var app = new Application<object?>(
             layout: new Stroke.Layout.Layout(container: container),
             output: output,
-            input: new DummyInput(),
+            input: input,
             style: CreateMergedStyle(style, includeDefaultPygmentsStyle));
 
         try
