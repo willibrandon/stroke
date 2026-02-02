@@ -260,7 +260,7 @@ A developer wants to pre-fill the input buffer with a default value that the use
 - **SC-005**: Dumb terminal fallback works correctly in environments where the terminal type is dumb
 - **SC-006**: Per-prompt parameter overrides take effect immediately without requiring session recreation
 - **SC-007**: Confirm prompt correctly returns boolean for all valid inputs (y/Y/n/N) and ignores all other keys
-- **SC-008**: Unit test coverage reaches 80% line coverage (measured by `dotnet test --collect:"XPlat Code Coverage"`) across all PromptSession, PromptFunctions, CompleteStyle, KeyboardInterruptException, and EOFException code
+- **SC-008**: Unit test coverage reaches 80% line coverage (measured by `dotnet test --collect:"XPlat Code Coverage"`) across all PromptSession, Prompt, CompleteStyle, KeyboardInterruptException, and EOFException code
 - **SC-009**: All 41 functional requirements (FR-001..FR-041) are implemented with 1:1 behavioral fidelity to the Python Prompt Toolkit source — verified by confirming every public API in Python's `prompt_toolkit.shortcuts.prompt` module has a corresponding API in C# with matching semantics
 - **SC-010**: The PromptSession constructor accepts all 44 parameters matching the Python source (`__init__` lines 378-424) without inventing or omitting any
 

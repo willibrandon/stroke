@@ -15,7 +15,7 @@ The Prompt Session feature provides the primary user-facing API for Stroke — a
 using Stroke.Shortcuts;
 
 // Simplest possible usage — one-shot prompt
-string name = PromptFunctions.Prompt("What is your name? ");
+string name = Prompt.Prompt("What is your name? ");
 Console.WriteLine($"Hello, {name}!");
 ```
 
@@ -65,7 +65,7 @@ string query = session.Prompt();
 ```csharp
 using Stroke.Shortcuts;
 
-bool confirmed = PromptFunctions.Confirm("Delete all files?");
+bool confirmed = Prompt.Confirm("Delete all files?");
 if (confirmed)
     Console.WriteLine("Deleting...");
 ```
@@ -75,7 +75,7 @@ if (confirmed)
 ```csharp
 using Stroke.Shortcuts;
 
-string input = await PromptFunctions.PromptAsync("Enter value: ");
+string input = await Prompt.PromptAsync("Enter value: ");
 ```
 
 ## Build & Test

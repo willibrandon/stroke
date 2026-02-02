@@ -60,6 +60,7 @@ public partial class PromptSession<TResult>
                             .And((Filter)AppFilters.HasFocus(DefaultBuffer))),
                     promptBindings),
                 new DynamicKeyBindings(() => KeyBindings)),
+            colorDepth: new ColorDepthOption(() => ColorDepth),
             mouseSupport: DynCond(() => MouseSupport),
             editingMode: editingMode,
             eraseWhenDone: eraseWhenDone,
@@ -171,62 +172,4 @@ public partial class PromptSession<TResult>
         return kb;
     }
 
-    /// <summary>
-    /// Creates a dumb terminal prompt that uses character-by-character echo.
-    /// </summary>
-    /// <param name="message">The prompt message to display.</param>
-    /// <returns>An application configured for dumb terminal mode.</returns>
-    /// <remarks>
-    /// Port of Python Prompt Toolkit's <c>_dumb_prompt</c> context manager.
-    /// In C#, the caller manages the lifecycle using try/finally.
-    /// </remarks>
-    internal Application<TResult> DumbPrompt(AnyFormattedText message)
-    {
-        // Write prompt to real output
-        Output.Write(FormattedTextUtils.FragmentListToText(
-            FormattedTextUtils.ToFormattedText(Message)));
-        Output.Flush();
-
-        // Key bindings: prompt bindings + user bindings
-        IKeyBindingsBase keyBindings = CreatePromptBindings();
-        var userKb = KeyBindings;
-        if (userKb is not null)
-        {
-            keyBindings = new MergedKeyBindings(userKb, keyBindings);
-        }
-
-        // Create minimal application with DummyOutput
-        var application = new Application<TResult>(
-            input: Input,
-            output: new DummyOutput(),
-            layout: Layout,
-            keyBindings: keyBindings);
-
-        // Subscribe to text changes to echo characters
-        void OnTextChanged(Buffer _)
-        {
-            var text = DefaultBuffer.Document.TextBeforeCursor;
-            if (text.Length > 0)
-            {
-                Output.Write(text[^1..]);
-                Output.Flush();
-            }
-        }
-
-        DefaultBuffer.OnTextChanged += OnTextChanged;
-
-        // Note: cleanup happens in the Prompt method's finally block (CleanupDumbPrompt)
-
-        return application;
-    }
-
-    /// <summary>
-    /// Cleans up after a dumb prompt run.
-    /// </summary>
-    internal void CleanupDumbPrompt(Action<Buffer> onTextChanged)
-    {
-        Output.Write("\r\n");
-        Output.Flush();
-        DefaultBuffer.OnTextChanged -= onTextChanged;
-    }
 }

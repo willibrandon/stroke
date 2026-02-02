@@ -182,7 +182,7 @@ namespace Stroke.Shortcuts;
 /// <summary>
 /// Prompt shortcut functions.
 /// </summary>
-public static class PromptFunctions
+public static class Prompt
 {
     /// <summary>
     /// Display a prompt and return the input.
@@ -258,7 +258,7 @@ src/Stroke/
 └── Shortcuts/
     ├── CompleteStyle.cs
     ├── PromptSession.cs
-    └── PromptFunctions.cs
+    └── Prompt.cs
 tests/Stroke.Tests/
 └── Shortcuts/
     ├── PromptSessionTests.cs

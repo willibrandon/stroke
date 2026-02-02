@@ -53,12 +53,42 @@ public partial class PromptSession<TResult>
     /// <summary>
     /// Accept handler for the default buffer. Exits the application with the buffer text.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Python's accept handler does <c>cast(Application[str], get_app()).exit(result=buff.document.text)</c>,
+    /// relying on dynamic typing. In C#, <typeparamref name="TResult"/> may not be <c>string</c>
+    /// (e.g., <c>PromptSession&lt;bool&gt;</c> for confirm dialogs). For non-string sessions,
+    /// the confirm key bindings call <c>App.Exit(result: true/false)</c> directly; this handler
+    /// only executes via Enter key on the default buffer.
+    /// </para>
+    /// </remarks>
     private bool AcceptInput(Buffer buffer)
     {
-        // Cast to Application<object?> to call Exit generically.
-        // The actual result type is handled by PromptSession's type parameter.
         var app = Application.AppContext.GetApp();
-        app.Exit(result: (TResult)(object)buffer.Document.Text, style: "class:accepted");
+        var text = buffer.Document.Text;
+
+        // For PromptSession<string>, cast directly. For other TResult types,
+        // attempt conversion — this mirrors Python's dynamic cast behavior.
+        if (text is TResult result)
+        {
+            app.Exit(result: result, style: "class:accepted");
+        }
+        else
+        {
+            try
+            {
+                app.Exit(result: (TResult)Convert.ChangeType(text, typeof(TResult)), style: "class:accepted");
+            }
+            catch (InvalidCastException)
+            {
+                app.Exit(result: default!, style: "class:accepted");
+            }
+            catch (FormatException)
+            {
+                app.Exit(result: default!, style: "class:accepted");
+            }
+        }
+
         return true; // Keep text, we call Reset later
     }
 

@@ -90,18 +90,17 @@ public partial class PromptSession<TResult>
         var defaultDoc = ResolveDefaultDocument(default_);
         DefaultBuffer.Reset(document: defaultDoc);
 
+        // Add pre-run callables (before dumb terminal check, matching Python source)
+        AddPreRunCallables(preRun, acceptDefault);
+
         // Set app refresh interval
         App.RefreshInterval = RefreshInterval == 0 ? null : RefreshInterval;
 
         // Dumb terminal check
         if (_output is null && PlatformUtils.IsDumbTerminal())
         {
-            // Dumb terminal branch — implemented in T040
-            return DumbPromptRun(setExceptionHandler, handleSigint);
+            return DumbPromptRun(setExceptionHandler, handleSigint, inThread);
         }
-
-        // Add pre-run callables
-        AddPreRunCallables(preRun, acceptDefault);
 
         // Run the application
         return App.Run(
@@ -179,17 +178,17 @@ public partial class PromptSession<TResult>
         var defaultDoc = ResolveDefaultDocument(default_);
         DefaultBuffer.Reset(document: defaultDoc);
 
+        // Add pre-run callables (before dumb terminal check, matching Python source)
+        AddPreRunCallables(preRun, acceptDefault);
+
         // Set app refresh interval
         App.RefreshInterval = RefreshInterval == 0 ? null : RefreshInterval;
 
         // Dumb terminal check
         if (_output is null && PlatformUtils.IsDumbTerminal())
         {
-            return DumbPromptRun(setExceptionHandler, handleSigint);
+            return await DumbPromptRunAsync(setExceptionHandler, handleSigint);
         }
-
-        // Add pre-run callables
-        AddPreRunCallables(preRun, acceptDefault);
 
         // Run the application
         return await App.RunAsync(
@@ -212,16 +211,12 @@ public partial class PromptSession<TResult>
             // Execute user's pre-run first
             preRun?.Invoke();
 
-            // If acceptDefault, schedule validation and accept
+            // If acceptDefault, schedule validation and accept on the event loop.
+            // Python uses get_running_loop().call_soon() which stays on the same thread.
+            // We marshal via the Application's action channel to preserve single-threaded semantics.
             if (acceptDefault)
             {
-                // Use Task.Run with a small delay to schedule "soon" in the event loop,
-                // allowing the default value to display first.
-                _ = Task.Run(async () =>
-                {
-                    await Task.Yield();
-                    DefaultBuffer.ValidateAndHandle();
-                });
+                App._actionChannel?.Writer.TryWrite(() => DefaultBuffer.ValidateAndHandle());
             }
         });
     }
@@ -346,9 +341,52 @@ public partial class PromptSession<TResult>
     // ═══════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Runs a dumb terminal prompt. Placeholder for T040 full implementation.
+    /// Runs a dumb terminal prompt synchronously.
     /// </summary>
-    private TResult DumbPromptRun(bool setExceptionHandler, bool handleSigint)
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>_dumb_prompt</c> context manager + <c>dump_app.run()</c>.
+    /// </remarks>
+    private TResult DumbPromptRun(bool setExceptionHandler, bool handleSigint, bool inThread)
+    {
+        var (dumbApp, onTextChanged) = CreateDumbPromptApp();
+        try
+        {
+            return dumbApp.Run(
+                setExceptionHandler: setExceptionHandler,
+                handleSigint: handleSigint,
+                inThread: inThread);
+        }
+        finally
+        {
+            CleanupDumbPrompt(onTextChanged);
+        }
+    }
+
+    /// <summary>
+    /// Runs a dumb terminal prompt asynchronously.
+    /// </summary>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>_dumb_prompt</c> context manager + <c>await dump_app.run_async()</c>.
+    /// </remarks>
+    private async Task<TResult> DumbPromptRunAsync(bool setExceptionHandler, bool handleSigint)
+    {
+        var (dumbApp, onTextChanged) = CreateDumbPromptApp();
+        try
+        {
+            return await dumbApp.RunAsync(
+                setExceptionHandler: setExceptionHandler,
+                handleSigint: handleSigint);
+        }
+        finally
+        {
+            CleanupDumbPrompt(onTextChanged);
+        }
+    }
+
+    /// <summary>
+    /// Creates a dumb terminal application with character echo.
+    /// </summary>
+    private (Application<TResult> app, Action<Buffer> onTextChanged) CreateDumbPromptApp()
     {
         // Write prompt to real output
         Output.Write(FormattedTextUtils.FragmentListToText(
@@ -382,17 +420,16 @@ public partial class PromptSession<TResult>
         }
 
         DefaultBuffer.OnTextChanged += OnTextChanged;
-        try
-        {
-            return dumbApp.Run(
-                setExceptionHandler: setExceptionHandler,
-                handleSigint: handleSigint);
-        }
-        finally
-        {
-            Output.Write("\r\n");
-            Output.Flush();
-            DefaultBuffer.OnTextChanged -= OnTextChanged;
-        }
+        return (dumbApp, OnTextChanged);
+    }
+
+    /// <summary>
+    /// Cleans up after a dumb prompt run.
+    /// </summary>
+    private void CleanupDumbPrompt(Action<Buffer> onTextChanged)
+    {
+        Output.Write("\r\n");
+        Output.Flush();
+        DefaultBuffer.OnTextChanged -= onTextChanged;
     }
 }

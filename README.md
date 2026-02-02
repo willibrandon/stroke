@@ -454,7 +454,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 - **Prompt Session** — High-level `PromptSession` API ported from `shortcuts/prompt.py`
   - `PromptSession<TResult>` generic class with 44-parameter constructor covering all Python Prompt Toolkit options
   - `Prompt()` and `PromptAsync()` with per-prompt permanent overrides (38 parameter parity with Python)
-  - `PromptFunctions` static class: `Prompt`, `PromptAsync`, `Confirm`, `ConfirmAsync`, `CreateConfirmSession`
+  - `Prompt` static class: `Prompt`, `PromptAsync`, `Confirm`, `ConfirmAsync`, `CreateConfirmSession`
   - `CompleteStyle` enum (Column, MultiColumn, ReadlineLike) for completion menu display modes
   - Layout construction: `FloatContainer` + `HSplit` + completion menus + toolbars + conditional containers
   - `SplitMultilinePrompt` for multi-line prompt rendering (before/after newline splitting)

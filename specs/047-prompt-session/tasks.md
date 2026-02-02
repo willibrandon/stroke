@@ -92,18 +92,18 @@
 
 ## Phase 5: User Story 3 — One-Shot Prompt Function (Priority: P2)
 
-**Goal**: Developer calls static `PromptFunctions.Prompt("Name: ")` for quick one-shot input without managing a session
+**Goal**: Developer calls static `Prompt.Prompt("Name: ")` for quick one-shot input without managing a session
 
-**Independent Test**: Call `PromptFunctions.Prompt("Name: ")` → type text → verify returned string
+**Independent Test**: Call `Prompt.Prompt("Name: ")` → type text → verify returned string
 
 ### Tests for User Story 3
 
-- [X] T024 [P] [US3] Write `PromptFunctionsTests` in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — static Prompt creates temp session with History param only, delegates all other params to session.Prompt(); PromptAsync equivalent → FR-019, FR-036
+- [X] T024 [P] [US3] Write `PromptTests` in `tests/Stroke.Tests/Shortcuts/PromptTests.cs` — static Prompt creates temp session with History param only, delegates all other params to session.Prompt(); PromptAsync equivalent → FR-019, FR-036
 
 ### Implementation for User Story 3
 
-- [X] T025 [US3] Implement `PromptFunctions.Prompt` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — creates `PromptSession<string>(history: history)`, calls `session.Prompt(message, ...)` with all remaining params per contract `contracts/prompt-functions.md` → FR-019
-- [X] T026 [US3] Implement `PromptFunctions.PromptAsync` static method in `src/Stroke/Shortcuts/PromptFunctions.cs` — same pattern as Prompt but calls session.PromptAsync → FR-019
+- [X] T025 [US3] Implement `Prompt.Prompt` static method in `src/Stroke/Shortcuts/Prompt.cs` — creates `PromptSession<string>(history: history)`, calls `session.Prompt(message, ...)` with all remaining params per contract `contracts/prompt.md` → FR-019
+- [X] T026 [US3] Implement `Prompt.PromptAsync` static method in `src/Stroke/Shortcuts/Prompt.cs` — same pattern as Prompt but calls session.PromptAsync → FR-019
 
 **Checkpoint**: US3 complete — one-shot prompt works.
 
@@ -135,12 +135,12 @@
 
 ### Tests for User Story 5
 
-- [X] T029 [P] [US5] Write confirm tests in `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` — CreateConfirmSession bindings (y/Y→true, n/N→false, Keys.Any→no-op), Confirm delegates to CreateConfirmSession.Prompt, ConfirmAsync delegates to PromptAsync, custom suffix → FR-020, FR-021
+- [X] T029 [P] [US5] Write confirm tests in `tests/Stroke.Tests/Shortcuts/PromptTests.cs` — CreateConfirmSession bindings (y/Y→true, n/N→false, Keys.Any→no-op), Confirm delegates to CreateConfirmSession.Prompt, ConfirmAsync delegates to PromptAsync, custom suffix → FR-020, FR-021
 
 ### Implementation for User Story 5
 
-- [X] T030 [US5] Implement `PromptFunctions.CreateConfirmSession` in `src/Stroke/Shortcuts/PromptFunctions.cs` — KeyBindings with y/Y/n/N bindings + Keys.Any catch-all; merges message+suffix via FormattedTextUtils.Merge; returns PromptSession<bool> per contract `contracts/prompt-functions.md` → FR-021
-- [X] T031 [US5] Implement `PromptFunctions.Confirm` and `ConfirmAsync` in `src/Stroke/Shortcuts/PromptFunctions.cs` — Confirm calls CreateConfirmSession.Prompt(), ConfirmAsync calls CreateConfirmSession.PromptAsync() → FR-020
+- [X] T030 [US5] Implement `Prompt.CreateConfirmSession` in `src/Stroke/Shortcuts/Prompt.cs` — KeyBindings with y/Y/n/N bindings + Keys.Any catch-all; merges message+suffix via FormattedTextUtils.Merge; returns PromptSession<bool> per contract `contracts/prompt.md` → FR-021
+- [X] T031 [US5] Implement `Prompt.Confirm` and `ConfirmAsync` in `src/Stroke/Shortcuts/Prompt.cs` — Confirm calls CreateConfirmSession.Prompt(), ConfirmAsync calls CreateConfirmSession.PromptAsync() → FR-020
 
 **Checkpoint**: US5 complete — confirmation prompt works.
 
@@ -374,13 +374,13 @@ Task T018: "PromptSessionBindingsTests in tests/Stroke.Tests/Shortcuts/PromptSes
 | `src/Stroke/Shortcuts/PromptSession.Application.cs` | T013, T014, T039 |
 | `src/Stroke/Shortcuts/PromptSession.Prompt.cs` | T019, T020, T021, T023, T033, T040 |
 | `src/Stroke/Shortcuts/PromptSession.Helpers.cs` | T015 |
-| `src/Stroke/Shortcuts/PromptFunctions.cs` | T025, T026, T030, T031 |
+| `src/Stroke/Shortcuts/Prompt.cs` | T025, T026, T030, T031 |
 | `tests/Stroke.Tests/Shortcuts/CompleteStyleTests.cs` | T016 |
 | `tests/Stroke.Tests/Shortcuts/PromptSessionTests.cs` | T017, T022 |
 | `tests/Stroke.Tests/Shortcuts/PromptSessionLayoutTests.cs` | T027, T034, T036 |
 | `tests/Stroke.Tests/Shortcuts/PromptSessionBindingsTests.cs` | T018 |
 | `tests/Stroke.Tests/Shortcuts/PromptSessionPromptTests.cs` | T032, T038, T041, T042 |
-| `tests/Stroke.Tests/Shortcuts/PromptFunctionsTests.cs` | T024, T029 |
+| `tests/Stroke.Tests/Shortcuts/PromptTests.cs` | T024, T029 |
 | `tests/Stroke.Tests/Shortcuts/PromptSessionConcurrencyTests.cs` | T043 |
 
 ### FR → Task Traceability

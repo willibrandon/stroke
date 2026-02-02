@@ -24,18 +24,19 @@ namespace Stroke.Shortcuts;
 /// Port of Python Prompt Toolkit's module-level <c>prompt</c>, <c>confirm</c>,
 /// and <c>create_confirm_session</c> functions from <c>prompt_toolkit.shortcuts.prompt</c>.
 /// </remarks>
-public static class PromptFunctions
+public static class Prompt
 {
     /// <summary>
-    /// Display a prompt and return the user's input. Creates a new
+    /// Display a prompt and return the user's input (blocking). Creates a new
     /// <c>PromptSession&lt;string&gt;</c> for each call.
     /// </summary>
     /// <remarks>
-    /// Port of Python Prompt Toolkit's <c>prompt()</c> function.
-    /// The <paramref name="history"/> parameter is passed to the session constructor;
-    /// all other parameters are passed to <c>session.Prompt()</c>.
+    /// <para>Port of Python Prompt Toolkit's <c>prompt()</c> function.</para>
+    /// <para>Named <c>RunPrompt</c> instead of <c>Prompt</c> because C# CS0542 prohibits
+    /// member names matching the enclosing type. The async equivalent is
+    /// <see cref="PromptAsync"/>.</para>
     /// </remarks>
-    public static string Prompt(
+    public static string RunPrompt(
         AnyFormattedText? message = null,
         IHistory? history = null,
         EditingMode? editingMode = null,

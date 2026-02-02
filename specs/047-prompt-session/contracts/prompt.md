@@ -1,7 +1,7 @@
-# Contract: PromptFunctions
+# Contract: Prompt
 
 **Namespace**: `Stroke.Shortcuts`
-**File**: `src/Stroke/Shortcuts/PromptFunctions.cs`
+**File**: `src/Stroke/Shortcuts/Prompt.cs`
 **Python Source**: `prompt_toolkit.shortcuts.prompt.prompt`, `confirm`, `create_confirm_session`
 
 ## Static Class Declaration
@@ -14,7 +14,7 @@
 /// Port of Python Prompt Toolkit's module-level <c>prompt</c>, <c>confirm</c>,
 /// and <c>create_confirm_session</c> functions from <c>prompt_toolkit.shortcuts.prompt</c>.
 /// </remarks>
-public static class PromptFunctions
+public static class Prompt
 ```
 
 ## Methods
@@ -144,14 +144,14 @@ public static Task<bool> ConfirmAsync(
 
 | Python | C# |
 |--------|-----|
-| `prompt(message, ...)` | `PromptFunctions.Prompt(message, ...)` |
-| N/A (Python has no async standalone) | `PromptFunctions.PromptAsync(message, ...)` |
-| `create_confirm_session(message, suffix)` | `PromptFunctions.CreateConfirmSession(message, suffix)` |
-| `confirm(message, suffix)` | `PromptFunctions.Confirm(message, suffix)` |
-| N/A | `PromptFunctions.ConfirmAsync(message, suffix)` |
+| `prompt(message, ...)` | `Prompt.Prompt(message, ...)` |
+| N/A (Python has no async standalone) | `Prompt.PromptAsync(message, ...)` |
+| `create_confirm_session(message, suffix)` | `Prompt.CreateConfirmSession(message, suffix)` |
+| `confirm(message, suffix)` | `Prompt.Confirm(message, suffix)` |
+| N/A | `Prompt.ConfirmAsync(message, suffix)` |
 
 ## Notes
 
-- Python's `prompt` is a module-level function. C# wraps it in a static class `PromptFunctions` since C# doesn't support free-standing functions.
+- Python's `prompt` is a module-level function. C# wraps it in a static class `Prompt` since C# doesn't support free-standing functions.
 - `ConfirmAsync` is a C# addition (not in Python) to provide async parity. This is a justified deviation per Constitution I — C# async patterns expect async alternatives.
 - The `message` parameter for `Confirm` defaults to `"Confirm?"` matching Python. Since `AnyFormattedText` can be constructed from string, this works via implicit conversion.
