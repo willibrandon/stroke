@@ -81,12 +81,23 @@ public class StdoutProxyTests
     }
 
     [Fact]
-    public void OriginalStdout_WhenDummyOutput_ReturnsNull()
+    public void OriginalStdout_WhenDummyOutput_FallsBackToProcessStdout()
+    {
+        // DummyOutput.Stdout returns null, so OriginalStdout should fall back
+        // to the process-level original stdout (equivalent to sys.__stdout__).
+        using var session = AppContext.CreateAppSession(output: new DummyOutput());
+        using var proxy = new StdoutProxy();
+
+        Assert.NotNull(proxy.OriginalStdout);
+    }
+
+    [Fact]
+    public void Errors_ReturnsStrict()
     {
         using var session = AppContext.CreateAppSession(output: new DummyOutput());
         using var proxy = new StdoutProxy();
 
-        Assert.Null(proxy.OriginalStdout);
+        Assert.Equal("strict", proxy.Errors);
     }
 
     [Fact]

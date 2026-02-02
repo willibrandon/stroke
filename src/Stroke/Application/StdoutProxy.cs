@@ -28,6 +28,12 @@ namespace Stroke.Application;
 /// </remarks>
 public sealed class StdoutProxy : TextWriter
 {
+    /// <summary>
+    /// Captures the process-level original stdout at first access, equivalent to
+    /// Python's <c>sys.__stdout__</c>. Used as fallback in <see cref="OriginalStdout"/>.
+    /// </summary>
+    private static readonly TextWriter? _originalProcessStdout = Console.Out;
+
     private readonly Lock _lock = new();
     private readonly List<string> _buffer = [];
     private readonly AppSession _appSession;
@@ -92,8 +98,15 @@ public sealed class StdoutProxy : TextWriter
 
     /// <summary>
     /// Gets the original stdout stream that this proxy wraps.
+    /// Falls back to the process-level original stdout when the output has no stdout stream.
     /// </summary>
-    public TextWriter? OriginalStdout => _output.Stdout;
+    public TextWriter? OriginalStdout => _output.Stdout ?? _originalProcessStdout;
+
+    /// <summary>
+    /// Gets the error handling mode. Always returns "strict" for compatibility
+    /// with Python's <c>TextIO.errors</c> protocol.
+    /// </summary>
+    public string Errors => "strict";
 
     /// <summary>
     /// Gets the encoding of the underlying output.
@@ -160,6 +173,7 @@ public sealed class StdoutProxy : TextWriter
         // Queue the sentinel outside the lock — BlockingCollection is thread-safe.
         _flushQueue.Add(new FlushItem.Done());
         _flushThread.Join();
+        _flushQueue.Dispose();
     }
 
     /// <summary>

@@ -441,7 +441,7 @@ This ensures examples behave correctly in real terminal environments before mark
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,326 tests**.
+Most recent first. Total test count: **8,327 tests**.
 
 - 049-patch-stdout: StdoutProxy TextWriter, StdoutPatching.PatchStdout(), FlushItem — producer-consumer flush thread, newline-gated buffering, RunInTerminal integration
 - 048-dialog-shortcuts: Dialogs static class — 7 factory methods + 7 async wrappers, thread-safe ProgressDialog
