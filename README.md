@@ -483,6 +483,18 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Thread-safe `ProgressDialog` via Lock-protected `setPercentage` and `_actionChannel`-marshaled `logText`
   - 47 new tests (8,271 total tests, >80% coverage)
 
+- **Choice Input** — Selection prompt shortcut ported from `shortcuts/choice_input.py`
+  - `ChoiceInput<T>` sealed class with 12-parameter constructor for full configuration
+  - `Prompt()` and `PromptAsync()` methods returning selected value
+  - `Dialogs.Choice<T>()` and `Dialogs.ChoiceAsync<T>()` convenience methods
+  - `KeyboardInterrupt` exception for Ctrl+C cancellation (configurable)
+  - RadioList-based UI with numbered options (1-9 direct selection)
+  - Arrow key and k/j navigation with wrap-around
+  - Optional frame border, bottom toolbar, mouse support
+  - Ctrl+Z suspend on Unix (when enabled)
+  - Key binding extensibility via MergedKeyBindings
+  - Thread-safe via immutable configuration (47 tests, >80% coverage)
+
 - **Patch Stdout** — Console output interception for active prompt sessions, ported from `patch_stdout.py`
   - `StdoutProxy` sealed `TextWriter` subclass with newline-gated buffering and producer-consumer flush thread
   - `StdoutPatching.PatchStdout()` replaces `Console.Out` and `Console.Error` with proxy, returns `IDisposable` for restore

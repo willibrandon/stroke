@@ -448,11 +448,13 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + Stroke.Input.Windows (ConsoleApi, Win32Types) — all P/Invoke already ported (054-win32-eventloop-utils)
 - N/A (in-memory kernel handles only) (054-win32-eventloop-utils)
 - C# 13 / .NET 10+ + `Stroke.Output` (IOutput, Vt100Output), `Stroke.Output.Windows` (Win32Output), `Stroke.Input.Windows` (ConsoleApi, Win32Types), `Stroke.Core` (PlatformUtils, Size), `System.Runtime.Versioning` (055-win10-vt100-output)
+- C# 13 / .NET 10+ + Stroke.Application, Stroke.Widgets.Lists (RadioList), Stroke.Layout (HSplit, ConditionalContainer, Box, Frame), Stroke.KeyBinding, Stroke.Filters (056-choice-input)
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,644 tests**.
+Most recent first. Total test count: **8,691 tests**.
 
+- 056-choice-input: ChoiceInput<T> selection prompt — numbered option list with RadioList widget, arrow/k/j/number key navigation, Enter to confirm, Ctrl+C interrupt with configurable exception type, optional frame border and bottom toolbar, mouse support, Ctrl+Z suspend (Unix), key binding extensibility via MergedKeyBindings, Dialogs.Choice<T>() and Dialogs.ChoiceAsync<T>() convenience methods
 - 055-win10-vt100-output: Windows10Output hybrid IOutput implementation — proxy class combining Win32Output (console sizing, mouse, scrolling, bracketed paste) and Vt100Output (all rendering via ANSI escape sequences), enables VT100 mode per-flush via ENABLE_VIRTUAL_TERMINAL_PROCESSING (0x0005), per-instance Lock for thread-safe flush serialization, defaults to true color (24-bit), WindowsVt100Support.IsVt100Enabled() detection delegating to PlatformUtils.IsWindowsVt100Supported
 - 054-win32-eventloop-utils: Win32EventLoopUtils static class — WaitForHandles (synchronous multiplexed handle waiting), WaitForHandlesAsync (100ms polling with CancellationToken), CreateWin32Event/SetWin32Event/ResetWin32Event/CloseWin32Event (manual-reset event lifecycle), WaitTimeout and Infinite constants, ArgumentOutOfRangeException for >64 handles, Win32Exception on API failure, platform-gated via [SupportedOSPlatform("windows")]
 - 053-conemu-output: ConEmuOutput hybrid IOutput implementation — proxy class combining Win32Output (console sizing, mouse, scrolling, bracketed paste) and Vt100Output (all rendering via ANSI escape sequences), enables 256-color and true-color support in ConEmu/Cmder terminals, thread-safe via delegation to underlying outputs
