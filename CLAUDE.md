@@ -440,11 +440,14 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory buffering only) (049-patch-stdout)
 - C# 13 / .NET 10+ + .NET BCL only — `System.Threading.ExecutionContext`, `System.Threading.SynchronizationContext`, `System.Threading.Tasks.Task`, `System.Diagnostics.StackTrace` (050-event-loop-utils)
 - N/A (stateless utilities, in-memory only) (050-event-loop-utils)
+- C# 13 / .NET 10 + .NET BCL only (System.Runtime.InteropServices, System.Runtime.Versioning) (051-win32-console-types)
+- N/A (in-memory struct types only) (051-win32-console-types)
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,361 tests**.
+Most recent first. Total test count: **8,503 tests**.
 
+- 051-win32-console-types: Win32Types namespace — 11 P/Invoke structs (Coord, SmallRect, InputRecord union, KeyEventRecord, MouseEventRecord, ConsoleScreenBufferInfo, CharInfo, etc.), 6 flags enums (EventType, ControlKeyState, MouseEventFlags, MouseButtonState, ConsoleInputMode, ConsoleOutputMode), StdHandles constants, 4 new ConsoleApi P/Invoke methods (GetConsoleScreenBufferInfo, ReadConsoleInput, WriteConsoleOutput, SetConsoleCursorPosition)
 - 050-event-loop-utils: EventLoopUtils static class — RunInExecutorWithContextAsync (ExecutionContext preservation across threads), CallSoonThreadSafe (deadline-based re-post coalescing via SynchronizationContext), GetTracebackFromContext (exception dictionary extraction)
 - 049-patch-stdout: StdoutProxy TextWriter, StdoutPatching.PatchStdout(), FlushItem — producer-consumer flush thread, newline-gated buffering, RunInTerminal integration
 - 048-dialog-shortcuts: Dialogs static class — 7 factory methods + 7 async wrappers, thread-safe ProgressDialog

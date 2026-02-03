@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using Stroke.Input.Windows.Win32Types;
 
 namespace Stroke.Input.Windows;
 
@@ -230,6 +231,113 @@ public static partial class ConsoleApi
     [LibraryImport(Kernel32, EntryPoint = "CloseHandle", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool CloseHandle(nint hObject);
+
+    #endregion
+
+    #region Screen Buffer Functions
+
+    /// <summary>
+    /// Retrieves information about the specified console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpConsoleScreenBufferInfo">Structure to receive the buffer information.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "GetConsoleScreenBufferInfo", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool GetConsoleScreenBufferInfo(
+        nint hConsoleOutput,
+        out ConsoleScreenBufferInfo lpConsoleScreenBufferInfo);
+
+    /// <summary>
+    /// Reads data from a console input buffer and removes it from the buffer.
+    /// </summary>
+    /// <param name="hConsoleInput">Handle to the console input buffer.</param>
+    /// <param name="lpBuffer">Pointer to buffer to receive the input records.</param>
+    /// <param name="nLength">Size of the buffer in number of input records.</param>
+    /// <param name="lpNumberOfEventsRead">Variable to receive the number of records read.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "ReadConsoleInputW", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static unsafe partial bool ReadConsoleInputUnsafe(
+        nint hConsoleInput,
+        InputRecord* lpBuffer,
+        uint nLength,
+        out uint lpNumberOfEventsRead);
+
+    /// <summary>
+    /// Reads data from a console input buffer and removes it from the buffer.
+    /// </summary>
+    /// <param name="hConsoleInput">Handle to the console input buffer.</param>
+    /// <param name="lpBuffer">Buffer to receive the input records.</param>
+    /// <param name="nLength">Size of the buffer in number of input records.</param>
+    /// <param name="lpNumberOfEventsRead">Variable to receive the number of records read.</param>
+    /// <returns>True on success, false on failure.</returns>
+    public static unsafe bool ReadConsoleInput(
+        nint hConsoleInput,
+        InputRecord[] lpBuffer,
+        uint nLength,
+        out uint lpNumberOfEventsRead)
+    {
+        fixed (InputRecord* pBuffer = lpBuffer)
+        {
+            return ReadConsoleInputUnsafe(hConsoleInput, pBuffer, nLength, out lpNumberOfEventsRead);
+        }
+    }
+
+    /// <summary>
+    /// Writes character and color attribute data to a specified rectangular block
+    /// of character cells in a console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpBuffer">Pointer to buffer containing character/attribute data.</param>
+    /// <param name="dwBufferSize">Size of the buffer (columns x rows).</param>
+    /// <param name="dwBufferCoord">Coordinates of the upper-left cell in the buffer to read from.</param>
+    /// <param name="lpWriteRegion">Pointer to coordinates of the screen buffer rectangle to write to.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "WriteConsoleOutputW", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static unsafe partial bool WriteConsoleOutputUnsafe(
+        nint hConsoleOutput,
+        CharInfo* lpBuffer,
+        Coord dwBufferSize,
+        Coord dwBufferCoord,
+        SmallRect* lpWriteRegion);
+
+    /// <summary>
+    /// Writes character and color attribute data to a specified rectangular block
+    /// of character cells in a console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpBuffer">Buffer containing character/attribute data.</param>
+    /// <param name="dwBufferSize">Size of the buffer (columns x rows).</param>
+    /// <param name="dwBufferCoord">Coordinates of the upper-left cell in the buffer to read from.</param>
+    /// <param name="lpWriteRegion">Coordinates of the screen buffer rectangle to write to.</param>
+    /// <returns>True on success, false on failure.</returns>
+    public static unsafe bool WriteConsoleOutput(
+        nint hConsoleOutput,
+        CharInfo[] lpBuffer,
+        Coord dwBufferSize,
+        Coord dwBufferCoord,
+        ref SmallRect lpWriteRegion)
+    {
+        fixed (CharInfo* pBuffer = lpBuffer)
+        fixed (SmallRect* pWriteRegion = &lpWriteRegion)
+        {
+            return WriteConsoleOutputUnsafe(hConsoleOutput, pBuffer, dwBufferSize, dwBufferCoord, pWriteRegion);
+        }
+    }
+
+    /// <summary>
+    /// Sets the cursor position in the specified console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="dwCursorPosition">New cursor position.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleCursorPosition", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetConsoleCursorPosition(
+        nint hConsoleOutput,
+        Coord dwCursorPosition);
 
     #endregion
 }

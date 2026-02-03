@@ -503,6 +503,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `GetTracebackFromContext` — Exception stack trace extraction from `IDictionary<string, object?>` context
   - Overflow clamping for `TimeSpan.MaxValue` deadlines, disposed sync context fallback, suppressed flow handling
   - Stateless, thread-safe (34 tests, >80% coverage)
+- **Win32 Console Types** — P/Invoke struct types and enums for Windows Console API interop, ported from `win32_types.py`
+  - `Stroke.Input.Windows.Win32Types` namespace with 17 type files
+  - 11 structs: `Coord` (4B), `SmallRect` (8B), `CharInfo` (4B), `KeyEventRecord` (16B), `MouseEventRecord` (16B), `WindowBufferSizeRecord` (4B), `MenuEventRecord` (4B), `FocusEventRecord` (4B), `InputRecord` union (20B, `LayoutKind.Explicit`), `ConsoleScreenBufferInfo` (22B), `SecurityAttributes` (12/24B)
+  - 6 flags enums: `EventType`, `ControlKeyState`, `MouseEventFlags`, `MouseButtonState`, `ConsoleInputMode`, `ConsoleOutputMode`
+  - `StdHandles` static class with STD_INPUT/OUTPUT/ERROR_HANDLE constants
+  - 4 new `ConsoleApi` P/Invoke methods: `GetConsoleScreenBufferInfo`, `ReadConsoleInput`, `WriteConsoleOutput`, `SetConsoleCursorPosition`
+  - `LibraryImport` source generator with unsafe pointer pinning for blittable array marshalling
+  - Cross-platform compilation (types compile everywhere; P/Invoke Windows-only via `[SupportedOSPlatform]`)
+  - Thread-safe via immutable value types (142 tests, 100% struct size verification)
 
 ### Up Next
 
