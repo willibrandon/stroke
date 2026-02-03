@@ -574,8 +574,7 @@ public sealed class Win32EventLoopUtilsTests
         if (!OperatingSystem.IsWindows()) return;
 
         const int iterations = 10_000;
-        var process = Process.GetCurrentProcess();
-        var initialHandleCount = process.HandleCount;
+        var initialTracked = Win32EventLoopUtils.ActiveEventHandleCount;
 
         for (int i = 0; i < iterations; i++)
         {
@@ -585,18 +584,12 @@ public sealed class Win32EventLoopUtilsTests
             Win32EventLoopUtils.CloseWin32Event(evt);
         }
 
-        // Force GC to clean up any finalizers
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        process.Refresh();
-        var finalHandleCount = process.HandleCount;
-
-        // Handle count should not have grown significantly
-        // Allow some variance for runtime activity
-        var leakedHandles = finalHandleCount - initialHandleCount;
-        Assert.True(
-            leakedHandles < 100, // Allow some slack for runtime activities
-            $"Possible handle leak: started with {initialHandleCount}, ended with {finalHandleCount} (leaked {leakedHandles})");
+        // Verify no tracked event handles remain after the loop.
+        // This directly tests the create/close invariant without relying on
+        // Process.HandleCount, which is process-wide and inflated by parallel
+        // test execution (other tests create CONOUT$, console handles, etc.).
+        var finalTracked = Win32EventLoopUtils.ActiveEventHandleCount;
+        Assert.Equal(initialTracked, finalTracked);
     }
 
     [Fact]

@@ -478,7 +478,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         output.EnableMouseSupport();
@@ -501,7 +501,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         output.DisableMouseSupport();
@@ -524,7 +524,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         output.EnableBracketedPaste();
@@ -547,7 +547,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         output.DisableBracketedPaste();

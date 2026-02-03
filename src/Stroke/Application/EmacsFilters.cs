@@ -24,13 +24,9 @@ public static class EmacsFilters
     public static IFilter EmacsInsertMode { get; } = new Condition(() =>
     {
         var app = AppContext.GetApp();
-        if (app.EditingMode != EditingMode.Emacs
-            || app.CurrentBuffer.SelectionState is not null
-            || app.CurrentBuffer.ReadOnly)
-        {
-            return false;
-        }
-        return true;
+        return app.EditingMode == EditingMode.Emacs
+            && app.CurrentBuffer.SelectionState is null
+            && !app.CurrentBuffer.ReadOnly;
     });
 
     /// <summary>

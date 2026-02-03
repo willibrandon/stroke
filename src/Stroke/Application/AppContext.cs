@@ -44,9 +44,18 @@ public static class AppContext
     public static Application<object?> GetApp()
     {
         var session = GetAppSession();
-        if (session.App is Application<object?> app)
+        var app = session.App;
+
+        // Check if session.App is any Application<T> (generic invariance means
+        // Application<string> is NOT Application<object?>, so we can't use pattern matching).
+        // Instead, check the generic type definition and use Unsafe.As.
+        if (app is not null)
         {
-            return app;
+            var appType = app.GetType();
+            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
+            {
+                return System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
+            }
         }
 
         return new DummyApplication();
@@ -59,7 +68,19 @@ public static class AppContext
     public static Application<object?>? GetAppOrNull()
     {
         var session = GetAppSession();
-        return session.App as Application<object?>;
+        var app = session.App;
+
+        // Check if session.App is any Application<T> (generic invariance issue).
+        if (app is not null)
+        {
+            var appType = app.GetType();
+            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
+            {
+                return System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

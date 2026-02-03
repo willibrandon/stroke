@@ -1,3 +1,6 @@
+using System.Runtime.InteropServices;
+using Stroke.Input.Posix;
+
 namespace Stroke.Output;
 
 /// <summary>
@@ -19,6 +22,9 @@ namespace Stroke.Output;
 /// </remarks>
 public static class OutputFactory
 {
+    private const int STDOUT_FILENO = 1;
+    private const int STDERR_FILENO = 2;
+
     /// <summary>
     /// Creates an appropriate <see cref="IOutput"/> instance based on the environment.
     /// </summary>
@@ -49,11 +55,15 @@ public static class OutputFactory
             return new DummyOutput();
         }
 
-        // Check for redirection
-        if (Console.IsOutputRedirected)
+        // Check for redirection using proper TTY detection.
+        // Console.IsOutputRedirected can be unreliable on Unix systems,
+        // so we use the isatty() system call for accurate TTY detection.
+        bool isStdoutTty = IsStdoutTty();
+
+        if (!isStdoutTty)
         {
             // If alwaysPreferTty and stderr is a TTY, use stderr for colored output
-            if (alwaysPreferTty && !Console.IsErrorRedirected)
+            if (alwaysPreferTty && IsStderrTty())
             {
                 return Vt100Output.FromPty(Console.Error);
             }
@@ -64,6 +74,59 @@ public static class OutputFactory
 
         // Interactive terminal - use VT100
         return Vt100Output.FromPty(stdout);
+    }
+
+    /// <summary>
+    /// Checks if stdout is connected to a TTY (terminal).
+    /// Uses the isatty() system call on Unix, falls back to Console API on Windows.
+    /// </summary>
+    private static bool IsStdoutTty()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return !Console.IsOutputRedirected;
+        }
+
+        // Unix: use isatty() for reliable TTY detection
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS() || OperatingSystem.IsFreeBSD())
+        {
+            try
+            {
+                return Termios.IsATty(STDOUT_FILENO) == 1;
+            }
+            catch
+            {
+                // Fall back to .NET API if isatty fails
+            }
+        }
+
+        return !Console.IsOutputRedirected;
+    }
+
+    /// <summary>
+    /// Checks if stderr is connected to a TTY (terminal).
+    /// </summary>
+    private static bool IsStderrTty()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return !Console.IsErrorRedirected;
+        }
+
+        // Unix: use isatty() for reliable TTY detection
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS() || OperatingSystem.IsFreeBSD())
+        {
+            try
+            {
+                return Termios.IsATty(STDERR_FILENO) == 1;
+            }
+            catch
+            {
+                // Fall back to .NET API if isatty fails
+            }
+        }
+
+        return !Console.IsErrorRedirected;
     }
 
     /// <summary>

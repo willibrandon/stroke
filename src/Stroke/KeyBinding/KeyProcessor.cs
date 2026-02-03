@@ -389,6 +389,7 @@ public sealed class KeyProcessor
     private void CallHandler(Binding handler, List<KeyPress> keySequence)
     {
         var app = AppContext.GetApp();
+        var currentBuffer = app.CurrentBuffer;
         bool wasRecordingEmacs = app.EmacsState.IsRecording;
         bool wasRecordingVi = !string.IsNullOrEmpty(app.ViState.RecordingRegister);
         bool wasTemporaryNavigationMode = app.ViState.TemporaryNavigationMode;
@@ -402,7 +403,7 @@ public sealed class KeyProcessor
             previousKeySequence: _previousKeySequence,
             isRepeat: handler == _previousHandler,
             app: app,
-            currentBuffer: app.CurrentBuffer);
+            currentBuffer: currentBuffer);
 
         // Save to undo stack if SaveBefore returns true
         if (handler.SaveBefore(@event))

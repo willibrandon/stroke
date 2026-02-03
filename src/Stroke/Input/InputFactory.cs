@@ -1,4 +1,5 @@
 using Stroke.Input.Pipe;
+using Stroke.Input.Posix;
 using Stroke.Input.Vt100;
 using Stroke.Input.Windows;
 
@@ -19,6 +20,8 @@ namespace Stroke.Input;
 /// </remarks>
 public static class InputFactory
 {
+    private const int STDIN_FILENO = 0;
+
     /// <summary>
     /// Creates an input instance appropriate for the current platform.
     /// </summary>
@@ -72,8 +75,12 @@ public static class InputFactory
     /// </example>
     public static IInput Create(Stream? stdin = null, bool alwaysPreferTty = false)
     {
-        // Check if we're in an environment that can provide input
-        if (!Console.IsInputRedirected || alwaysPreferTty)
+        // Check if stdin is a TTY using reliable detection.
+        // Console.IsInputRedirected can be unreliable on Unix systems,
+        // so we use the isatty() system call for accurate TTY detection.
+        bool isStdinTty = IsStdinTty();
+
+        if (isStdinTty || alwaysPreferTty)
         {
             // We have a real terminal
             if (OperatingSystem.IsWindows())
@@ -89,6 +96,33 @@ public static class InputFactory
 
         // Fallback to DummyInput
         return new DummyInput();
+    }
+
+    /// <summary>
+    /// Checks if stdin is connected to a TTY (terminal).
+    /// Uses the isatty() system call on Unix, falls back to Console API on Windows.
+    /// </summary>
+    private static bool IsStdinTty()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return !Console.IsInputRedirected;
+        }
+
+        // Unix: use isatty() for reliable TTY detection
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS() || OperatingSystem.IsFreeBSD())
+        {
+            try
+            {
+                return Termios.IsATty(STDIN_FILENO) == 1;
+            }
+            catch
+            {
+                // Fall back to .NET API if isatty fails
+            }
+        }
+
+        return !Console.IsInputRedirected;
     }
 
     /// <summary>

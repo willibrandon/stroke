@@ -131,7 +131,9 @@ internal sealed unsafe partial class PosixStdinReader : IDisposable
 
                     // EAGAIN/EWOULDBLOCK - no data available (non-blocking)
                     if (errno == EAGAIN || errno == EWOULDBLOCK || errno == GetPlatformEagain())
+                    {
                         return string.Empty;
+                    }
 
                     // Other error - treat as closed
                     _closed = true;

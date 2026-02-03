@@ -379,7 +379,8 @@ public class Window : IContainer, IWindow
             _horizontalScroll,
             wrapLines,
             AlwaysHideCursor.Invoke(),
-            align);
+            align,
+            GetLinePrefix);
 
         // Store render information
         var xOffset = writePosition.XPos + leftMarginTotal;
@@ -676,7 +677,8 @@ public class Window : IContainer, IWindow
             int horizontalScroll,
             bool wrapLines,
             bool alwaysHideCursor,
-            WindowAlign align)
+            WindowAlign align,
+            GetLinePrefixCallable? getLinePrefix)
     {
         var xPos = writePosition.XPos + moveX;
         var yPos = writePosition.YPos;
@@ -696,6 +698,24 @@ public class Window : IContainer, IWindow
             var col = horizontalScroll;
 
             visibleLineToRowCol[y - yPos] = (currentLine, col);
+
+            // Draw line prefix (prompt) before content.
+            // The prefix is NOT subject to horizontal scrolling - it always renders at the start.
+            if (getLinePrefix != null)
+            {
+                var prefixFragments = getLinePrefix(currentLine, 0);
+                foreach (var prefixFragment in prefixFragments)
+                {
+                    foreach (var c in prefixFragment.Text)
+                    {
+                        if (x < xPos + width)
+                        {
+                            screen[y, x] = Char.Create(c.ToString(), prefixFragment.Style);
+                            x++;
+                        }
+                    }
+                }
+            }
 
             // Skip horizontally scrolled content
             var skippedChars = 0;

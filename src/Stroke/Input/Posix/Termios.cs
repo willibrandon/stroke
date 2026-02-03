@@ -71,81 +71,81 @@ public static unsafe partial class Termios
     #region Input Mode Flags (c_iflag)
 
     /// <summary>Ignore BREAK condition.</summary>
-    public const uint IGNBRK = 0x00000001;
+    public const nuint IGNBRK = 0x00000001;
 
     /// <summary>Signal interrupt on BREAK.</summary>
-    public const uint BRKINT = 0x00000002;
+    public const nuint BRKINT = 0x00000002;
 
     /// <summary>Ignore parity errors.</summary>
-    public const uint IGNPAR = 0x00000004;
+    public const nuint IGNPAR = 0x00000004;
 
     /// <summary>Mark parity errors.</summary>
-    public const uint PARMRK = 0x00000008;
+    public const nuint PARMRK = 0x00000008;
 
     /// <summary>Enable parity checking.</summary>
-    public const uint INPCK = 0x00000010;
+    public const nuint INPCK = 0x00000010;
 
     /// <summary>Strip 8th bit.</summary>
-    public const uint ISTRIP = 0x00000020;
+    public const nuint ISTRIP = 0x00000020;
 
     /// <summary>Translate NL to CR on input.</summary>
-    public const uint INLCR = 0x00000040;
+    public const nuint INLCR = 0x00000040;
 
     /// <summary>Ignore CR on input.</summary>
-    public const uint IGNCR = 0x00000080;
+    public const nuint IGNCR = 0x00000080;
 
     /// <summary>Translate CR to NL on input.</summary>
-    public const uint ICRNL = 0x00000100;
+    public const nuint ICRNL = 0x00000100;
 
     /// <summary>Enable start/stop output control.</summary>
-    public const uint IXON = 0x00000200;
+    public const nuint IXON = 0x00000200;
 
     /// <summary>Any character restarts output.</summary>
-    public const uint IXANY = 0x00000800;
+    public const nuint IXANY = 0x00000800;
 
     /// <summary>Enable start/stop input control.</summary>
-    public const uint IXOFF = 0x00000400;
+    public const nuint IXOFF = 0x00000400;
 
     /// <summary>Ring bell on input queue full.</summary>
-    public const uint IMAXBEL = 0x00002000;
+    public const nuint IMAXBEL = 0x00002000;
 
     #endregion
 
     #region Output Mode Flags (c_oflag)
 
     /// <summary>Post-process output.</summary>
-    public const uint OPOST = 0x00000001;
+    public const nuint OPOST = 0x00000001;
 
     #endregion
 
     #region Local Mode Flags (c_lflag)
 
     /// <summary>Enable signals (INTR, QUIT, SUSP).</summary>
-    public const uint ISIG = 0x00000080;
+    public const nuint ISIG = 0x00000080;
 
     /// <summary>Canonical mode (line editing).</summary>
-    public const uint ICANON = 0x00000100;
+    public const nuint ICANON = 0x00000100;
 
     /// <summary>Enable echo.</summary>
-    public const uint ECHO = 0x00000008;
+    public const nuint ECHO = 0x00000008;
 
     /// <summary>Echo ERASE as BS-SP-BS.</summary>
-    public const uint ECHOE = 0x00000002;
+    public const nuint ECHOE = 0x00000002;
 
     /// <summary>Echo KILL by erasing line.</summary>
-    public const uint ECHOK = 0x00000004;
+    public const nuint ECHOK = 0x00000004;
 
     /// <summary>Echo NL even if ECHO is off.</summary>
-    public const uint ECHONL = 0x00000010;
+    public const nuint ECHONL = 0x00000010;
 
     /// <summary>Disable flush after interrupt.</summary>
-    public const uint NOFLSH = 0x80000000;
+    public const nuint NOFLSH = 0x80000000;
 
     /// <summary>Stop background jobs.</summary>
-    public const uint TOSTOP = 0x00400000;
+    public const nuint TOSTOP = 0x00400000;
 
     /// <summary>Extended input processing.</summary>
-    public const uint IEXTEN = 0x00000400;
+    public const nuint IEXTEN = 0x00000400;
 
     #endregion
 
@@ -193,8 +193,9 @@ public static unsafe partial class Termios
 /// </summary>
 /// <remarks>
 /// <para>
-/// The exact layout varies between platforms. This structure is sized for
-/// typical Linux/macOS implementations with a 32-byte control characters array.
+/// The exact layout varies between platforms:
+/// - macOS/FreeBSD: tcflag_t and speed_t are 8 bytes (unsigned long), NCCS=20
+/// - Linux: tcflag_t is 4 bytes (unsigned int), speed_t is 4 bytes, NCCS=32
 /// </para>
 /// <para>
 /// This struct uses a fixed-size buffer for c_cc to enable compatibility with
@@ -205,23 +206,26 @@ public static unsafe partial class Termios
 public unsafe struct TermiosStruct
 {
     /// <summary>Input mode flags.</summary>
-    public uint c_iflag;
+    public nuint c_iflag;
 
     /// <summary>Output mode flags.</summary>
-    public uint c_oflag;
+    public nuint c_oflag;
 
     /// <summary>Control mode flags.</summary>
-    public uint c_cflag;
+    public nuint c_cflag;
 
     /// <summary>Local mode flags.</summary>
-    public uint c_lflag;
+    public nuint c_lflag;
 
-    /// <summary>Control characters array (fixed-size buffer).</summary>
-    public fixed byte c_cc[32];
+    /// <summary>Control characters array (fixed-size buffer, sized for macOS NCCS=20 with padding).</summary>
+    public fixed byte c_cc[20];
 
-    /// <summary>Input speed (not commonly used).</summary>
-    public uint c_ispeed;
+    // 4 bytes padding to align c_ispeed on 8-byte boundary (macOS)
+    private readonly uint _padding;
 
-    /// <summary>Output speed (not commonly used).</summary>
-    public uint c_ospeed;
+    /// <summary>Input speed.</summary>
+    public nuint c_ispeed;
+
+    /// <summary>Output speed.</summary>
+    public nuint c_ospeed;
 }

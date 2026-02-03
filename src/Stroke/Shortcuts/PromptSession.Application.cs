@@ -88,12 +88,13 @@ public partial class PromptSession<TResult>
 
         // Enter: accept input in single-line mode
         var doAccept = new Condition(() =>
-            !FilterUtils.ToFilter(Multiline).Invoke()
-            && App.Layout.HasFocus(DefaultBuffer));
+            !FilterUtils.ToFilter(Multiline).Invoke() && App.Layout.HasFocus(DefaultBuffer));
+
+        var enterFilter = new FilterOrBool(((Filter)doAccept).And((Filter)defaultFocused));
 
         kb.Add<KeyHandlerCallable>(
             [new KeyOrChar(Keys.ControlM)],
-            filter: new FilterOrBool(((Filter)doAccept).And((Filter)defaultFocused)))(
+            filter: enterFilter)(
             (@event) =>
             {
                 DefaultBuffer.ValidateAndHandle();

@@ -328,10 +328,11 @@ public sealed class KeyBindingsTests
 
         var matches = kb.GetBindingsForKeys([Keys.ControlC]);
 
-        // Both match, but specific binding should come first
+        // Both match. Sorted descending by AnyCount: [wildcard, specific].
+        // KeyProcessor uses matches[^1] (last) to get the most specific (fewest wildcards).
         Assert.Equal(2, matches.Count);
-        Assert.Equal((KeyHandlerCallable)Handler1, matches[0].Handler);
-        Assert.Equal((KeyHandlerCallable)Handler2, matches[1].Handler);
+        Assert.Equal((KeyHandlerCallable)Handler2, matches[0].Handler); // wildcard (1 Any)
+        Assert.Equal((KeyHandlerCallable)Handler1, matches[1].Handler); // specific (0 Any)
     }
 
     [Fact]
@@ -356,10 +357,11 @@ public sealed class KeyBindingsTests
 
         var matches = kb.GetBindingsForKeys([Keys.ControlX, Keys.ControlC]);
 
-        // One wildcard binding has higher priority
+        // Sorted descending by AnyCount: [2 wildcards, 1 wildcard].
+        // KeyProcessor uses matches[^1] (last) to get the most specific (fewest wildcards).
         Assert.Equal(2, matches.Count);
-        Assert.Equal((KeyHandlerCallable)Handler2, matches[0].Handler);
-        Assert.Equal((KeyHandlerCallable)Handler1, matches[1].Handler);
+        Assert.Equal((KeyHandlerCallable)Handler1, matches[0].Handler); // 2 wildcards
+        Assert.Equal((KeyHandlerCallable)Handler2, matches[1].Handler); // 1 wildcard
     }
 
     #endregion
