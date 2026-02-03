@@ -442,6 +442,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless utilities, in-memory only) (050-event-loop-utils)
 - C# 13 / .NET 10 + .NET BCL only (System.Runtime.InteropServices, System.Runtime.Versioning) (051-win32-console-types)
 - N/A (in-memory struct types only) (051-win32-console-types)
+- C# 13 / .NET 10+ + System.Runtime.InteropServices (P/Invoke), Stroke.Input.Windows.Win32Types, Stroke.Styles, Stroke.Outpu (052-win32-console-output)
 
 ## Recent Changes
 
