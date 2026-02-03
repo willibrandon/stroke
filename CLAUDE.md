@@ -440,6 +440,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory buffering only) (049-patch-stdout)
 - C# 13 / .NET 10+ + .NET BCL only — `System.Threading.ExecutionContext`, `System.Threading.SynchronizationContext`, `System.Threading.Tasks.Task`, `System.Diagnostics.StackTrace` (050-event-loop-utils)
 - N/A (stateless utilities, in-memory only) (050-event-loop-utils)
+- C# 13 / .NET 10 + .NET BCL only (System.Runtime.InteropServices, System.Runtime.Versioning) (051-win32-console-types)
+- N/A (in-memory struct types only) (051-win32-console-types)
 
 ## Recent Changes
 
