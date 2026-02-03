@@ -233,8 +233,10 @@ public sealed class KeyBindings : IKeyBindingsBase
                 }
             }
 
-            // Sort by Any count (fewer wildcards = higher priority)
-            matches.Sort((a, b) => a.AnyCount.CompareTo(b.AnyCount));
+            // Sort by Any count descending (more wildcards first) so that
+            // matches[^1] returns the binding with fewest wildcards (highest priority).
+            // Python uses: sorted(result, key=lambda item: -item[0])
+            matches.Sort((a, b) => b.AnyCount.CompareTo(a.AnyCount));
 
             return matches.AsReadOnly();
         });

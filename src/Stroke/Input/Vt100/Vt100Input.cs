@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Stroke.Input.Posix;
 
@@ -24,7 +25,7 @@ namespace Stroke.Input.Vt100;
 [SupportedOSPlatform("linux")]
 [SupportedOSPlatform("macos")]
 [SupportedOSPlatform("freebsd")]
-public sealed class Vt100Input : IInput
+public sealed partial class Vt100Input : IInput
 {
     private static int s_nextId;
 
@@ -35,6 +36,9 @@ public sealed class Vt100Input : IInput
     private readonly List<KeyPress> _keyBuffer = new();
     private readonly Lock _callbackLock = new();
     private readonly Stack<Action> _callbackStack = new();
+    private readonly ManualResetEventSlim _inputProcessed = new(true); // Starts signaled
+    private Thread? _inputMonitorThread;
+    private volatile bool _monitorRunning;
     private bool _closed;
     private bool _disposed;
 
@@ -59,10 +63,18 @@ public sealed class Vt100Input : IInput
         ThrowIfDisposed();
 
         if (_closed)
+        {
+            // Signal that input processing is complete even if we're closed
+            _inputProcessed.Set();
             return [];
+        }
 
         // Read available data from stdin
         var data = _stdinReader.Read();
+
+        // Signal that input has been processed (consumed from stdin buffer).
+        // This allows the monitor thread to poll again.
+        _inputProcessed.Set();
 
         if (string.IsNullOrEmpty(data))
         {
@@ -116,16 +128,119 @@ public sealed class Vt100Input : IInput
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
 
+        bool startMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(inputReadyCallback);
 
             // Enable non-blocking mode when attached
             _stdinReader.NonBlocking = true;
+
+            // Start the input monitor thread if this is the first callback
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
+            {
+                startMonitor = true;
+            }
+        }
+
+        if (startMonitor)
+        {
+            StartInputMonitor();
         }
 
         return new AttachDisposable(this, inputReadyCallback);
     }
+
+    /// <summary>
+    /// Starts the background thread that monitors stdin for input availability.
+    /// </summary>
+    private void StartInputMonitor()
+    {
+        _monitorRunning = true;
+        _inputMonitorThread = new Thread(InputMonitorLoop)
+        {
+            Name = "Vt100Input-Monitor",
+            IsBackground = true
+        };
+        _inputMonitorThread.Start();
+    }
+
+    /// <summary>
+    /// Stops the input monitor thread.
+    /// </summary>
+    private void StopInputMonitor()
+    {
+        _monitorRunning = false;
+        // The thread will exit on the next poll timeout
+    }
+
+    /// <summary>
+    /// The input monitor loop that polls stdin and invokes callbacks when input is available.
+    /// </summary>
+    private void InputMonitorLoop()
+    {
+        Span<PollFd> pollFds = stackalloc PollFd[1];
+
+        while (_monitorRunning && !_closed && !_disposed)
+        {
+            pollFds[0] = new PollFd { Fd = _fd, Events = POLLIN, REvents = 0 };
+
+            // Poll with 100ms timeout to allow checking _monitorRunning flag
+            var pollResult = Poll(pollFds, 1, 100);
+
+            if (pollResult > 0 && (pollFds[0].REvents & POLLIN) != 0)
+            {
+                // Input is available, invoke the top callback
+                Action? callback = null;
+                using (_callbackLock.EnterScope())
+                {
+                    if (_callbackStack.Count > 0)
+                    {
+                        callback = _callbackStack.Peek();
+                    }
+                }
+
+                if (callback != null)
+                {
+                    // Reset the event before invoking callback.
+                    // This ensures we wait until ReadKeys() consumes the input
+                    // before polling again, preventing a busy loop.
+                    _inputProcessed.Reset();
+
+                    callback.Invoke();
+
+                    // Wait for ReadKeys() to consume the input (with timeout to allow shutdown).
+                    // This prevents busy-looping when poll() keeps returning immediately.
+                    _inputProcessed.Wait(200);
+                }
+            }
+            else if (pollResult < 0)
+            {
+                // Error occurred (ignore EINTR)
+                var errno = Marshal.GetLastPInvokeError();
+                if (errno != EINTR)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    // Poll constants
+    private const short POLLIN = 0x0001;
+    private const int EINTR = 4;
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct PollFd
+    {
+        public int Fd;
+        public short Events;
+        public short REvents;
+    }
+
+    [LibraryImport("libc", EntryPoint = "poll", SetLastError = true)]
+    private static partial int Poll(Span<PollFd> fds, int nfds, int timeout);
 
     /// <inheritdoc/>
     public IDisposable Detach()
@@ -161,6 +276,7 @@ public sealed class Vt100Input : IInput
     public void Close()
     {
         _closed = true;
+        StopInputMonitor();
         _stdinReader.Close();
     }
 
@@ -182,6 +298,8 @@ public sealed class Vt100Input : IInput
 
     private void RemoveCallback(Action callback)
     {
+        bool stopMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             // Rebuild stack without the specified callback
@@ -194,7 +312,15 @@ public sealed class Vt100Input : IInput
 
             // Disable non-blocking mode if no more callbacks
             if (_callbackStack.Count == 0)
+            {
                 _stdinReader.NonBlocking = false;
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
     }
 

@@ -73,7 +73,9 @@ public partial class Application<TResult>
             {
                 // Ignore when we aren't running anymore, except for CPR
                 if (!_isRunning && !Renderer.WaitingForCpr)
+                {
                     return;
+                }
 
                 // Get keys from the input object
                 var keys = Input.ReadKeys();
@@ -84,6 +86,7 @@ public partial class Application<TResult>
                     KeyProcessor.Feed(new KBKeyPress(inputKp.Key, inputKp.Data));
                 }
                 KeyProcessor.ProcessKeys();
+                Invalidate();
 
                 // Quit when the input stream was closed
                 if (Input.Closed)
@@ -130,8 +133,15 @@ public partial class Application<TResult>
             }
 
             // Enter raw mode, attach input
+            // The callback is called from Vt100Input's monitor thread, so we marshal
+            // to the main async context via the action channel for thread safety.
+            void ReadFromInputMarshaled()
+            {
+                _actionChannel?.Writer.TryWrite(ReadFromInput);
+            }
+
             using var rawMode = Input.RawMode();
-            using var inputAttach = Input.Attach(ReadFromInput);
+            using var inputAttach = Input.Attach(ReadFromInputMarshaled);
 
             // Register SIGWINCH handler for terminal resize (Unix only).
             // Port of Python's attach_winch_signal_handler.

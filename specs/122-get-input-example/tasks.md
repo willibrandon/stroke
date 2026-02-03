@@ -19,9 +19,9 @@
 
 **Purpose**: Create the examples directory structure and solution file
 
-- [ ] T001 Create `examples/` directory at repository root
-- [ ] T002 Create `examples/Stroke.Examples.sln` solution file (FR-002)
-- [ ] T003 Create `examples/Stroke.Examples.Prompts/` directory
+- [x] T001 Create `examples/` directory at repository root
+- [x] T002 Create `examples/Stroke.Examples.sln` solution file (FR-002)
+- [x] T003 Create `examples/Stroke.Examples.Prompts/` directory
 
 **Checkpoint**: Directory structure exists, solution file created
 
@@ -37,16 +37,16 @@
 
 **Independent Test**: `dotnet build examples/Stroke.Examples.sln` completes with zero errors and zero warnings (SC-001)
 
-- [ ] T004 [US2] Create `examples/Stroke.Examples.Prompts/Stroke.Examples.Prompts.csproj` with required elements (FR-003):
+- [x] T004 [US2] Create `examples/Stroke.Examples.Prompts/Stroke.Examples.Prompts.csproj` with required elements (FR-003):
   - `<TargetFramework>net10.0</TargetFramework>`
   - `<OutputType>Exe</OutputType>`
   - `<LangVersion>13</LangVersion>`
   - `<Nullable>enable</Nullable>`
   - `<ImplicitUsings>enable</ImplicitUsings>`
   - `<ProjectReference Include="..\..\src\Stroke\Stroke.csproj" />`
-- [ ] T005 [US2] Add `Stroke.Examples.Prompts.csproj` to `examples/Stroke.Examples.sln`
-- [ ] T006 [US2] Create minimal `examples/Stroke.Examples.Prompts/Program.cs` with empty Main entry point
-- [ ] T007 [US2] Verify `dotnet build examples/Stroke.Examples.sln` succeeds with zero errors and zero warnings (SC-001, US2-AS1)
+- [x] T005 [US2] Add `Stroke.Examples.Prompts.csproj` to `examples/Stroke.Examples.sln`
+- [x] T006 [US2] Create minimal `examples/Stroke.Examples.Prompts/Program.cs` with empty Main entry point
+- [x] T007 [US2] Verify `dotnet build examples/Stroke.Examples.sln` succeeds with zero errors and zero warnings (SC-001, US2-AS1)
 
 **Checkpoint**: Foundation ready — `dotnet build examples/Stroke.Examples.sln` passes. Example implementation can now begin.
 

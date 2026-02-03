@@ -495,7 +495,18 @@ public partial class Application<TResult> : IApplicationDoneCheck
     /// If the focused control is not a BufferControl, returns a new dummy Buffer
     /// named "dummy-buffer". A new dummy instance is created on each access.
     /// </summary>
-    public Buffer CurrentBuffer => Layout.CurrentBuffer ?? new Buffer(name: "dummy-buffer");
+    public Buffer CurrentBuffer
+    {
+        get
+        {
+            var buffer = Layout.CurrentBuffer;
+            if (buffer is null)
+            {
+                return new Buffer(name: "dummy-buffer");
+            }
+            return buffer;
+        }
+    }
 
     /// <summary>
     /// The SearchState for the currently focused BufferControl.
