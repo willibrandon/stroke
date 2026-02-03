@@ -575,7 +575,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (1/129 complete)
-  - ✅ `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
+  - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - Remaining: 128 examples across 9 projects
 
 ## Requirements
