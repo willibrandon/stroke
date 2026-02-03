@@ -761,9 +761,9 @@ public sealed class Document
 |--------|--------|-----------|
 | `generator_to_async_generator(gen, buffer_size)` | `AsyncGeneratorUtils.GeneratorToAsyncGenerator<T>(...)` | `IAsyncEnumerable<T> GeneratorToAsyncGenerator<T>(Func<IEnumerable<T>> gen, int bufferSize = 1000)` |
 | `aclosing(agen)` | `AsyncGeneratorUtils.Aclosing<T>(agen)` | `IAsyncDisposableValue<IAsyncEnumerable<T>> Aclosing<T>(IAsyncEnumerable<T> agen)` |
-| `run_in_executor_with_context(func)` | `EventLoopUtils.RunInExecutorWithContextAsync(func)` | `Task<T> RunInExecutorWithContextAsync<T>(Func<T> func)` |
-| `call_soon_threadsafe(func)` | `EventLoopUtils.CallSoonThreadSafe(action)` | `void CallSoonThreadSafe(Action action)` |
-| `get_traceback_from_context(context)` | `EventLoopUtils.GetTracebackFromContext(context)` | `string? GetTracebackFromContext(IDictionary context)` |
+| `run_in_executor_with_context(func)` | `EventLoopUtils.RunInExecutorWithContextAsync(func)` | `Task<T> RunInExecutorWithContextAsync<T>(Func<T> func, CancellationToken cancellationToken = default)` |
+| `call_soon_threadsafe(func, max_postpone_time)` | `EventLoopUtils.CallSoonThreadSafe(action, maxPostponeTime)` | `void CallSoonThreadSafe(Action action, TimeSpan? maxPostponeTime = null)` |
+| `get_traceback_from_context(context)` | `EventLoopUtils.GetTracebackFromContext(context)` | `string? GetTracebackFromContext(IDictionary<string, object?> context)` |
 | `new_eventloop_with_inputhook(hook)` | `EventLoopUtils.NewEventLoopWithInputHook(hook)` | `... NewEventLoopWithInputHook(InputHook hook)` |
 | `set_eventloop_with_inputhook(hook)` | `EventLoopUtils.SetEventLoopWithInputHook(hook)` | `void SetEventLoopWithInputHook(InputHook hook)` |
 
