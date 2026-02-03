@@ -548,6 +548,18 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `[SupportedOSPlatform("windows")]` attribute for platform safety
   - Thread-safe via stateless design (24 tests, >80% coverage)
 
+- **Windows 10 VT100 Output** — Hybrid `IOutput` implementation for Windows 10+ consoles, ported from `windows10.py`
+  - `Windows10Output` sealed class combining `Win32Output` and `Vt100Output` via delegation
+  - Enables VT100 escape sequences by temporarily setting `ENABLE_VIRTUAL_TERMINAL_PROCESSING` during flush
+  - Win32Output handles: `GetSize`, `GetRowsBelowCursorPosition`, mouse support, scrolling, bracketed paste
+  - Vt100Output handles: all rendering (cursor movement, colors, text output, screen control)
+  - Per-flush mode switching: save original mode → enable VT100 (0x0005) → flush → restore original mode
+  - Per-instance `Lock` (.NET 9+) for thread-safe flush serialization
+  - Default color depth: 24-bit true color (Windows 10 support since 2016)
+  - `WindowsVt100Support.IsVt100Enabled()` detection delegating to `PlatformUtils.IsWindowsVt100Supported`
+  - `[SupportedOSPlatform("windows")]` attribute for platform safety
+  - Thread-safe via per-instance lock on flush operations (36 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)
