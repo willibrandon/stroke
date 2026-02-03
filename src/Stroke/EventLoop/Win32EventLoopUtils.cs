@@ -179,31 +179,34 @@ public static class Win32EventLoopUtils
         // Capture handles as array for use in closure
         var handleArray = handles as nint[] ?? handles.ToArray();
 
-        // For finite timeout, delegate directly with cancellation check
-        if (timeout != Infinite)
-        {
-            return Task.Run(() =>
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return null;
-                }
-
-                return WaitForHandles(handleArray, timeout);
-            }, cancellationToken).ContinueWith(
-                t => t.IsCanceled ? null : t.Result,
-                TaskContinuationOptions.ExecuteSynchronously);
-        }
-
-        // For infinite timeout, use polling loop
+        // Use polling loop for both finite and infinite timeouts to remain
+        // responsive to cancellation. Each iteration waits at most
+        // AsyncPollingInterval ms, then checks cancellation and (for finite
+        // timeouts) whether the total deadline has elapsed.
         return Task.Run(() =>
         {
+            var deadline = timeout == Infinite
+                ? long.MaxValue
+                : Environment.TickCount64 + timeout;
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                var result = WaitForHandles(handleArray, AsyncPollingInterval);
+                var remaining = timeout == Infinite
+                    ? AsyncPollingInterval
+                    : (int)Math.Min(
+                        Math.Max(deadline - Environment.TickCount64, 0),
+                        AsyncPollingInterval);
+
+                var result = WaitForHandles(handleArray, remaining);
                 if (result is not null)
                 {
                     return result;
+                }
+
+                // For finite timeouts, check if deadline has passed
+                if (timeout != Infinite && Environment.TickCount64 >= deadline)
+                {
+                    return null;
                 }
             }
 
