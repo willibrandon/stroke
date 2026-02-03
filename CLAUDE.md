@@ -447,6 +447,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory only) (053-conemu-output)
 - C# 13 / .NET 10+ + Stroke.Input.Windows (ConsoleApi, Win32Types) — all P/Invoke already ported (054-win32-eventloop-utils)
 - N/A (in-memory kernel handles only) (054-win32-eventloop-utils)
+- C# 13 / .NET 10+ + `Stroke.Output` (IOutput, Vt100Output), `Stroke.Output.Windows` (Win32Output), `Stroke.Input.Windows` (ConsoleApi, Win32Types), `Stroke.Core` (PlatformUtils, Size), `System.Runtime.Versioning` (055-win10-vt100-output)
 
 ## Recent Changes
 
