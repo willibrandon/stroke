@@ -496,6 +496,14 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Nesting support: multiple `PatchStdout()` calls stack correctly
   - Thread-safe via `System.Threading.Lock` for buffer access (55 tests, >80% coverage)
 
+- **Event Loop Utilities** — Context-preserving background execution and thread-safe callback scheduling, ported from `eventloop/utils.py`
+  - `EventLoopUtils` static class with 3 public methods + 2 private helpers
+  - `RunInExecutorWithContextAsync<T>` and void overload — `ExecutionContext.Capture()`/`Run()` for `AsyncLocal<T>` preservation across thread pool dispatch
+  - `CallSoonThreadSafe` — `SynchronizationContext.Post` with optional deadline-based re-post coalescing via `Environment.TickCount64`
+  - `GetTracebackFromContext` — Exception stack trace extraction from `IDictionary<string, object?>` context
+  - Overflow clamping for `TimeSpan.MaxValue` deadlines, disposed sync context fallback, suppressed flow handling
+  - Stateless, thread-safe (34 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)

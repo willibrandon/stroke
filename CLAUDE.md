@@ -443,8 +443,9 @@ This ensures examples behave correctly in real terminal environments before mark
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,327 tests**.
+Most recent first. Total test count: **8,361 tests**.
 
+- 050-event-loop-utils: EventLoopUtils static class — RunInExecutorWithContextAsync (ExecutionContext preservation across threads), CallSoonThreadSafe (deadline-based re-post coalescing via SynchronizationContext), GetTracebackFromContext (exception dictionary extraction)
 - 049-patch-stdout: StdoutProxy TextWriter, StdoutPatching.PatchStdout(), FlushItem — producer-consumer flush thread, newline-gated buffering, RunInTerminal integration
 - 048-dialog-shortcuts: Dialogs static class — 7 factory methods + 7 async wrappers, thread-safe ProgressDialog
 - 047-prompt-session: PromptSession<TResult> 44-param constructor, Prompt static class, CompleteStyle enum, confirm dialogs

@@ -19,8 +19,8 @@
 
 **Purpose**: Create project structure and namespace directory
 
-- [ ] T001 Create `src/Stroke/EventLoop/` directory for the `Stroke.EventLoop` namespace
-- [ ] T002 Create `tests/Stroke.Tests/EventLoop/` directory for test files
+- [x] T001 Create `src/Stroke/EventLoop/` directory for the `Stroke.EventLoop` namespace
+- [x] T002 Create `tests/Stroke.Tests/EventLoop/` directory for test files
 
 ---
 
@@ -32,18 +32,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T003 [P] [US1] Write tests for `RunInExecutorWithContextAsync<T>` context preservation (set `AsyncLocal<T>`, dispatch, assert visible) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T004 [P] [US1] Write tests for `RunInExecutorWithContextAsync<T>` result return (value-returning `Func<T>` returns correct `Task<T>`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T005 [P] [US1] Write tests for `RunInExecutorWithContextAsync` void overload (`Action` completes `Task`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T006 [P] [US1] Write tests for cancellation behavior (before dispatch and during execution) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T007 [P] [US1] Write tests for exception propagation through returned `Task` (FR-016) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T008 [P] [US1] Write tests for null argument validation (`ArgumentNullException` for null `func`/`action`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T009 [P] [US1] Write test for suppressed `ExecutionContext` flow (capture returns null, function still executes) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T003 [P] [US1] Write tests for `RunInExecutorWithContextAsync<T>` context preservation (set `AsyncLocal<T>`, dispatch, assert visible) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T004 [P] [US1] Write tests for `RunInExecutorWithContextAsync<T>` result return (value-returning `Func<T>` returns correct `Task<T>`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T005 [P] [US1] Write tests for `RunInExecutorWithContextAsync` void overload (`Action` completes `Task`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T006 [P] [US1] Write tests for cancellation behavior (before dispatch and during execution) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T007 [P] [US1] Write tests for exception propagation through returned `Task` (FR-016) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T008 [P] [US1] Write tests for null argument validation (`ArgumentNullException` for null `func`/`action`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T009 [P] [US1] Write test for suppressed `ExecutionContext` flow (capture returns null, function still executes) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement `RunInExecutorWithContextAsync<T>(Func<T>, CancellationToken)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — capture `ExecutionContext`, dispatch via `Task.Run`, restore context via `ExecutionContext.Run`, handle null capture (FR-001, FR-002, FR-003, FR-012, FR-016)
-- [ ] T011 [US1] Implement `RunInExecutorWithContextAsync(Action, CancellationToken)` void overload in `src/Stroke/EventLoop/EventLoopUtils.cs` — delegates to generic version or uses parallel implementation with `Action` (FR-002)
+- [x] T010 [US1] Implement `RunInExecutorWithContextAsync<T>(Func<T>, CancellationToken)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — capture `ExecutionContext`, dispatch via `Task.Run`, restore context via `ExecutionContext.Run`, handle null capture (FR-001, FR-002, FR-003, FR-012, FR-016)
+- [x] T011 [US1] Implement `RunInExecutorWithContextAsync(Action, CancellationToken)` void overload in `src/Stroke/EventLoop/EventLoopUtils.cs` — delegates to generic version or uses parallel implementation with `Action` (FR-002)
 
 **Checkpoint**: `RunInExecutorWithContextAsync` tests pass. Context flows correctly to background threads.
 
@@ -57,20 +57,20 @@
 
 ### Tests for User Story 2
 
-- [ ] T012 [P] [US2] Write test for no-deadline scheduling (posts via `SynchronizationContext.Post`, executes when queue processes) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T013 [P] [US2] Write test for null `SynchronizationContext` fallback (executes immediately on calling thread) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`. Note: this also covers FR-015 (disposed/stopped sync context) — in .NET, a disposed sync context manifests as `SynchronizationContext.Current` being null or `Post` throwing, both of which trigger the immediate-execution fallback
-- [ ] T014 [P] [US2] Write test for deadline scheduling — idle sync context (callback runs on first re-post cycle) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T015 [P] [US2] Write test for deadline scheduling — busy sync context (callback defers until deadline expires, within 50ms tolerance) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`. Test approach: use a custom `SynchronizationContext` that queues posted callbacks and processes them on demand; post multiple no-op work items before the deadline callback to simulate contention, then pump the queue and verify the callback executes only after the deadline
-- [ ] T016 [P] [US2] Write test for zero/negative `maxPostponeTime` (executes immediately, deadline already expired) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T017 [P] [US2] Write test for `TimeSpan.MaxValue` / overflow `maxPostponeTime` — verify deadline clamps to `long.MaxValue` (no overflow), callback still executes via re-post pattern in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T018 [P] [US2] Write test for null `action` argument (`ArgumentNullException`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T019 [P] [US2] Write test for reentrancy — callback calls `CallSoonThreadSafe` without deadlock (FR-014) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T020 [P] [US2] Write test for exception propagation through sync context (FR-013) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T020b [P] [US2] Write test for multiple rapid `CallSoonThreadSafe` calls with the same deadline — verify each callback is independently scheduled with no deduplication (Edge Case 5) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T012 [P] [US2] Write test for no-deadline scheduling (posts via `SynchronizationContext.Post`, executes when queue processes) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T013 [P] [US2] Write test for null `SynchronizationContext` fallback (executes immediately on calling thread) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`. Note: this also covers FR-015 (disposed/stopped sync context) — in .NET, a disposed sync context manifests as `SynchronizationContext.Current` being null or `Post` throwing, both of which trigger the immediate-execution fallback
+- [x] T014 [P] [US2] Write test for deadline scheduling — idle sync context (callback runs on first re-post cycle) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T015 [P] [US2] Write test for deadline scheduling — busy sync context (callback defers until deadline expires, within 50ms tolerance) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`. Test approach: use a custom `SynchronizationContext` that queues posted callbacks and processes them on demand; post multiple no-op work items before the deadline callback to simulate contention, then pump the queue and verify the callback executes only after the deadline
+- [x] T016 [P] [US2] Write test for zero/negative `maxPostponeTime` (executes immediately, deadline already expired) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T017 [P] [US2] Write test for `TimeSpan.MaxValue` / overflow `maxPostponeTime` — verify deadline clamps to `long.MaxValue` (no overflow), callback still executes via re-post pattern in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T018 [P] [US2] Write test for null `action` argument (`ArgumentNullException`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T019 [P] [US2] Write test for reentrancy — callback calls `CallSoonThreadSafe` without deadlock (FR-014) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T020 [P] [US2] Write test for exception propagation through sync context (FR-013) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T020b [P] [US2] Write test for multiple rapid `CallSoonThreadSafe` calls with the same deadline — verify each callback is independently scheduled with no deduplication (Edge Case 5) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Implement `CallSoonThreadSafe(Action, TimeSpan?)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — null sync context fallback, no-deadline direct post, deadline re-post loop using `Environment.TickCount64`, zero/negative deadline handling, overflow clamping (FR-004 through FR-008, FR-012 through FR-015)
+- [x] T021 [US2] Implement `CallSoonThreadSafe(Action, TimeSpan?)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — null sync context fallback, no-deadline direct post, deadline re-post loop using `Environment.TickCount64`, zero/negative deadline handling, overflow clamping (FR-004 through FR-008, FR-012 through FR-015)
 
 **Checkpoint**: `CallSoonThreadSafe` tests pass. Deadline coalescing works. Null sync context falls back correctly.
 
@@ -84,15 +84,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Write test for exception with non-null `StackTrace` — returns stack trace string in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T023 [P] [US3] Write test for missing "exception" key — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T024 [P] [US3] Write test for non-`Exception` value under "exception" key — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T025 [P] [US3] Write test for exception with null `StackTrace` (never thrown) — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T026 [P] [US3] Write test for null `context` argument (`ArgumentNullException`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T022 [P] [US3] Write test for exception with non-null `StackTrace` — returns stack trace string in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T023 [P] [US3] Write test for missing "exception" key — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T024 [P] [US3] Write test for non-`Exception` value under "exception" key — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T025 [P] [US3] Write test for exception with null `StackTrace` (never thrown) — returns null in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T026 [P] [US3] Write test for null `context` argument (`ArgumentNullException`) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T027 [US3] Implement `GetTracebackFromContext(IDictionary<string, object?>)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — look up "exception" key, check `Exception` type with non-null `StackTrace`, return `string?` (FR-009, FR-012)
+- [x] T027 [US3] Implement `GetTracebackFromContext(IDictionary<string, object?>)` in `src/Stroke/EventLoop/EventLoopUtils.cs` — look up "exception" key, check `Exception` type with non-null `StackTrace`, return `string?` (FR-009, FR-012)
 
 **Checkpoint**: `GetTracebackFromContext` tests pass. All dictionary scenarios handled correctly.
 
@@ -102,13 +102,13 @@
 
 **Purpose**: Thread safety stress tests, XML documentation, and final validation
 
-- [ ] T028 [P] Write concurrency stress test — 10 threads × 1000 iterations per method, call `RunInExecutorWithContextAsync`, `CallSoonThreadSafe`, and `GetTracebackFromContext` concurrently, assert no deadlocks, data corruption, or unhandled exceptions (SC-008) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
-- [ ] T029 [P] Add XML documentation comments to all public types and members in `src/Stroke/EventLoop/EventLoopUtils.cs` (FR-011) — per contracts/event-loop-utils.md
-- [ ] T030 Run `dotnet build src/Stroke/` — verify clean compilation with no warnings
-- [ ] T031 Run `dotnet test tests/Stroke.Tests/ --filter "FullyQualifiedName~EventLoop"` — verify all tests pass
-- [ ] T032 Run full regression `dotnet test` — verify no existing tests broken
-- [ ] T033 Verify test coverage meets 80% threshold for `EventLoopUtils.cs` (SC-009)
-- [ ] T034 [P] Write performance smoke test — verify `ExecutionContext.Capture`/`Run` and `SynchronizationContext.Post` overhead is within expected range (SC-010). Use `Stopwatch` to measure 10,000 iterations and assert mean time per call is under 10μs (generous bound to avoid flaky tests; the <1μs target is an implementation-level goal validated by inspection, not a hard test gate)
+- [x] T028 [P] Write concurrency stress test — 10 threads × 1000 iterations per method, call `RunInExecutorWithContextAsync`, `CallSoonThreadSafe`, and `GetTracebackFromContext` concurrently, assert no deadlocks, data corruption, or unhandled exceptions (SC-008) in `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+- [x] T029 [P] Add XML documentation comments to all public types and members in `src/Stroke/EventLoop/EventLoopUtils.cs` (FR-011) — per contracts/event-loop-utils.md
+- [x] T030 Run `dotnet build src/Stroke/` — verify clean compilation with no warnings
+- [x] T031 Run `dotnet test tests/Stroke.Tests/ --filter "FullyQualifiedName~EventLoop"` — verify all tests pass
+- [x] T032 Run full regression `dotnet test` — verify no existing tests broken
+- [x] T033 Verify test coverage meets 80% threshold for `EventLoopUtils.cs` (SC-009)
+- [x] T034 [P] Write performance smoke test — verify `ExecutionContext.Capture`/`Run` and `SynchronizationContext.Post` overhead is within expected range (SC-010). Use `Stopwatch` to measure 10,000 iterations and assert mean time per call is under 10μs (generous bound to avoid flaky tests; the <1μs target is an implementation-level goal validated by inspection, not a hard test gate)
 
 ---
 
