@@ -264,8 +264,9 @@ public sealed class ChoiceInput<T>
                     textGetter: () => BottomToolbar is not null
                         ? FormattedTextUtils.ToFormattedText(BottomToolbar.Value)
                         : [],
-                    keyBindings: null,
+                    style: "class:bottom-toolbar.text",
                     focusable: new FilterOrBool(false),
+                    keyBindings: null,
                     showCursor: false),
                 style: "class:bottom-toolbar",
                 dontExtendHeight: new FilterOrBool(true),
