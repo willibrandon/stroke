@@ -438,6 +438,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
 - C# 13 / .NET 10+ + `Stroke.Application` (AppSession, AppContext, RunInTerminal), `Stroke.Output` (IOutput) (049-patch-stdout)
 - N/A (in-memory buffering only) (049-patch-stdout)
+- C# 13 / .NET 10+ + .NET BCL only — `System.Threading.ExecutionContext`, `System.Threading.SynchronizationContext`, `System.Threading.Tasks.Task`, `System.Diagnostics.StackTrace` (050-event-loop-utils)
+- N/A (stateless utilities, in-memory only) (050-event-loop-utils)
 
 ## Recent Changes
 

@@ -69,8 +69,9 @@ tests/
 │   └── ViModeTests.cs
 ├── Stroke.Widgets.Tests/
 │   └── ButtonTests.cs
-├── Stroke.EventLoop.Tests/
-│   └── AsyncGeneratorTests.cs
+├── Stroke.Tests/EventLoop/
+│   ├── AsyncGeneratorTests.cs
+│   └── EventLoopUtilsTests.cs
 ├── Stroke.Contrib.Tests/
 │   └── RegularLanguagesTests.cs
 └── Stroke.Tests/
@@ -755,19 +756,73 @@ public class RegularLanguagesTests
 
 ### 18. test_async_generator.py → AsyncGeneratorTests.cs
 
-**File:** `tests/Stroke.EventLoop.Tests/AsyncGeneratorTests.cs`
+**File:** `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 | # | Python Test | C# Test Method | Description |
 |---|-------------|----------------|-------------|
 | 1 | `test_generator_to_async_generator` | `GeneratorToAsyncGenerator` | Sync-to-async conversion |
 
 ```csharp
-// Stroke.EventLoop.Tests/AsyncGeneratorTests.cs
-namespace Stroke.EventLoop.Tests;
+// Stroke.Tests/EventLoop/AsyncGeneratorTests.cs
+namespace Stroke.Tests.EventLoop;
 
 public class AsyncGeneratorTests
 {
     [Fact] public async Task GeneratorToAsyncGenerator() { /* ... */ }
+}
+```
+
+---
+
+### 18b. eventloop/utils.py → EventLoopUtilsTests.cs
+
+**File:** `tests/Stroke.Tests/EventLoop/EventLoopUtilsTests.cs`
+
+> Note: Python Prompt Toolkit has no dedicated test file for `eventloop/utils.py`. These tests are created for the C# port to achieve 80% coverage per Constitution VIII.
+
+| # | Python Function | C# Test Method(s) | Description |
+|---|----------------|-------------------|-------------|
+| 1 | `run_in_executor_with_context` | `ContextPreservation`, `ResultReturn`, `VoidOverload`, `Cancellation`, `ExceptionPropagation`, `NullArgValidation`, `SuppressedFlow` | Context-preserving background execution |
+| 2 | `call_soon_threadsafe` | `NoDeadline`, `NullSyncContext`, `DeadlineIdle`, `DeadlineBusy`, `ZeroNegativeDeadline`, `MaxPostponeOverflow`, `NullActionValidation`, `Reentrancy`, `ExceptionPropagation`, `RapidCalls` | Thread-safe callback scheduling |
+| 3 | `get_traceback_from_context` | `ExceptionWithTrace`, `MissingKey`, `NonExceptionValue`, `NullStackTrace`, `NullContextValidation` | Exception traceback extraction |
+| 4 | (cross-cutting) | `ConcurrencyStress` | Thread safety stress test (10+ threads) |
+
+```csharp
+// Stroke.Tests/EventLoop/EventLoopUtilsTests.cs
+namespace Stroke.Tests.EventLoop;
+
+public class EventLoopUtilsTests
+{
+    // US1: RunInExecutorWithContextAsync
+    [Fact] public async Task ContextPreservation() { /* ... */ }
+    [Fact] public async Task ResultReturn() { /* ... */ }
+    [Fact] public async Task VoidOverload() { /* ... */ }
+    [Fact] public async Task Cancellation() { /* ... */ }
+    [Fact] public async Task ExceptionPropagation() { /* ... */ }
+    [Fact] public void NullArgValidation() { /* ... */ }
+    [Fact] public async Task SuppressedFlow() { /* ... */ }
+
+    // US2: CallSoonThreadSafe
+    [Fact] public void NoDeadline() { /* ... */ }
+    [Fact] public void NullSyncContext() { /* ... */ }
+    [Fact] public void DeadlineIdle() { /* ... */ }
+    [Fact] public void DeadlineBusy() { /* ... */ }
+    [Fact] public void ZeroNegativeDeadline() { /* ... */ }
+    [Fact] public void MaxPostponeOverflow() { /* ... */ }
+    [Fact] public void NullActionValidation() { /* ... */ }
+    [Fact] public void Reentrancy() { /* ... */ }
+    [Fact] public void CallSoonExceptionPropagation() { /* ... */ }
+    [Fact] public void RapidCalls() { /* ... */ }
+
+    // US3: GetTracebackFromContext
+    [Fact] public void ExceptionWithTrace() { /* ... */ }
+    [Fact] public void MissingKey() { /* ... */ }
+    [Fact] public void NonExceptionValue() { /* ... */ }
+    [Fact] public void NullStackTrace() { /* ... */ }
+    [Fact] public void NullContextValidation() { /* ... */ }
+
+    // Cross-cutting
+    [Fact] public async Task ConcurrencyStress() { /* ... */ }
 }
 ```
 
