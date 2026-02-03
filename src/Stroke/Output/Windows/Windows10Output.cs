@@ -1,40 +1,44 @@
 using System.Runtime.Versioning;
+using Stroke.Core;
 using Stroke.Core.Primitives;
 using Stroke.CursorShapes;
+using Stroke.Input.Windows;
 using Stroke.Styles;
 
 namespace Stroke.Output.Windows;
 
 /// <summary>
-/// ConEmu (Windows) output abstraction combining Win32Output and Vt100Output.
+/// Windows 10 output abstraction that enables and uses VT100 escape sequences.
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is a faithful port of Python Prompt Toolkit's <c>ConEmuOutput</c> class
-/// from <c>prompt_toolkit.output.conemu</c>.
+/// This is a faithful port of Python Prompt Toolkit's <c>Windows10_Output</c> class
+/// from <c>prompt_toolkit.output.windows10</c>.
 /// </para>
 /// <para>
-/// ConEmu is a Windows console application that also supports ANSI escape sequences.
 /// This output class is a proxy to both <see cref="Win32Output"/> and <see cref="Vt100Output"/>.
-/// It uses Win32Output for console sizing, mouse support, scrolling, and bracketed paste,
-/// but all cursor movements and rendering happen through Vt100Output.
+/// It uses Win32Output for console sizing, cursor position queries, and scroll operations,
+/// but all rendering (text output, cursor movement, colors) happens through Vt100Output.
 /// </para>
 /// <para>
-/// This enables 256-color and true-color support in ConEmu and Cmder terminals while
-/// maintaining proper Windows console integration.
+/// The key difference from <see cref="ConEmuOutput"/> is that this class temporarily enables
+/// VT100 processing mode during each flush operation, then restores the original console mode.
+/// This allows VT100 escape sequences to work on Windows 10+ consoles that don't have VT100
+/// enabled by default.
 /// </para>
 /// <para>
-/// This class is thread-safe. Thread safety is delegated to the underlying outputs,
-/// which are both thread-safe.
+/// This class is thread-safe. Flush operations are serialized using a per-instance lock
+/// to prevent interleaved enable/restore sequences.
 /// </para>
 /// </remarks>
-/// <seealso href="http://conemu.github.io/">ConEmu</seealso>
-/// <seealso href="http://gooseberrycreative.com/cmder/">Cmder</seealso>
 [SupportedOSPlatform("windows")]
-public sealed class ConEmuOutput : IOutput, IDisposable
+public sealed class Windows10Output : IOutput, IDisposable
 {
     private readonly Win32Output _win32Output;
     private readonly Vt100Output _vt100Output;
+    private readonly nint _hconsole;
+    private readonly ColorDepth? _defaultColorDepth;
+    private readonly Lock _lock = new();
 
     /// <summary>
     /// Gets the underlying Win32 console output.
@@ -65,11 +69,12 @@ public sealed class ConEmuOutput : IOutput, IDisposable
     public TextWriter? Stdout => _vt100Output.Stdout;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ConEmuOutput"/> class.
+    /// Initializes a new instance of the <see cref="Windows10Output"/> class.
     /// </summary>
     /// <param name="stdout">The output stream to write to.</param>
     /// <param name="defaultColorDepth">
-    /// Optional override for default color depth. If null, color depth is auto-detected.
+    /// Optional override for default color depth. If null, <see cref="ColorDepth.Depth24Bit"/>
+    /// (true color) is used as the default.
     /// </param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="stdout"/> is null.
@@ -80,16 +85,26 @@ public sealed class ConEmuOutput : IOutput, IDisposable
     /// <exception cref="NoConsoleScreenBufferError">
     /// Thrown when not running in a Windows console.
     /// </exception>
-    public ConEmuOutput(TextWriter stdout, ColorDepth? defaultColorDepth = null)
+    public Windows10Output(TextWriter stdout, ColorDepth? defaultColorDepth = null)
     {
         ArgumentNullException.ThrowIfNull(stdout);
+
+        if (!PlatformUtils.IsWindows)
+        {
+            throw new PlatformNotSupportedException("Windows10Output is only supported on Windows.");
+        }
+
+        // Store the color depth override
+        _defaultColorDepth = defaultColorDepth;
 
         // Create Win32Output first (may throw NoConsoleScreenBufferError)
         _win32Output = new Win32Output(stdout, defaultColorDepth: defaultColorDepth);
 
         // Create Vt100Output second
-        // Pass null for term to auto-detect, and pass the colorDepth
         _vt100Output = Vt100Output.FromPty(stdout, defaultColorDepth: defaultColorDepth);
+
+        // Store the console handle once (FR-015: not re-acquired during each Flush)
+        _hconsole = ConsoleApi.GetStdHandle(ConsoleApi.STD_OUTPUT_HANDLE);
     }
 
     #region Writing (delegated to Vt100Output)
@@ -101,7 +116,42 @@ public sealed class ConEmuOutput : IOutput, IDisposable
     public void WriteRaw(string data) => _vt100Output.WriteRaw(data);
 
     /// <inheritdoc />
-    public void Flush() => _vt100Output.Flush();
+    /// <remarks>
+    /// <para>
+    /// This method temporarily enables VT100 processing mode, flushes the VT100 output,
+    /// then restores the original console mode.
+    /// </para>
+    /// <para>
+    /// Thread-safe: Uses per-instance locking to serialize flush operations.
+    /// </para>
+    /// </remarks>
+    public void Flush()
+    {
+        using (_lock.EnterScope())
+        {
+            // Get current console mode (may fail if no console attached)
+            if (!ConsoleApi.GetConsoleMode(_hconsole, out var originalMode))
+            {
+                // If GetConsoleMode fails, proceed without VT100 mode switching
+                _vt100Output.Flush();
+                return;
+            }
+
+            // Enable VT100 processing: ENABLE_PROCESSED_INPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING
+            var vt100Mode = ConsoleApi.ENABLE_PROCESSED_INPUT | ConsoleApi.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+            ConsoleApi.SetConsoleMode(_hconsole, vt100Mode);
+
+            try
+            {
+                _vt100Output.Flush();
+            }
+            finally
+            {
+                // Always restore original console mode
+                ConsoleApi.SetConsoleMode(_hconsole, originalMode);
+            }
+        }
+    }
 
     #endregion
 
@@ -175,23 +225,31 @@ public sealed class ConEmuOutput : IOutput, IDisposable
 
     #endregion
 
-    #region Mouse (delegated to Win32Output)
+    #region Mouse (delegated to Vt100Output)
+
+    // NOTE: Now that we use "virtual terminal input" on Windows, both input
+    // and output are done through ANSI escape sequences. This means we should
+    // enable mouse support by calling the vt100_output, not win32_output.
+    // See Python Prompt Toolkit windows10.py lines 68-86.
 
     /// <inheritdoc />
-    public void EnableMouseSupport() => _win32Output.EnableMouseSupport();
+    public void EnableMouseSupport() => _vt100Output.EnableMouseSupport();
 
     /// <inheritdoc />
-    public void DisableMouseSupport() => _win32Output.DisableMouseSupport();
+    public void DisableMouseSupport() => _vt100Output.DisableMouseSupport();
 
     #endregion
 
-    #region Bracketed Paste (delegated to Win32Output)
+    #region Bracketed Paste (delegated to Vt100Output)
+
+    // NOTE: Same rationale as mouse support - with virtual terminal input,
+    // bracketed paste uses ANSI escape sequences via vt100_output.
 
     /// <inheritdoc />
-    public void EnableBracketedPaste() => _win32Output.EnableBracketedPaste();
+    public void EnableBracketedPaste() => _vt100Output.EnableBracketedPaste();
 
     /// <inheritdoc />
-    public void DisableBracketedPaste() => _win32Output.DisableBracketedPaste();
+    public void DisableBracketedPaste() => _vt100Output.DisableBracketedPaste();
 
     #endregion
 
@@ -234,7 +292,11 @@ public sealed class ConEmuOutput : IOutput, IDisposable
     public int Fileno() => _vt100Output.Fileno();
 
     /// <inheritdoc />
-    public ColorDepth GetDefaultColorDepth() => _vt100Output.GetDefaultColorDepth();
+    /// <remarks>
+    /// Returns <see cref="ColorDepth.Depth24Bit"/> (true color) by default.
+    /// Windows 10 has supported 24-bit color since 2016.
+    /// </remarks>
+    public ColorDepth GetDefaultColorDepth() => _defaultColorDepth ?? ColorDepth.Depth24Bit;
 
     #endregion
 

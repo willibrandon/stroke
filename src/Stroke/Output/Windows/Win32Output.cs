@@ -26,7 +26,7 @@ namespace Stroke.Output.Windows;
 /// </para>
 /// </remarks>
 [SupportedOSPlatform("windows")]
-public sealed partial class Win32Output : IOutput
+public sealed partial class Win32Output : IOutput, IDisposable
 {
     private readonly Lock _lock = new();
     private readonly List<string> _buffer = [];
@@ -39,6 +39,8 @@ public sealed partial class Win32Output : IOutput
     private bool _inAlternateScreen;
     private bool _hidden;
     private int _defaultAttrs;
+    private bool _ownsHandle;
+    private bool _disposed;
 
     /// <summary>
     /// Gets whether to use the complete buffer width instead of visible window width.
@@ -91,10 +93,17 @@ public sealed partial class Win32Output : IOutput
                 ConsoleApi.FILE_SHARE_READ | ConsoleApi.FILE_SHARE_WRITE,
                 nint.Zero, ConsoleApi.OPEN_EXISTING, 0, nint.Zero);
             _originalHandle = _hConsole;
+            _ownsHandle = true;
 
             if (_hConsole == ConsoleApi.INVALID_HANDLE_VALUE ||
                 !ConsoleApi.GetConsoleScreenBufferInfo(_hConsole, out info))
             {
+                if (_hConsole != ConsoleApi.INVALID_HANDLE_VALUE)
+                {
+                    ConsoleApi.CloseHandle(_hConsole);
+                }
+
+                _ownsHandle = false;
                 throw new NoConsoleScreenBufferError();
             }
         }
@@ -728,6 +737,39 @@ public sealed partial class Win32Output : IOutput
         if (hwnd != nint.Zero)
         {
             ConsoleApi.RedrawWindow(hwnd, nint.Zero, nint.Zero, ConsoleApi.RDW_INVALIDATE);
+        }
+    }
+
+    #endregion
+
+    #region IDisposable
+
+    /// <summary>
+    /// Releases the console handle if it was opened by this instance via <c>CreateFileW("CONOUT$")</c>.
+    /// </summary>
+    /// <remarks>
+    /// Handles obtained from <c>GetStdHandle</c> are shared process-wide and must not be closed.
+    /// Only handles opened via <c>CreateFileW</c> as a fallback are owned by this instance.
+    /// </remarks>
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (_inAlternateScreen)
+        {
+            QuitAlternateScreen();
+        }
+
+        if (_ownsHandle && _originalHandle != nint.Zero && _originalHandle != ConsoleApi.INVALID_HANDLE_VALUE)
+        {
+            ConsoleApi.CloseHandle(_originalHandle);
+            _originalHandle = nint.Zero;
+            _hConsole = nint.Zero;
         }
     }
 

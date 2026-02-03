@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -16,10 +17,21 @@ namespace Stroke.EventLoop;
 /// <para>
 /// All methods are thread-safe.
 /// </para>
+/// <para>
+/// Deviation from Python PTK: Event handles created by <see cref="CreateWin32Event"/> are
+/// tracked to detect double-close, since Windows silently recycles closed handle values
+/// (LIFO reuse) and a second <c>CloseHandle</c> would close an unrelated kernel object.
+/// </para>
 /// </remarks>
 [SupportedOSPlatform("windows")]
 public static class Win32EventLoopUtils
 {
+    /// <summary>
+    /// Tracks handles created by <see cref="CreateWin32Event"/> to detect double-close.
+    /// Windows recycles handle values immediately (LIFO), so a second CloseHandle on
+    /// a freed value silently closes whatever object now owns that value.
+    /// </summary>
+    private static readonly ConcurrentDictionary<nint, byte> _activeEventHandles = new();
     /// <summary>
     /// Timeout value indicating that a wait operation timed out.
     /// </summary>
@@ -199,15 +211,19 @@ public static class Win32EventLoopUtils
         // Capture handles as array for use in closure
         var handleArray = handles as nint[] ?? handles.ToArray();
 
+        // Compute deadline from the caller's wall-clock time, not from when the
+        // thread pool schedules the task. This ensures thread pool scheduling
+        // delay counts toward the timeout rather than being added on top of it.
+        var deadline = timeout == Infinite
+            ? long.MaxValue
+            : Environment.TickCount64 + timeout;
+
         // Use polling loop for both finite and infinite timeouts to remain
         // responsive to cancellation. Each iteration waits at most
         // AsyncPollingInterval ms, then checks cancellation and (for finite
         // timeouts) whether the total deadline has elapsed.
         return Task.Run(() =>
         {
-            var deadline = timeout == Infinite
-                ? long.MaxValue
-                : Environment.TickCount64 + timeout;
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -272,6 +288,7 @@ public static class Win32EventLoopUtils
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
+        _activeEventHandles.TryAdd(handle, 0);
         return handle;
     }
 
@@ -314,8 +331,20 @@ public static class Win32EventLoopUtils
     /// </exception>
     public static void CloseWin32Event(nint handle)
     {
+        // Atomically remove from tracking. If the handle isn't tracked, it was
+        // either already closed or never created by CreateWin32Event. Reject it
+        // with ERROR_INVALID_HANDLE (6) to prevent double-close on a recycled
+        // handle value — Windows reuses freed handle values immediately (LIFO),
+        // so a raw CloseHandle would silently destroy an unrelated kernel object.
+        if (!_activeEventHandles.TryRemove(handle, out _))
+        {
+            throw new Win32Exception(6); // ERROR_INVALID_HANDLE
+        }
+
         if (!ConsoleApi.CloseHandle(handle))
         {
+            // Re-add to tracking since the OS close failed
+            _activeEventHandles.TryAdd(handle, 0);
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
     }
