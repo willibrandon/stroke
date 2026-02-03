@@ -50,4 +50,15 @@ public sealed class ConsoleScreenBufferInfoTests
         Assert.Equal(10, Marshal.OffsetOf<ConsoleScreenBufferInfo>(nameof(ConsoleScreenBufferInfo.Window)).ToInt32());
         Assert.Equal(18, Marshal.OffsetOf<ConsoleScreenBufferInfo>(nameof(ConsoleScreenBufferInfo.MaximumWindowSize)).ToInt32());
     }
+
+    [Fact]
+    public void ToString_ReturnsExpectedFormat()
+    {
+        var info = default(ConsoleScreenBufferInfo);
+
+        var result = info.ToString();
+
+        // Format matches Python's __repr__: all field values in order
+        Assert.Equal("ConsoleScreenBufferInfo(0,0,0,0,0,0,0,0,0,0,0)", result);
+    }
 }

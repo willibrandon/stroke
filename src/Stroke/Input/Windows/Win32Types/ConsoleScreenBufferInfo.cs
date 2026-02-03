@@ -40,4 +40,11 @@ public readonly struct ConsoleScreenBufferInfo
     /// Maximum window size based on buffer and font.
     /// </summary>
     public readonly Coord MaximumWindowSize;
+
+    /// <summary>
+    /// Returns a string representation of the screen buffer info.
+    /// </summary>
+    /// <returns>A formatted string containing all field values.</returns>
+    public override string ToString() =>
+        $"ConsoleScreenBufferInfo({Size.Y},{Size.X},{CursorPosition.Y},{CursorPosition.X},{Attributes},{Window.Top},{Window.Left},{Window.Bottom},{Window.Right},{MaximumWindowSize.Y},{MaximumWindowSize.X})";
 }
