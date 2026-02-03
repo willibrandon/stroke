@@ -234,6 +234,148 @@ public static partial class ConsoleApi
 
     #endregion
 
+    #region Text Attribute and Output Functions
+
+    /// <summary>
+    /// Sets the character attributes for text written to the console.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="wAttributes">The character attributes (color/style).</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleTextAttribute", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetConsoleTextAttribute(nint hConsoleOutput, ushort wAttributes);
+
+    /// <summary>
+    /// Writes a character to the console screen buffer a specified number of times.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="cCharacter">Character to write (as ushort for wchar_t).</param>
+    /// <param name="nLength">Number of character cells to fill.</param>
+    /// <param name="dwWriteCoord">Starting coordinates (packed as Y &lt;&lt; 16 | X).</param>
+    /// <param name="lpNumberOfCharsWritten">Number of characters written.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "FillConsoleOutputCharacterW", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool FillConsoleOutputCharacter(
+        nint hConsoleOutput,
+        ushort cCharacter,
+        uint nLength,
+        int dwWriteCoord,
+        out uint lpNumberOfCharsWritten);
+
+    /// <summary>
+    /// Sets the character attributes for a specified number of character cells.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="wAttribute">Attribute to write.</param>
+    /// <param name="nLength">Number of character cells to fill.</param>
+    /// <param name="dwWriteCoord">Starting coordinates (packed as Y &lt;&lt; 16 | X).</param>
+    /// <param name="lpNumberOfAttrsWritten">Number of attributes written.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "FillConsoleOutputAttribute", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool FillConsoleOutputAttribute(
+        nint hConsoleOutput,
+        ushort wAttribute,
+        uint nLength,
+        int dwWriteCoord,
+        out uint lpNumberOfAttrsWritten);
+
+    /// <summary>
+    /// Writes a character string to a console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpBuffer">String to write.</param>
+    /// <param name="nNumberOfCharsToWrite">Number of characters to write.</param>
+    /// <param name="lpNumberOfCharsWritten">Number of characters written.</param>
+    /// <param name="lpReserved">Reserved, must be IntPtr.Zero.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "WriteConsoleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool WriteConsole(
+        nint hConsoleOutput,
+        string lpBuffer,
+        uint nNumberOfCharsToWrite,
+        out uint lpNumberOfCharsWritten,
+        nint lpReserved);
+
+    /// <summary>
+    /// Sets the title for the current console window.
+    /// </summary>
+    /// <param name="lpConsoleTitle">The title string.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleTitleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetConsoleTitle(string lpConsoleTitle);
+
+    /// <summary>
+    /// Creates a console screen buffer.
+    /// </summary>
+    /// <param name="dwDesiredAccess">Access flags (GENERIC_READ, GENERIC_WRITE).</param>
+    /// <param name="dwShareMode">Share mode (0 for no sharing).</param>
+    /// <param name="lpSecurityAttributes">Security attributes (IntPtr.Zero for default).</param>
+    /// <param name="dwFlags">Buffer type (CONSOLE_TEXTMODE_BUFFER).</param>
+    /// <param name="lpScreenBufferData">Reserved, must be IntPtr.Zero.</param>
+    /// <returns>Handle to the new screen buffer, or INVALID_HANDLE_VALUE on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "CreateConsoleScreenBuffer", SetLastError = true)]
+    public static partial nint CreateConsoleScreenBuffer(
+        uint dwDesiredAccess,
+        uint dwShareMode,
+        nint lpSecurityAttributes,
+        uint dwFlags,
+        nint lpScreenBufferData);
+
+    /// <summary>
+    /// Sets the specified screen buffer to be the currently displayed console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleActiveScreenBuffer", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetConsoleActiveScreenBuffer(nint hConsoleOutput);
+
+    /// <summary>
+    /// Sets the current size and position of a console screen buffer's window.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="bAbsolute">If true, coordinates are absolute; if false, relative.</param>
+    /// <param name="lpConsoleWindow">The new window rectangle.</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleWindowInfo", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetConsoleWindowInfo(
+        nint hConsoleOutput,
+        [MarshalAs(UnmanagedType.Bool)] bool bAbsolute,
+        in SmallRect lpConsoleWindow);
+
+    /// <summary>
+    /// Retrieves the window handle used by the console associated with the calling process.
+    /// </summary>
+    /// <returns>Handle to the console window, or IntPtr.Zero if no console.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "GetConsoleWindow", SetLastError = true)]
+    public static partial nint GetConsoleWindow();
+
+    /// <summary>
+    /// Retrieves information about the specified console screen buffer's cursor.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpConsoleCursorInfo">Structure to receive cursor information.</param>
+    /// <returns>Non-zero on success, zero on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "GetConsoleCursorInfo", SetLastError = true)]
+    public static partial int GetConsoleCursorInfo(nint hConsoleOutput, out ConsoleCursorInfo lpConsoleCursorInfo);
+
+    /// <summary>
+    /// Sets the size and visibility of the cursor for the specified console screen buffer.
+    /// </summary>
+    /// <param name="hConsoleOutput">Handle to the console screen buffer.</param>
+    /// <param name="lpConsoleCursorInfo">Cursor size and visibility settings.</param>
+    /// <returns>Non-zero on success, zero on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "SetConsoleCursorInfo", SetLastError = true)]
+    public static partial int SetConsoleCursorInfo(nint hConsoleOutput, in ConsoleCursorInfo lpConsoleCursorInfo);
+
+    #endregion
+
     #region Screen Buffer Functions
 
     /// <summary>
@@ -338,6 +480,40 @@ public static partial class ConsoleApi
     public static partial bool SetConsoleCursorPosition(
         nint hConsoleOutput,
         Coord dwCursorPosition);
+
+    #endregion
+
+    #region User32 Functions
+
+    private const string User32 = "user32.dll";
+
+    /// <summary>
+    /// Updates the specified rectangle of the window, or the entire window if null.
+    /// </summary>
+    /// <param name="hWnd">Handle to the window.</param>
+    /// <param name="lprcUpdate">Rectangle to update (IntPtr.Zero for entire window).</param>
+    /// <param name="hrgnUpdate">Update region handle (IntPtr.Zero for entire window).</param>
+    /// <param name="flags">Redraw flags (RDW_INVALIDATE, etc.).</param>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(User32, EntryPoint = "RedrawWindow", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool RedrawWindow(nint hWnd, nint lprcUpdate, nint hrgnUpdate, uint flags);
+
+    /// <summary>Invalidates the entire window.</summary>
+    public const uint RDW_INVALIDATE = 0x0001;
+
+    #endregion
+
+    #region Console Screen Buffer Access Constants
+
+    /// <summary>Generic read access.</summary>
+    public const uint GENERIC_READ = 0x80000000;
+
+    /// <summary>Generic write access.</summary>
+    public const uint GENERIC_WRITE = 0x40000000;
+
+    /// <summary>Text mode buffer type for CreateConsoleScreenBuffer.</summary>
+    public const uint CONSOLE_TEXTMODE_BUFFER = 1;
 
     #endregion
 }

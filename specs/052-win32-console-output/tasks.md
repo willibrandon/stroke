@@ -19,10 +19,10 @@
 
 **Purpose**: Extend ConsoleApi with required P/Invoke methods and add Coord.ToInt32() helper
 
-- [ ] T001 Add kernel32 P/Invoke methods to `src/Stroke/Input/Windows/ConsoleApi.cs`: SetConsoleTextAttribute, FillConsoleOutputCharacterW, FillConsoleOutputAttribute, WriteConsoleW, SetConsoleTitleW, CreateConsoleScreenBuffer, SetConsoleActiveScreenBuffer, SetConsoleWindowInfo, GetConsoleWindow
-- [ ] T002 [P] Add user32.dll RedrawWindow P/Invoke and RDW_INVALIDATE constant to `src/Stroke/Input/Windows/ConsoleApi.cs`
-- [ ] T003 [P] Add access constants (GENERIC_READ, GENERIC_WRITE, CONSOLE_TEXTMODE_BUFFER) to `src/Stroke/Input/Windows/ConsoleApi.cs`
-- [ ] T004 [P] Add Coord.ToInt32() extension method to `src/Stroke/Input/Windows/Win32Types/Coord.cs` with packing logic `(Y << 16) | (X & 0xFFFF)`
+- [x] T001 Add kernel32 P/Invoke methods to `src/Stroke/Input/Windows/ConsoleApi.cs`: SetConsoleTextAttribute, FillConsoleOutputCharacterW, FillConsoleOutputAttribute, WriteConsoleW, SetConsoleTitleW, CreateConsoleScreenBuffer, SetConsoleActiveScreenBuffer, SetConsoleWindowInfo, GetConsoleWindow
+- [x] T002 [P] Add user32.dll RedrawWindow P/Invoke and RDW_INVALIDATE constant to `src/Stroke/Input/Windows/ConsoleApi.cs`
+- [x] T003 [P] Add access constants (GENERIC_READ, GENERIC_WRITE, CONSOLE_TEXTMODE_BUFFER) to `src/Stroke/Input/Windows/ConsoleApi.cs`
+- [x] T004 [P] Add Coord.ToInt32() extension method to `src/Stroke/Input/Windows/Win32Types/Coord.cs` with packing logic `(Y << 16) | (X & 0xFFFF)`
 
 **Checkpoint**: P/Invoke infrastructure ready for Win32Output implementation
 
@@ -34,10 +34,10 @@
 
 **⚠️ CRITICAL**: Win32Output cannot be implemented until this phase completes
 
-- [ ] T005 Create `src/Stroke/Output/Windows/ForegroundColor.cs` with static color constants (Black=0x0000, Blue=0x0001, Green=0x0002, Cyan=0x0003, Red=0x0004, Magenta=0x0005, Yellow=0x0006, Gray=0x0007, Intensity=0x0008)
-- [ ] T006 [P] Create `src/Stroke/Output/Windows/BackgroundColor.cs` with static color constants (Black=0x0000, Blue=0x0010, Green=0x0020, Cyan=0x0030, Red=0x0040, Magenta=0x0050, Yellow=0x0060, Gray=0x0070, Intensity=0x0080)
-- [ ] T007 [P] Create `src/Stroke/Output/NoConsoleScreenBufferError.cs` with context-aware message (checks TERM env var for xterm, suggests winpty or cmd.exe)
-- [ ] T008 Create `src/Stroke/Output/Windows/ColorLookupTable.cs` with thread-safe cache, 17 ANSI color mappings, 16-color RGB distance matching, LookupFgColor/LookupBgColor methods
+- [x] T005 Create `src/Stroke/Output/Windows/ForegroundColor.cs` with static color constants (Black=0x0000, Blue=0x0001, Green=0x0002, Cyan=0x0003, Red=0x0004, Magenta=0x0005, Yellow=0x0006, Gray=0x0007, Intensity=0x0008)
+- [x] T006 [P] Create `src/Stroke/Output/Windows/BackgroundColor.cs` with static color constants (Black=0x0000, Blue=0x0010, Green=0x0020, Cyan=0x0030, Red=0x0040, Magenta=0x0050, Yellow=0x0060, Gray=0x0070, Intensity=0x0080)
+- [x] T007 [P] Create `src/Stroke/Output/NoConsoleScreenBufferError.cs` with context-aware message (checks TERM env var for xterm, suggests winpty or cmd.exe)
+- [x] T008 Create `src/Stroke/Output/Windows/ColorLookupTable.cs` with thread-safe cache, 17 ANSI color mappings, 16-color RGB distance matching, LookupFgColor/LookupBgColor methods
 
 **Checkpoint**: Foundational types ready - user story implementation can begin
 
@@ -51,17 +51,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T009 [P] [US1] Create test file `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` with constructor tests (platform check, console detection, exception scenarios)
-- [ ] T010 [P] [US1] Add Write/WriteRaw/Flush tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` verifying buffering and character-by-character output
-- [ ] T011 [P] [US1] Add cursor positioning tests (CursorGoto, CursorUp/Down/Forward/Backward) to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs`
+- [x] T009 [P] [US1] Create test file `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` with constructor tests (platform check, console detection, exception scenarios)
+- [x] T010 [P] [US1] Add Write/WriteRaw/Flush tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` verifying buffering and character-by-character output
+- [x] T011 [P] [US1] Add cursor positioning tests (CursorGoto, CursorUp/Down/Forward/Backward) to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Create `src/Stroke/Output/Windows/Win32Output.cs` with constructor (platform check, handle acquisition, default attributes capture), IOutput implementation stub
-- [ ] T013 [US1] Implement Write, WriteRaw, Flush methods in `src/Stroke/Output/Windows/Win32Output.cs` with thread-safe buffer and character-by-character WriteConsoleW
-- [ ] T014 [US1] Implement CursorGoto, CursorUp, CursorDown, CursorForward, CursorBackward in `src/Stroke/Output/Windows/Win32Output.cs` using SetConsoleCursorPosition
-- [ ] T015 [US1] Implement GetSize, GetRowsBelowCursorPosition in `src/Stroke/Output/Windows/Win32Output.cs` with visible window vs buffer width handling
-- [ ] T016 [US1] Implement property accessors (Encoding, Fileno, RespondsToCpr, Stdout, UseCompleteWidth, DefaultColorDepth, GetDefaultColorDepth) in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T012 [US1] Create `src/Stroke/Output/Windows/Win32Output.cs` with constructor (platform check, handle acquisition, default attributes capture), IOutput implementation stub
+- [x] T013 [US1] Implement Write, WriteRaw, Flush methods in `src/Stroke/Output/Windows/Win32Output.cs` with thread-safe buffer and character-by-character WriteConsoleW
+- [x] T014 [US1] Implement CursorGoto, CursorUp, CursorDown, CursorForward, CursorBackward in `src/Stroke/Output/Windows/Win32Output.cs` using SetConsoleCursorPosition
+- [x] T015 [US1] Implement GetSize, GetRowsBelowCursorPosition in `src/Stroke/Output/Windows/Win32Output.cs` with visible window vs buffer width handling
+- [x] T016 [US1] Implement property accessors (Encoding, Fileno, RespondsToCpr, Stdout, UseCompleteWidth, DefaultColorDepth, GetDefaultColorDepth) in `src/Stroke/Output/Windows/Win32Output.cs`
 
 **Checkpoint**: Win32Output MVP functional - basic text output and cursor control on Windows console
 
@@ -75,17 +75,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Create test file `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` with ANSI color lookup tests (17 colors)
-- [ ] T018 [P] [US2] Add RGB distance matching tests to `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` verifying closest color selection
-- [ ] T019 [P] [US2] Add cache thread safety tests to `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` (10+ threads, 1000+ operations)
-- [ ] T020 [P] [US2] Create test file `tests/Stroke.Tests/Output/Windows/Win32OutputColorTests.cs` with SetAttributes/ResetAttributes tests
+- [x] T017 [P] [US2] Create test file `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` with ANSI color lookup tests (17 colors)
+- [x] T018 [P] [US2] Add RGB distance matching tests to `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` verifying closest color selection
+- [x] T019 [P] [US2] Add cache thread safety tests to `tests/Stroke.Tests/Output/Windows/ColorLookupTableTests.cs` (10+ threads, 1000+ operations)
+- [x] T020 [P] [US2] Create test file `tests/Stroke.Tests/Output/Windows/Win32OutputColorTests.cs` with SetAttributes/ResetAttributes tests
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Create `src/Stroke/Output/Windows/Win32Output.Colors.cs` partial class with SetAttributes implementation (color depth handling, attribute combination)
-- [ ] T022 [US2] Implement reverse attribute bit-swap in `src/Stroke/Output/Windows/Win32Output.Colors.cs` (swap foreground/background 4-bit values)
-- [ ] T023 [US2] Implement hidden text flag management in `src/Stroke/Output/Windows/Win32Output.Colors.cs` and integrate with Write method space replacement
-- [ ] T024 [US2] Implement ResetAttributes in `src/Stroke/Output/Windows/Win32Output.Colors.cs` using saved default attributes
+- [x] T021 [US2] Create `src/Stroke/Output/Windows/Win32Output.Colors.cs` partial class with SetAttributes implementation (color depth handling, attribute combination)
+- [x] T022 [US2] Implement reverse attribute bit-swap in `src/Stroke/Output/Windows/Win32Output.Colors.cs` (swap foreground/background 4-bit values)
+- [x] T023 [US2] Implement hidden text flag management in `src/Stroke/Output/Windows/Win32Output.Colors.cs` and integrate with Write method space replacement
+- [x] T024 [US2] Implement ResetAttributes in `src/Stroke/Output/Windows/Win32Output.Colors.cs` using saved default attributes
 
 **Checkpoint**: Full color support functional - ANSI names, RGB mapping, reverse, hidden all working
 
@@ -99,13 +99,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T025 [P] [US3] Add alternate screen tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (enter, exit, idempotency, content preservation)
+- [x] T025 [P] [US3] Add alternate screen tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (enter, exit, idempotency, content preservation)
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Implement EnterAlternateScreen in `src/Stroke/Output/Windows/Win32Output.cs` using CreateConsoleScreenBuffer + SetConsoleActiveScreenBuffer
-- [ ] T027 [US3] Implement QuitAlternateScreen in `src/Stroke/Output/Windows/Win32Output.cs` with handle restoration and CloseHandle cleanup
-- [ ] T028 [US3] Add _inAlternateScreen, _originalHandle, _alternateHandle state management with proper locking in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T026 [US3] Implement EnterAlternateScreen in `src/Stroke/Output/Windows/Win32Output.cs` using CreateConsoleScreenBuffer + SetConsoleActiveScreenBuffer
+- [x] T027 [US3] Implement QuitAlternateScreen in `src/Stroke/Output/Windows/Win32Output.cs` with handle restoration and CloseHandle cleanup
+- [x] T028 [US3] Add _inAlternateScreen, _originalHandle, _alternateHandle state management with proper locking in `src/Stroke/Output/Windows/Win32Output.cs`
 
 **Checkpoint**: Alternate screen buffer functional - full-screen apps can preserve terminal content
 
@@ -119,13 +119,13 @@
 
 ### Tests for User Story 4
 
-- [ ] T029 [P] [US4] Add erase operation tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (EraseScreen, EraseEndOfLine, EraseDown)
+- [x] T029 [P] [US4] Add erase operation tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (EraseScreen, EraseEndOfLine, EraseDown)
 
 ### Implementation for User Story 4
 
-- [ ] T030 [US4] Implement EraseScreen in `src/Stroke/Output/Windows/Win32Output.cs` using FillConsoleOutputCharacterW + FillConsoleOutputAttribute, cursor home
-- [ ] T031 [US4] Implement EraseEndOfLine in `src/Stroke/Output/Windows/Win32Output.cs` (cursor X to line end)
-- [ ] T032 [US4] Implement EraseDown in `src/Stroke/Output/Windows/Win32Output.cs` (cursor position to buffer end)
+- [x] T030 [US4] Implement EraseScreen in `src/Stroke/Output/Windows/Win32Output.cs` using FillConsoleOutputCharacterW + FillConsoleOutputAttribute, cursor home
+- [x] T031 [US4] Implement EraseEndOfLine in `src/Stroke/Output/Windows/Win32Output.cs` (cursor X to line end)
+- [x] T032 [US4] Implement EraseDown in `src/Stroke/Output/Windows/Win32Output.cs` (cursor position to buffer end)
 
 **Checkpoint**: Screen erase operations functional - dynamic UI updates supported
 
@@ -139,12 +139,12 @@
 
 ### Tests for User Story 5
 
-- [ ] T033 [P] [US5] Add mouse support tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (enable, disable, mode flag verification)
+- [x] T033 [P] [US5] Add mouse support tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (enable, disable, mode flag verification)
 
 ### Implementation for User Story 5
 
-- [ ] T034 [US5] Implement EnableMouseSupport in `src/Stroke/Output/Windows/Win32Output.cs` (ENABLE_MOUSE_INPUT | ~ENABLE_QUICK_EDIT_MODE on stdin)
-- [ ] T035 [US5] Implement DisableMouseSupport in `src/Stroke/Output/Windows/Win32Output.cs` (~ENABLE_MOUSE_INPUT on stdin)
+- [x] T034 [US5] Implement EnableMouseSupport in `src/Stroke/Output/Windows/Win32Output.cs` (ENABLE_MOUSE_INPUT | ~ENABLE_QUICK_EDIT_MODE on stdin)
+- [x] T035 [US5] Implement DisableMouseSupport in `src/Stroke/Output/Windows/Win32Output.cs` (~ENABLE_MOUSE_INPUT on stdin)
 
 **Checkpoint**: Mouse support functional - interactive applications can receive mouse events
 
@@ -158,15 +158,15 @@
 
 ### Tests for User Story 6
 
-- [ ] T036 [P] [US6] Add platform detection tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (non-Windows, non-console scenarios)
-- [ ] T037 [P] [US6] Add NoConsoleScreenBufferError message tests to `tests/Stroke.Tests/Output/NoConsoleScreenBufferErrorTests.cs` (xterm detection, winpty suggestion)
+- [x] T036 [P] [US6] Add platform detection tests to `tests/Stroke.Tests/Output/Windows/Win32OutputTests.cs` (non-Windows, non-console scenarios)
+- [x] T037 [P] [US6] Add NoConsoleScreenBufferError message tests to `tests/Stroke.Tests/Output/NoConsoleScreenBufferErrorTests.cs` (xterm detection, winpty suggestion)
 
 ### Implementation for User Story 6
 
 (Platform detection is implemented in T012 constructor; this phase adds remaining edge case handling)
 
-- [ ] T038 [US6] Verify constructor throws PlatformNotSupportedException on non-Windows in `src/Stroke/Output/Windows/Win32Output.cs`
-- [ ] T039 [US6] Verify constructor throws NoConsoleScreenBufferError when GetConsoleScreenBufferInfo fails in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T038 [US6] Verify constructor throws PlatformNotSupportedException on non-Windows in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T039 [US6] Verify constructor throws NoConsoleScreenBufferError when GetConsoleScreenBufferInfo fails in `src/Stroke/Output/Windows/Win32Output.cs`
 
 **Checkpoint**: Platform detection functional - developers get actionable error messages
 
@@ -176,12 +176,12 @@
 
 **Purpose**: Remaining IOutput methods, documentation, and cross-story integration
 
-- [ ] T040 Implement remaining no-op methods in `src/Stroke/Output/Windows/Win32Output.cs`: SetCursorShape, ResetCursorShape, DisableAutowrap, EnableAutowrap, EnableBracketedPaste, DisableBracketedPaste, ResetCursorKeyMode, AskForCpr, ScrollBufferToPrompt
-- [ ] T041 [P] Implement HideCursor, ShowCursor via SetConsoleCursorInfo in `src/Stroke/Output/Windows/Win32Output.cs`
-- [ ] T042 [P] Implement SetTitle, ClearTitle via SetConsoleTitleW in `src/Stroke/Output/Windows/Win32Output.cs`
-- [ ] T043 [P] Implement Bell method in `src/Stroke/Output/Windows/Win32Output.cs` (write '\a' or MessageBeep)
-- [ ] T044 [P] Implement static Win32RefreshWindow in `src/Stroke/Output/Windows/Win32Output.cs` using GetConsoleWindow + RedrawWindow
-- [ ] T045 Add thread safety documentation (XML comments) to all public types per Constitution XI
+- [x] T040 Implement remaining no-op methods in `src/Stroke/Output/Windows/Win32Output.cs`: SetCursorShape, ResetCursorShape, DisableAutowrap, EnableAutowrap, EnableBracketedPaste, DisableBracketedPaste, ResetCursorKeyMode, AskForCpr, ScrollBufferToPrompt
+- [x] T041 [P] Implement HideCursor, ShowCursor via SetConsoleCursorInfo in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T042 [P] Implement SetTitle, ClearTitle via SetConsoleTitleW in `src/Stroke/Output/Windows/Win32Output.cs`
+- [x] T043 [P] Implement Bell method in `src/Stroke/Output/Windows/Win32Output.cs` (write '\a' or MessageBeep)
+- [x] T044 [P] Implement static Win32RefreshWindow in `src/Stroke/Output/Windows/Win32Output.cs` using GetConsoleWindow + RedrawWindow
+- [x] T045 Add thread safety documentation (XML comments) to all public types per Constitution XI
 - [ ] T046 Run quickstart.md validation scenarios manually on Windows
 - [ ] T047 [P] Run `dotnet test --collect:"XPlat Code Coverage"` and verify ≥80% coverage per SC-007
 
