@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using System.Threading;
 using Stroke.Input.Windows;
 
 namespace Stroke.EventLoop;
@@ -64,6 +65,11 @@ public static class Win32EventLoopUtils
     /// <exception cref="Win32Exception">
     /// The wait operation failed.
     /// </exception>
+    /// <exception cref="AbandonedMutexException">
+    /// One of the handles was an abandoned mutex (its owner thread terminated
+    /// without releasing it). The <see cref="AbandonedMutexException.MutexIndex"/>
+    /// property indicates which handle was abandoned.
+    /// </exception>
     /// <remarks>
     /// <para>
     /// Important: Handles should be proper Windows HANDLE values (nint),
@@ -117,13 +123,24 @@ public static class Win32EventLoopUtils
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
+        // Check for abandoned mutex (WAIT_ABANDONED_0 + index)
+        // This occurs when a thread terminated without releasing a mutex.
+        // Match .NET's WaitHandle.WaitAny behavior by throwing AbandonedMutexException.
+        if (result >= ConsoleApi.WAIT_ABANDONED_0 &&
+            result < ConsoleApi.WAIT_ABANDONED_0 + MaximumWaitObjects)
+        {
+            var abandonedIndex = (int)(result - ConsoleApi.WAIT_ABANDONED_0);
+            throw new AbandonedMutexException(abandonedIndex, null);
+        }
+
         // Calculate index: result is WAIT_OBJECT_0 + index
         var index = (int)(result - ConsoleApi.WAIT_OBJECT_0);
 
-        // Validate index is in range (defensive check)
+        // Validate index is in range (defensive check for unexpected return values)
         if (index < 0 || index >= handleArray.Length)
         {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
+            throw new InvalidOperationException(
+                $"WaitForMultipleObjects returned unexpected value: 0x{result:X8}");
         }
 
         return handleArray[index];
@@ -149,6 +166,9 @@ public static class Win32EventLoopUtils
     /// </exception>
     /// <exception cref="Win32Exception">
     /// The wait operation failed.
+    /// </exception>
+    /// <exception cref="AbandonedMutexException">
+    /// One of the handles was an abandoned mutex.
     /// </exception>
     /// <remarks>
     /// <para>
