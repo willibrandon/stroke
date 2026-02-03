@@ -443,6 +443,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + .NET BCL only (System.Runtime.InteropServices, System.Runtime.Versioning) (051-win32-console-types)
 - N/A (in-memory struct types only) (051-win32-console-types)
 - C# 13 / .NET 10+ + System.Runtime.InteropServices (P/Invoke), Stroke.Input.Windows.Win32Types, Stroke.Styles, Stroke.Output (052-win32-console-output)
+- C# 13 / .NET 10+ + Stroke.Output (IOutput, Win32Output, Vt100Output), Stroke.Core (PlatformUtils, Size), System.Runtime.Versioning (053-conemu-output)
+- N/A (in-memory only) (053-conemu-output)
 
 ## Recent Changes
 
