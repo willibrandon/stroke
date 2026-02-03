@@ -89,7 +89,7 @@ public class Windows10OutputTests
         using var writer = new StringWriter();
 
         // Act - should succeed when console is attached
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Assert - constructor succeeded
         Assert.NotNull(output);
@@ -109,7 +109,7 @@ public class Windows10OutputTests
         using var writer = new StringWriter();
 
         // Act
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Assert - verify the handle is stored by calling operations that use it
         // Multiple flush operations should not re-acquire the handle
@@ -138,7 +138,7 @@ public class Windows10OutputTests
         using var writer = new StringWriter();
 
         // Act
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Assert
         Assert.NotNull(output.Win32Output);
@@ -160,7 +160,7 @@ public class Windows10OutputTests
         var colorDepth = ColorDepth.Depth8Bit;
 
         // Act
-        var output = new Windows10Output(writer, colorDepth);
+        using var output = new Windows10Output(writer, colorDepth);
 
         // Assert
         Assert.Equal(colorDepth, output.Win32Output.DefaultColorDepth);
@@ -183,7 +183,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
         output.Write("test");
 
         // Act
@@ -205,7 +205,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
         var handle = ConsoleApi.GetStdHandle(ConsoleApi.STD_OUTPUT_HANDLE);
 
         // Get original mode before flush
@@ -232,7 +232,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
         var exceptions = new List<Exception>();
         var threadCount = 10;
         var iterationsPerThread = 1000;
@@ -292,7 +292,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
         var testData = "Hello, Windows 10!";
 
         // Act
@@ -316,7 +316,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
         var testData = "\x1b[31mRed Text\x1b[0m";
 
         // Act
@@ -344,7 +344,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         var colorDepth = output.GetDefaultColorDepth();
@@ -366,7 +366,7 @@ public class Windows10OutputTests
         // Arrange
         using var writer = new StringWriter();
         var expectedDepth = ColorDepth.Depth4Bit;
-        var output = new Windows10Output(writer, expectedDepth);
+        using var output = new Windows10Output(writer, expectedDepth);
 
         // Act
         var colorDepth = output.GetDefaultColorDepth();
@@ -391,7 +391,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert
         Assert.False(output.RespondsToCpr);
@@ -413,7 +413,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         var size = output.GetSize();
@@ -435,7 +435,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         var rows = output.GetRowsBelowCursorPosition();
@@ -456,7 +456,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert - should not throw
         output.ScrollBufferToPrompt();
@@ -474,7 +474,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert - should not throw
         output.EnableMouseSupport();
@@ -493,7 +493,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert - should not throw
         output.DisableMouseSupport();
@@ -511,7 +511,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert - should not throw
         output.EnableBracketedPaste();
@@ -530,7 +530,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert - should not throw
         output.DisableBracketedPaste();
@@ -552,7 +552,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert
         Assert.NotNull(output.Win32Output);
@@ -570,7 +570,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert
         Assert.NotNull(output.Vt100Output);
@@ -592,7 +592,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert
         Assert.Equal("utf-8", output.Encoding);
@@ -610,7 +610,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act & Assert
         Assert.Same(writer, output.Stdout);
@@ -628,7 +628,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         IOutput iOutput = output;
@@ -650,7 +650,7 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new Windows10Output(writer);
+        using var output = new Windows10Output(writer);
 
         // Act
         static void AcceptIOutput(IOutput o) => o.Write("test");

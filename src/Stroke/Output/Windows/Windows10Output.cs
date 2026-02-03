@@ -32,7 +32,7 @@ namespace Stroke.Output.Windows;
 /// </para>
 /// </remarks>
 [SupportedOSPlatform("windows")]
-public sealed class Windows10Output : IOutput
+public sealed class Windows10Output : IOutput, IDisposable
 {
     private readonly Win32Output _win32Output;
     private readonly Vt100Output _vt100Output;
@@ -299,6 +299,15 @@ public sealed class Windows10Output : IOutput
 
     /// <inheritdoc />
     public int GetRowsBelowCursorPosition() => _win32Output.GetRowsBelowCursorPosition();
+
+    #endregion
+
+    #region IDisposable
+
+    /// <summary>
+    /// Disposes the underlying Win32Output, releasing any console handles it owns.
+    /// </summary>
+    public void Dispose() => _win32Output.Dispose();
 
     #endregion
 }

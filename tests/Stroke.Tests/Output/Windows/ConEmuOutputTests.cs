@@ -58,7 +58,7 @@ public class ConEmuOutputTests
         using var writer = new StringWriter();
 
         // Act
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Assert
         Assert.NotNull(output.Win32Output);
@@ -92,7 +92,7 @@ public class ConEmuOutputTests
         var colorDepth = ColorDepth.Depth8Bit;
 
         // Act
-        var output = new ConEmuOutput(writer, colorDepth);
+        using var output = new ConEmuOutput(writer, colorDepth);
 
         // Assert
         // Both outputs should have the color depth configured
@@ -112,7 +112,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert
         Assert.NotNull(output.Win32Output);
@@ -130,7 +130,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert
         Assert.NotNull(output.Vt100Output);
@@ -152,7 +152,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
         var testData = "Hello, ConEmu!";
 
         // Act
@@ -176,7 +176,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
         var testData = "\x1b[31mRed Text\x1b[0m";
 
         // Act
@@ -200,7 +200,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
         output.Write("test");
 
         // Act
@@ -226,7 +226,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act
         var size = output.GetSize();
@@ -248,7 +248,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act
         var rows = output.GetRowsBelowCursorPosition();
@@ -273,7 +273,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert - should not throw
         output.EnableMouseSupport();
@@ -292,7 +292,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert - should not throw
         output.DisableMouseSupport();
@@ -314,7 +314,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert - should not throw
         output.EnableBracketedPaste();
@@ -333,7 +333,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert - should not throw
         output.DisableBracketedPaste();
@@ -355,7 +355,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert
         Assert.False(output.RespondsToCpr);
@@ -373,7 +373,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert
         Assert.Equal("utf-8", output.Encoding);
@@ -391,7 +391,7 @@ public class ConEmuOutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        var output = new ConEmuOutput(writer);
+        using var output = new ConEmuOutput(writer);
 
         // Act & Assert
         Assert.Same(writer, output.Stdout);

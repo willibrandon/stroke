@@ -31,7 +31,7 @@ namespace Stroke.Output.Windows;
 /// <seealso href="http://conemu.github.io/">ConEmu</seealso>
 /// <seealso href="http://gooseberrycreative.com/cmder/">Cmder</seealso>
 [SupportedOSPlatform("windows")]
-public sealed class ConEmuOutput : IOutput
+public sealed class ConEmuOutput : IOutput, IDisposable
 {
     private readonly Win32Output _win32Output;
     private readonly Vt100Output _vt100Output;
@@ -245,6 +245,15 @@ public sealed class ConEmuOutput : IOutput
 
     /// <inheritdoc />
     public int GetRowsBelowCursorPosition() => _win32Output.GetRowsBelowCursorPosition();
+
+    #endregion
+
+    #region IDisposable
+
+    /// <summary>
+    /// Disposes the underlying Win32Output, releasing any console handles it owns.
+    /// </summary>
+    public void Dispose() => _win32Output.Dispose();
 
     #endregion
 }
