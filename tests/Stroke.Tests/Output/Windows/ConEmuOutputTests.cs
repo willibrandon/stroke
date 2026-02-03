@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Stroke.Core.Primitives;
+using Stroke.Input.Windows;
 using Stroke.Output;
 using Stroke.Output.Windows;
 using Xunit;
@@ -18,11 +19,28 @@ namespace Stroke.Tests.Output.Windows;
 /// Many tests require Windows platform and a console screen buffer.
 /// Tests are skipped on non-Windows platforms.
 /// </para>
+/// <para>
+/// Test runners and mintty redirect stdio through pipes, so the process may
+/// not have a Win32 console attached. <see cref="EnsureConsoleAttached"/>
+/// allocates one when needed.
+/// </para>
 /// </remarks>
 [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
     Justification = "Tests explicitly check OperatingSystem.IsWindows() before calling ConEmuOutput")]
 public class ConEmuOutputTests
 {
+    /// <summary>
+    /// Ensures the process has an attached Win32 console.
+    /// Test runners and mintty redirect stdio through pipes, leaving
+    /// no console attached. Win32Output requires a real console handle.
+    /// </summary>
+    private static void EnsureConsoleAttached()
+    {
+        if (OperatingSystem.IsWindows() && ConsoleApi.GetConsoleWindow() == nint.Zero)
+        {
+            ConsoleApi.AllocConsole();
+        }
+    }
 
     #region Constructor Tests (T008)
 
@@ -33,6 +51,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -65,6 +85,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var colorDepth = ColorDepth.Depth8Bit;
@@ -86,6 +108,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -101,6 +125,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -121,6 +147,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -144,6 +172,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -165,6 +195,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -190,6 +222,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -209,6 +243,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -233,6 +269,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -249,6 +287,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -270,6 +310,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -286,6 +328,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
@@ -307,6 +351,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -323,6 +369,8 @@ public class ConEmuOutputTests
             return; // Skip on non-Windows
         }
 
+        EnsureConsoleAttached();
+
         // Arrange
         using var writer = new StringWriter();
         var output = new ConEmuOutput(writer);
@@ -338,6 +386,8 @@ public class ConEmuOutputTests
         {
             return; // Skip on non-Windows
         }
+
+        EnsureConsoleAttached();
 
         // Arrange
         using var writer = new StringWriter();
