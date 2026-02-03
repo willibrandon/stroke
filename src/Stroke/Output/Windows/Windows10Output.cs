@@ -225,23 +225,31 @@ public sealed class Windows10Output : IOutput, IDisposable
 
     #endregion
 
-    #region Mouse (delegated to Win32Output)
+    #region Mouse (delegated to Vt100Output)
+
+    // NOTE: Now that we use "virtual terminal input" on Windows, both input
+    // and output are done through ANSI escape sequences. This means we should
+    // enable mouse support by calling the vt100_output, not win32_output.
+    // See Python Prompt Toolkit windows10.py lines 68-86.
 
     /// <inheritdoc />
-    public void EnableMouseSupport() => _win32Output.EnableMouseSupport();
+    public void EnableMouseSupport() => _vt100Output.EnableMouseSupport();
 
     /// <inheritdoc />
-    public void DisableMouseSupport() => _win32Output.DisableMouseSupport();
+    public void DisableMouseSupport() => _vt100Output.DisableMouseSupport();
 
     #endregion
 
-    #region Bracketed Paste (delegated to Win32Output)
+    #region Bracketed Paste (delegated to Vt100Output)
+
+    // NOTE: Same rationale as mouse support - with virtual terminal input,
+    // bracketed paste uses ANSI escape sequences via vt100_output.
 
     /// <inheritdoc />
-    public void EnableBracketedPaste() => _win32Output.EnableBracketedPaste();
+    public void EnableBracketedPaste() => _vt100Output.EnableBracketedPaste();
 
     /// <inheritdoc />
-    public void DisableBracketedPaste() => _win32Output.DisableBracketedPaste();
+    public void DisableBracketedPaste() => _vt100Output.DisableBracketedPaste();
 
     #endregion
 

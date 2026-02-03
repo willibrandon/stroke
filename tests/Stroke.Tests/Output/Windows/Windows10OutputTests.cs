@@ -462,8 +462,12 @@ public class Windows10OutputTests
         output.ScrollBufferToPrompt();
     }
 
+    // NOTE: Mouse and bracketed paste delegate to Vt100Output (not Win32Output)
+    // because Windows 10 uses virtual terminal input via ANSI escape sequences.
+    // See Python Prompt Toolkit windows10.py lines 68-86.
+
     [Fact]
-    public void EnableMouseSupport_DelegatesToWin32Output()
+    public void EnableMouseSupport_DelegatesToVt100Output()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -474,15 +478,19 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        using var output = new Windows10Output(writer);
+        var output = new Windows10Output(writer);
 
-        // Act & Assert - should not throw
+        // Act
         output.EnableMouseSupport();
-        output.DisableMouseSupport();
+        output.Flush();
+
+        // Assert - Vt100Output writes ANSI escape sequence for mouse support
+        var result = writer.ToString();
+        Assert.Contains("\x1b[?1000h", result); // Enable mouse tracking
     }
 
     [Fact]
-    public void DisableMouseSupport_DelegatesToWin32Output()
+    public void DisableMouseSupport_DelegatesToVt100Output()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -493,14 +501,19 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        using var output = new Windows10Output(writer);
+        var output = new Windows10Output(writer);
 
-        // Act & Assert - should not throw
+        // Act
         output.DisableMouseSupport();
+        output.Flush();
+
+        // Assert - Vt100Output writes ANSI escape sequence to disable mouse
+        var result = writer.ToString();
+        Assert.Contains("\x1b[?1000l", result); // Disable mouse tracking
     }
 
     [Fact]
-    public void EnableBracketedPaste_DelegatesToWin32Output()
+    public void EnableBracketedPaste_DelegatesToVt100Output()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -511,15 +524,19 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        using var output = new Windows10Output(writer);
+        var output = new Windows10Output(writer);
 
-        // Act & Assert - should not throw
+        // Act
         output.EnableBracketedPaste();
-        output.DisableBracketedPaste();
+        output.Flush();
+
+        // Assert - Vt100Output writes ANSI escape sequence for bracketed paste
+        var result = writer.ToString();
+        Assert.Contains("\x1b[?2004h", result); // Enable bracketed paste
     }
 
     [Fact]
-    public void DisableBracketedPaste_DelegatesToWin32Output()
+    public void DisableBracketedPaste_DelegatesToVt100Output()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -530,10 +547,15 @@ public class Windows10OutputTests
 
         // Arrange
         using var writer = new StringWriter();
-        using var output = new Windows10Output(writer);
+        var output = new Windows10Output(writer);
 
-        // Act & Assert - should not throw
+        // Act
         output.DisableBracketedPaste();
+        output.Flush();
+
+        // Assert - Vt100Output writes ANSI escape sequence to disable bracketed paste
+        var result = writer.ToString();
+        Assert.Contains("\x1b[?2004l", result); // Disable bracketed paste
     }
 
     #endregion
