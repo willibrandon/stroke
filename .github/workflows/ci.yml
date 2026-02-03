@@ -34,7 +34,7 @@ jobs:
 
       - name: Typos
         if: matrix.os == 'ubuntu-latest'
-        uses: crate-ci/typos@master
+        uses: crate-ci/typos@v1.43.0
         with:
           config: ./.typos.toml
 
