@@ -449,6 +449,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory kernel handles only) (054-win32-eventloop-utils)
 - C# 13 / .NET 10+ + `Stroke.Output` (IOutput, Vt100Output), `Stroke.Output.Windows` (Win32Output), `Stroke.Input.Windows` (ConsoleApi, Win32Types), `Stroke.Core` (PlatformUtils, Size), `System.Runtime.Versioning` (055-win10-vt100-output)
 - C# 13 / .NET 10+ + Stroke.Application, Stroke.Widgets.Lists (RadioList), Stroke.Layout (HSplit, ConditionalContainer, Box, Frame), Stroke.KeyBinding, Stroke.Filters (056-choice-input)
+- C# 13 / .NET 10+ + Stroke library (`Stroke.Shortcuts.Prompt.RunPrompt`) (122-get-input-example)
 
 ## Recent Changes
 
