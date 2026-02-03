@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Stroke.Core;
 
@@ -14,13 +15,13 @@ namespace Stroke.Core;
 /// Port of Python Prompt Toolkit's platform detection functions from <c>utils.py</c>:
 /// <c>is_windows</c>, <c>suspend_to_background_supported</c>, <c>is_conemu_ansi</c>,
 /// <c>in_main_thread</c>, <c>get_bell_environment_variable</c>, <c>get_term_environment_variable</c>,
-/// <c>is_dumb_terminal</c>.
+/// <c>is_dumb_terminal</c>, and <c>is_windows_vt100_supported</c> (from <c>output/windows10.py</c>).
 /// </para>
 /// <para>
 /// Environment variable checks are performed at access time, not cached at startup.
 /// </para>
 /// </remarks>
-public static class PlatformUtils
+public static partial class PlatformUtils
 {
     /// <summary>
     /// Gets a value indicating whether the application is running on Windows.
@@ -124,5 +125,111 @@ public static class PlatformUtils
 
         return string.Equals(term, "dumb", StringComparison.OrdinalIgnoreCase) ||
                string.Equals(term, "unknown", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether VT100 escape sequences are supported on Windows.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if running on Windows 10 version 1607 or later with VT100 support enabled;
+    /// <c>false</c> on non-Windows platforms or older Windows versions.
+    /// </value>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>is_windows_vt100_supported()</c> function,
+    /// which calls <c>is_win_vt100_enabled()</c> from <c>output/windows10.py</c>.
+    /// </para>
+    /// <para>
+    /// This property attempts to enable virtual terminal processing on the console
+    /// output handle. If successful, VT100 sequences are supported. The original
+    /// console mode is always restored after the check.
+    /// </para>
+    /// </remarks>
+    public static bool IsWindowsVt100Supported => IsWindows && CheckWindowsVt100Support();
+
+    /// <summary>
+    /// Checks if Windows VT100 support can be enabled.
+    /// </summary>
+    /// <returns><c>true</c> if VT100 can be enabled; otherwise <c>false</c>.</returns>
+    private static bool CheckWindowsVt100Support()
+    {
+        // Use OperatingSystem.IsWindows() so the analyzer recognizes the platform guard
+        if (!OperatingSystem.IsWindows())
+        {
+            return false;
+        }
+
+        try
+        {
+            var handle = Vt100Detection.GetStdHandle(Vt100Detection.STD_OUTPUT_HANDLE);
+            if (handle == nint.Zero || handle == new nint(-1))
+            {
+                return false;
+            }
+
+            // Get original console mode
+            if (!Vt100Detection.GetConsoleMode(handle, out var originalMode))
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to enable VT100 processing
+                var newMode = originalMode | Vt100Detection.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+                var result = Vt100Detection.SetConsoleMode(handle, newMode);
+                return result;
+            }
+            finally
+            {
+                // Restore original mode
+                Vt100Detection.SetConsoleMode(handle, originalMode);
+            }
+        }
+        catch
+        {
+            // Any failure means VT100 is not supported
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// P/Invoke declarations for VT100 detection.
+    /// </summary>
+    /// <remarks>
+    /// These are minimal declarations needed for VT100 support detection.
+    /// They are separate from <c>Stroke.Input.Windows.ConsoleApi</c> to avoid
+    /// circular dependencies (Core must not depend on Input layer).
+    /// </remarks>
+    [SupportedOSPlatform("windows")]
+    private static partial class Vt100Detection
+    {
+        private const string Kernel32 = "kernel32.dll";
+
+        /// <summary>Standard output handle.</summary>
+        public const int STD_OUTPUT_HANDLE = -11;
+
+        /// <summary>Enable VT100 output sequence processing.</summary>
+        public const uint ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
+
+        /// <summary>
+        /// Gets a handle to the specified standard device.
+        /// </summary>
+        [LibraryImport(Kernel32, EntryPoint = "GetStdHandle", SetLastError = true)]
+        public static partial nint GetStdHandle(int nStdHandle);
+
+        /// <summary>
+        /// Gets the current mode for the specified console handle.
+        /// </summary>
+        [LibraryImport(Kernel32, EntryPoint = "GetConsoleMode", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool GetConsoleMode(nint hConsoleHandle, out uint lpMode);
+
+        /// <summary>
+        /// Sets the mode for the specified console handle.
+        /// </summary>
+        [LibraryImport(Kernel32, EntryPoint = "SetConsoleMode", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool SetConsoleMode(nint hConsoleHandle, uint dwMode);
     }
 }

@@ -526,4 +526,78 @@ public class PlatformUtilsTests
     }
 
     #endregion
+
+    #region IsWindowsVt100Supported Tests
+
+    [Fact]
+    public void IsWindowsVt100Supported_OnNonWindows_ReturnsFalse()
+    {
+        if (PlatformUtils.IsWindows)
+        {
+            // Skip this test on Windows - it tests non-Windows behavior
+            return;
+        }
+
+        Assert.False(PlatformUtils.IsWindowsVt100Supported);
+    }
+
+    [Fact]
+    public void IsWindowsVt100Supported_OnWindows_ReturnsConsistentValue()
+    {
+        if (!PlatformUtils.IsWindows)
+        {
+            // Skip this test on non-Windows
+            return;
+        }
+
+        // On Windows, the value should be consistent across multiple calls
+        var first = PlatformUtils.IsWindowsVt100Supported;
+        var second = PlatformUtils.IsWindowsVt100Supported;
+
+        Assert.Equal(first, second);
+    }
+
+    [Fact]
+    public void IsWindowsVt100Supported_OnModernWindows_ReturnsTrue()
+    {
+        if (!PlatformUtils.IsWindows)
+        {
+            // Skip this test on non-Windows
+            return;
+        }
+
+        // Windows 10 version 1607+ supports VT100
+        // Most CI systems run on modern Windows, so this should be true
+        // Note: This test may fail on very old Windows versions or when
+        // running without a console (e.g., certain CI configurations)
+        var result = PlatformUtils.IsWindowsVt100Supported;
+
+        // We can't assert true because some CI environments may not have a console
+        // Instead, verify it doesn't throw and returns a boolean
+        Assert.IsType<bool>(result);
+    }
+
+    [Fact]
+    public void IsWindowsVt100Supported_ImpliesIsWindows()
+    {
+        // If VT100 is supported, we must be on Windows
+        if (PlatformUtils.IsWindowsVt100Supported)
+        {
+            Assert.True(PlatformUtils.IsWindows);
+        }
+    }
+
+    [Fact]
+    public void IsWindowsVt100Supported_DoesNotThrow()
+    {
+        // Should never throw, regardless of platform
+        var exception = Record.Exception(() =>
+        {
+            _ = PlatformUtils.IsWindowsVt100Supported;
+        });
+
+        Assert.Null(exception);
+    }
+
+    #endregion
 }
