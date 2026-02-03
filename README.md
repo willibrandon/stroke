@@ -483,6 +483,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Thread-safe `ProgressDialog` via Lock-protected `setPercentage` and `_actionChannel`-marshaled `logText`
   - 47 new tests (8,271 total tests, >80% coverage)
 
+- **Patch Stdout** — Console output interception for active prompt sessions, ported from `patch_stdout.py`
+  - `StdoutProxy` sealed `TextWriter` subclass with newline-gated buffering and producer-consumer flush thread
+  - `StdoutPatching.PatchStdout()` replaces `Console.Out` and `Console.Error` with proxy, returns `IDisposable` for restore
+  - `FlushItem` internal sealed record hierarchy (Text/Done) for type-safe queue sentinel pattern
+  - `BlockingCollection<FlushItem>` queue with dedicated `Thread(IsBackground=true)` consumer
+  - `RunInTerminal.RunAsync` integration: suspends renderer during output when app is running
+  - Raw mode (`raw: true`) passes VT100 escape sequences through `IOutput.WriteRaw()` unmodified
+  - Non-raw mode (default) routes through `IOutput.Write()` which escapes 0x1B → '?'
+  - `EnableAutowrap()` called before each write (Windows VT processing workaround)
+  - Configurable `SleepBetweenWrites` (default 200ms) for batching rapid writes
+  - Nesting support: multiple `PatchStdout()` calls stack correctly
+  - Thread-safe via `System.Threading.Lock` for buffer access (55 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)

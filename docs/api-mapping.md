@@ -1940,7 +1940,7 @@ public interface IOutput
 
 | Python | Stroke | Signature |
 |--------|--------|-----------|
-| `patch_stdout(raw)` | `PatchStdout.Patch(raw)` | `IDisposable Patch(bool raw = false)` |
+| `patch_stdout(raw)` | `StdoutPatching.PatchStdout(raw)` | `IDisposable PatchStdout(bool raw = false)` |
 
 ---
 
