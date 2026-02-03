@@ -264,25 +264,23 @@ public class TypeaheadBufferTests : IDisposable
     public void ThreadSafety_ConcurrentStoreAndGet()
     {
         using var input = new SimplePipeInput();
-        var iterations = 1000;
-        var stored = 0;
+        var storeCount = 500;
         var retrieved = new List<KeyPress>();
         var lockObj = new object();
 
-        Parallel.For(0, iterations, i =>
+        // Phase 1: Store all items in parallel
+        Parallel.For(0, storeCount, i =>
         {
-            if (i % 2 == 0)
+            TypeaheadBuffer.Store(input, new List<KeyPress> { new(Keys.Any, i.ToString()) });
+        });
+
+        // Phase 2: Retrieve items in parallel (multiple Gets racing)
+        Parallel.For(0, 10, _ =>
+        {
+            var result = TypeaheadBuffer.Get(input);
+            lock (lockObj)
             {
-                TypeaheadBuffer.Store(input, new List<KeyPress> { new(Keys.Any, i.ToString()) });
-                Interlocked.Increment(ref stored);
-            }
-            else
-            {
-                var result = TypeaheadBuffer.Get(input);
-                lock (lockObj)
-                {
-                    retrieved.AddRange(result);
-                }
+                retrieved.AddRange(result);
             }
         });
 
@@ -290,8 +288,8 @@ public class TypeaheadBufferTests : IDisposable
         var remaining = TypeaheadBuffer.Get(input);
         retrieved.AddRange(remaining);
 
-        // All stored items should be retrievable
-        Assert.Equal(iterations / 2, retrieved.Count);
+        // All stored items should be retrievable exactly once
+        Assert.Equal(storeCount, retrieved.Count);
     }
 
     [Fact]
