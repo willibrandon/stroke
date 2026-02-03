@@ -507,29 +507,21 @@ public sealed partial class Win32Output : IOutput
     #region Cursor Visibility (Stub - Implemented in T041)
 
     /// <inheritdoc />
+    /// <remarks>
+    /// No-op on Win32 console, matching Python Prompt Toolkit behavior.
+    /// </remarks>
     public void HideCursor()
     {
-        using (_lock.EnterScope())
-        {
-            if (ConsoleApi.GetConsoleCursorInfo(_hConsole, out var info) != 0)
-            {
-                info.IsVisible = false;
-                ConsoleApi.SetConsoleCursorInfo(_hConsole, in info);
-            }
-        }
+        // No-op - matching Python Prompt Toolkit's pass implementation
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// No-op on Win32 console, matching Python Prompt Toolkit behavior.
+    /// </remarks>
     public void ShowCursor()
     {
-        using (_lock.EnterScope())
-        {
-            if (ConsoleApi.GetConsoleCursorInfo(_hConsole, out var info) != 0)
-            {
-                info.IsVisible = true;
-                ConsoleApi.SetConsoleCursorInfo(_hConsole, in info);
-            }
-        }
+        // No-op - matching Python Prompt Toolkit's pass implementation
     }
 
     /// <inheritdoc />
@@ -561,45 +553,39 @@ public sealed partial class Win32Output : IOutput
     /// <inheritdoc />
     public void SetAttributes(Attrs attrs, ColorDepth colorDepth)
     {
-        // Full implementation in Win32Output.Colors.cs (T021-T024)
-        // Basic stub for MVP
         using (_lock.EnterScope())
         {
             _hidden = attrs.Hidden ?? false;
 
-            if (colorDepth == ColorDepth.Depth1Bit)
+            // Start from the default attributes (preserves non-color bits)
+            int winAttrs = _defaultAttrs;
+
+            if (colorDepth != ColorDepth.Depth1Bit)
             {
-                // 1-bit depth ignores colors
-                return;
+                // Override the last four bits: foreground color
+                if (!string.IsNullOrEmpty(attrs.Color))
+                {
+                    winAttrs &= ~0x0F; // Clear fg bits
+                    winAttrs |= _colorLookupTable.LookupFgColor(attrs.Color);
+                }
+
+                // Override the next four bits: background color
+                if (!string.IsNullOrEmpty(attrs.BgColor))
+                {
+                    winAttrs &= ~0xF0; // Clear bg bits
+                    winAttrs |= _colorLookupTable.LookupBgColor(attrs.BgColor);
+                }
             }
 
-            int fgAttr = ForegroundColor.Gray; // Default
-            int bgAttr = BackgroundColor.Black; // Default
-
-            // Look up foreground color
-            if (!string.IsNullOrEmpty(attrs.Color))
-            {
-                fgAttr = _colorLookupTable.LookupFgColor(attrs.Color);
-            }
-
-            // Look up background color
-            if (!string.IsNullOrEmpty(attrs.BgColor))
-            {
-                bgAttr = _colorLookupTable.LookupBgColor(attrs.BgColor);
-            }
-
-            var combinedAttr = fgAttr | bgAttr;
-
-            // Handle reverse attribute (swap fg/bg)
+            // Reverse: swap the four-bit fg/bg groups
             if (attrs.Reverse ?? false)
             {
-                // Extract 4-bit fg and bg, swap them
-                var fg4 = combinedAttr & 0x0F;
-                var bg4 = (combinedAttr >> 4) & 0x0F;
-                combinedAttr = (fg4 << 4) | bg4;
+                winAttrs = (winAttrs & ~0xFF)
+                    | ((winAttrs & 0x0F) << 4)
+                    | ((winAttrs & 0xF0) >> 4);
             }
 
-            ConsoleApi.SetConsoleTextAttribute(_hConsole, (ushort)combinedAttr);
+            ConsoleApi.SetConsoleTextAttribute(_hConsole, (ushort)winAttrs);
         }
     }
 
