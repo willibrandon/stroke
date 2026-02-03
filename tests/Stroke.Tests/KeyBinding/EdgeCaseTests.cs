@@ -128,10 +128,11 @@ public sealed class EdgeCaseTests
 
         var result = kb.GetBindingsForKeys([Keys.ControlC]);
 
-        // Both match, but exact match (0 wildcards) should be first
+        // Both match. Sorted descending by AnyCount: [1 wildcard, 0 wildcards].
+        // KeyProcessor uses matches[^1] (last) to get the most specific (fewest wildcards).
         Assert.Equal(2, result.Count);
-        Assert.Equal((KeyHandlerCallable)Handler2, result[0].Handler);
-        Assert.Equal((KeyHandlerCallable)Handler1, result[1].Handler);
+        Assert.Equal((KeyHandlerCallable)Handler1, result[0].Handler); // 1 wildcard
+        Assert.Equal((KeyHandlerCallable)Handler2, result[1].Handler); // 0 wildcards (most specific)
     }
 
     #endregion

@@ -116,8 +116,9 @@ public sealed class BasicBindingsReadlineTests
     public void ReadlineMovement_HasNoFilter(Keys key)
     {
         var bindings = GetBindings(key);
-        // Find the named command binding (not the ignored one)
-        var namedBinding = bindings.FirstOrDefault(b =>
+        // Find the named command binding (not the ignored one).
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var namedBinding = bindings.LastOrDefault(b =>
             b.Handler != GetIgnoreHandler());
         Assert.NotNull(namedBinding);
         // Filter should be Always (no filter restriction)
@@ -153,8 +154,9 @@ public sealed class BasicBindingsReadlineTests
     public void ReadlineEditing_HasInsertModeFilter(Keys key)
     {
         var bindings = GetBindings(key);
-        // Find the named command binding (not the ignored one)
-        var namedBinding = bindings.FirstOrDefault(b =>
+        // Find the named command binding (not the ignored one).
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var namedBinding = bindings.LastOrDefault(b =>
             b.Handler != GetIgnoreHandler());
         Assert.NotNull(namedBinding);
         // Filter should not be Always (has a real filter)
@@ -162,15 +164,13 @@ public sealed class BasicBindingsReadlineTests
     }
 
     [Theory]
-    [InlineData(Keys.ControlH)]
-    [InlineData(Keys.Delete)]
-    [InlineData(Keys.ControlDelete)]
-    public void ReadlineEditing_DeletionKeys_HaveIfNoRepeatSaveBefore(Keys key)
+    [InlineData(Keys.ControlH, "backward-delete-char")]
+    [InlineData(Keys.Delete, "delete-char")]
+    [InlineData(Keys.ControlDelete, "delete-char")]
+    public void ReadlineEditing_DeletionKeys_HaveIfNoRepeatSaveBefore(Keys key, string commandName)
     {
-        var bindings = GetBindings(key);
-        var namedBinding = bindings.FirstOrDefault(b =>
-            b.Handler != GetIgnoreHandler() &&
-            b.Filter is not Always);
+        // Find the specific named command binding (not the Delete-selection handler)
+        var namedBinding = FindNamedCommandBinding(key, commandName);
         Assert.NotNull(namedBinding);
 
         var nonRepeatedEvent = CreateEvent(isRepeat: false);
@@ -187,7 +187,8 @@ public sealed class BasicBindingsReadlineTests
     public void ReadlineEditing_NonDeletionKeys_HaveDefaultSaveBefore(Keys key)
     {
         var bindings = GetBindings(key);
-        var namedBinding = bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var namedBinding = bindings.LastOrDefault(b =>
             b.Handler != GetIgnoreHandler() &&
             b.Filter is not Always);
         Assert.NotNull(namedBinding);

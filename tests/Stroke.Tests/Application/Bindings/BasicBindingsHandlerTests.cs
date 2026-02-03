@@ -97,7 +97,9 @@ public sealed class BasicBindingsHandlerTests : IDisposable
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(key)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
 
-        return bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        // Bindings are sorted descending by AnyCount, so the last match is most specific.
+        return bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler &&
             !IsNamedCommandHandler(b) &&
             (hasFilter ? b.Filter is not Always : b.Filter is Always) &&
@@ -166,7 +168,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlM)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
 
-        return bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        return bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler &&
             !IsNamedCommandHandler(b) &&
             b.Filter is not Always);
@@ -252,7 +255,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(key)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
 
-        return bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        return bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler &&
             !IsNamedCommandHandler(b) &&
             b.Filter is Always);
@@ -267,7 +271,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
     {
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlJ)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
-        var inlineBinding = bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var inlineBinding = bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler && !IsNamedCommandHandler(b));
         Assert.NotNull(inlineBinding);
     }
@@ -277,7 +282,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
     {
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlJ)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
-        var inlineBinding = bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var inlineBinding = bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler && !IsNamedCommandHandler(b));
         Assert.NotNull(inlineBinding);
         Assert.IsType<Always>(inlineBinding.Filter);
@@ -300,7 +306,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
 
             var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlJ)]);
             var ignoreHandler = _kb.Bindings[0].Handler;
-            var binding = bindings.FirstOrDefault(b =>
+            // Use LastOrDefault to get the most specific binding (fewest wildcards).
+            var binding = bindings.LastOrDefault(b =>
                 b.Handler != ignoreHandler && !IsNamedCommandHandler(b));
             Assert.NotNull(binding);
 
@@ -425,7 +432,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
     private Binding? FindPasteBinding()
     {
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.BracketedPaste)]);
-        return bindings.FirstOrDefault();
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        return bindings.LastOrDefault();
     }
 
     #endregion
@@ -487,7 +495,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
     {
         var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlZ)]);
         var ignoreHandler = _kb.Bindings[0].Handler;
-        return bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        return bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler && !IsNamedCommandHandler(b));
     }
 
@@ -585,7 +594,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
         var ignoreHandler = _kb.Bindings[0].Handler;
 
         // Find the inline handler binding with HasSelection filter
-        var selectionBinding = bindings.FirstOrDefault(b =>
+        // Use LastOrDefault to get the most specific binding (fewest wildcards).
+        var selectionBinding = bindings.LastOrDefault(b =>
             b.Handler != ignoreHandler &&
             !IsNamedCommandHandler(b) &&
             b.Filter is not Always);
@@ -607,7 +617,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
 
             var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.Delete)]);
             var ignoreHandler = _kb.Bindings[0].Handler;
-            var selectionBinding = bindings.FirstOrDefault(b =>
+            // Use LastOrDefault to get the most specific binding (fewest wildcards).
+            var selectionBinding = bindings.LastOrDefault(b =>
                 b.Handler != ignoreHandler &&
                 !IsNamedCommandHandler(b) &&
                 b.Filter is not Always);
@@ -637,7 +648,8 @@ public sealed class BasicBindingsHandlerTests : IDisposable
             // Find the Ctrl+D → delete-char named command binding
             var bindings = _kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlD)]);
             var ignoreHandler = _kb.Bindings[0].Handler;
-            var deleteCharBinding = bindings.FirstOrDefault(b =>
+            // Use LastOrDefault to get the most specific binding (fewest wildcards).
+            var deleteCharBinding = bindings.LastOrDefault(b =>
                 b.Handler != ignoreHandler &&
                 IsNamedCommandHandler(b) &&
                 b.Filter is not Always);

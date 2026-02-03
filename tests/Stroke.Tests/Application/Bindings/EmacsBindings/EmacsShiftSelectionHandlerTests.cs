@@ -83,12 +83,9 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ShiftRight)]);
 
-            // The first binding with ~has_selection filter is the start-selection handler
-            var startBinding = bindings.First(b =>
-            {
-                // No selection yet, so start-selection filter should match
-                return true;
-            });
+            // Use Last() to get the most specific binding (fewest wildcards).
+            // Bindings are sorted descending by AnyCount.
+            var startBinding = bindings.Last();
 
             var evt = CreateEvent(app, buffer, Keys.ShiftRight);
             startBinding.Handler(evt);
@@ -110,7 +107,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
         {
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ShiftRight)]);
-            var startBinding = bindings[0];
+            // Use [^1] to get the most specific binding (fewest wildcards).
+            var startBinding = bindings[^1];
 
             var evt = CreateEvent(app, buffer, Keys.ShiftRight);
             startBinding.Handler(evt);
@@ -129,7 +127,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
         {
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ShiftRight)]);
-            var startBinding = bindings[0];
+            // Use [^1] to get the most specific binding (fewest wildcards).
+            var startBinding = bindings[^1];
 
             var evt = CreateEvent(app, buffer, Keys.ShiftRight);
             startBinding.Handler(evt);
@@ -158,8 +157,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ShiftRight)]);
 
-            // The second binding (index 1) is the extend-selection handler
-            var extendBinding = bindings[1];
+            // With descending sort by AnyCount, extend-selection is at [^2] (second from end).
+            var extendBinding = bindings[^2];
 
             var evt = CreateEvent(app, buffer, Keys.ShiftRight);
             extendBinding.Handler(evt);
@@ -188,7 +187,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
 
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.Any)]);
-            var replaceBinding = bindings[0];
+            // Use [^1] to get the most specific binding (fewest wildcards).
+            var replaceBinding = bindings[^1];
 
             // Create event for typing 'X' (Keys.Any with data 'X')
             var evt = new KeyPressEvent(
@@ -226,7 +226,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
 
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ControlH)]);
-            var deleteBinding = bindings[0];
+            // Use [^1] to get the most specific binding (fewest wildcards).
+            var deleteBinding = bindings[^1];
 
             var evt = CreateEvent(app, buffer, Keys.ControlH);
             deleteBinding.Handler(evt);
@@ -254,7 +255,8 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
 
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.Right)]);
-            var cancelBinding = bindings[0];
+            // Use [^1] to get the most specific binding (fewest wildcards).
+            var cancelBinding = bindings[^1];
 
             var evt = CreateEvent(app, buffer, Keys.Right);
             cancelBinding.Handler(evt);
