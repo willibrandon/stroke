@@ -183,6 +183,9 @@ public static partial class ConsoleApi
     /// <summary>The wait operation failed.</summary>
     public const uint WAIT_FAILED = 0xFFFFFFFF;
 
+    /// <summary>The object was an abandoned mutex.</summary>
+    public const uint WAIT_ABANDONED_0 = 0x00000080;
+
     /// <summary>Infinite timeout value.</summary>
     public const uint INFINITE = 0xFFFFFFFF;
 
