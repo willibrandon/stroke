@@ -143,7 +143,7 @@ public static class EventLoopUtils
                 return;
             }
 
-            syncContext.Post(Schedule, null);
+            PostOrFallback(syncContext, Schedule);
         }
 
         PostOrFallback(syncContext, Schedule);

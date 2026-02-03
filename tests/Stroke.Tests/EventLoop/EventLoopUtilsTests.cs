@@ -76,17 +76,27 @@ public sealed class EventLoopUtilsTests : IDisposable
     }
 
     [Fact]
-    public async Task RunInExecutorWithContextAsync_RunsOnDifferentThread()
+    public void RunInExecutorWithContextAsync_RunsOnDifferentThread()
     {
-        var ct = TestContext.Current.CancellationToken;
+        // Use a dedicated non-pool thread as the caller so Task.Run (which
+        // dispatches to the thread pool) is guaranteed to use a different thread.
+        var callingThreadId = 0;
+        var bgThreadId = 0;
+        var done = new ManualResetEventSlim(false);
 
-        var bgThreadId = await EventLoopUtils.RunInExecutorWithContextAsync(() =>
+        var thread = new Thread(() =>
         {
-            return Environment.CurrentManagedThreadId;
-        }, ct);
+            callingThreadId = Environment.CurrentManagedThreadId;
+            bgThreadId = EventLoopUtils.RunInExecutorWithContextAsync(() =>
+            {
+                return Environment.CurrentManagedThreadId;
+            }).GetAwaiter().GetResult();
+            done.Set();
+        });
+        thread.Start();
+        done.Wait(TestContext.Current.CancellationToken);
 
-        // We just verify it completes and returns a valid thread ID
-        Assert.True(bgThreadId > 0);
+        Assert.NotEqual(callingThreadId, bgThreadId);
     }
 
     #endregion
@@ -309,21 +319,27 @@ public sealed class EventLoopUtilsTests : IDisposable
     public void CallSoonThreadSafe_WithDeadline_BusyContext_DefersUntilDeadline()
     {
         var executed = false;
+        long executedAtMs = -1;
         var context = new TestSynchronizationContext();
         SynchronizationContext.SetSynchronizationContext(context);
 
-        var deadline = TimeSpan.FromMilliseconds(100);
+        var deadlineMs = 100;
+        var deadline = TimeSpan.FromMilliseconds(deadlineMs);
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+
         EventLoopUtils.CallSoonThreadSafe(
-            () => { executed = true; },
+            () => { executed = true; executedAtMs = sw.ElapsedMilliseconds; },
             deadline);
 
         // Pump once — the schedule function runs but deadline hasn't expired.
         // It re-posts itself. We keep the context "busy" by injecting work.
         context.PumpOne();
 
+        // Verify callback has NOT executed yet (deadline hasn't expired).
+        Assert.False(executed, "Callback should not execute before deadline expires");
+
         // Keep pumping with interleaved work to simulate busy context.
         // The callback should defer until the deadline expires.
-        var sw = System.Diagnostics.Stopwatch.StartNew();
         while (!executed && sw.ElapsedMilliseconds < 500)
         {
             // Inject no-op work items to simulate contention
@@ -334,6 +350,10 @@ public sealed class EventLoopUtilsTests : IDisposable
         }
 
         Assert.True(executed, "Callback should have executed after deadline expired");
+        // Verify the callback did not fire before the deadline period elapsed.
+        // Allow some tolerance since Thread.Sleep granularity may cause slight undershoot.
+        Assert.True(executedAtMs >= deadlineMs - 50,
+            $"Callback ran at {executedAtMs}ms, expected no earlier than ~{deadlineMs}ms (with 50ms tolerance)");
     }
 
     #endregion
