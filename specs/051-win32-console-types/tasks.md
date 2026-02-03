@@ -61,8 +61,8 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 **Purpose**: Create directory structure and foundational files
 
-- [ ] T001 Create Win32Types directory at src/Stroke/Input/Windows/Win32Types/
-- [ ] T002 Create Win32Types test directory at tests/Stroke.Tests/Input/Windows/Win32Types/
+- [X] T001 Create Win32Types directory at src/Stroke/Input/Windows/Win32Types/
+- [X] T002 Create Win32Types test directory at tests/Stroke.Tests/Input/Windows/Win32Types/
 
 ---
 
@@ -74,49 +74,49 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 ### Core Building Block Structs (no dependencies)
 
-- [ ] T003 [P] [US1] Implement Coord struct in src/Stroke/Input/Windows/Win32Types/Coord.cs (4 bytes: X, Y as short; constructor; IEquatable<Coord>)
-- [ ] T004 [P] [US1] Implement SmallRect struct in src/Stroke/Input/Windows/Win32Types/SmallRect.cs (8 bytes: Left, Top, Right, Bottom as short; Width/Height properties; IEquatable<SmallRect>)
-- [ ] T005 [P] [US1] Implement CharInfo struct in src/Stroke/Input/Windows/Win32Types/CharInfo.cs (4 bytes: UnicodeChar, Attributes; constructor; IEquatable<CharInfo>)
-- [ ] T006 [P] [US1] Implement SecurityAttributes struct in src/Stroke/Input/Windows/Win32Types/SecurityAttributes.cs (12/24 bytes: Length, SecurityDescriptor, InheritHandle; Create() factory)
+- [X] T003 [P] [US1] Implement Coord struct in src/Stroke/Input/Windows/Win32Types/Coord.cs (4 bytes: X, Y as short; constructor; IEquatable<Coord>)
+- [X] T004 [P] [US1] Implement SmallRect struct in src/Stroke/Input/Windows/Win32Types/SmallRect.cs (8 bytes: Left, Top, Right, Bottom as short; Width/Height properties; IEquatable<SmallRect>)
+- [X] T005 [P] [US1] Implement CharInfo struct in src/Stroke/Input/Windows/Win32Types/CharInfo.cs (4 bytes: UnicodeChar, Attributes; constructor; IEquatable<CharInfo>)
+- [X] T006 [P] [US1] Implement SecurityAttributes struct in src/Stroke/Input/Windows/Win32Types/SecurityAttributes.cs (12/24 bytes: Length, SecurityDescriptor, InheritHandle; Create() factory)
 
 ### Tests for Core Building Block Structs
 
-- [ ] T007 [P] [US1] Create tests for Coord in tests/Stroke.Tests/Input/Windows/Win32Types/CoordTests.cs (construction, equality, size = 4 bytes)
-- [ ] T008 [P] [US1] Create tests for SmallRect in tests/Stroke.Tests/Input/Windows/Win32Types/SmallRectTests.cs (construction, Width/Height, equality, size = 8 bytes)
-- [ ] T009 [P] [US1] Create tests for CharInfo in tests/Stroke.Tests/Input/Windows/Win32Types/CharInfoTests.cs (construction, equality, size = 4 bytes)
-- [ ] T010 [P] [US1] Create tests for SecurityAttributes in tests/Stroke.Tests/Input/Windows/Win32Types/SecurityAttributesTests.cs (Create() factory, size = 12 or 24 bytes per platform)
+- [X] T007 [P] [US1] Create tests for Coord in tests/Stroke.Tests/Input/Windows/Win32Types/CoordTests.cs (construction, equality, size = 4 bytes)
+- [X] T008 [P] [US1] Create tests for SmallRect in tests/Stroke.Tests/Input/Windows/Win32Types/SmallRectTests.cs (construction, Width/Height, equality, size = 8 bytes)
+- [X] T009 [P] [US1] Create tests for CharInfo in tests/Stroke.Tests/Input/Windows/Win32Types/CharInfoTests.cs (construction, equality, size = 4 bytes)
+- [X] T010 [P] [US1] Create tests for SecurityAttributes in tests/Stroke.Tests/Input/Windows/Win32Types/SecurityAttributesTests.cs (Create() factory, size = 12 or 24 bytes per platform)
 
 ### Event Record Structs (depend on Coord)
 
-- [ ] T011 [P] [US1] Implement WindowBufferSizeRecord struct in src/Stroke/Input/Windows/Win32Types/WindowBufferSizeRecord.cs (4 bytes: Size as Coord)
-- [ ] T012 [P] [US1] Implement MenuEventRecord struct in src/Stroke/Input/Windows/Win32Types/MenuEventRecord.cs (4 bytes: CommandId as uint)
-- [ ] T013 [P] [US1] Implement FocusEventRecord struct in src/Stroke/Input/Windows/Win32Types/FocusEventRecord.cs (4 bytes: SetFocus as int; HasFocus property)
+- [X] T011 [P] [US1] Implement WindowBufferSizeRecord struct in src/Stroke/Input/Windows/Win32Types/WindowBufferSizeRecord.cs (4 bytes: Size as Coord)
+- [X] T012 [P] [US1] Implement MenuEventRecord struct in src/Stroke/Input/Windows/Win32Types/MenuEventRecord.cs (4 bytes: CommandId as uint)
+- [X] T013 [P] [US1] Implement FocusEventRecord struct in src/Stroke/Input/Windows/Win32Types/FocusEventRecord.cs (4 bytes: SetFocus as int; HasFocus property)
 
 ### Tests for Simple Event Records
 
-- [ ] T014 [P] [US1] Create tests for WindowBufferSizeRecord in tests/Stroke.Tests/Input/Windows/Win32Types/WindowBufferSizeRecordTests.cs (size = 4 bytes)
-- [ ] T015 [P] [US1] Create tests for MenuEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/MenuEventRecordTests.cs (size = 4 bytes)
-- [ ] T016 [P] [US1] Create tests for FocusEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/FocusEventRecordTests.cs (size = 4 bytes, HasFocus property)
+- [X] T014 [P] [US1] Create tests for WindowBufferSizeRecord in tests/Stroke.Tests/Input/Windows/Win32Types/WindowBufferSizeRecordTests.cs (size = 4 bytes)
+- [X] T015 [P] [US1] Create tests for MenuEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/MenuEventRecordTests.cs (size = 4 bytes)
+- [X] T016 [P] [US1] Create tests for FocusEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/FocusEventRecordTests.cs (size = 4 bytes, HasFocus property)
 
 ### Complex Event Record Structs (depend on enums from US2 - but can define with uint placeholders initially)
 
-- [ ] T017 [US1] Implement KeyEventRecord struct in src/Stroke/Input/Windows/Win32Types/KeyEventRecord.cs (16 bytes: KeyDown, RepeatCount, VirtualKeyCode, VirtualScanCode, UnicodeChar, ControlKeyState; IsKeyDown property)
-- [ ] T018 [US1] Implement MouseEventRecord struct in src/Stroke/Input/Windows/Win32Types/MouseEventRecord.cs (16 bytes: MousePosition as Coord, ButtonState, ControlKeyState, EventFlags)
+- [X] T017 [US1] Implement KeyEventRecord struct in src/Stroke/Input/Windows/Win32Types/KeyEventRecord.cs (16 bytes: KeyDown, RepeatCount, VirtualKeyCode, VirtualScanCode, UnicodeChar, ControlKeyState; IsKeyDown property)
+- [X] T018 [US1] Implement MouseEventRecord struct in src/Stroke/Input/Windows/Win32Types/MouseEventRecord.cs (16 bytes: MousePosition as Coord, ButtonState, ControlKeyState, EventFlags)
 
 ### Tests for Complex Event Records
 
-- [ ] T019 [P] [US1] Create tests for KeyEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/KeyEventRecordTests.cs (size = 16 bytes, IsKeyDown property)
-- [ ] T020 [P] [US1] Create tests for MouseEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/MouseEventRecordTests.cs (size = 16 bytes)
+- [X] T019 [P] [US1] Create tests for KeyEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/KeyEventRecordTests.cs (size = 16 bytes, IsKeyDown property)
+- [X] T020 [P] [US1] Create tests for MouseEventRecord in tests/Stroke.Tests/Input/Windows/Win32Types/MouseEventRecordTests.cs (size = 16 bytes)
 
 ### Union Struct (depends on all event records)
 
-- [ ] T021 [US1] Implement InputRecord union struct in src/Stroke/Input/Windows/Win32Types/InputRecord.cs (20 bytes: LayoutKind.Explicit; EventType at offset 0; all event records at offset 4)
-- [ ] T022 [US1] Create tests for InputRecord in tests/Stroke.Tests/Input/Windows/Win32Types/InputRecordTests.cs (size = 20 bytes, field offsets via Marshal.OffsetOf)
+- [X] T021 [US1] Implement InputRecord union struct in src/Stroke/Input/Windows/Win32Types/InputRecord.cs (20 bytes: LayoutKind.Explicit; EventType at offset 0; all event records at offset 4)
+- [X] T022 [US1] Create tests for InputRecord in tests/Stroke.Tests/Input/Windows/Win32Types/InputRecordTests.cs (size = 20 bytes, field offsets via Marshal.OffsetOf)
 
 ### Composite Struct (depends on Coord, SmallRect)
 
-- [ ] T023 [US1] Implement ConsoleScreenBufferInfo struct in src/Stroke/Input/Windows/Win32Types/ConsoleScreenBufferInfo.cs (22 bytes: Size, CursorPosition as Coord; Attributes as ushort; Window as SmallRect; MaximumWindowSize as Coord)
-- [ ] T024 [US1] Create tests for ConsoleScreenBufferInfo in tests/Stroke.Tests/Input/Windows/Win32Types/ConsoleScreenBufferInfoTests.cs (size = 22 bytes)
+- [X] T023 [US1] Implement ConsoleScreenBufferInfo struct in src/Stroke/Input/Windows/Win32Types/ConsoleScreenBufferInfo.cs (22 bytes: Size, CursorPosition as Coord; Attributes as ushort; Window as SmallRect; MaximumWindowSize as Coord)
+- [X] T024 [US1] Create tests for ConsoleScreenBufferInfo in tests/Stroke.Tests/Input/Windows/Win32Types/ConsoleScreenBufferInfoTests.cs (size = 22 bytes)
 
 **Checkpoint**: All 11 struct types implemented and verified. US1 acceptance scenarios satisfied.
 
@@ -130,16 +130,16 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 ### Enum Implementations
 
-- [ ] T025 [P] [US2] Implement EventType enum in src/Stroke/Input/Windows/Win32Types/EventType.cs (ushort: KeyEvent=0x0001, MouseEvent=0x0002, WindowBufferSizeEvent=0x0004, MenuEvent=0x0008, FocusEvent=0x0010)
-- [ ] T026 [P] [US2] Implement ControlKeyState flags enum in src/Stroke/Input/Windows/Win32Types/ControlKeyState.cs (uint with [Flags]: 10 values from None=0x0000 to EnhancedKey=0x0100)
-- [ ] T027 [P] [US2] Implement MouseEventFlags flags enum in src/Stroke/Input/Windows/Win32Types/MouseEventFlags.cs (uint with [Flags]: 5 values from None=0x0000 to MouseHWheeled=0x0008)
-- [ ] T028 [P] [US2] Implement MouseButtonState flags enum in src/Stroke/Input/Windows/Win32Types/MouseButtonState.cs (uint with [Flags]: 6 values from None=0x0000 to FromLeft4thButtonPressed=0x0010)
-- [ ] T029 [P] [US2] Implement ConsoleInputMode flags enum in src/Stroke/Input/Windows/Win32Types/ConsoleInputMode.cs (uint with [Flags]: 10 values from None=0x0000 to EnableVirtualTerminalInput=0x0200)
-- [ ] T030 [P] [US2] Implement ConsoleOutputMode flags enum in src/Stroke/Input/Windows/Win32Types/ConsoleOutputMode.cs (uint with [Flags]: 6 values from None=0x0000 to EnableLvbGridWorldwide=0x0010)
+- [X] T025 [P] [US2] Implement EventType enum in src/Stroke/Input/Windows/Win32Types/EventType.cs (ushort: KeyEvent=0x0001, MouseEvent=0x0002, WindowBufferSizeEvent=0x0004, MenuEvent=0x0008, FocusEvent=0x0010)
+- [X] T026 [P] [US2] Implement ControlKeyState flags enum in src/Stroke/Input/Windows/Win32Types/ControlKeyState.cs (uint with [Flags]: 10 values from None=0x0000 to EnhancedKey=0x0100)
+- [X] T027 [P] [US2] Implement MouseEventFlags flags enum in src/Stroke/Input/Windows/Win32Types/MouseEventFlags.cs (uint with [Flags]: 5 values from None=0x0000 to MouseHWheeled=0x0008)
+- [X] T028 [P] [US2] Implement MouseButtonState flags enum in src/Stroke/Input/Windows/Win32Types/MouseButtonState.cs (uint with [Flags]: 6 values from None=0x0000 to FromLeft4thButtonPressed=0x0010)
+- [X] T029 [P] [US2] Implement ConsoleInputMode flags enum in src/Stroke/Input/Windows/Win32Types/ConsoleInputMode.cs (uint with [Flags]: 10 values from None=0x0000 to EnableVirtualTerminalInput=0x0200)
+- [X] T030 [P] [US2] Implement ConsoleOutputMode flags enum in src/Stroke/Input/Windows/Win32Types/ConsoleOutputMode.cs (uint with [Flags]: 6 values from None=0x0000 to EnableLvbGridWorldwide=0x0010)
 
 ### Enum Tests
 
-- [ ] T031 [US2] Create comprehensive enum tests in tests/Stroke.Tests/Input/Windows/Win32Types/EnumTests.cs (verify all hex values, [Flags] behavior, bitwise operations: LeftCtrlPressed | ShiftPressed = 0x0018, EnableProcessedInput | EnableMouseInput = 0x0011)
+- [X] T031 [US2] Create comprehensive enum tests in tests/Stroke.Tests/Input/Windows/Win32Types/EnumTests.cs (verify all hex values, [Flags] behavior, bitwise operations: LeftCtrlPressed | ShiftPressed = 0x0018, EnableProcessedInput | EnableMouseInput = 0x0011)
 
 **Checkpoint**: All 6 enum types implemented with verified hex values. US2 acceptance scenarios satisfied.
 
@@ -151,8 +151,8 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 **Independent Test**: Verify constant values match Windows API definitions (-10, -11, -12).
 
-- [ ] T032 [P] [US4] Implement StdHandles static class in src/Stroke/Input/Windows/StdHandles.cs (STD_INPUT_HANDLE=-10, STD_OUTPUT_HANDLE=-11, STD_ERROR_HANDLE=-12)
-- [ ] T033 [P] [US4] Create tests for StdHandles in tests/Stroke.Tests/Input/Windows/Win32Types/StdHandlesTests.cs (verify constant values)
+- [X] T032 [P] [US4] Implement StdHandles static class in src/Stroke/Input/Windows/StdHandles.cs (STD_INPUT_HANDLE=-10, STD_OUTPUT_HANDLE=-11, STD_ERROR_HANDLE=-12)
+- [X] T033 [P] [US4] Create tests for StdHandles in tests/Stroke.Tests/Input/Windows/Win32Types/StdHandlesTests.cs (verify constant values)
 
 **Checkpoint**: US4 complete. Handle constants available for P/Invoke calls.
 
@@ -166,15 +166,15 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 ### P/Invoke Implementations
 
-- [ ] T034 [US3] Add GetConsoleScreenBufferInfo P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, SetLastError=true, out ConsoleScreenBufferInfo)
-- [ ] T035 [US3] Add ReadConsoleInput P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, EntryPoint="ReadConsoleInputW", [Out] InputRecord[], out count)
-- [ ] T036 [US3] Add WriteConsoleOutput P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, EntryPoint="WriteConsoleOutputW", [In] CharInfo[], ref SmallRect)
-- [ ] T037 [US3] Add SetConsoleCursorPosition P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, Coord parameter)
+- [X] T034 [US3] Add GetConsoleScreenBufferInfo P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, SetLastError=true, out ConsoleScreenBufferInfo)
+- [X] T035 [US3] Add ReadConsoleInput P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, EntryPoint="ReadConsoleInputW", [Out] InputRecord[], out count)
+- [X] T036 [US3] Add WriteConsoleOutput P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, EntryPoint="WriteConsoleOutputW", [In] CharInfo[], ref SmallRect)
+- [X] T037 [US3] Add SetConsoleCursorPosition P/Invoke to src/Stroke/Input/Windows/ConsoleApi.cs (LibraryImport, Coord parameter)
 
 ### P/Invoke Tests (Windows-only, conditional)
 
-- [ ] T038 [US3] Create P/Invoke tests in tests/Stroke.Tests/Input/Windows/Win32Types/NativeMethodsTests.cs (Windows-only: GetStdHandle returns valid handle, GetConsoleScreenBufferInfo populates fields, CA1416 analyzer warning on non-Windows)
-- [ ] T038a [US3] Verify existing ConsoleApi methods still function after extension (GetStdHandle, GetConsoleMode, SetConsoleMode, CreateEvent, SetEvent, ResetEvent, CloseHandle, WaitForMultipleObjects)
+- [X] T038 [US3] Create P/Invoke tests in tests/Stroke.Tests/Input/Windows/Win32Types/NativeMethodsTests.cs (Windows-only: GetStdHandle returns valid handle, GetConsoleScreenBufferInfo populates fields, CA1416 analyzer warning on non-Windows)
+- [X] T038a [US3] Verify existing ConsoleApi methods still function after extension (GetStdHandle, GetConsoleMode, SetConsoleMode, CreateEvent, SetEvent, ResetEvent, CloseHandle, WaitForMultipleObjects)
 
 **Checkpoint**: All P/Invoke methods implemented. US3 acceptance scenarios satisfied on Windows. Existing ConsoleApi functionality verified.
 
@@ -184,14 +184,14 @@ tests/Stroke.Tests/Input/Windows/Win32Types/
 
 **Purpose**: Final validation, documentation, and cleanup
 
-- [ ] T039 Run all struct size verification tests to confirm SC-001
-- [ ] T040 Verify InputRecord field offsets match SC-002 (Marshal.OffsetOf verification)
-- [ ] T041 Verify enum values match Microsoft documentation per SC-003
-- [ ] T042 Verify P/Invoke calls work on Windows per SC-004
-- [ ] T043 Verify types compile on non-Windows platforms per SC-005
-- [ ] T044 Verify all Python win32_types.py types are ported per SC-006
-- [ ] T045 [P] Ensure XML documentation on all public types per NFR-007
-- [ ] T046 Run quickstart.md code examples as validation
+- [X] T039 Run all struct size verification tests to confirm SC-001
+- [X] T040 Verify InputRecord field offsets match SC-002 (Marshal.OffsetOf verification)
+- [X] T041 Verify enum values match Microsoft documentation per SC-003
+- [X] T042 Verify P/Invoke calls work on Windows per SC-004
+- [X] T043 Verify types compile on non-Windows platforms per SC-005
+- [X] T044 Verify all Python win32_types.py types are ported per SC-006
+- [X] T045 [P] Ensure XML documentation on all public types per NFR-007
+- [X] T046 Run quickstart.md code examples as validation
 
 ---
 
