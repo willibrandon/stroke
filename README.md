@@ -513,6 +513,19 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Cross-platform compilation (types compile everywhere; P/Invoke Windows-only via `[SupportedOSPlatform]`)
   - Thread-safe via immutable value types (142 tests, 100% struct size verification)
 
+- **Win32 Console Output** — Windows Console API-based `IOutput` implementation for legacy terminals, ported from `win32.py`
+  - `Win32Output` sealed class implementing all 30+ `IOutput` methods via kernel32.dll P/Invoke
+  - Direct cursor control: `SetConsoleCursorPosition`, `GetConsoleCursorInfo`, `SetConsoleCursorInfo`
+  - 16-color (4-bit) palette via `FillConsoleOutputAttribute` and `SetConsoleTextAttribute`
+  - `ColorLookupTable` thread-safe mapper: 17 ANSI colors + Euclidean RGB distance matching to closest palette entry
+  - `ForegroundColor` / `BackgroundColor` static classes with Win32 attribute constants (bits 0-3, 4-7)
+  - Alternate screen buffer via `CreateConsoleScreenBuffer` + `SetConsoleActiveScreenBuffer`
+  - Screen erase: `FillConsoleOutputCharacter` + `FillConsoleOutputAttribute` for clear operations
+  - Character-by-character `WriteConsoleW` rendering (Windows Console bug workaround)
+  - `NoConsoleScreenBufferError` context-aware exception with xterm/winpty detection
+  - `ConsoleCursorInfo` struct with uint-based Visible field for P/Invoke compatibility
+  - Thread-safe via `System.Threading.Lock` on mutable buffer state (67 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)

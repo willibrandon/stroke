@@ -55,4 +55,17 @@ public readonly struct Coord : IEquatable<Coord>
 
     /// <inheritdoc />
     public override string ToString() => $"({X}, {Y})";
+
+    /// <summary>
+    /// Packs the coordinate into a single int for pass-by-value P/Invoke calls.
+    /// </summary>
+    /// <returns>The coordinate packed as (Y &lt;&lt; 16) | (X &amp; 0xFFFF).</returns>
+    /// <remarks>
+    /// <para>
+    /// Some Win32 console APIs (FillConsoleOutputCharacter, FillConsoleOutputAttribute)
+    /// expect COORD passed by value. Due to 64-bit ABI differences, passing the struct
+    /// directly can cause issues. Packing into a single int avoids these problems.
+    /// </para>
+    /// </remarks>
+    public int ToInt32() => (Y << 16) | (X & 0xFFFF);
 }

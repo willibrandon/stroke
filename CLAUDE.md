@@ -442,11 +442,13 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (stateless utilities, in-memory only) (050-event-loop-utils)
 - C# 13 / .NET 10 + .NET BCL only (System.Runtime.InteropServices, System.Runtime.Versioning) (051-win32-console-types)
 - N/A (in-memory struct types only) (051-win32-console-types)
+- C# 13 / .NET 10+ + System.Runtime.InteropServices (P/Invoke), Stroke.Input.Windows.Win32Types, Stroke.Styles, Stroke.Output (052-win32-console-output)
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,503 tests**.
+Most recent first. Total test count: **8,570 tests**.
 
+- 052-win32-console-output: Win32Output IOutput implementation — kernel32.dll P/Invoke for legacy Windows console, ColorLookupTable (17 ANSI colors + Euclidean RGB distance matching), ForegroundColor/BackgroundColor static constants, NoConsoleScreenBufferError context-aware exception, character-by-character WriteConsoleW rendering, alternate screen buffer support, 16-color (4-bit) palette
 - 051-win32-console-types: Win32Types namespace — 11 P/Invoke structs (Coord, SmallRect, InputRecord union, KeyEventRecord, MouseEventRecord, ConsoleScreenBufferInfo, CharInfo, etc.), 6 flags enums (EventType, ControlKeyState, MouseEventFlags, MouseButtonState, ConsoleInputMode, ConsoleOutputMode), StdHandles constants, 4 new ConsoleApi P/Invoke methods (GetConsoleScreenBufferInfo, ReadConsoleInput, WriteConsoleOutput, SetConsoleCursorPosition)
 - 050-event-loop-utils: EventLoopUtils static class — RunInExecutorWithContextAsync (ExecutionContext preservation across threads), CallSoonThreadSafe (deadline-based re-post coalescing via SynchronizationContext), GetTracebackFromContext (exception dictionary extraction)
 - 049-patch-stdout: StdoutProxy TextWriter, StdoutPatching.PatchStdout(), FlushItem — producer-consumer flush thread, newline-gated buffering, RunInTerminal integration
