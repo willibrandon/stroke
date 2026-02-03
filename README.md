@@ -537,6 +537,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `[SupportedOSPlatform("windows")]` attribute for platform safety
   - Thread-safe via delegation to thread-safe underlying outputs (19 tests, >80% coverage)
 
+- **Win32 Event Loop Utilities** — Windows-specific event loop primitives, ported from `eventloop/win32.py`
+  - `Win32EventLoopUtils` static class with 2 constants + 6 public methods
+  - `WaitForHandles` synchronous multiplexed wait returning signaled handle or `null` on timeout
+  - `WaitForHandlesAsync` async version with 100ms polling loop and `CancellationToken` support
+  - `CreateWin32Event` / `SetWin32Event` / `ResetWin32Event` / `CloseWin32Event` for manual-reset event lifecycle
+  - `WaitTimeout` (0x00000102) and `Infinite` (-1) constants matching Python Prompt Toolkit
+  - `ArgumentOutOfRangeException` for >64 handles (MAXIMUM_WAIT_OBJECTS limit)
+  - `Win32Exception` on API failure with `Marshal.GetLastWin32Error()` error codes
+  - `[SupportedOSPlatform("windows")]` attribute for platform safety
+  - Thread-safe via stateless design (24 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)

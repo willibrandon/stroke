@@ -25,8 +25,8 @@
 
 **Purpose**: Create source and test file scaffolding
 
-- [ ] T001 Create `Win32EventLoopUtils.cs` with class declaration, platform attribute, namespace, and XML doc comments in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T002 [P] Create `Win32EventLoopUtilsTests.cs` test class with `[PlatformFact]` infrastructure in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T001 Create `Win32EventLoopUtils.cs` with class declaration, platform attribute, namespace, and XML doc comments in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T002 [P] Create `Win32EventLoopUtilsTests.cs` test class with `[PlatformFact]` infrastructure in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
 
 ---
 
@@ -36,9 +36,9 @@
 
 **⚠️ CRITICAL**: All user stories depend on these constants being defined
 
-- [ ] T003 Add `WaitTimeout` constant (0x00000102) with XML doc in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T004 [P] Add `Infinite` constant (-1) with XML doc in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T005 Verify P/Invoke methods exist in `src/Stroke/Input/Windows/ConsoleApi.cs`: WaitForMultipleObjects, CreateEvent, SetEvent, ResetEvent, CloseHandle
+- [x] T003 Add `WaitTimeout` constant (0x00000102) with XML doc in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T004 [P] Add `Infinite` constant (-1) with XML doc in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T005 Verify P/Invoke methods exist in `src/Stroke/Input/Windows/ConsoleApi.cs`: WaitForMultipleObjects, CreateEvent, SetEvent, ResetEvent, CloseHandle
 
 **Checkpoint**: Constants defined, P/Invoke verified — user story implementation can begin
 
@@ -54,17 +54,17 @@
 
 > **Write tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T006 [P] [US1] Test: `WaitForHandles_WithSignaledHandle_ReturnsSignaledHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T006b [P] [US1] Test: `WaitForHandles_WithMultipleHandles_ReturnsCorrectSignaledHandle` (5 handles, signal #3) in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T007 [P] [US1] Test: `WaitForHandles_WithTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T008 [P] [US1] Test: `WaitForHandles_WithEmptyList_ReturnsNullImmediately` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T009 [P] [US1] Test: `WaitForHandles_WithAlreadySignaledHandle_ReturnsImmediately` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T010 [P] [US1] Test: `WaitForHandles_ExceedingMaxHandles_ThrowsArgumentOutOfRangeException` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T011 [P] [US1] Test: `WaitForHandles_WithInvalidHandle_ThrowsWin32Exception` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T006 [P] [US1] Test: `WaitForHandles_WithSignaledHandle_ReturnsSignaledHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T006b [P] [US1] Test: `WaitForHandles_WithMultipleHandles_ReturnsCorrectSignaledHandle` (5 handles, signal #3) in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T007 [P] [US1] Test: `WaitForHandles_WithTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T008 [P] [US1] Test: `WaitForHandles_WithEmptyList_ReturnsNullImmediately` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T009 [P] [US1] Test: `WaitForHandles_WithAlreadySignaledHandle_ReturnsImmediately` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T010 [P] [US1] Test: `WaitForHandles_ExceedingMaxHandles_ThrowsArgumentOutOfRangeException` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T011 [P] [US1] Test: `WaitForHandles_WithInvalidHandle_ThrowsWin32Exception` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Implement `WaitForHandles` method: empty list check, handle count validation (≤64), IReadOnlyList to array conversion, WaitForMultipleObjects call, index-to-handle mapping, timeout/failure handling in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T012 [US1] Implement `WaitForHandles` method: empty list check, handle count validation (≤64), IReadOnlyList to array conversion, WaitForMultipleObjects call, index-to-handle mapping, timeout/failure handling in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
 
 **Checkpoint**: User Story 1 complete — can wait on multiple handles synchronously
 
@@ -80,19 +80,19 @@
 
 > **Write tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T013 [P] [US2] Test: `CreateWin32Event_ReturnsValidHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T014 [P] [US2] Test: `CreateWin32Event_ReturnsNonSignaledEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T015 [P] [US2] Test: `SetWin32Event_SignalsEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T016 [P] [US2] Test: `ResetWin32Event_UnsignalsEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T017 [P] [US2] Test: `CloseWin32Event_ReleasesHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T018 [P] [US2] Test: `CloseWin32Event_DoubleClose_ThrowsWin32Exception` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T013 [P] [US2] Test: `CreateWin32Event_ReturnsValidHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T014 [P] [US2] Test: `CreateWin32Event_ReturnsNonSignaledEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T015 [P] [US2] Test: `SetWin32Event_SignalsEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T016 [P] [US2] Test: `ResetWin32Event_UnsignalsEvent` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T017 [P] [US2] Test: `CloseWin32Event_ReleasesHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T018 [P] [US2] Test: `CloseWin32Event_DoubleClose_ThrowsWin32Exception` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement `CreateWin32Event` method: call CreateEvent (manual-reset, non-signaled, unnamed), check for IntPtr.Zero, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T020 [P] [US2] Implement `SetWin32Event` method: call SetEvent, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T021 [P] [US2] Implement `ResetWin32Event` method: call ResetEvent, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T022 [P] [US2] Implement `CloseWin32Event` method: call CloseHandle, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T019 [US2] Implement `CreateWin32Event` method: call CreateEvent (manual-reset, non-signaled, unnamed), check for IntPtr.Zero, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T020 [P] [US2] Implement `SetWin32Event` method: call SetEvent, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T021 [P] [US2] Implement `ResetWin32Event` method: call ResetEvent, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T022 [P] [US2] Implement `CloseWin32Event` method: call CloseHandle, check return value, throw Win32Exception on failure in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
 
 **Checkpoint**: User Story 2 complete — can create and manage event lifecycle
 
@@ -108,15 +108,15 @@
 
 > **Write tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T023 [P] [US3] Test: `WaitForHandlesAsync_WithSignaledHandle_ReturnsSignaledHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T024 [P] [US3] Test: `WaitForHandlesAsync_WithCancellation_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T025 [P] [US3] Test: `WaitForHandlesAsync_WithTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T026 [P] [US3] Test: `WaitForHandlesAsync_CancellationBeforeTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T027 [P] [US3] Test: `WaitForHandlesAsync_DoesNotBlockCallingThread` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T023 [P] [US3] Test: `WaitForHandlesAsync_WithSignaledHandle_ReturnsSignaledHandle` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T024 [P] [US3] Test: `WaitForHandlesAsync_WithCancellation_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T025 [P] [US3] Test: `WaitForHandlesAsync_WithTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T026 [P] [US3] Test: `WaitForHandlesAsync_CancellationBeforeTimeout_ReturnsNull` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T027 [P] [US3] Test: `WaitForHandlesAsync_DoesNotBlockCallingThread` in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Implement `WaitForHandlesAsync` method: Task.Run wrapper, 100ms polling loop for infinite timeout, cancellation token checking, finite timeout passthrough in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T028 [US3] Implement `WaitForHandlesAsync` method: Task.Run wrapper, 100ms polling loop for infinite timeout, cancellation token checking, finite timeout passthrough in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
 
 **Checkpoint**: User Story 3 complete — async wait with cancellation fully functional
 
@@ -126,14 +126,14 @@
 
 **Purpose**: Validation, documentation, success criteria verification
 
-- [ ] T029 Verify all XML doc comments are complete and accurate in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
-- [ ] T030 [P] Run all tests and verify 100% pass rate on Windows
-- [ ] T031 [P] SC-001 validation: Add stress test for 1000 iterations verifying correct handle identification in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T032 [P] SC-002 validation: Add timing test verifying timeout accuracy within 10% in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T033 [P] SC-003 validation: Add resource leak test for 10,000 create/close iterations in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T033b [P] Thread safety validation: Add concurrent stress test (10 threads, 100 iterations each waiting on same handles) in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
-- [ ] T034 Run quickstart.md examples manually to verify API usability
-- [ ] T035 Final review: Verify requirements traceability (all 15 FR requirements implemented)
+- [x] T029 Verify all XML doc comments are complete and accurate in `src/Stroke/EventLoop/Win32EventLoopUtils.cs`
+- [x] T030 [P] Run all tests and verify 100% pass rate on Windows
+- [x] T031 [P] SC-001 validation: Add stress test for 1000 iterations verifying correct handle identification in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T032 [P] SC-002 validation: Add timing test verifying timeout accuracy within 10% in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T033 [P] SC-003 validation: Add resource leak test for 10,000 create/close iterations in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T033b [P] Thread safety validation: Add concurrent stress test (10 threads, 100 iterations each waiting on same handles) in `tests/Stroke.Tests/EventLoop/Win32EventLoopUtilsTests.cs`
+- [x] T034 Run quickstart.md examples manually to verify API usability
+- [x] T035 Final review: Verify requirements traceability (all 15 FR requirements implemented)
 
 ---
 
