@@ -23,8 +23,8 @@
 
 **Purpose**: Create file structure and shared utilities
 
-- [ ] T001 Create `KeyboardInterrupt` exception class in `src/Stroke/Shortcuts/KeyboardInterrupt.cs` with standard exception constructors (default, message, message+inner)
-- [ ] T002 [P] Create private helper method `CreateDefaultChoiceInputStyle()` returning `Style.FromDict()` with `frame.border=#884444` and `selected-option=bold` - this will be placed in ChoiceInput.cs
+- [x] T001 Create `KeyboardInterrupt` exception class in `src/Stroke/Shortcuts/KeyboardInterrupt.cs` with standard exception constructors (default, message, message+inner)
+- [x] T002 [P] Create private helper method `CreateDefaultChoiceInputStyle()` returning `Style.FromDict()` with `frame.border=#884444` and `selected-option=bold` - this will be placed in ChoiceInput.cs
 
 ---
 
@@ -34,12 +34,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Create `ChoiceInput<T>` sealed class skeleton in `src/Stroke/Shortcuts/ChoiceInput.cs` with:
+- [x] T003 Create `ChoiceInput<T>` sealed class skeleton in `src/Stroke/Shortcuts/ChoiceInput.cs` with:
   - Constructor accepting all 12 parameters from contract (message, options, defaultValue, mouseSupport, style, symbol, bottomToolbar, showFrame, enableSuspend, enableInterrupt, interruptException, keyBindings)
   - Read-only properties for all configuration (Message, Options, Default, MouseSupport, Style, Symbol, BottomToolbar, ShowFrame, EnableSuspend, EnableInterrupt, InterruptException, KeyBindings)
   - Parameter validation: ArgumentNullException if options is null, ArgumentException if options is empty [FR-018]
   - Default value handling: interruptException defaults to typeof(KeyboardInterrupt), enableInterrupt defaults to true
-- [ ] T004 Implement private `CreateApplication()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` that builds:
+- [x] T004 Implement private `CreateApplication()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` that builds:
   - RadioList<T> widget with options, showNumbers=true, selectCharacter=symbol, defaultValue
   - Layout using HSplit with Box(Label) for message, Box(RadioList) for options
   - Application<T> with fullScreen=false, mouseSupport parameter
@@ -57,18 +57,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Configure RadioList in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` for navigation [FR-004, FR-005]:
+- [x] T005 [US1] Configure RadioList in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` for navigation [FR-004, FR-005]:
   - Up/Down arrow navigation with wrap-around (delegated to RadioList)
   - Number keys 1-9 for direct selection (delegated to RadioList showNumbers=true)
   - k/j vi-style navigation (delegated to RadioList)
-- [ ] T006 [US1] Add Enter key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-006]:
+- [x] T006 [US1] Add Enter key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-006]:
   - Bind Enter to exit Application with RadioList.CurrentValue as result
   - Use Application.Exit(result) pattern
-- [ ] T007 [US1] Implement `Prompt()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-016]:
+- [x] T007 [US1] Implement `Prompt()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-016]:
   - Call CreateApplication() to build Application<T>
   - Call Application.Run() to execute
   - Return the typed result T
-- [ ] T008 [US1] Implement default value selection in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-007]:
+- [x] T008 [US1] Implement default value selection in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-007]:
   - Pass defaultValue to RadioList constructor
   - If default doesn't match any option, RadioList selects first option (built-in behavior)
 
@@ -84,11 +84,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Add Ctrl+C key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-008]:
+- [x] T009 [US2] Add Ctrl+C key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-008]:
   - Create Condition filter from EnableInterrupt FilterOrBool
   - Bind Ctrl+C with filter to Application.Exit(exception: interruptException instance)
   - Also bind SIGINT signal handler with same behavior
-- [ ] T010 [US2] Ensure Ctrl+C does nothing when EnableInterrupt evaluates to false [FR-008]:
+- [x] T010 [US2] Ensure Ctrl+C does nothing when EnableInterrupt evaluates to false [FR-008]:
   - Key binding filter prevents handler execution when condition is false
   - Verify prompt remains displayed awaiting selection
 
@@ -104,15 +104,15 @@
 
 ### Implementation for User Story 6
 
-- [ ] T011 [US6] Implement `PromptAsync()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-016]:
+- [x] T011 [US6] Implement `PromptAsync()` method in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-016]:
   - Call CreateApplication() to build Application<T>
   - Call Application.RunAsync() and await result
   - Return the typed result T
-- [ ] T012 [US6] Add `Dialogs.Choice<T>()` convenience method in `src/Stroke/Shortcuts/Dialogs.cs` [FR-017]:
+- [x] T012 [US6] Add `Dialogs.Choice<T>()` convenience method in `src/Stroke/Shortcuts/Dialogs.cs` [FR-017]:
   - Accept all 12 parameters matching ChoiceInput constructor
   - Create ChoiceInput<T> instance
   - Call and return Prompt() result
-- [ ] T013 [US6] Add `Dialogs.ChoiceAsync<T>()` convenience method in `src/Stroke/Shortcuts/Dialogs.cs` [FR-017]:
+- [x] T013 [US6] Add `Dialogs.ChoiceAsync<T>()` convenience method in `src/Stroke/Shortcuts/Dialogs.cs` [FR-017]:
   - Accept all 12 parameters matching ChoiceInput constructor
   - Create ChoiceInput<T> instance
   - Call and return await PromptAsync() result
@@ -129,15 +129,15 @@
 
 ### Implementation for User Story 3
 
-- [ ] T014 [US3] Add ConditionalContainer for Frame in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-010]:
+- [x] T014 [US3] Add ConditionalContainer for Frame in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-010]:
   - Wrap HSplit layout in ConditionalContainer
   - Create Condition filter from ShowFrame FilterOrBool
   - When true, wrap content in Frame widget with class:frame.border style
-- [ ] T015 [US3] Add bottom toolbar support in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-011]:
+- [x] T015 [US3] Add bottom toolbar support in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-011]:
   - Add ConditionalContainer for toolbar below RadioList in HSplit
   - Filter: bottomToolbar != null AND ~IsDone AND RendererHeightIsKnown
   - Use FormattedTextToolbar or Window with FormattedTextControl for toolbar content
-- [ ] T016 [US3] Apply custom style in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-014]:
+- [x] T016 [US3] Apply custom style in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-014]:
   - If style parameter is null, use CreateDefaultChoiceInputStyle()
   - Pass style to Application constructor
   - Style classes applied: frame.border, selected-option, bottom-toolbar.text
@@ -154,7 +154,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T017 [US4] Verify mouse support passes through in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-009]:
+- [x] T017 [US4] Verify mouse support passes through in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-009]:
   - Pass mouseSupport parameter to Application constructor
   - RadioList handles mouse click events internally (already implemented)
   - Graceful degradation on terminals without mouse support (Application handles this)
@@ -171,7 +171,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T018 [US5] Add Ctrl+Z key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-012]:
+- [x] T018 [US5] Add Ctrl+Z key binding in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs` [FR-012]:
   - Create Condition filter: EnableSuspend.Evaluate() AND PlatformUtils.SuspendToBackgroundSupported
   - Bind Ctrl+Z with filter to Application.SuspendToBackground() or equivalent
   - On Windows, filter evaluates false so key binding has no effect [XP-001]
@@ -184,7 +184,7 @@
 
 **Purpose**: Support user-provided additional key bindings
 
-- [ ] T019 Add key binding merge support in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs`:
+- [x] T019 Add key binding merge support in `CreateApplication()` in `src/Stroke/Shortcuts/ChoiceInput.cs`:
   - If keyBindings parameter is not null, wrap in DynamicKeyBindings
   - Use MergedKeyBindings to combine: local bindings (Enter, Ctrl+C, Ctrl+Z), user bindings, RadioList bindings
   - Local bindings have highest priority
@@ -195,24 +195,24 @@
 
 **Purpose**: Documentation, edge cases, and validation
 
-- [ ] T020 [P] Add XML documentation comments to all public members in `src/Stroke/Shortcuts/ChoiceInput.cs`:
+- [x] T020 [P] Add XML documentation comments to all public members in `src/Stroke/Shortcuts/ChoiceInput.cs`:
   - Include thread safety remarks noting immutable configuration (NFR-001)
   - Document that RadioList provides semantic list structure for screen reader compatibility (NFR-005)
-- [ ] T021 [P] Add XML documentation comments to `Dialogs.Choice<T>()` and `Dialogs.ChoiceAsync<T>()` in `src/Stroke/Shortcuts/Dialogs.cs`
-- [ ] T022 [P] Create unit tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
+- [x] T021 [P] Add XML documentation comments to `Dialogs.Choice<T>()` and `Dialogs.ChoiceAsync<T>()` in `src/Stroke/Shortcuts/Dialogs.cs`
+- [x] T022 [P] Create unit tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
   - Constructor validation tests (null options, empty options)
   - Default value handling tests (match, no match, first option selected)
   - Property getter tests (all 12 properties return correct values)
   - Immutability verification: confirm all properties are get-only with no public setters (NFR-001)
-- [ ] T023 [P] Create navigation tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
+- [x] T023 [P] Create navigation tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
   - Up/Down navigation with wrap-around
   - Number key selection (1-9)
   - Enter confirms selection
-- [ ] T024 [P] Create interrupt tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
+- [x] T024 [P] Create interrupt tests in `tests/Stroke.Tests/Shortcuts/ChoiceInputTests.cs`:
   - Ctrl+C with enableInterrupt=true throws KeyboardInterrupt
   - Ctrl+C with enableInterrupt=false is ignored
   - Custom interruptException type is thrown
-- [ ] T025 Run quickstart.md validation - execute all code examples to verify they work
+- [x] T025 Run quickstart.md validation - execute all code examples to verify they work
 
 ---
 

@@ -499,4 +499,126 @@ public static class Dialogs
         Action<Action<int>, Action<string>>? runCallback = null,
         IStyle? style = null)
         => await ProgressDialog(title, text, runCallback, style).RunAsync();
+
+    // ──────────────────────────────────────────────
+    // Choice selection prompt
+    // ──────────────────────────────────────────────
+
+    /// <summary>
+    /// Create and display a choice selection prompt.
+    /// </summary>
+    /// <typeparam name="T">The type of value returned when an option is selected.</typeparam>
+    /// <param name="message">Plain text or formatted text to be shown before the options.</param>
+    /// <param name="options">Sequence of (value, label) tuples.</param>
+    /// <param name="defaultValue">Default value to pre-select.</param>
+    /// <param name="mouseSupport">Enable mouse support.</param>
+    /// <param name="style">Style instance for colors.</param>
+    /// <param name="symbol">Symbol in front of selected choice.</param>
+    /// <param name="bottomToolbar">Text at bottom of screen.</param>
+    /// <param name="showFrame">Surround with frame when true.</param>
+    /// <param name="enableSuspend">Allow Ctrl+Z suspend on Unix.</param>
+    /// <param name="enableInterrupt">Raise exception on Ctrl+C.</param>
+    /// <param name="interruptException">Exception type for Ctrl+C.</param>
+    /// <param name="keyBindings">Additional key bindings.</param>
+    /// <returns>The value associated with the selected option.</returns>
+    /// <remarks>
+    /// <para>
+    /// Example usage:
+    /// </para>
+    /// <code>
+    /// string result = Dialogs.Choice(
+    ///     message: "Please select a dish:",
+    ///     options: new[]
+    ///     {
+    ///         ("pizza", (AnyFormattedText)"Pizza with mushrooms"),
+    ///         ("salad", (AnyFormattedText)"Salad with tomatoes"),
+    ///         ("sushi", (AnyFormattedText)"Sushi"),
+    ///     },
+    ///     defaultValue: "pizza");
+    /// </code>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>choice()</c> function from
+    /// <c>prompt_toolkit.shortcuts.choice_input</c>.
+    /// </para>
+    /// </remarks>
+    public static T Choice<T>(
+        AnyFormattedText message,
+        IReadOnlyList<(T Value, AnyFormattedText Label)> options,
+        T? defaultValue = default,
+        bool mouseSupport = false,
+        IStyle? style = null,
+        string symbol = ">",
+        AnyFormattedText? bottomToolbar = null,
+        FilterOrBool showFrame = default,
+        FilterOrBool enableSuspend = default,
+        FilterOrBool enableInterrupt = default,
+        Type? interruptException = null,
+        IKeyBindingsBase? keyBindings = null)
+    {
+        return new ChoiceInput<T>(
+            message: message,
+            options: options,
+            defaultValue: defaultValue,
+            mouseSupport: mouseSupport,
+            style: style,
+            symbol: symbol,
+            bottomToolbar: bottomToolbar,
+            showFrame: showFrame,
+            enableSuspend: enableSuspend,
+            enableInterrupt: enableInterrupt,
+            interruptException: interruptException,
+            keyBindings: keyBindings).Prompt();
+    }
+
+    /// <summary>
+    /// Create and display a choice selection prompt asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of value returned when an option is selected.</typeparam>
+    /// <param name="message">Plain text or formatted text to be shown before the options.</param>
+    /// <param name="options">Sequence of (value, label) tuples.</param>
+    /// <param name="defaultValue">Default value to pre-select.</param>
+    /// <param name="mouseSupport">Enable mouse support.</param>
+    /// <param name="style">Style instance for colors.</param>
+    /// <param name="symbol">Symbol in front of selected choice.</param>
+    /// <param name="bottomToolbar">Text at bottom of screen.</param>
+    /// <param name="showFrame">Surround with frame when true.</param>
+    /// <param name="enableSuspend">Allow Ctrl+Z suspend on Unix.</param>
+    /// <param name="enableInterrupt">Raise exception on Ctrl+C.</param>
+    /// <param name="interruptException">Exception type for Ctrl+C.</param>
+    /// <param name="keyBindings">Additional key bindings.</param>
+    /// <returns>A task that completes with the value associated with the selected option.</returns>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>ChoiceInput.prompt_async()</c> method from
+    /// <c>prompt_toolkit.shortcuts.choice_input</c>.
+    /// </para>
+    /// </remarks>
+    public static Task<T> ChoiceAsync<T>(
+        AnyFormattedText message,
+        IReadOnlyList<(T Value, AnyFormattedText Label)> options,
+        T? defaultValue = default,
+        bool mouseSupport = false,
+        IStyle? style = null,
+        string symbol = ">",
+        AnyFormattedText? bottomToolbar = null,
+        FilterOrBool showFrame = default,
+        FilterOrBool enableSuspend = default,
+        FilterOrBool enableInterrupt = default,
+        Type? interruptException = null,
+        IKeyBindingsBase? keyBindings = null)
+    {
+        return new ChoiceInput<T>(
+            message: message,
+            options: options,
+            defaultValue: defaultValue,
+            mouseSupport: mouseSupport,
+            style: style,
+            symbol: symbol,
+            bottomToolbar: bottomToolbar,
+            showFrame: showFrame,
+            enableSuspend: enableSuspend,
+            enableInterrupt: enableInterrupt,
+            interruptException: interruptException,
+            keyBindings: keyBindings).PromptAsync();
+    }
 }
