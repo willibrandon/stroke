@@ -210,9 +210,9 @@ public sealed class Vt100Parser
             _buffer.Append(c);
             _state = ParserState.Escape;
         }
-        else if (c < 32)
+        else if (c < 32 || c == '\x7f')
         {
-            // Control character
+            // Control character (C0: 0x00-0x1F, DEL: 0x7F)
             EmitControlCharacter(c);
         }
         else
@@ -520,6 +520,7 @@ public sealed class Vt100Parser
             '\x1d' => Keys.ControlSquareClose,
             '\x1e' => Keys.ControlCircumflex,
             '\x1f' => Keys.ControlUnderscore,
+            '\x7f' => Keys.ControlH, // DEL → Backspace (VT100 terminals send 0x7F for Backspace)
             _ => Keys.Any
         };
 

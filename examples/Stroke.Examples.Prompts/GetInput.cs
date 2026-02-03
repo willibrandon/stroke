@@ -9,7 +9,14 @@ public static class GetInput
 {
     public static void Run()
     {
-        var answer = Prompt.RunPrompt("Give me some input: ");
-        Console.WriteLine($"You said: {answer}");
+        try
+        {
+            var answer = Prompt.RunPrompt("Give me some input: ");
+            Console.WriteLine($"You said: {answer}");
+        }
+        catch (KeyboardInterruptException)
+        {
+            Console.WriteLine("GoodBye!");
+        }
     }
 }
