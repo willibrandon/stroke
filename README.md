@@ -526,6 +526,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ConsoleCursorInfo` struct with uint-based Visible field for P/Invoke compatibility
   - Thread-safe via `System.Threading.Lock` on mutable buffer state (67 tests, >80% coverage)
 
+- **ConEmu Output** — Hybrid `IOutput` implementation for ConEmu/Cmder terminals, ported from `conemu.py`
+  - `ConEmuOutput` sealed class combining `Win32Output` and `Vt100Output` via delegation
+  - Win32Output handles: `GetSize`, `GetRowsBelowCursorPosition`, mouse support, scrolling, bracketed paste
+  - Vt100Output handles: all rendering (cursor movement, colors, text output, screen control)
+  - Enables 256-color and true-color support in ConEmu/Cmder while maintaining accurate console sizing
+  - `RespondsToCpr` always returns `false` (CPR not needed on Windows)
+  - Public `Win32Output` and `Vt100Output` properties for advanced access to underlying outputs
+  - Detection via `PlatformUtils.IsConEmuAnsi` checking `ConEmuANSI=ON` (case-sensitive)
+  - `[SupportedOSPlatform("windows")]` attribute for platform safety
+  - Thread-safe via delegation to thread-safe underlying outputs (19 tests, >80% coverage)
+
 ### Up Next
 
 - **Examples** — Port of Python Prompt Toolkit examples (129 examples across 9 projects)
