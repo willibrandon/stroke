@@ -515,5 +515,60 @@ public static partial class ConsoleApi
     /// <summary>Text mode buffer type for CreateConsoleScreenBuffer.</summary>
     public const uint CONSOLE_TEXTMODE_BUFFER = 1;
 
+    /// <summary>Share read access.</summary>
+    public const uint FILE_SHARE_READ = 0x00000001;
+
+    /// <summary>Share write access.</summary>
+    public const uint FILE_SHARE_WRITE = 0x00000002;
+
+    /// <summary>Opens an existing file or device.</summary>
+    public const uint OPEN_EXISTING = 3;
+
+    #endregion
+
+    #region File Functions
+
+    /// <summary>
+    /// Creates or opens a file or I/O device. Used to open <c>CONIN$</c> and <c>CONOUT$</c>
+    /// pseudo-files for direct console access, bypassing stdio redirection.
+    /// </summary>
+    /// <param name="lpFileName">The name of the file or device (e.g., "CONOUT$").</param>
+    /// <param name="dwDesiredAccess">Access flags (GENERIC_READ, GENERIC_WRITE).</param>
+    /// <param name="dwShareMode">Share mode (FILE_SHARE_READ, FILE_SHARE_WRITE).</param>
+    /// <param name="lpSecurityAttributes">Security attributes (IntPtr.Zero for default).</param>
+    /// <param name="dwCreationDisposition">Creation disposition (OPEN_EXISTING for devices).</param>
+    /// <param name="dwFlagsAndAttributes">File attributes and flags (0 for default).</param>
+    /// <param name="hTemplateFile">Template file handle (IntPtr.Zero for none).</param>
+    /// <returns>Handle to the opened file/device, or INVALID_HANDLE_VALUE on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "CreateFileW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    public static partial nint CreateFile(
+        string lpFileName,
+        uint dwDesiredAccess,
+        uint dwShareMode,
+        nint lpSecurityAttributes,
+        uint dwCreationDisposition,
+        uint dwFlagsAndAttributes,
+        nint hTemplateFile);
+
+    #endregion
+
+    #region Console Lifecycle
+
+    /// <summary>
+    /// Allocates a new console for the calling process.
+    /// </summary>
+    /// <returns>True if the console was allocated, false if the process already has one.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "AllocConsole", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool AllocConsole();
+
+    /// <summary>
+    /// Detaches the calling process from its console.
+    /// </summary>
+    /// <returns>True on success, false on failure.</returns>
+    [LibraryImport(Kernel32, EntryPoint = "FreeConsole", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool FreeConsole();
+
     #endregion
 }

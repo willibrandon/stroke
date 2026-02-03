@@ -83,7 +83,20 @@ public sealed partial class Win32Output : IOutput
         // Verify we have a valid console
         if (!ConsoleApi.GetConsoleScreenBufferInfo(_hConsole, out var info))
         {
-            throw new NoConsoleScreenBufferError();
+            // Fallback: open CONOUT$ directly to bypass stdio redirection.
+            // This handles ConEmu/Cmder terminals and test runners that redirect
+            // stdout while a console is still attached to the process.
+            _hConsole = ConsoleApi.CreateFile("CONOUT$",
+                ConsoleApi.GENERIC_READ | ConsoleApi.GENERIC_WRITE,
+                ConsoleApi.FILE_SHARE_READ | ConsoleApi.FILE_SHARE_WRITE,
+                nint.Zero, ConsoleApi.OPEN_EXISTING, 0, nint.Zero);
+            _originalHandle = _hConsole;
+
+            if (_hConsole == ConsoleApi.INVALID_HANDLE_VALUE ||
+                !ConsoleApi.GetConsoleScreenBufferInfo(_hConsole, out info))
+            {
+                throw new NoConsoleScreenBufferError();
+            }
         }
 
         // Save default attributes for ResetAttributes
