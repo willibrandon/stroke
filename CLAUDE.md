@@ -451,8 +451,9 @@ This ensures examples behave correctly in real terminal environments before mark
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,613 tests**.
+Most recent first. Total test count: **8,644 tests**.
 
+- 055-win10-vt100-output: Windows10Output hybrid IOutput implementation — proxy class combining Win32Output (console sizing, mouse, scrolling, bracketed paste) and Vt100Output (all rendering via ANSI escape sequences), enables VT100 mode per-flush via ENABLE_VIRTUAL_TERMINAL_PROCESSING (0x0005), per-instance Lock for thread-safe flush serialization, defaults to true color (24-bit), WindowsVt100Support.IsVt100Enabled() detection delegating to PlatformUtils.IsWindowsVt100Supported
 - 054-win32-eventloop-utils: Win32EventLoopUtils static class — WaitForHandles (synchronous multiplexed handle waiting), WaitForHandlesAsync (100ms polling with CancellationToken), CreateWin32Event/SetWin32Event/ResetWin32Event/CloseWin32Event (manual-reset event lifecycle), WaitTimeout and Infinite constants, ArgumentOutOfRangeException for >64 handles, Win32Exception on API failure, platform-gated via [SupportedOSPlatform("windows")]
 - 053-conemu-output: ConEmuOutput hybrid IOutput implementation — proxy class combining Win32Output (console sizing, mouse, scrolling, bracketed paste) and Vt100Output (all rendering via ANSI escape sequences), enables 256-color and true-color support in ConEmu/Cmder terminals, thread-safe via delegation to underlying outputs
 - 052-win32-console-output: Win32Output IOutput implementation — kernel32.dll P/Invoke for legacy Windows console, ColorLookupTable (17 ANSI colors + Euclidean RGB distance matching), ForegroundColor/BackgroundColor static constants, NoConsoleScreenBufferError context-aware exception, character-by-character WriteConsoleW rendering, alternate screen buffer support, 16-color (4-bit) palette

@@ -24,8 +24,8 @@
 
 **Purpose**: Verify prerequisites and project structure
 
-- [ ] T001 Verify existing classes are available: Win32Output, Vt100Output, ConsoleApi, PlatformUtils in respective namespaces
-- [ ] T002 Verify P/Invoke constants exist: ENABLE_PROCESSED_INPUT (0x0001), ENABLE_VIRTUAL_TERMINAL_PROCESSING (0x0004), STD_OUTPUT_HANDLE (-11) in src/Stroke/Input/Windows/ConsoleApi.cs
+- [x] T001 Verify existing classes are available: Win32Output, Vt100Output, ConsoleApi, PlatformUtils in respective namespaces
+- [x] T002 Verify P/Invoke constants exist: ENABLE_PROCESSED_INPUT (0x0001), ENABLE_VIRTUAL_TERMINAL_PROCESSING (0x0004), STD_OUTPUT_HANDLE (-11) in src/Stroke/Input/Windows/ConsoleApi.cs
 
 ---
 
@@ -35,12 +35,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 [P] Create WindowsVt100Support static class skeleton in src/Stroke/Output/Windows/WindowsVt100Support.cs
-- [ ] T004 [P] Create Windows10Output class skeleton in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T005 Implement WindowsVt100Support.IsVt100Enabled() delegating to PlatformUtils.IsWindowsVt100Supported in src/Stroke/Output/Windows/WindowsVt100Support.cs
-- [ ] T006 Implement Windows10Output constructor with validation (null check, platform check, handle acquisition) in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T007 [P] Create Windows10OutputTests test class skeleton in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T008 [P] Create WindowsVt100SupportTests test class skeleton in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
+- [x] T003 [P] Create WindowsVt100Support static class skeleton in src/Stroke/Output/Windows/WindowsVt100Support.cs
+- [x] T004 [P] Create Windows10Output class skeleton in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T005 Implement WindowsVt100Support.IsVt100Enabled() delegating to PlatformUtils.IsWindowsVt100Supported in src/Stroke/Output/Windows/WindowsVt100Support.cs
+- [x] T006 Implement Windows10Output constructor with validation (null check, platform check, handle acquisition) in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T007 [P] Create Windows10OutputTests test class skeleton in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T008 [P] Create WindowsVt100SupportTests test class skeleton in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
 
 **Checkpoint**: Foundation ready - class skeletons exist with constructor validation
 
@@ -56,32 +56,32 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T009 [P] [US1] Test constructor throws ArgumentNullException for null stdout in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T010 [P] [US1] Test constructor throws PlatformNotSupportedException on non-Windows in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T011 [P] [US1] Test constructor propagates NoConsoleScreenBufferError from Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T011a [P] [US1] Test constructor stores console handle once (FR-015: verify handle is not re-acquired during each Flush) in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T012 [P] [US1] Test Flush() acquires lock and calls Vt100Output.Flush() in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T013 [P] [US1] Test Flush() restores console mode in finally block in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T014 [P] [US1] Test concurrent Flush() calls are serialized via per-instance lock (10+ threads, 1000+ iterations per Constitution XI) in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T015 [P] [US1] Test Write() delegates to Vt100Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T016 [P] [US1] Test WriteRaw() delegates to Vt100Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T017 [P] [US1] Test GetDefaultColorDepth() returns Depth24Bit by default in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T018 [P] [US1] Test GetDefaultColorDepth() returns override when provided in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T019 [P] [US1] Test RespondsToCpr returns false in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T009 [P] [US1] Test constructor throws ArgumentNullException for null stdout in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T010 [P] [US1] Test constructor throws PlatformNotSupportedException on non-Windows in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T011 [P] [US1] Test constructor propagates NoConsoleScreenBufferError from Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T011a [P] [US1] Test constructor stores console handle once (FR-015: verify handle is not re-acquired during each Flush) in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T012 [P] [US1] Test Flush() acquires lock and calls Vt100Output.Flush() in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T013 [P] [US1] Test Flush() restores console mode in finally block in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T014 [P] [US1] Test concurrent Flush() calls are serialized via per-instance lock (10+ threads, 1000+ iterations per Constitution XI) in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T015 [P] [US1] Test Write() delegates to Vt100Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T016 [P] [US1] Test WriteRaw() delegates to Vt100Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T017 [P] [US1] Test GetDefaultColorDepth() returns Depth24Bit by default in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T018 [P] [US1] Test GetDefaultColorDepth() returns override when provided in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T019 [P] [US1] Test RespondsToCpr returns false in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] Implement Flush() with VT100 mode switching (lock, GetConsoleMode, SetConsoleMode, delegate, restore) in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T021 [P] [US1] Implement Write() delegation to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T022 [P] [US1] Implement WriteRaw() delegation to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T023 [P] [US1] Implement GetDefaultColorDepth() returning Depth24Bit or override in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T024 [P] [US1] Implement RespondsToCpr property returning false in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T025 [US1] Implement all VT100 rendering delegations (EraseScreen, EraseEndOfLine, EraseDown, etc.) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T026 [US1] Implement cursor delegations (CursorGoto, CursorUp, CursorDown, CursorForward, CursorBackward, HideCursor, ShowCursor, SetCursorShape, ResetCursorShape) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T027 [US1] Implement attribute delegations (ResetAttributes, SetAttributes, DisableAutowrap, EnableAutowrap) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T028 [US1] Implement title and bell delegations (SetTitle, ClearTitle, Bell, AskForCpr, ResetCursorKeyMode) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T029 [US1] Implement alternate screen delegations (EnterAlternateScreen, QuitAlternateScreen) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T030 [US1] Implement property delegations (Encoding, Stdout, Fileno) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T020 [US1] Implement Flush() with VT100 mode switching (lock, GetConsoleMode, SetConsoleMode, delegate, restore) in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T021 [P] [US1] Implement Write() delegation to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T022 [P] [US1] Implement WriteRaw() delegation to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T023 [P] [US1] Implement GetDefaultColorDepth() returning Depth24Bit or override in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T024 [P] [US1] Implement RespondsToCpr property returning false in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T025 [US1] Implement all VT100 rendering delegations (EraseScreen, EraseEndOfLine, EraseDown, etc.) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T026 [US1] Implement cursor delegations (CursorGoto, CursorUp, CursorDown, CursorForward, CursorBackward, HideCursor, ShowCursor, SetCursorShape, ResetCursorShape) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T027 [US1] Implement attribute delegations (ResetAttributes, SetAttributes, DisableAutowrap, EnableAutowrap) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T028 [US1] Implement title and bell delegations (SetTitle, ClearTitle, Bell, AskForCpr, ResetCursorKeyMode) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T029 [US1] Implement alternate screen delegations (EnterAlternateScreen, QuitAlternateScreen) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T030 [US1] Implement property delegations (Encoding, Stdout, Fileno) to Vt100Output in src/Stroke/Output/Windows/Windows10Output.cs
 
 **Checkpoint**: User Story 1 complete - VT100 rendering works with mode switching during flush
 
@@ -95,22 +95,22 @@
 
 ### Tests for User Story 2
 
-- [ ] T031 [P] [US2] Test GetSize() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T032 [P] [US2] Test GetRowsBelowCursorPosition() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T033 [P] [US2] Test ScrollBufferToPrompt() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T034 [P] [US2] Test EnableMouseSupport() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T035 [P] [US2] Test DisableMouseSupport() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T036 [P] [US2] Test EnableBracketedPaste() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
-- [ ] T037 [P] [US2] Test DisableBracketedPaste() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T031 [P] [US2] Test GetSize() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T032 [P] [US2] Test GetRowsBelowCursorPosition() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T033 [P] [US2] Test ScrollBufferToPrompt() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T034 [P] [US2] Test EnableMouseSupport() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T035 [P] [US2] Test DisableMouseSupport() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T036 [P] [US2] Test EnableBracketedPaste() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T037 [P] [US2] Test DisableBracketedPaste() delegates to Win32Output in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T038 [P] [US2] Implement GetSize() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T039 [P] [US2] Implement GetRowsBelowCursorPosition() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T040 [P] [US2] Implement ScrollBufferToPrompt() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T041 [P] [US2] Implement mouse support delegations (EnableMouseSupport, DisableMouseSupport) to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T042 [P] [US2] Implement bracketed paste delegations (EnableBracketedPaste, DisableBracketedPaste) to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T043 [US2] Expose Win32Output and Vt100Output public properties in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T038 [P] [US2] Implement GetSize() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T039 [P] [US2] Implement GetRowsBelowCursorPosition() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T040 [P] [US2] Implement ScrollBufferToPrompt() delegation to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T041 [P] [US2] Implement mouse support delegations (EnableMouseSupport, DisableMouseSupport) to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T042 [P] [US2] Implement bracketed paste delegations (EnableBracketedPaste, DisableBracketedPaste) to Win32Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T043 [US2] Expose Win32Output and Vt100Output public properties in src/Stroke/Output/Windows/Windows10Output.cs
 
 **Checkpoint**: User Story 2 complete - console operations delegate correctly to Win32Output
 
@@ -124,13 +124,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T044 [P] [US3] Test IsVt100Enabled() returns true when SetConsoleMode succeeds in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
-- [ ] T045 [P] [US3] Test IsVt100Enabled() returns false when GetConsoleMode fails in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
-- [ ] T046 [P] [US3] Test IsVt100Enabled() restores original console mode (no side effects) in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
+- [x] T044 [P] [US3] Test IsVt100Enabled() returns true when SetConsoleMode succeeds in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
+- [x] T045 [P] [US3] Test IsVt100Enabled() returns false when GetConsoleMode fails in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
+- [x] T046 [P] [US3] Test IsVt100Enabled() restores original console mode (no side effects) in tests/Stroke.Tests/Output/Windows/WindowsVt100SupportTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T047 [US3] Verify WindowsVt100Support.IsVt100Enabled() implementation delegates correctly in src/Stroke/Output/Windows/WindowsVt100Support.cs
+- [x] T047 [US3] Verify WindowsVt100Support.IsVt100Enabled() implementation delegates correctly in src/Stroke/Output/Windows/WindowsVt100Support.cs
 
 **Checkpoint**: User Story 3 complete - VT100 detection works correctly for output factory
 
@@ -140,11 +140,11 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T048 [P] Add XML documentation comments to all public members of Windows10Output in src/Stroke/Output/Windows/Windows10Output.cs
-- [ ] T049 [P] Add XML documentation comments to all public members of WindowsVt100Support in src/Stroke/Output/Windows/WindowsVt100Support.cs
-- [ ] T050 Verify 80% test coverage for Windows10Output and WindowsVt100Support per SC-004
-- [ ] T051 Run quickstart.md validation scenarios: (1) basic ANSI color output, (2) detection pattern with IsVt100Enabled(), (3) true color default, (4) console operations GetSize/ScrollBufferToPrompt, (5) thread-safe flush
-- [ ] T052 [P] Test IOutput interface compliance (can assign to IOutput, can pass as IOutput parameter) per SC-005 in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
+- [x] T048 [P] Add XML documentation comments to all public members of Windows10Output in src/Stroke/Output/Windows/Windows10Output.cs
+- [x] T049 [P] Add XML documentation comments to all public members of WindowsVt100Support in src/Stroke/Output/Windows/WindowsVt100Support.cs
+- [x] T050 Verify 80% test coverage for Windows10Output and WindowsVt100Support per SC-004
+- [x] T051 Run quickstart.md validation scenarios: (1) basic ANSI color output, (2) detection pattern with IsVt100Enabled(), (3) true color default, (4) console operations GetSize/ScrollBufferToPrompt, (5) thread-safe flush
+- [x] T052 [P] Test IOutput interface compliance (can assign to IOutput, can pass as IOutput parameter) per SC-005 in tests/Stroke.Tests/Output/Windows/Windows10OutputTests.cs
 
 ---
 
