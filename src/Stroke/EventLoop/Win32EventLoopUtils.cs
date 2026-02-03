@@ -32,6 +32,16 @@ public static class Win32EventLoopUtils
     /// a freed value silently closes whatever object now owns that value.
     /// </summary>
     private static readonly ConcurrentDictionary<nint, byte> _activeEventHandles = new();
+
+    /// <summary>
+    /// Gets the number of event handles currently tracked as active (created but not yet closed).
+    /// </summary>
+    /// <remarks>
+    /// This property is useful for verifying that event handles are properly closed
+    /// and no leaks have occurred.
+    /// </remarks>
+    public static int ActiveEventHandleCount => _activeEventHandles.Count;
+
     /// <summary>
     /// Timeout value indicating that a wait operation timed out.
     /// </summary>
@@ -218,13 +228,12 @@ public static class Win32EventLoopUtils
             ? long.MaxValue
             : Environment.TickCount64 + timeout;
 
-        // Use polling loop for both finite and infinite timeouts to remain
-        // responsive to cancellation. Each iteration waits at most
-        // AsyncPollingInterval ms, then checks cancellation and (for finite
-        // timeouts) whether the total deadline has elapsed.
-        return Task.Run(() =>
+        // Use a dedicated thread (LongRunning) for the blocking wait loop.
+        // Task.Run uses the thread pool, which can have significant scheduling
+        // delay under load (e.g., parallel test execution), causing the loop
+        // to start late. A dedicated thread starts immediately.
+        return Task.Factory.StartNew(() =>
         {
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 var remaining = timeout == Infinite
@@ -248,7 +257,8 @@ public static class Win32EventLoopUtils
 
             // Cancellation requested
             return null;
-        }, cancellationToken).ContinueWith(
+        }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+        .ContinueWith(
             t => t.IsCanceled ? null : t.Result,
             TaskContinuationOptions.ExecuteSynchronously);
     }

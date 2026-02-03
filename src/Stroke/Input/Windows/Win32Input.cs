@@ -29,6 +29,9 @@ public sealed class Win32Input : IInput
     private readonly List<KeyPress> _keyBuffer = new();
     private readonly Lock _callbackLock = new();
     private readonly Stack<Action> _callbackStack = new();
+    private readonly ManualResetEventSlim _inputProcessed = new(true); // Starts signaled
+    private Thread? _inputMonitorThread;
+    private volatile bool _monitorRunning;
     private bool _closed;
     private bool _disposed;
 
@@ -65,7 +68,11 @@ public sealed class Win32Input : IInput
         ThrowIfDisposed();
 
         if (_closed)
+        {
+            // Signal that input processing is complete even if we're closed
+            _inputProcessed.Set();
             return [];
+        }
 
         _keyBuffer.Clear();
 
@@ -83,6 +90,10 @@ public sealed class Win32Input : IInput
             // Legacy mode: read console input events
             ReadLegacyInput();
         }
+
+        // Signal that input has been processed (consumed from input buffer).
+        // This allows the monitor thread to wait again without busy-looping.
+        _inputProcessed.Set();
 
         var result = _keyBuffer.ToList();
         _keyBuffer.Clear();
@@ -127,9 +138,22 @@ public sealed class Win32Input : IInput
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
 
+        bool startMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(inputReadyCallback);
+
+            // Start the input monitor thread if this is the first callback
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
+            {
+                startMonitor = true;
+            }
+        }
+
+        if (startMonitor)
+        {
+            StartInputMonitor();
         }
 
         return new AttachDisposable(this, inputReadyCallback);
@@ -189,6 +213,7 @@ public sealed class Win32Input : IInput
     public void Close()
     {
         _closed = true;
+        StopInputMonitor();
     }
 
     /// <inheritdoc/>
@@ -219,6 +244,84 @@ public sealed class Win32Input : IInput
         uint newMode = mode | ConsoleApi.ENABLE_VIRTUAL_TERMINAL_INPUT;
 
         return ConsoleApi.SetConsoleMode(_handle, newMode);
+    }
+
+    /// <summary>
+    /// Starts the background thread that monitors the console input handle for available input.
+    /// </summary>
+    private void StartInputMonitor()
+    {
+        _monitorRunning = true;
+        _inputMonitorThread = new Thread(InputMonitorLoop)
+        {
+            Name = "Win32Input-Monitor",
+            IsBackground = true
+        };
+        _inputMonitorThread.Start();
+    }
+
+    /// <summary>
+    /// Stops the input monitor thread.
+    /// </summary>
+    private void StopInputMonitor()
+    {
+        _monitorRunning = false;
+        // The thread will exit on the next WaitForSingleObject timeout
+    }
+
+    /// <summary>
+    /// The input monitor loop that waits on the console input handle and invokes
+    /// callbacks when input is available.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is the Windows equivalent of <see cref="Vt100.Vt100Input"/>'s
+    /// <c>InputMonitorLoop</c> which uses POSIX <c>poll()</c>.
+    /// On Windows, we use <c>WaitForSingleObject</c> on the console input handle
+    /// with a 100ms timeout to allow periodic checks of the <c>_monitorRunning</c> flag.
+    /// </para>
+    /// <para>
+    /// After invoking the callback, the loop waits for <see cref="ReadKeys"/> to signal
+    /// <see cref="_inputProcessed"/> before polling again, preventing busy-looping
+    /// when the input handle remains signaled (e.g., due to mouse or window events
+    /// that <see cref="Console.KeyAvailable"/> filters out).
+    /// </para>
+    /// </remarks>
+    private void InputMonitorLoop()
+    {
+        while (_monitorRunning && !_closed && !_disposed)
+        {
+            // Wait on the console input handle with 100ms timeout
+            var waitResult = ConsoleApi.WaitForSingleObject(_handle, 100);
+
+            if (waitResult == ConsoleApi.WAIT_OBJECT_0)
+            {
+                // Input is available, invoke the top callback
+                Action? callback = null;
+                using (_callbackLock.EnterScope())
+                {
+                    if (_callbackStack.Count > 0)
+                    {
+                        callback = _callbackStack.Peek();
+                    }
+                }
+
+                if (callback != null)
+                {
+                    // Reset the event before invoking callback.
+                    // This ensures we wait until ReadKeys() consumes the input
+                    // before polling again, preventing a busy loop.
+                    _inputProcessed.Reset();
+
+                    callback.Invoke();
+
+                    // Wait for ReadKeys() to consume the input (with timeout to allow shutdown).
+                    _inputProcessed.Wait(200);
+                }
+            }
+            // WAIT_TIMEOUT: loop back and check _monitorRunning
+            // WAIT_FAILED: unexpected, but loop back and retry
+        }
     }
 
     /// <summary>
@@ -308,6 +411,8 @@ public sealed class Win32Input : IInput
 
     private void RemoveCallback(Action callback)
     {
+        bool stopMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             var temp = _callbackStack.ToList();
@@ -316,6 +421,16 @@ public sealed class Win32Input : IInput
             {
                 _callbackStack.Push(cb);
             }
+
+            if (_callbackStack.Count == 0)
+            {
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
     }
 
