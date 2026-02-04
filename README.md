@@ -582,6 +582,26 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `WindowsVt100Support.IsVt100Enabled()` detection delegating to `PlatformUtils.IsWindowsVt100Supported`
   - `[SupportedOSPlatform("windows")]` attribute for platform safety
   - Thread-safe via per-instance lock on flush operations (36 tests, >80% coverage)
+- **Telnet Server** — Network-accessible REPL support ported from `contrib/telnet/`
+  - `TelnetServer` class with host/port/interact/encoding/style/enableCpr configuration
+  - `RunAsync()` with ready callback and cancellation token for graceful shutdown
+  - `Connections` property returning snapshot of active connections
+  - Connection lifecycle: accept → negotiate → interact → cleanup (5-second shutdown timeout)
+  - `TelnetConnection` with Send/SendAbovePrompt/EraseScreen/Close methods
+  - NAWS (Negotiate About Window Size) parsing with dimension clamping (1-500)
+  - TTYPE (Terminal Type) negotiation with 500ms timeout and VT100 fallback
+  - `TelnetProtocolParser` state machine (5 states) with IAC escaping and subnegotiation
+  - `ConnectionStdout` TextWriter with LF→CRLF conversion per telnet NVT specification
+  - `TelnetConstants` with 20+ protocol constants (IAC, DO, WILL, SB, SE, NAWS, TTYPE, etc.)
+  - 4 telnet examples: `hello-world`, `chat-app`, `dialog`, `toolbar`
+  - Thread-safe via Lock and ConcurrentDictionary (208 tests, >80% coverage)
+- **Logging Infrastructure** — Central logging facility ported from `log.py`
+  - `StrokeLogger` static class with `Logger` singleton property
+  - `Configure(ILoggerFactory)` for provider setup (console, file, Serilog, etc.)
+  - `CreateLogger<T>()` and `CreateLogger(string)` for component-specific loggers
+  - `NullLoggerFactory` default for zero performance impact when disabled
+  - Integrated into telnet classes for protocol debugging
+  - Thread-safe via `System.Threading.Lock` (26 tests, >80% coverage)
 
 ### Up Next
 

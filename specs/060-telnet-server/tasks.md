@@ -26,9 +26,9 @@
 
 **Purpose**: Project initialization and directory structure
 
-- [ ] T001 Create directory structure `src/Stroke/Contrib/Telnet/` and `tests/Stroke.Tests/Contrib/Telnet/`
-- [ ] T002 [P] Verify existing dependencies exist: `Stroke.Application` (AppSession, AppContext), `Stroke.Output` (Vt100Output), `Stroke.Input` (IPipeInput, PipeInput)
-- [ ] T003 [P] Verify `Stroke.Core.Size` struct is available for terminal dimensions
+- [x] T001 Create directory structure `src/Stroke/Contrib/Telnet/` and `tests/Stroke.Tests/Contrib/Telnet/`
+- [x] T002 [P] Verify existing dependencies exist: `Stroke.Application` (AppSession, AppContext), `Stroke.Output` (Vt100Output), `Stroke.Input` (IPipeInput, PipeInput)
+- [x] T003 [P] Verify `Stroke.Core.Size` struct is available for terminal dimensions
 
 ---
 
@@ -38,18 +38,18 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Implement `TelnetConstants` static class with all protocol byte constants in `src/Stroke/Contrib/Telnet/TelnetConstants.cs`
+- [x] T004 Implement `TelnetConstants` static class with all protocol byte constants in `src/Stroke/Contrib/Telnet/TelnetConstants.cs`
   - Commands: IAC (255), DO (253), DONT (254), WILL (251), WONT (252), SB (250), SE (240), NOP (0)
   - Simple commands: DM (242), BRK (243), IP (244), AO (245), AYT (246), EC (247), EL (248), GA (249)
   - Options: ECHO (1), SGA (3), TTYPE (24), NAWS (31), LINEMODE (34)
   - Subnegotiation: IS (0), SEND (1), MODE (1)
   - Reference: `contracts/TelnetConstants.md`
 
-- [ ] T005 [P] Write unit tests for `TelnetConstants` in `tests/Stroke.Tests/Contrib/Telnet/TelnetConstantsTests.cs`
+- [x] T005 [P] Write unit tests for `TelnetConstants` in `tests/Stroke.Tests/Contrib/Telnet/TelnetConstantsTests.cs`
   - Verify all constant values match RFC 854 and Python PTK
   - Verify `ToByte()` helper method
 
-- [ ] T006 Implement `TelnetProtocolParser` state machine in `src/Stroke/Contrib/Telnet/TelnetProtocolParser.cs`
+- [x] T006 Implement `TelnetProtocolParser` state machine in `src/Stroke/Contrib/Telnet/TelnetProtocolParser.cs`
   - States: Normal, Iac, IacCommand, Subnegotiation, SubnegotiationIac (per FR-003)
   - Callbacks: DataReceived, SizeReceived, TtypeReceived (per API-011)
   - Handle double-IAC escape (FR-016)
@@ -61,7 +61,7 @@
   - NOT thread-safe - document constraint (TS-003, API-012)
   - Reference: `contracts/TelnetProtocolParser.md`, `data-model.md`
 
-- [ ] T007 [P] Write unit tests for `TelnetProtocolParser` in `tests/Stroke.Tests/Contrib/Telnet/TelnetProtocolParserTests.cs`
+- [x] T007 [P] Write unit tests for `TelnetProtocolParser` in `tests/Stroke.Tests/Contrib/Telnet/TelnetProtocolParserTests.cs`
   - Test normal data passthrough
   - Test IAC command handling (DO, DONT, WILL, WONT)
   - Test double-IAC escape (0xFF 0xFF → single 0xFF data)
@@ -74,7 +74,7 @@
   - Test malformed sequences (log and continue)
   - Test NOP bytes passthrough (FR-003c)
 
-- [ ] T008 Implement `ConnectionStdout` TextWriter in `src/Stroke/Contrib/Telnet/ConnectionStdout.cs`
+- [x] T008 Implement `ConnectionStdout` TextWriter in `src/Stroke/Contrib/Telnet/ConnectionStdout.cs`
   - LF → CRLF conversion (FR-006)
   - Buffered writes with Flush()
   - Socket error handling - log but don't throw (ERR-002)
@@ -83,7 +83,7 @@
   - IsAtty returns true
   - Reference: `contracts/ConnectionStdout.md`
 
-- [ ] T009 [P] Write unit tests for `ConnectionStdout` in `tests/Stroke.Tests/Contrib/Telnet/ConnectionStdoutTests.cs`
+- [x] T009 [P] Write unit tests for `ConnectionStdout` in `tests/Stroke.Tests/Contrib/Telnet/ConnectionStdoutTests.cs`
   - Test LF → CRLF conversion
   - Test CRLF → CRCRLF (matching Python PTK behavior)
   - Test Write() with null/empty strings
@@ -108,7 +108,7 @@
 
 ### Tests for User Story 1
 
-- [ ] T010 [P] [US1] Write integration tests in `tests/Stroke.Tests/Contrib/Telnet/TelnetServerIntegrationTests.cs`
+- [x] T010 [P] [US1] Write integration tests in `tests/Stroke.Tests/Contrib/Telnet/TelnetServerIntegrationTests.cs`
   - Test server starts and accepts TCP connection
   - Test server sends initialization sequences (FR-002)
   - Test interact callback is invoked after negotiation
@@ -117,52 +117,52 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement `TelnetConnection` class shell in `src/Stroke/Contrib/Telnet/TelnetConnection.cs`
+- [x] T011 [US1] Implement `TelnetConnection` class shell in `src/Stroke/Contrib/Telnet/TelnetConnection.cs`
   - Internal constructor with all parameters per contract
   - Properties: Socket, RemoteAddress, Server, Encoding, Style, Size, IsClosed, EnableCpr
   - Size defaults to 80x24 (EC-004)
   - Reference: `contracts/TelnetConnection.md`
 
-- [ ] T012 [US1] Implement `TelnetConnection.Feed()` internal method
+- [x] T012 [US1] Implement `TelnetConnection.Feed()` internal method
   - Create TelnetProtocolParser with callbacks
   - Wire DataReceived to PipeInput.SendBytes()
   - Wire SizeReceived to update Size property (with clamping 1-500)
   - Wire TtypeReceived to trigger Ready state
   - Handle 0x0 size as 1x1 (EC-009)
 
-- [ ] T013 [US1] Implement `TelnetConnection.Send()` method
+- [x] T013 [US1] Implement `TelnetConnection.Send()` method
   - Use Vt100Output with ConnectionStdout
   - Render formatted text with Style
   - No-op if IsClosed (API-005, EC-005)
   - Thread-safe via Lock
 
-- [ ] T014 [US1] Implement `TelnetConnection.EraseScreen()` method
+- [x] T014 [US1] Implement `TelnetConnection.EraseScreen()` method
   - Send ESC[2J + ESC[H sequences (API-007)
   - No-op if IsClosed
 
-- [ ] T015 [US1] Implement `TelnetConnection.Close()` method
+- [x] T015 [US1] Implement `TelnetConnection.Close()` method
   - Idempotent (API-008)
   - Close socket, input, output
   - Set IsClosed = true
   - Thread-safe state transition (TS-005)
 
-- [ ] T016 [US1] Implement `TelnetConnection.RunApplicationAsync()` internal method
+- [x] T016 [US1] Implement `TelnetConnection.RunApplicationAsync()` internal method
   - Create isolated PipeInput (FR-007, ISO-001)
   - Create Vt100Output with ConnectionStdout
   - Set up AppSession context
   - Invoke interact callback
   - Handle callback exceptions (ERR-003)
 
-- [ ] T017 [US1] Implement `TelnetServer` class in `src/Stroke/Contrib/Telnet/TelnetServer.cs`
+- [x] T017 [US1] Implement `TelnetServer` class in `src/Stroke/Contrib/Telnet/TelnetServer.cs`
   - Constructor with 6 parameters per contract
-  - Port validation 1-65535 (ArgumentOutOfRangeException)
+  - Port validation 0-65535 (ArgumentOutOfRangeException)
   - Default host "127.0.0.1", port 23
   - Default encoding UTF-8
   - Properties: Host, Port, Encoding, Style, EnableCpr
   - Connections property (thread-safe snapshot via ConcurrentDictionary)
   - Reference: `contracts/TelnetServer.md`
 
-- [ ] T018 [US1] Implement `TelnetServer.RunAsync()` method - socket setup
+- [x] T018 [US1] Implement `TelnetServer.RunAsync()` method - socket setup
   - Create Socket with TCP/IP
   - Bind to Host:Port
   - Handle AddressAlreadyInUse exception (EC-003)
@@ -170,33 +170,33 @@
   - Invoke readyCallback after bind (API-001)
   - State transition Created → Running (TS-004)
 
-- [ ] T019 [US1] Implement `TelnetServer.RunAsync()` method - accept loop
+- [x] T019 [US1] Implement `TelnetServer.RunAsync()` method - accept loop
   - Accept connections in loop until cancelled
   - Create TelnetConnection for each
   - Send initialization sequences (FR-002, 7 exact sequences)
   - Start connection task
   - Add to Connections set
 
-- [ ] T020 [US1] Implement `TelnetServer.RunAsync()` method - read loop per connection
+- [x] T020 [US1] Implement `TelnetServer.RunAsync()` method - read loop per connection
   - Read from socket in loop
   - Feed data to connection's parser
   - Handle socket errors (ERR-001)
   - Clean up on disconnect (FR-011)
   - Timeout for NAWS/TTYPE negotiation 500ms (EC-011)
 
-- [ ] T021 [US1] Implement deprecated `Start()` and `StopAsync()` methods
+- [x] T021 [US1] Implement deprecated `Start()` and `StopAsync()` methods
   - Mark with [Obsolete] attribute (API-004)
   - Start() launches RunAsync in background
   - StopAsync() cancels and awaits
 
-- [ ] T022 [P] [US1] Write unit tests for `TelnetConnection` in `tests/Stroke.Tests/Contrib/Telnet/TelnetConnectionTests.cs`
+- [x] T022 [P] [US1] Write unit tests for `TelnetConnection` in `tests/Stroke.Tests/Contrib/Telnet/TelnetConnectionTests.cs`
   - Test Send() with formatted text
   - Test Send() on closed connection (no-op)
   - Test EraseScreen() sends correct sequences
   - Test Close() is idempotent
   - Test Size property with clamping
 
-- [ ] T023 [P] [US1] Write unit tests for `TelnetServer` in `tests/Stroke.Tests/Contrib/Telnet/TelnetServerTests.cs`
+- [x] T023 [P] [US1] Write unit tests for `TelnetServer` in `tests/Stroke.Tests/Contrib/Telnet/TelnetServerTests.cs`
   - Test constructor parameter validation
   - Test port out of range throws
   - Test default values

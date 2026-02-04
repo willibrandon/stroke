@@ -26,6 +26,7 @@ public abstract class PipeInputBase : IPipeInput
     private readonly Queue<byte> _inputBuffer = new();
     private readonly List<KeyPress> _parsedKeys = new();
     private readonly Vt100Parser _parser;
+    private Action? _inputReadyCallback;
     private bool _closed;
     private bool _disposed;
 
@@ -121,6 +122,7 @@ public abstract class PipeInputBase : IPipeInput
     {
         ThrowIfDisposed();
 
+        Action? callback;
         using (_lock.EnterScope())
         {
             if (_closed)
@@ -132,7 +134,12 @@ public abstract class PipeInputBase : IPipeInput
             {
                 _inputBuffer.Enqueue(b);
             }
+
+            callback = _inputReadyCallback;
         }
+
+        // Notify outside the lock to avoid deadlocks
+        callback?.Invoke();
     }
 
     /// <inheritdoc/>
@@ -153,12 +160,32 @@ public abstract class PipeInputBase : IPipeInput
     {
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
-        // Pipe input doesn't use event loop callbacks
-        return NoOpDisposable.Instance;
+
+        using (_lock.EnterScope())
+        {
+            _inputReadyCallback = inputReadyCallback;
+        }
+
+        return new DetachDisposable(this);
     }
 
     /// <inheritdoc/>
-    public virtual IDisposable Detach() => NoOpDisposable.Instance;
+    public virtual IDisposable Detach()
+    {
+        using (_lock.EnterScope())
+        {
+            _inputReadyCallback = null;
+        }
+        return NoOpDisposable.Instance;
+    }
+
+    /// <summary>
+    /// Disposable that detaches the input callback when disposed.
+    /// </summary>
+    private sealed class DetachDisposable(PipeInputBase owner) : IDisposable
+    {
+        public void Dispose() => owner.Detach();
+    }
 
     /// <inheritdoc/>
     public virtual nint FileNo()
