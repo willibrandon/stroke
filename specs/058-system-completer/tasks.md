@@ -24,8 +24,8 @@
 
 **Purpose**: Project structure verification - no new projects needed
 
-- [ ] T001 Verify existing namespace structure includes `Stroke.Contrib.Completers` in `src/Stroke/Contrib/Completers/`
-- [ ] T002 Verify test directory structure exists at `tests/Stroke.Tests/Contrib/Completers/`
+- [x] T001 Verify existing namespace structure includes `Stroke.Contrib.Completers` in `src/Stroke/Contrib/Completers/`
+- [x] T002 Verify test directory structure exists at `tests/Stroke.Tests/Contrib/Completers/`
 
 ---
 
@@ -51,17 +51,17 @@
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Create SystemCompleter class with grammar constant in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
+- [x] T003 [US1] Create SystemCompleter class with grammar constant in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
   - Define `GrammarPattern` constant with regex: `(?P<executable>[^\s]+)(\s+("[^"]*"|'[^']*'|[^'"]+))*\s+((?P<filename>[^\s]+)|"(?P<double_quoted_filename>[^\s]+)"|'(?P<single_quoted_filename>[^\s]+)')`
   - Create `sealed class SystemCompleter : GrammarCompleter`
   - Add XML documentation per Constitution (thread safety, usage examples)
 
-- [ ] T004 [US1] Implement parameterless constructor in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
+- [x] T004 [US1] Implement parameterless constructor in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
   - Compile grammar with `Grammar.Compile()` passing escape/unescape function dictionaries
   - Create completer dictionary: `executable` → `new ExecutableCompleter(minInputLen: 1, expandUser: true)`
   - Call base constructor with compiled grammar and completers
 
-- [ ] T005 [US1] Create test file structure at `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T005 [US1] Create test file structure at `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Create `SystemCompleterTests` class
   - Add test: executable completion at first word position (validates FR-001, FR-007)
   - Add test: no completions for non-existent executable prefix
@@ -78,11 +78,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T006 [US2] Add `filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
+- [x] T006 [US2] Add `filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
   - Map `filename` → `new PathCompleter(onlyDirectories: false, expandUser: true)`
   - Verify grammar pattern captures unquoted paths after whitespace
 
-- [ ] T007 [US2] Add unquoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T007 [US2] Add unquoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Test: unquoted path completion after command (validates FR-002, FR-003)
   - Test: tilde expansion in unquoted paths (validates FR-006)
   - Test: relative paths `./` and `../` (validates FR-010)
@@ -100,12 +100,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T008 [US3] Add `double_quoted_filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
+- [x] T008 [US3] Add `double_quoted_filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
   - Map `double_quoted_filename` → `new PathCompleter(onlyDirectories: false, expandUser: true)`
   - Add escape function: `"` → `\"`
   - Add unescape function: `\"` → `"`
 
-- [ ] T009 [US3] Add double-quoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T009 [US3] Add double-quoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Test: double-quoted path completion (validates FR-004)
   - Test: escape handling for internal double quotes
   - Test: tilde expansion inside double quotes (validates FR-006)
@@ -122,12 +122,12 @@
 
 ### Implementation for User Story 4
 
-- [ ] T010 [US4] Add `single_quoted_filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
+- [x] T010 [US4] Add `single_quoted_filename` completer mapping in `src/Stroke/Contrib/Completers/SystemCompleter.cs`:
   - Map `single_quoted_filename` → `new PathCompleter(onlyDirectories: false, expandUser: true)`
   - Add escape function: `'` → `\'`
   - Add unescape function: `\'` → `'`
 
-- [ ] T011 [US4] Add single-quoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T011 [US4] Add single-quoted path completion tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Test: single-quoted path completion (validates FR-005)
   - Test: escape handling for internal single quotes
 
@@ -139,22 +139,22 @@
 
 **Purpose**: Edge cases, documentation, and validation
 
-- [ ] T012 [P] Add edge case tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T012 [P] Add edge case tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Test: empty PATH handling (no completions shown)
   - Test: non-existent PATH directories (silently skipped)
   - Test: empty input (executable completion attempted)
   - Test: whitespace-only after command (file path completion activates)
 
-- [ ] T013 [P] Add cross-platform and NFR tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
+- [x] T013 [P] Add cross-platform and NFR tests in `tests/Stroke.Tests/Contrib/Completers/SystemCompleterTests.cs`:
   - Test: thread safety with concurrent GetCompletions calls (validates NFR-001)
   - Test: verify SystemCompleter has no mutable instance fields (validates NFR-002)
   - Test: platform-appropriate behavior (conditional on runtime OS)
 
-- [ ] T014 Run quickstart.md validation scenarios:
+- [x] T014 Run quickstart.md validation scenarios:
   - Verify basic usage example works
   - Verify all table examples produce expected completions
 
-- [ ] T015 Run full test suite and verify 80%+ coverage target
+- [x] T015 Run full test suite and verify 80%+ coverage target
 
 ---
 

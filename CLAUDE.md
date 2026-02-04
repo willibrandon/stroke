@@ -454,8 +454,9 @@ This ensures examples behave correctly in real terminal environments before mark
 
 ## Recent Changes
 
-Most recent first. Total test count: **8,691 tests**.
+Most recent first. Total test count: **8,709 tests**.
 
+- 058-system-completer: SystemCompleter — pre-configured GrammarCompleter for shell command completion, executable completion at first word position via ExecutableCompleter, unquoted/double-quoted/single-quoted file path completion via PathCompleter, escape/unescape functions for quoted paths (`"` → `\"`, `'` → `\'`), tilde expansion, cross-platform support (Windows/Unix), thread-safe immutable configuration
 - 122-get-input-example: First working example — `examples/Stroke.Examples.Prompts` project with `GetInput.cs` (15-line equivalent of Python's `get-input.py`), dictionary-based command-line routing in `Program.cs`, usage help and error handling for unknown examples. **Critical bug fixes**: (1) `KeyBindings.GetBindingsForKeys` sort order changed from ascending to descending by `AnyCount` so specific keys override wildcards, (2) `AppContext.GetApp()` fixed for C# generic invariance using `GetGenericTypeDefinition()` + `Unsafe.As`
 - 056-choice-input: ChoiceInput<T> selection prompt — numbered option list with RadioList widget, arrow/k/j/number key navigation, Enter to confirm, Ctrl+C interrupt with configurable exception type, optional frame border and bottom toolbar, mouse support, Ctrl+Z suspend (Unix), key binding extensibility via MergedKeyBindings, Dialogs.Choice<T>() and Dialogs.ChoiceAsync<T>() convenience methods
 - 055-win10-vt100-output: Windows10Output hybrid IOutput implementation — proxy class combining Win32Output (console sizing, mouse, scrolling, bracketed paste) and Vt100Output (all rendering via ANSI escape sequences), enables VT100 mode per-flush via ENABLE_VIRTUAL_TERMINAL_PROCESSING (0x0005), per-instance Lock for thread-safe flush serialization, defaults to true color (24-bit), WindowsVt100Support.IsVt100Enabled() detection delegating to PlatformUtils.IsWindowsVt100Supported

@@ -21,7 +21,7 @@ namespace Stroke.Contrib.RegularLanguages;
 /// This class is thread-safe; all operations can be called concurrently.
 /// </para>
 /// </remarks>
-public sealed class GrammarCompleter : CompletionNs.ICompleter
+public class GrammarCompleter : CompletionNs.ICompleter
 {
     private readonly CompiledGrammar _compiledGrammar;
     private readonly IReadOnlyDictionary<string, CompletionNs.ICompleter> _completers;
