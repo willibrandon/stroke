@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
-using System.Threading.Channels;
 using Stroke.Core;
+using Stroke.EventLoop;
 
 namespace Stroke.Completion;
 
@@ -15,10 +15,6 @@ namespace Stroke.Completion;
 /// <para>
 /// The completions will be displayed as soon as they are produced. The user
 /// can already select a completion, even if not all completions are displayed.
-/// </para>
-/// <para>
-/// This class is thread-safe per Constitution XI. It uses channels for safe
-/// cross-thread communication.
 /// </para>
 /// </remarks>
 public sealed class ThreadedCompleter : CompleterBase
@@ -49,15 +45,9 @@ public sealed class ThreadedCompleter : CompleterBase
     /// Gets completions asynchronously, running the wrapped completer in a background thread.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// This method runs the wrapped completer's <see cref="GetCompletions"/> method
-    /// in a background thread. Results are streamed back through a channel
-    /// as they become available.
-    /// </para>
-    /// <para>
-    /// The <paramref name="cancellationToken"/> is checked between each completion
-    /// and will stop the background work if cancelled.
-    /// </para>
+    /// Port of Python Prompt Toolkit's ThreadedCompleter.get_completions_async.
+    /// Uses <see cref="AsyncGeneratorUtils.GeneratorToAsyncGenerator{T}"/> to run the
+    /// synchronous completer in a background thread with backpressure support.
     /// </remarks>
     /// <param name="document">The current document.</param>
     /// <param name="completeEvent">Event describing how completion was triggered.</param>
@@ -68,102 +58,17 @@ public sealed class ThreadedCompleter : CompleterBase
         CompleteEvent completeEvent,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        // Use a bounded channel for backpressure, matching Python's queue-based approach.
-        // This prevents the producer from running too far ahead of the consumer.
-        var channel = Channel.CreateBounded<CompletionOrException>(new BoundedChannelOptions(capacity: 100)
+        // Matches Python: async with aclosing(generator_to_async_generator(...))
+        await using var wrapper = AsyncGeneratorUtils.Aclosing(
+            AsyncGeneratorUtils.GeneratorToAsyncGenerator(
+                () => _completer.GetCompletions(document, completeEvent)));
+
+        await foreach (var completion in wrapper.Value.WithCancellation(cancellationToken).ConfigureAwait(false))
         {
-            SingleReader = true,
-            SingleWriter = true,
-            FullMode = BoundedChannelFullMode.Wait
-        });
-
-        // Get the enumerator and write the first completion synchronously.
-        // This ensures at least one item is available immediately, avoiding the latency
-        // of waiting for the background thread to start. This matches Python's behavior
-        // where get_nowait() is tried first before awaiting.
-        var enumerator = _completer.GetCompletions(document, completeEvent).GetEnumerator();
-        var hasMore = false;
-
-        try
-        {
-            if (enumerator.MoveNext())
-            {
-                channel.Writer.TryWrite(new CompletionOrException(enumerator.Current));
-                hasMore = true;
-            }
-        }
-        catch (Exception ex)
-        {
-            channel.Writer.TryWrite(new CompletionOrException(ex));
-            channel.Writer.Complete();
-            enumerator.Dispose();
-            hasMore = false;
-        }
-
-        if (hasMore)
-        {
-            // Start background task to produce remaining completions.
-            // Use LongRunning to get a dedicated thread (avoids thread pool starvation for slow completers).
-            _ = Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            break;
-                        }
-
-                        // WriteAsync may block if channel is full (backpressure)
-                        channel.Writer.WriteAsync(new CompletionOrException(enumerator.Current), cancellationToken)
-                            .AsTask().GetAwaiter().GetResult();
-                    }
-                }
-                catch (Exception ex) when (ex is not OperationCanceledException)
-                {
-                    // Write the exception to the channel so it can be re-thrown on the reader side
-                    channel.Writer.TryWrite(new CompletionOrException(ex));
-                }
-                finally
-                {
-                    enumerator.Dispose();
-                    channel.Writer.Complete();
-                }
-            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-        }
-        else
-        {
-            // No completions or error already written, just complete the channel
-            channel.Writer.TryComplete();
-        }
-
-        // Consume completions from the channel.
-        // Note: ReadAllAsync's inner TryRead loop doesn't check cancellation between buffered items,
-        // so we must check the token explicitly after each yield.
-        await foreach (var item in channel.Reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
-        {
-            if (item.Exception != null)
-            {
-                throw item.Exception;
-            }
-
-            yield return item.Completion!;
-
-            // Check cancellation after yielding each item.
-            // This ensures we stop promptly when cancelled, even if items are buffered.
-            cancellationToken.ThrowIfCancellationRequested();
+            yield return completion;
         }
     }
 
     /// <inheritdoc/>
     public override string ToString() => $"ThreadedCompleter({_completer})";
-
-    /// <summary>
-    /// Represents either a completion or an exception from the background thread.
-    /// </summary>
-    private readonly record struct CompletionOrException(Completion? Completion, Exception? Exception = null)
-    {
-        public CompletionOrException(Exception exception) : this(null, exception) { }
-    }
 }

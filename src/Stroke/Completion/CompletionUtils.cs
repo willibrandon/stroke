@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Stroke.Core;
+using Stroke.EventLoop;
 
 namespace Stroke.Completion;
 
@@ -163,8 +164,11 @@ public static class CompletionUtils
         {
             foreach (var completer in _completers)
             {
-                await foreach (var completion in completer.GetCompletionsAsync(document, completeEvent, cancellationToken)
-                    .ConfigureAwait(false))
+                // Use Aclosing to ensure proper cleanup on early exit or cancellation.
+                await using var wrapper = AsyncGeneratorUtils.Aclosing(
+                    completer.GetCompletionsAsync(document, completeEvent, cancellationToken));
+
+                await foreach (var completion in wrapper.Value.ConfigureAwait(false))
                 {
                     yield return completion;
                 }
