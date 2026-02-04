@@ -18,5 +18,9 @@ public static class GetInput
         {
             Console.WriteLine("GoodBye!");
         }
+        catch (EOFException)
+        {
+            Console.WriteLine("GoodBye!");
+        }
     }
 }

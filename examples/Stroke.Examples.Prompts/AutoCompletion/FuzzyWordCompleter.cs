@@ -55,10 +55,21 @@ public static class FuzzyWordCompleterExample
 
     public static void Run()
     {
-        var text = Prompt.RunPrompt(
-            "Give some animals: ",
-            completer: AnimalCompleter,
-            completeWhileTyping: true);
-        Console.WriteLine($"You said: {text}");
+        try
+        {
+            var text = Prompt.RunPrompt(
+                "Give some animals: ",
+                completer: AnimalCompleter,
+                completeWhileTyping: true);
+            Console.WriteLine($"You said: {text}");
+        }
+        catch (KeyboardInterruptException)
+        {
+            // Ctrl-C pressed. Exit cleanly.
+        }
+        catch (EOFException)
+        {
+            // Ctrl-D pressed. Exit cleanly.
+        }
     }
 }
