@@ -433,7 +433,10 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
             _syncEnumerator.Dispose();
         }
 
-        _queue?.Dispose();
+        // Note: We intentionally do NOT call _queue.Dispose() here.
+        // BlockingCollection.Dispose() is not thread-safe with Take().
+        // If MoveNextAsync() has an in-flight Take() call, disposing the
+        // queue can cause undefined behavior. Let the GC handle cleanup.
     }
 }
 
