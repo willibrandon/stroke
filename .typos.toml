@@ -1,11 +1,18 @@
 # Typos configuration
 # https://github.com/crate-ci/typos
 
+[files]
+# Exclude external dependencies
+extend-exclude = ["FxSsh/"]
+
 [default.extend-identifiers]
 # Windows API naming conventions use ordinals like 2nd, 3rd, 4th
 FromLeft2ndButtonPressed = "FromLeft2ndButtonPressed"
 FromLeft3rdButtonPressed = "FromLeft3rdButtonPressed"
 FromLeft4thButtonPressed = "FromLeft4thButtonPressed"
+# FxSsh library has a typo in their event name (external API, can't change)
+ExceptionRasied = "ExceptionRasied"
+OnExceptionRaised = "OnExceptionRaised"
 
 [default.extend-words]
 # Technical terms that are not typos
@@ -25,3 +32,5 @@ hel = "hel"
 enumerables = "enumerables"
 # Vi command: "fo" means f (find char) + o (the character to find)
 fo = "fo"
+# Base64 encoded SSH keys contain random character sequences
+Pn = "Pn"
