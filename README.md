@@ -516,6 +516,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `GetTracebackFromContext` — Exception stack trace extraction from `IDictionary<string, object?>` context
   - Overflow clamping for `TimeSpan.MaxValue` deadlines, disposed sync context fallback, suppressed flow handling
   - Stateless, thread-safe (34 tests, >80% coverage)
+- **Async Generator Utilities** — Safe async generator cleanup and sync-to-async conversion, ported from `eventloop/async_generator.py`
+  - `AsyncGeneratorUtils` static class with `Aclosing<T>()` and `GeneratorToAsyncGenerator<T>()`
+  - `Aclosing<T>()` wraps async generators in `IAsyncDisposableValue<T>` ensuring `DisposeAsync()` on early exit or exception
+  - `GeneratorToAsyncGenerator<T>()` converts sync `IEnumerable<T>` to `IAsyncEnumerable<T>` with backpressure
+  - Bounded `BlockingCollection<T>` buffer (default 1000) with producer blocking when full
+  - Lazy producer thread startup on `GetAsyncEnumerator()` call
+  - Cooperative cancellation via `volatile bool` flag with 1-second timeout TryAdd
+  - Exception propagation from producer to consumer on next `MoveNextAsync()`
+  - Producer terminates within 2 seconds of disposal under all conditions
+  - Thread-safe (24 tests, >80% coverage)
 - **Win32 Console Types** — P/Invoke struct types and enums for Windows Console API interop, ported from `win32_types.py`
   - `Stroke.Input.Windows.Win32Types` namespace with 17 type files
   - 11 structs: `Coord` (4B), `SmallRect` (8B), `CharInfo` (4B), `KeyEventRecord` (16B), `MouseEventRecord` (16B), `WindowBufferSizeRecord` (4B), `MenuEventRecord` (4B), `FocusEventRecord` (4B), `InputRecord` union (20B, `LayoutKind.Explicit`), `ConsoleScreenBufferInfo` (22B), `SecurityAttributes` (12/24B)

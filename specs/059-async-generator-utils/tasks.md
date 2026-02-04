@@ -25,9 +25,9 @@ Per plan.md:
 
 **Purpose**: Project initialization and verify existing structure
 
-- [ ] T001 Verify EventLoop directory exists in `src/Stroke/EventLoop/` per plan.md
-- [ ] T002 Verify test directory exists in `tests/Stroke.Tests/EventLoop/` per plan.md
-- [ ] T003 Create `AsyncGeneratorUtils.cs` skeleton with namespace `Stroke.EventLoop` in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T001 Verify EventLoop directory exists in `src/Stroke/EventLoop/` per plan.md
+- [x] T002 Verify test directory exists in `tests/Stroke.Tests/EventLoop/` per plan.md
+- [x] T003 Create `AsyncGeneratorUtils.cs` skeleton with namespace `Stroke.EventLoop` in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
 
 ---
 
@@ -37,10 +37,10 @@ Per plan.md:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Implement `IAsyncDisposableValue<out T>` interface with covariant `Value` property in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T005 [P] Implement `Done` internal sentinel class in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T006 [P] Add `DefaultBufferSize` constant (1000) in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T007 Create `AsyncGeneratorTests.cs` test class skeleton in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T004 Implement `IAsyncDisposableValue<out T>` interface with covariant `Value` property in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T005 [P] Implement `Done` internal sentinel class in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T006 [P] Add `DefaultBufferSize` constant (1000) in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T007 Create `AsyncGeneratorTests.cs` test class skeleton in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -56,17 +56,17 @@ Per plan.md:
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T008 [P] [US1] Test normal iteration calls DisposeAsync exactly once in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T009 [P] [US1] Test early break calls DisposeAsync exactly once in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T010 [P] [US1] Test exception during iteration calls DisposeAsync before propagating in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T011 [P] [US1] Test disposal idempotency (multiple DisposeAsync calls are no-ops) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T012 [P] [US1] Test ArgumentNullException for null asyncEnumerable in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T008 [P] [US1] Test normal iteration calls DisposeAsync exactly once in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T009 [P] [US1] Test early break calls DisposeAsync exactly once in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T010 [P] [US1] Test exception during iteration calls DisposeAsync before propagating in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T011 [P] [US1] Test disposal idempotency (multiple DisposeAsync calls are no-ops) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T012 [P] [US1] Test ArgumentNullException for null asyncEnumerable in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement `AsyncDisposableValue<T>` internal class with disposal tracking in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T014 [US1] Implement `Aclosing<T>` static method with null validation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T015 [US1] Add XML documentation to `Aclosing<T>` and `IAsyncDisposableValue<T>` per contracts/async-generator-utils.md
+- [x] T013 [US1] Implement `AsyncDisposableValue<T>` internal class with disposal tracking in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T014 [US1] Implement `Aclosing<T>` static method with null validation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T015 [US1] Add XML documentation to `Aclosing<T>` and `IAsyncDisposableValue<T>` per contracts/async-generator-utils.md
 
 **Checkpoint**: User Story 1 complete - Aclosing<T> provides safe async generator cleanup
 
@@ -82,20 +82,20 @@ Per plan.md:
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T016 [P] [US2] Test order preservation for N items (N up to 100,000 per SC-001) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T017 [P] [US2] Test non-blocking behavior (MoveNextAsync yields control) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T018 [P] [US2] Test empty sequence returns false immediately in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T019 [P] [US2] Test large sequence (50k items) stays within memory bounds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T020 [P] [US2] Test ArgumentNullException for null getEnumerable in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T021 [P] [US2] Test ArgumentOutOfRangeException for invalid bufferSize in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T016 [P] [US2] Test order preservation for N items (N up to 100,000 per SC-001) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T017 [P] [US2] Test non-blocking behavior (MoveNextAsync yields control) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T018 [P] [US2] Test empty sequence returns false immediately in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T019 [P] [US2] Test large sequence (50k items) stays within memory bounds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T020 [P] [US2] Test ArgumentNullException for null getEnumerable in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T021 [P] [US2] Test ArgumentOutOfRangeException for invalid bufferSize in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement core `GeneratorToAsyncGenerator<T>` method signature with parameter validation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T023 [US2] Implement producer thread logic using `Task.Run()` and `BlockingCollection<object>` in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T024 [US2] Implement consumer async enumerator with `MoveNextAsync()` that takes from buffer in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T025 [US2] Add lazy initialization (producer starts on `GetAsyncEnumerator()`) per edge case spec in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T026 [US2] Add XML documentation to `GeneratorToAsyncGenerator<T>` per contracts/async-generator-utils.md
+- [x] T022 [US2] Implement core `GeneratorToAsyncGenerator<T>` method signature with parameter validation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T023 [US2] Implement producer thread logic using `Task.Run()` and `BlockingCollection<object>` in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T024 [US2] Implement consumer async enumerator with `MoveNextAsync()` that takes from buffer in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T025 [US2] Add lazy initialization (producer starts on `GetAsyncEnumerator()`) per edge case spec in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T026 [US2] Add XML documentation to `GeneratorToAsyncGenerator<T>` per contracts/async-generator-utils.md
 
 **Checkpoint**: User Story 2 complete - sync-to-async conversion works with FIFO ordering
 
@@ -111,14 +111,14 @@ Per plan.md:
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T027 [P] [US3] Test producer blocks when buffer is full in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T028 [P] [US3] Test default buffer size is exactly 1000 in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T029 [P] [US3] Test custom buffer size is respected in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T027 [P] [US3] Test producer blocks when buffer is full in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T028 [P] [US3] Test default buffer size is exactly 1000 in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T029 [P] [US3] Test custom buffer size is respected in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T030 [US3] Implement bounded `BlockingCollection<T>` with capacity from bufferSize parameter in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T031 [US3] Implement timeout-based `TryAdd` (1 second) for responsive cancellation checking per FR-008 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T030 [US3] Implement bounded `BlockingCollection<T>` with capacity from bufferSize parameter in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T031 [US3] Implement timeout-based `TryAdd` (1 second) for responsive cancellation checking per FR-008 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
 
 **Checkpoint**: User Story 3 complete - backpressure prevents memory exhaustion
 
@@ -134,19 +134,19 @@ Per plan.md:
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T032 [P] [US4] Test DisposeAsync signals producer to stop within 2 seconds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T033 [P] [US4] Test producer blocked on full buffer unblocks on dispose in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T034 [P] [US4] Test break + dispose terminates producer within 2 seconds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T035 [P] [US4] Test CancellationToken via WithCancellation throws OperationCanceledException in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T036 [P] [US4] Test exception from producer propagates on next MoveNextAsync in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T037 [P] [US4] Test multiple enumerators are independent (each has own thread/buffer) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T032 [P] [US4] Test DisposeAsync signals producer to stop within 2 seconds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T033 [P] [US4] Test producer blocked on full buffer unblocks on dispose in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T034 [P] [US4] Test break + dispose terminates producer within 2 seconds in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T035 [P] [US4] Test CancellationToken via WithCancellation throws OperationCanceledException in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T036 [P] [US4] Test exception from producer propagates on next MoveNextAsync in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T037 [P] [US4] Test multiple enumerators are independent (each has own thread/buffer) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T038 [US4] Implement `volatile bool _quitting` flag for cooperative cancellation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T039 [US4] Implement `DisposeAsync` that sets quitting flag and awaits producer task in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T040 [US4] Implement exception storage and re-throw on `MoveNextAsync()` per FR-010 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
-- [ ] T041 [US4] Ensure each `GetAsyncEnumerator()` call creates independent state (thread, buffer) per FR-016 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T038 [US4] Implement `volatile bool _quitting` flag for cooperative cancellation in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T039 [US4] Implement `DisposeAsync` that sets quitting flag and awaits producer task in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T040 [US4] Implement exception storage and re-throw on `MoveNextAsync()` per FR-010 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
+- [x] T041 [US4] Ensure each `GetAsyncEnumerator()` call creates independent state (thread, buffer) per FR-016 in `src/Stroke/EventLoop/AsyncGeneratorUtils.cs`
 
 **Checkpoint**: User Story 4 complete - clean cancellation and exception handling
 
@@ -156,12 +156,12 @@ Per plan.md:
 
 **Purpose**: Edge cases, thread safety validation, and coverage verification
 
-- [ ] T042 [P] Add edge case test: DisposeAsync during active MoveNextAsync in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T043 [P] Add edge case test: both producer and consumer throw simultaneously in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T044 [P] Add edge case test: rapid creation/disposal cycles in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T045 [P] Add edge case test: producer throws multiple times (only first propagates) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
-- [ ] T046 Verify 80% line coverage via `dotnet test --collect:"XPlat Code Coverage"` per SC-006
-- [ ] T047 Run quickstart.md code examples manually to verify documented usage works
+- [x] T042 [P] Add edge case test: DisposeAsync during active MoveNextAsync in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T043 [P] Add edge case test: both producer and consumer throw simultaneously in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T044 [P] Add edge case test: rapid creation/disposal cycles in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T045 [P] Add edge case test: producer throws multiple times (only first propagates) in `tests/Stroke.Tests/EventLoop/AsyncGeneratorTests.cs`
+- [x] T046 Verify 80% line coverage via `dotnet test --collect:"XPlat Code Coverage"` per SC-006
+- [x] T047 Run quickstart.md code examples manually to verify documented usage works
 
 ---
 
