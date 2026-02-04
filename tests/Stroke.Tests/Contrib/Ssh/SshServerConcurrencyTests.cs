@@ -7,7 +7,7 @@ using Xunit;
 namespace Stroke.Tests.Contrib.Ssh;
 
 /// <summary>
-/// Concurrency and thread-safety tests for <see cref="PromptToolkitSshServer"/>.
+/// Concurrency and thread-safety tests for <see cref="StrokeSshServer"/>.
 /// Tests for Phase 8: Concurrency & Stress Testing.
 /// </summary>
 [Collection("SSH Server Tests")]
@@ -17,7 +17,7 @@ public class SshServerConcurrencyTests : IAsyncLifetime
     private int _testPort;
     private CancellationTokenSource? _serverCts;
     private Task? _serverTask;
-    private PromptToolkitSshServer? _server;
+    private StrokeSshServer? _server;
 
     public ValueTask InitializeAsync()
     {
@@ -57,11 +57,11 @@ public class SshServerConcurrencyTests : IAsyncLifetime
         // Using 5 concurrent sessions for reasonable test duration
         const int sessionCount = 5;
         var ct = TestContext.Current.CancellationToken;
-        var sessionsStarted = new ConcurrentBag<PromptToolkitSshSession>();
+        var sessionsStarted = new ConcurrentBag<StrokeSshSession>();
         var allSessionsStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -130,7 +130,7 @@ public class SshServerConcurrencyTests : IAsyncLifetime
         const int cycles = 10;
         var ct = TestContext.Current.CancellationToken;
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -176,12 +176,12 @@ public class SshServerConcurrencyTests : IAsyncLifetime
     {
         // T039: Verify concurrent data send and resize operations are thread-safe
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
         var exceptions = new ConcurrentBag<Exception>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -252,7 +252,7 @@ public class SshServerConcurrencyTests : IAsyncLifetime
     public void Connections_UsesConcurrentDictionary()
     {
         // T041: Verify Connections uses thread-safe collection
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: _ => Task.CompletedTask,
@@ -261,7 +261,7 @@ public class SshServerConcurrencyTests : IAsyncLifetime
         // Connections property should return a snapshot that is safe to iterate
         var connections = _server.Connections;
         Assert.NotNull(connections);
-        Assert.IsType<HashSet<PromptToolkitSshSession>>(connections);
+        Assert.IsType<HashSet<StrokeSshSession>>(connections);
     }
 
     [Fact]
@@ -270,7 +270,7 @@ public class SshServerConcurrencyTests : IAsyncLifetime
         // T042: Verify session uses Lock for mutable state
         // This is a structural test - verify the pattern is used
         var channel = new TestSshChannel();
-        var session = new PromptToolkitSshSession(
+        var session = new StrokeSshSession(
             channel,
             _ => Task.CompletedTask,
             enableCpr: true);

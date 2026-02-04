@@ -6,7 +6,7 @@ using Xunit;
 namespace Stroke.Tests.Contrib.Ssh;
 
 /// <summary>
-/// Tests for <see cref="PromptToolkitSshServer"/> constructor validation and properties.
+/// Tests for <see cref="StrokeSshServer"/> constructor validation and properties.
 /// </summary>
 public class SshServerTests
 {
@@ -16,7 +16,7 @@ public class SshServerTests
     public void Constructor_WithNullHostKeyPath_ThrowsArgumentNullException()
     {
         var ex = Assert.Throws<ArgumentNullException>(() =>
-            new PromptToolkitSshServer(
+            new StrokeSshServer(
                 host: "127.0.0.1",
                 port: 2222,
                 interact: _ => Task.CompletedTask,
@@ -33,7 +33,7 @@ public class SshServerTests
     public void Constructor_WithInvalidPort_ThrowsArgumentOutOfRangeException(int port)
     {
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-            new PromptToolkitSshServer(
+            new StrokeSshServer(
                 host: "127.0.0.1",
                 port: port,
                 interact: _ => Task.CompletedTask,
@@ -49,7 +49,7 @@ public class SshServerTests
     [InlineData(65535)]
     public void Constructor_WithValidPort_Succeeds(int port)
     {
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             host: "127.0.0.1",
             port: port,
             interact: _ => Task.CompletedTask,
@@ -62,7 +62,7 @@ public class SshServerTests
     public void Constructor_WithNullInteract_UsesDefaultInteract()
     {
         // Should not throw - null interact uses a no-op default
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             host: "127.0.0.1",
             port: 2222,
             interact: null,
@@ -74,7 +74,7 @@ public class SshServerTests
     [Fact]
     public void Constructor_WithNullHost_UsesDefaultHost()
     {
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             host: null!,
             port: 2222,
             interact: _ => Task.CompletedTask,
@@ -90,7 +90,7 @@ public class SshServerTests
     [Fact]
     public void Host_DefaultsTo127001()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.Equal("127.0.0.1", server.Host);
     }
@@ -98,7 +98,7 @@ public class SshServerTests
     [Fact]
     public void Port_DefaultsTo2222()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.Equal(2222, server.Port);
     }
@@ -106,7 +106,7 @@ public class SshServerTests
     [Fact]
     public void Encoding_DefaultsToUtf8()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.Equal(Encoding.UTF8, server.Encoding);
     }
@@ -114,7 +114,7 @@ public class SshServerTests
     [Fact]
     public void Encoding_CanBeCustomized()
     {
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             hostKeyPath: "/tmp/test_key",
             encoding: Encoding.ASCII);
 
@@ -124,7 +124,7 @@ public class SshServerTests
     [Fact]
     public void Style_DefaultsToNull()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.Null(server.Style);
     }
@@ -132,7 +132,7 @@ public class SshServerTests
     [Fact]
     public void EnableCpr_DefaultsToTrue()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.True(server.EnableCpr);
     }
@@ -140,7 +140,7 @@ public class SshServerTests
     [Fact]
     public void EnableCpr_CanBeDisabled()
     {
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             hostKeyPath: "/tmp/test_key",
             enableCpr: false);
 
@@ -150,7 +150,7 @@ public class SshServerTests
     [Fact]
     public void Connections_InitiallyEmpty()
     {
-        var server = new PromptToolkitSshServer(hostKeyPath: "/tmp/test_key");
+        var server = new StrokeSshServer(hostKeyPath: "/tmp/test_key");
 
         Assert.Empty(server.Connections);
     }
@@ -184,14 +184,14 @@ public class SshServerTests
 
     #region Helper Classes
 
-    private class TestableServer : PromptToolkitSshServer
+    private class TestableServer : StrokeSshServer
     {
         public TestableServer(string hostKeyPath) : base(hostKeyPath: hostKeyPath) { }
 
         public bool TestBeginAuth(string username) => BeginAuth(username);
     }
 
-    private class AuthRequiredServer : PromptToolkitSshServer
+    private class AuthRequiredServer : StrokeSshServer
     {
         public AuthRequiredServer(string hostKeyPath) : base(hostKeyPath: hostKeyPath) { }
 

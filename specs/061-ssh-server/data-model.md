@@ -5,7 +5,7 @@
 
 ## Entities
 
-### PromptToolkitSshServer
+### StrokeSshServer
 
 Main server class that accepts SSH connections and creates sessions.
 
@@ -16,10 +16,10 @@ Main server class that accepts SSH connections and creates sessions.
 | Encoding | `Encoding` | Character encoding (default: UTF-8) |
 | Style | `IStyle?` | Optional style for formatted text output |
 | EnableCpr | `bool` | Enable cursor position requests (default: true) |
-| Connections | `IReadOnlySet<PromptToolkitSshSession>` | Active session snapshot |
+| Connections | `IReadOnlySet<StrokeSshSession>` | Active session snapshot |
 
 **Relationships**:
-- One-to-many with `PromptToolkitSshSession` (server manages multiple sessions)
+- One-to-many with `StrokeSshSession` (server manages multiple sessions)
 
 **State Transitions**:
 - Created → Running (via `RunAsync()`)
@@ -31,13 +31,13 @@ Main server class that accepts SSH connections and creates sessions.
 
 ---
 
-### PromptToolkitSshSession
+### StrokeSshSession
 
 Represents a single SSH connection with isolated I/O.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| Interact | `Func<PromptToolkitSshSession, Task>` | Callback for session interaction |
+| Interact | `Func<StrokeSshSession, Task>` | Callback for session interaction |
 | EnableCpr | `bool` | Cursor position requests enabled |
 | AppSession | `AppSession?` | Current application session (null until interaction starts) |
 | InteractTask | `Task?` | The running interact task |
@@ -52,7 +52,7 @@ Represents a single SSH connection with isolated I/O.
 | _closed | `bool` | Connection closed flag |
 
 **Relationships**:
-- Many-to-one with `PromptToolkitSshServer`
+- Many-to-one with `StrokeSshServer`
 - One-to-one with `ISshChannel`
 - One-to-one with `IPipeInput`
 - One-to-one with `Vt100Output`
@@ -124,8 +124,8 @@ TextWriter wrapper for SSH channel output with LF→CRLF conversion.
 
 | Entity | Thread Safety | Mechanism |
 |--------|---------------|-----------|
-| PromptToolkitSshServer | Thread-safe | `ConcurrentDictionary<PromptToolkitSshSession, byte>` for connections, `Lock` for task list |
-| PromptToolkitSshSession | Thread-safe | `Lock` for mutable state, `volatile` for boolean flags |
+| StrokeSshServer | Thread-safe | `ConcurrentDictionary<StrokeSshSession, byte>` for connections, `Lock` for task list |
+| StrokeSshSession | Thread-safe | `Lock` for mutable state, `volatile` for boolean flags |
 | SshChannel | Thread-safe | Delegates to FxSsh channel (thread-safe) |
 | SshChannelStdout | Thread-safe | Delegates to channel |
 
@@ -158,7 +158,7 @@ Main Thread          Accept Loop           Session N
 
 ```
 1. SshServer.ConnectionAccepted
-   └─► Create PromptToolkitSshSession
+   └─► Create StrokeSshSession
 
 2. UserAuthService.UserAuth
    └─► Call BeginAuth(username) virtual method

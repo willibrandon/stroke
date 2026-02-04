@@ -9,7 +9,7 @@ using Xunit;
 namespace Stroke.Tests.Contrib.Ssh;
 
 /// <summary>
-/// Integration tests for <see cref="PromptToolkitSshServer"/> using SSH.NET client.
+/// Integration tests for <see cref="StrokeSshServer"/> using SSH.NET client.
 /// These tests use real SSH connections per Constitution VIII (no mocks).
 /// </summary>
 [Collection("SSH Server Tests")]
@@ -19,7 +19,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
     private int _testPort;
     private CancellationTokenSource? _serverCts;
     private Task? _serverTask;
-    private PromptToolkitSshServer? _server;
+    private StrokeSshServer? _server;
 
     public ValueTask InitializeAsync()
     {
@@ -73,7 +73,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var connected = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: session =>
@@ -115,7 +115,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var ready = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: _ => Task.CompletedTask,
@@ -147,7 +147,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -203,7 +203,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
         var canFinish = new TaskCompletionSource<bool>();
         const int expectedClients = 3;
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -269,11 +269,11 @@ public class SshServerIntegrationTests : IAsyncLifetime
     public async Task Session_GetSize_ReturnsValidSize()
     {
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -327,11 +327,11 @@ public class SshServerIntegrationTests : IAsyncLifetime
     public async Task InitialTerminalSize_CapturedFromPty()
     {
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -385,12 +385,12 @@ public class SshServerIntegrationTests : IAsyncLifetime
     public async Task Session_EnableCpr_FlowsFromServerToSession()
     {
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
         // Create server with CPR disabled
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -441,7 +441,7 @@ public class SshServerIntegrationTests : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var outputWritten = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>

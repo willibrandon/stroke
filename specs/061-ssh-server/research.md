@@ -46,11 +46,11 @@
 
 | Python asyncssh | FxSsh | Stroke |
 |-----------------|-------|--------|
-| `SSHServer.begin_auth()` | `UserAuthService.UserAuth` | `PromptToolkitSshServer.BeginAuth()` virtual |
-| `SSHServer.session_requested()` | `ConnectionService.CommandOpened` | `PromptToolkitSshServer.CreateSession()` virtual |
-| `SSHServerSession.connection_made()` | `ConnectionAccepted` event | `PromptToolkitSshSession` constructor |
-| `SSHServerSession.data_received()` | Channel `DataReceived` | `PromptToolkitSshSession.DataReceived()` |
-| `SSHServerSession.terminal_size_changed()` | `WindowChange` event | `PromptToolkitSshSession.TerminalSizeChanged()` |
+| `SSHServer.begin_auth()` | `UserAuthService.UserAuth` | `StrokeSshServer.BeginAuth()` virtual |
+| `SSHServer.session_requested()` | `ConnectionService.CommandOpened` | `StrokeSshServer.CreateSession()` virtual |
+| `SSHServerSession.connection_made()` | `ConnectionAccepted` event | `StrokeSshSession` constructor |
+| `SSHServerSession.data_received()` | Channel `DataReceived` | `StrokeSshSession.DataReceived()` |
+| `SSHServerSession.terminal_size_changed()` | `WindowChange` event | `StrokeSshSession.TerminalSizeChanged()` |
 | `session._chan.write()` | Channel `SendData()` | `SshChannelStdout.Write()` |
 | `session._chan.set_line_mode()` | N/A (FxSsh has no line mode) | `ISshChannel.SetLineMode()` (no-op) |
 
@@ -168,7 +168,7 @@ public interface ISshChannel
 
 ### R8: Host Key Management
 
-**Decision**: `PromptToolkitSshServer` constructor accepts host key path or PEM string
+**Decision**: `StrokeSshServer` constructor accepts host key path or PEM string
 
 **FxSsh Pattern**:
 ```csharp
@@ -190,7 +190,7 @@ var rsaKey = FxSsh.KeyGenerator.GenerateRsaKeyPem(2048);
 **Pattern**:
 ```csharp
 // Server side
-var server = new PromptToolkitSshServer(interact: async session => { ... });
+var server = new StrokeSshServer(interact: async session => { ... });
 await server.RunAsync(readyCallback: () => serverReady.Set());
 
 // Client side (using SSH.NET)

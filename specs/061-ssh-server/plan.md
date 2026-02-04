@@ -5,7 +5,7 @@
 
 ## Summary
 
-Implement SSH server integration allowing Stroke applications to run over SSH connections using the FxSsh library, following Python Prompt Toolkit's asyncssh-based ssh module patterns. The implementation provides `PromptToolkitSshServer` (inheritable server class with virtual authentication/session hooks) and `PromptToolkitSshSession` (per-connection session managing PipeInput, Vt100Output, AppSession).
+Implement SSH server integration allowing Stroke applications to run over SSH connections using the FxSsh library, following Python Prompt Toolkit's asyncssh-based ssh module patterns. The implementation provides `StrokeSshServer` (inheritable server class with virtual authentication/session hooks) and `StrokeSshSession` (per-connection session managing PipeInput, Vt100Output, AppSession).
 
 ## Technical Context
 
@@ -59,8 +59,8 @@ specs/061-ssh-server/
 src/Stroke/
 └── Contrib/
     └── Ssh/
-        ├── PromptToolkitSshServer.cs   # Main server class (~350 LOC)
-        ├── PromptToolkitSshSession.cs  # Per-connection session (~300 LOC)
+        ├── StrokeSshServer.cs   # Main server class (~350 LOC)
+        ├── StrokeSshSession.cs  # Per-connection session (~300 LOC)
         ├── SshChannelStdout.cs         # TextWriter with LF→CRLF (~100 LOC)
         ├── ISshChannel.cs              # Channel abstraction interface (~50 LOC)
         └── SshChannel.cs               # FxSsh channel adapter (~150 LOC)

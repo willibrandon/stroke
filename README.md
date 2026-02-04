@@ -603,12 +603,12 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Integrated into telnet classes for protocol debugging
   - Thread-safe via `System.Threading.Lock` (26 tests, >80% coverage)
 - **SSH Server** — Secure network-accessible REPL support using FxSsh, ported from `contrib/ssh/`
-  - `PromptToolkitSshServer` class with host/port/interact/hostKeyPath/encoding/style/enableCpr configuration
+  - `StrokeSshServer` class with host/port/interact/hostKeyPath/encoding/style/enableCpr configuration
   - `RunAsync()` with ready callback and cancellation token for graceful shutdown (5-second timeout)
   - `Connections` property returning snapshot of active sessions
   - `BeginAuth()` virtual method for custom authentication (defaults to no auth)
   - `CreateSession()` virtual method for custom session types
-  - `PromptToolkitSshSession` with GetSize/DataReceived/TerminalSizeChanged/Close methods
+  - `StrokeSshSession` with GetSize/DataReceived/TerminalSizeChanged/Close methods
   - `ISshChannel` abstraction for testability with `SshChannel` FxSsh adapter
   - `SshChannelStdout` TextWriter with LF→CRLF conversion per NVT specification
   - Terminal type and size tracking from PTY request

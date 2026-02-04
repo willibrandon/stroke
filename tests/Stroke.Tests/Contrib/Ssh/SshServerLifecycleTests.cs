@@ -6,7 +6,7 @@ using Xunit;
 namespace Stroke.Tests.Contrib.Ssh;
 
 /// <summary>
-/// Lifecycle and cleanup tests for <see cref="PromptToolkitSshServer"/>.
+/// Lifecycle and cleanup tests for <see cref="StrokeSshServer"/>.
 /// Tests for Phase 7: Session Cleanup on Disconnect.
 /// </summary>
 [Collection("SSH Server Tests")]
@@ -16,7 +16,7 @@ public class SshServerLifecycleTests : IAsyncLifetime
     private int _testPort;
     private CancellationTokenSource? _serverCts;
     private Task? _serverTask;
-    private PromptToolkitSshServer? _server;
+    private StrokeSshServer? _server;
 
     public ValueTask InitializeAsync()
     {
@@ -53,11 +53,11 @@ public class SshServerLifecycleTests : IAsyncLifetime
     public async Task GracefulDisconnect_CleansUpResources()
     {
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var sessionEnded = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -122,7 +122,7 @@ public class SshServerLifecycleTests : IAsyncLifetime
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -186,11 +186,11 @@ public class SshServerLifecycleTests : IAsyncLifetime
     {
         // T034: Verify graceful disconnect triggers prompt cleanup
         var ct = TestContext.Current.CancellationToken;
-        PromptToolkitSshSession? capturedSession = null;
+        StrokeSshSession? capturedSession = null;
         var sessionStarted = new TaskCompletionSource<bool>();
         var canFinish = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: async session =>
@@ -254,7 +254,7 @@ public class SshServerLifecycleTests : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var exceptionThrown = new TaskCompletionSource<bool>();
 
-        _server = new PromptToolkitSshServer(
+        _server = new StrokeSshServer(
             host: "127.0.0.1",
             port: _testPort,
             interact: session =>

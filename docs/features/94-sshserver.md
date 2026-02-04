@@ -12,7 +12,7 @@ Note: Python uses `asyncssh` library. The C# port will use SSH.NET.
 
 ## Public API
 
-### PromptToolkitSshServer
+### StrokeSshServer
 
 ```csharp
 namespace Stroke.Contrib.Ssh;
@@ -21,21 +21,21 @@ namespace Stroke.Contrib.Ssh;
 /// Run prompt_toolkit applications over an SSH server.
 /// Each connection gets its own AppSession for concurrent UI interactions.
 /// </summary>
-public sealed class PromptToolkitSshServer
+public sealed class StrokeSshServer
 {
     /// <summary>
     /// Create an SSH server for prompt toolkit applications.
     /// </summary>
     /// <param name="interact">Async callback for each session.</param>
     /// <param name="enableCpr">Enable cursor position requests.</param>
-    public PromptToolkitSshServer(
-        Func<PromptToolkitSshSession, Task> interact,
+    public StrokeSshServer(
+        Func<StrokeSshSession, Task> interact,
         bool enableCpr = true);
 
     /// <summary>
     /// The interact callback for sessions.
     /// </summary>
-    public Func<PromptToolkitSshSession, Task> Interact { get; }
+    public Func<StrokeSshSession, Task> Interact { get; }
 
     /// <summary>
     /// Whether cursor position requests are enabled.
@@ -54,11 +54,11 @@ public sealed class PromptToolkitSshServer
     /// Called when a session is requested.
     /// </summary>
     /// <returns>A new SSH session.</returns>
-    public virtual PromptToolkitSshSession CreateSession();
+    public virtual StrokeSshSession CreateSession();
 }
 ```
 
-### PromptToolkitSshSession
+### StrokeSshSession
 
 ```csharp
 namespace Stroke.Contrib.Ssh;
@@ -66,12 +66,12 @@ namespace Stroke.Contrib.Ssh;
 /// <summary>
 /// Represents a single SSH session running a prompt toolkit application.
 /// </summary>
-public sealed class PromptToolkitSshSession
+public sealed class StrokeSshSession
 {
     /// <summary>
     /// The interact callback for this session.
     /// </summary>
-    public Func<PromptToolkitSshSession, Task> Interact { get; }
+    public Func<StrokeSshSession, Task> Interact { get; }
 
     /// <summary>
     /// Whether cursor position requests are enabled.
@@ -178,8 +178,8 @@ public interface ISshChannel
 src/Stroke/
 └── Contrib/
     └── Ssh/
-        ├── PromptToolkitSshServer.cs
-        ├── PromptToolkitSshSession.cs
+        ├── StrokeSshServer.cs
+        ├── StrokeSshSession.cs
         └── ISshChannel.cs
 tests/Stroke.Tests/
 └── Contrib/
@@ -192,14 +192,14 @@ tests/Stroke.Tests/
 ### SshSession Implementation
 
 ```csharp
-public sealed class PromptToolkitSshSession
+public sealed class StrokeSshSession
 {
     private ISshChannel? _channel;
     private PipeInput? _input;
     private Vt100Output? _output;
 
-    public PromptToolkitSshSession(
-        Func<PromptToolkitSshSession, Task> interact,
+    public StrokeSshSession(
+        Func<StrokeSshSession, Task> interact,
         bool enableCpr)
     {
         Interact = interact;
@@ -308,7 +308,7 @@ internal sealed class SshChannelStdout : TextWriter
 ### Usage Example
 
 ```csharp
-async Task Interact(PromptToolkitSshSession session)
+async Task Interact(StrokeSshSession session)
 {
     // Show a dialog
     var result = await YesNoDialog.ShowAsync("Welcome", "Ready to continue?");
@@ -321,7 +321,7 @@ async Task Interact(PromptToolkitSshSession session)
 }
 
 // Create the server
-var server = new PromptToolkitSshServer(Interact, enableCpr: true);
+var server = new StrokeSshServer(Interact, enableCpr: true);
 
 // Start SSH server with SSH.NET
 await SshServer.CreateAsync(
@@ -360,7 +360,7 @@ public class SshNetChannelAdapter : ISshChannel
 
 ```csharp
 // Each SSH connection gets its own:
-// 1. PromptToolkitSshSession instance
+// 1. StrokeSshSession instance
 // 2. PipeInput for feeding keystrokes
 // 3. Vt100Output for rendering
 // 4. AppSession context
@@ -380,9 +380,9 @@ public class SshNetChannelAdapter : ISshChannel
 ## Implementation Tasks
 
 1. Define ISshChannel abstraction
-2. Implement PromptToolkitSshSession
+2. Implement StrokeSshSession
 3. Implement SshChannelStdout wrapper
-4. Implement PromptToolkitSshServer
+4. Implement StrokeSshServer
 5. Handle terminal size change notifications
 6. Integrate with PipeInput for keyboard
 7. Create AppSession per connection

@@ -25,40 +25,40 @@ namespace Stroke.Contrib.Ssh;
 /// </remarks>
 /// <example>
 /// <code>
-/// async Task InteractAsync(PromptToolkitSshSession session)
+/// async Task InteractAsync(StrokeSshSession session)
 /// {
 ///     var prompt = new PromptSession&lt;string&gt;();
 ///     var result = await prompt.PromptAsync("Say something: ");
 ///     Console.WriteLine($"You said: {result}");
 /// }
 ///
-/// var server = new PromptToolkitSshServer(
+/// var server = new StrokeSshServer(
 ///     interact: InteractAsync,
 ///     port: 2222,
 ///     hostKeyPath: "ssh_host_key");
 /// await server.RunAsync();
 /// </code>
 /// </example>
-public class PromptToolkitSshServer
+public class StrokeSshServer
 {
     private static readonly ILogger _logger = StrokeLogger.CreateLogger("Stroke.Ssh.Server");
 
-    private readonly Func<PromptToolkitSshSession, Task> _interact;
+    private readonly Func<StrokeSshSession, Task> _interact;
     private readonly string _hostKeyPath;
-    private readonly ConcurrentDictionary<PromptToolkitSshSession, byte> _connections = new();
-    private readonly ConcurrentDictionary<SessionChannel, PromptToolkitSshSession> _channelToSession = new();
+    private readonly ConcurrentDictionary<StrokeSshSession, byte> _connections = new();
+    private readonly ConcurrentDictionary<SessionChannel, StrokeSshSession> _channelToSession = new();
     private readonly ConcurrentDictionary<SessionChannel, SshChannel> _channelToAdapter = new();
     private readonly List<Task> _sessionTasks = new();
     private readonly Lock _tasksLock = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PromptToolkitSshServer"/> class.
+    /// Initializes a new instance of the <see cref="StrokeSshServer"/> class.
     /// </summary>
     /// <param name="host">The host address to bind to (default: "127.0.0.1").</param>
     /// <param name="port">The port number to listen on (default: 2222).</param>
     /// <param name="interact">
     /// Async callback invoked for each new connection. The callback receives the
-    /// <see cref="PromptToolkitSshSession"/> and should implement the interactive session logic.
+    /// <see cref="StrokeSshSession"/> and should implement the interactive session logic.
     /// </param>
     /// <param name="hostKeyPath">Path to the SSH host key file (PEM format).</param>
     /// <param name="encoding">Character encoding (default: UTF-8).</param>
@@ -70,10 +70,10 @@ public class PromptToolkitSshServer
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="interact"/> or <paramref name="hostKeyPath"/> is null.
     /// </exception>
-    public PromptToolkitSshServer(
+    public StrokeSshServer(
         string host = "127.0.0.1",
         int port = 2222,
-        Func<PromptToolkitSshSession, Task>? interact = null,
+        Func<StrokeSshSession, Task>? interact = null,
         string? hostKeyPath = null,
         Encoding? encoding = null,
         IStyle? style = null,
@@ -125,8 +125,8 @@ public class PromptToolkitSshServer
     /// Thread safety: This set is a snapshot and can be safely enumerated while
     /// sessions are being added or removed.
     /// </remarks>
-    public IReadOnlySet<PromptToolkitSshSession> Connections =>
-        new HashSet<PromptToolkitSshSession>(_connections.Keys);
+    public IReadOnlySet<StrokeSshSession> Connections =>
+        new HashSet<StrokeSshSession>(_connections.Keys);
 
     /// <summary>
     /// Runs the SSH server until cancelled.
@@ -247,9 +247,9 @@ public class PromptToolkitSshServer
     /// <remarks>
     /// Override this method to create custom session types.
     /// </remarks>
-    protected virtual PromptToolkitSshSession CreateSession(ISshChannel channel)
+    protected virtual StrokeSshSession CreateSession(ISshChannel channel)
     {
-        return new PromptToolkitSshSession(channel, _interact, EnableCpr);
+        return new StrokeSshSession(channel, _interact, EnableCpr);
     }
 
     private void OnConnectionAccepted(object? sender, Session session)
@@ -348,7 +348,7 @@ public class PromptToolkitSshServer
         }
     }
 
-    private async Task RunSessionAsync(PromptToolkitSshSession session, SessionChannel channel)
+    private async Task RunSessionAsync(StrokeSshSession session, SessionChannel channel)
     {
         try
         {
@@ -360,7 +360,7 @@ public class PromptToolkitSshServer
         }
     }
 
-    private void OnChannelClosed(SessionChannel channel, PromptToolkitSshSession session)
+    private void OnChannelClosed(SessionChannel channel, StrokeSshSession session)
     {
         _logger.LogDebug("SSH channel closed");
 
@@ -420,7 +420,7 @@ public class PromptToolkitSshServer
         }
     }
 
-    private static Task DummyInteractAsync(PromptToolkitSshSession session)
+    private static Task DummyInteractAsync(StrokeSshSession session)
     {
         return Task.CompletedTask;
     }

@@ -24,7 +24,7 @@ namespace Stroke.Contrib.Ssh;
 /// async context.
 /// </para>
 /// </remarks>
-public class PromptToolkitSshSession
+public class StrokeSshSession
 {
     private static readonly ILogger _logger = StrokeLogger.CreateLogger("Stroke.Ssh.Session");
 
@@ -38,14 +38,14 @@ public class PromptToolkitSshSession
     private volatile bool _hasAppContext;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PromptToolkitSshSession"/> class.
+    /// Initializes a new instance of the <see cref="StrokeSshSession"/> class.
     /// </summary>
     /// <param name="channel">The SSH channel adapter.</param>
     /// <param name="interact">The interaction callback.</param>
     /// <param name="enableCpr">Enable cursor position requests.</param>
-    internal PromptToolkitSshSession(
+    internal StrokeSshSession(
         ISshChannel channel,
-        Func<PromptToolkitSshSession, Task> interact,
+        Func<StrokeSshSession, Task> interact,
         bool enableCpr)
     {
         _channel = channel ?? throw new ArgumentNullException(nameof(channel));
@@ -63,7 +63,7 @@ public class PromptToolkitSshSession
     /// <summary>
     /// Gets the interact callback for this session.
     /// </summary>
-    public Func<PromptToolkitSshSession, Task> Interact { get; }
+    public Func<StrokeSshSession, Task> Interact { get; }
 
     /// <summary>
     /// Gets whether cursor position requests are enabled.

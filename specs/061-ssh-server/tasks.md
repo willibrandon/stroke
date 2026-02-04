@@ -61,18 +61,18 @@
 
 ### Implementation for User Story 1
 
-- [x] T012 [US1] Create `PromptToolkitSshSession` class in `src/Stroke/Contrib/Ssh/PromptToolkitSshSession.cs` with:
-  - Constructor accepting `ISshChannel`, `Func<PromptToolkitSshSession, Task>` interact, `bool enableCpr`
+- [x] T012 [US1] Create `StrokeSshSession` class in `src/Stroke/Contrib/Ssh/StrokeSshSession.cs` with:
+  - Constructor accepting `ISshChannel`, `Func<StrokeSshSession, Task>` interact, `bool enableCpr`
   - Properties: `Interact`, `EnableCpr`, `AppSession?`, `InteractTask?`
   - `GetSize()` returning current size or default 79×20 per FR-004
   - `DataReceived(string data)` routing to PipeInput per FR-005
   - Internal state: `_size`, `_pipeInput`, `_vt100Output`, `_closed` with `Lock` synchronization per Constitution XI
-- [x] T013 [US1] Create `PromptToolkitSshServer` class in `src/Stroke/Contrib/Ssh/PromptToolkitSshServer.cs` with:
+- [x] T013 [US1] Create `StrokeSshServer` class in `src/Stroke/Contrib/Ssh/StrokeSshServer.cs` with:
   - Constructor: `host`, `port`, `interact`, `hostKeyPath`, `encoding`, `style`, `enableCpr` per contracts
   - Properties: `Host`, `Port`, `Encoding`, `Style`, `EnableCpr`, `Connections`
   - `RunAsync(Action? readyCallback, CancellationToken)` starting FxSsh server, wiring events per FR-002
   - `ConcurrentDictionary` for thread-safe session tracking per Constitution XI
-- [x] T014 [US1] Implement FxSsh event wiring in `PromptToolkitSshServer`:
+- [x] T014 [US1] Implement FxSsh event wiring in `StrokeSshServer`:
   - `ConnectionAccepted` → create session, add to Connections
   - `CommandOpened` → create PipeInput, Vt100Output, AppSession, start interact task per FR-003
   - `DataReceived` → route to session's `DataReceived()` per FR-005
@@ -98,11 +98,11 @@
 
 ### Implementation for User Story 2
 
-- [x] T020 [US2] Implement `TerminalSizeChanged(int width, int height)` in `PromptToolkitSshSession` per FR-008:
+- [x] T020 [US2] Implement `TerminalSizeChanged(int width, int height)` in `StrokeSshSession` per FR-008:
   - Clamp dimensions to 1-500 per spec edge cases
   - Update `_size` under lock
   - Trigger app invalidation via `AppSession.Invalidate()` if running
-- [x] T021 [US2] Wire FxSsh `WindowChange` event in `PromptToolkitSshServer` to call session's `TerminalSizeChanged()`
+- [x] T021 [US2] Wire FxSsh `WindowChange` event in `StrokeSshServer` to call session's `TerminalSizeChanged()`
 - [x] T022 [US2] Wire FxSsh `PtyReceived` event to store initial terminal size and type in `SshChannel`
 
 **Checkpoint**: User Story 2 complete - terminal resize events trigger re-render within 100ms
@@ -186,7 +186,7 @@
 
 ### Implementation
 
-- [x] T041 Verify `Connections` uses `ConcurrentDictionary<PromptToolkitSshSession, byte>` for O(1) add/remove
+- [x] T041 Verify `Connections` uses `ConcurrentDictionary<StrokeSshSession, byte>` for O(1) add/remove
 - [x] T042 Verify all session state mutations use `Lock.EnterScope()` pattern
 - [x] T043 Add data buffering for pre-session data (64KB limit per spec edge cases)
 

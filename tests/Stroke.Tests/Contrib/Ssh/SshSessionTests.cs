@@ -6,7 +6,7 @@ using Xunit;
 namespace Stroke.Tests.Contrib.Ssh;
 
 /// <summary>
-/// Tests for <see cref="PromptToolkitSshSession"/> properties and behavior.
+/// Tests for <see cref="StrokeSshSession"/> properties and behavior.
 /// </summary>
 public class SshSessionTests
 {
@@ -15,7 +15,7 @@ public class SshSessionTests
     [Fact]
     public void Interact_ReturnsProvidedCallback()
     {
-        Func<PromptToolkitSshSession, Task> callback = _ => Task.CompletedTask;
+        Func<StrokeSshSession, Task> callback = _ => Task.CompletedTask;
         var channel = new TestSshChannel();
         var session = CreateSession(channel, callback, enableCpr: true);
 
@@ -281,12 +281,12 @@ public class SshSessionTests
 
     #region Helper Methods
 
-    private static PromptToolkitSshSession CreateSession(
+    private static StrokeSshSession CreateSession(
         ISshChannel channel,
-        Func<PromptToolkitSshSession, Task>? interact = null,
+        Func<StrokeSshSession, Task>? interact = null,
         bool enableCpr = true)
     {
-        return new PromptToolkitSshSession(
+        return new StrokeSshSession(
             channel,
             interact ?? (_ => Task.CompletedTask),
             enableCpr);

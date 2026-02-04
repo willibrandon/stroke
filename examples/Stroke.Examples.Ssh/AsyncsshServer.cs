@@ -57,7 +57,7 @@ public static class AsyncsshServer
     {
         EnsureHostKey();
 
-        var server = new PromptToolkitSshServer(
+        var server = new StrokeSshServer(
             interact: InteractAsync,
             port: 2222,
             hostKeyPath: HostKeyPath);
@@ -72,7 +72,7 @@ public static class AsyncsshServer
     /// that any Stroke application (dialogs, prompts, etc.) will use the
     /// SSH channel for input and output.
     /// </summary>
-    private static async Task InteractAsync(PromptToolkitSshSession session)
+    private static async Task InteractAsync(StrokeSshSession session)
     {
         var promptSession = new PromptSession<string>();
 

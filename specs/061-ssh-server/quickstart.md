@@ -23,7 +23,7 @@ using Stroke.Contrib.Ssh;
 using Stroke.Shortcuts;
 
 // Define interaction callback
-async Task InteractAsync(PromptToolkitSshSession session)
+async Task InteractAsync(StrokeSshSession session)
 {
     var prompt = new PromptSession<string>();
     var name = await prompt.PromptAsync("What is your name? ");
@@ -31,7 +31,7 @@ async Task InteractAsync(PromptToolkitSshSession session)
 }
 
 // Create and run server
-var server = new PromptToolkitSshServer(
+var server = new StrokeSshServer(
     port: 2222,
     interact: InteractAsync,
     hostKeyPath: "ssh_host_key"
@@ -138,7 +138,7 @@ await server.RunAsync(cancellationToken: cts.Token);
 ### Port 0 (Auto-Assign)
 
 ```csharp
-var server = new PromptToolkitSshServer(port: 0, ...);
+var server = new StrokeSshServer(port: 0, ...);
 
 await server.RunAsync(readyCallback: () =>
 {

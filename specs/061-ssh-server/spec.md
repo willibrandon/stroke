@@ -9,7 +9,7 @@
 
 ### Session 2026-02-03
 
-- Q: Should `PromptToolkitSshServer` be sealed or inheritable for custom authentication? → A: Inheritable with virtual `BeginAuth` and `CreateSession` methods (matches Python PTK design)
+- Q: Should `StrokeSshServer` be sealed or inheritable for custom authentication? → A: Inheritable with virtual `BeginAuth` and `CreateSession` methods (matches Python PTK design)
 
 ### Virtual Method Semantics
 
@@ -20,7 +20,7 @@
 
 **Password Authentication Pattern** (when `BeginAuth` returns `true`):
 ```csharp
-public class AuthenticatedSshServer : PromptToolkitSshServer
+public class AuthenticatedSshServer : StrokeSshServer
 {
     private readonly Dictionary<string, string> _credentials;
 
@@ -62,7 +62,7 @@ public class AuthenticatedSshServer : PromptToolkitSshServer
 - **Terminal support**: Most modern terminals (xterm, iTerm2, Windows Terminal) support CPR; some (like `dumb` terminals) do not
 
 **CreateSession Semantics**:
-- Default: Returns new `PromptToolkitSshSession` with server's interact callback and enableCpr
+- Default: Returns new `StrokeSshSession` with server's interact callback and enableCpr
 - Override pattern: Return custom session subclass for per-session state or behavior
 
 ## API Mapping (Python PTK → C#)
@@ -71,8 +71,8 @@ public class AuthenticatedSshServer : PromptToolkitSshServer
 
 | Python PTK Class | C# Stroke Class | Notes |
 |------------------|-----------------|-------|
-| `PromptToolkitSSHSession` | `PromptToolkitSshSession` | Case convention: SSH → Ssh (C# PascalCase) |
-| `PromptToolkitSSHServer` | `PromptToolkitSshServer` | Case convention: SSH → Ssh |
+| `PromptToolkitSSHSession` | `StrokeSshSession` | Case convention: SSH → Ssh (C# PascalCase) |
+| `PromptToolkitSSHServer` | `StrokeSshServer` | Case convention: SSH → Ssh |
 | Nested `Stdout` class | `SshChannelStdout` | Promoted to top-level internal class for clarity |
 
 ### Method Mapping
@@ -90,10 +90,10 @@ public class AuthenticatedSshServer : PromptToolkitSshServer
 
 ### Constructor Parameter Mapping
 
-**PromptToolkitSshServer**:
+**StrokeSshServer**:
 | Python Parameter | C# Parameter | Notes |
 |------------------|--------------|-------|
-| `interact` | `interact` | `Func<PromptToolkitSshSession, Task>` |
+| `interact` | `interact` | `Func<StrokeSshSession, Task>` |
 | `enable_cpr` | `enableCpr` | Default: `true` |
 | (N/A - asyncssh handles) | `host` | Default: `"127.0.0.1"` |
 | (N/A - asyncssh handles) | `port` | Default: `2222` |
@@ -101,7 +101,7 @@ public class AuthenticatedSshServer : PromptToolkitSshServer
 | (N/A - asyncssh handles) | `encoding` | Default: UTF-8 |
 | (N/A - asyncssh handles) | `style` | Optional style |
 
-**PromptToolkitSshSession**:
+**StrokeSshSession**:
 | Python Parameter | C# Parameter | Notes |
 |------------------|--------------|-------|
 | `interact` | `Interact` | Property (readonly) |
@@ -213,8 +213,8 @@ Per Constitution XI, all mutable classes MUST be thread-safe:
 
 | Class | Thread Safety Mechanism | Rationale |
 |-------|-------------------------|-----------|
-| `PromptToolkitSshServer` | `ConcurrentDictionary<PromptToolkitSshSession, byte>` for connections; `Lock` for task list | Multiple sessions connect/disconnect concurrently |
-| `PromptToolkitSshSession` | `Lock` for mutable state (`_size`, `_closed`); `volatile` for boolean flags | DataReceived may be called from network thread while interact runs |
+| `StrokeSshServer` | `ConcurrentDictionary<StrokeSshSession, byte>` for connections; `Lock` for task list | Multiple sessions connect/disconnect concurrently |
+| `StrokeSshSession` | `Lock` for mutable state (`_size`, `_closed`); `volatile` for boolean flags | DataReceived may be called from network thread while interact runs |
 | `SshChannel` | Delegates to FxSsh channel (inherently thread-safe) | FxSsh handles internal synchronization |
 | `SshChannelStdout` | Delegates to channel; atomic per-write | Multiple writes may occur concurrently |
 
@@ -253,7 +253,7 @@ Graceful shutdown MUST follow this order:
 
 | FxSsh Event | Stroke Handler | Description |
 |-------------|----------------|-------------|
-| `SshServer.ConnectionAccepted` | Create `PromptToolkitSshSession` | New client connected; session added to Connections |
+| `SshServer.ConnectionAccepted` | Create `StrokeSshSession` | New client connected; session added to Connections |
 | `UserAuthService.UserAuth` | Call `BeginAuth(username)` virtual | Set `UserAuthArgs.Result` based on return value |
 | `ConnectionService.PtyReceived` | Store terminal type, width, height | Initial terminal negotiation complete |
 | `ConnectionService.CommandOpened` | Start interact callback | Shell/exec request received; create I/O infrastructure |
@@ -358,15 +358,15 @@ Other exceptions should propagate to surface bugs.
 
 ### Functional Requirements
 
-- **FR-001**: System MUST provide a `PromptToolkitSshSession` class representing a single SSH connection with access to the interact callback, CPR setting, AppSession, and current InteractTask
-- **FR-002**: System MUST provide a `PromptToolkitSshServer` class with an interact callback parameter and EnableCpr configuration
+- **FR-001**: System MUST provide a `StrokeSshSession` class representing a single SSH connection with access to the interact callback, CPR setting, AppSession, and current InteractTask
+- **FR-002**: System MUST provide a `StrokeSshServer` class with an interact callback parameter and EnableCpr configuration
 - **FR-003**: System MUST create isolated sessions for each SSH connection with independent PipeInput, Vt100Output, and AppSession instances
 - **FR-004**: System MUST expose a `GetSize()` method that returns current terminal size as `Size(columns=79, rows=20)` (width×height) if not yet negotiated
 - **FR-005**: System MUST route incoming SSH data to the session's PipeInput for keyboard handling via `DataReceived(string data)` method
 - **FR-006**: System MUST route Vt100Output rendering to the SSH channel via SshChannelStdout wrapper
 - **FR-007**: System MUST convert LF to CRLF in output per NVT specification
 - **FR-008**: System MUST notify the running application when terminal size changes via `TerminalSizeChanged(int width, int height)` method
-- **FR-009**: System MUST provide a virtual `CreateSession()` method that creates a new `PromptToolkitSshSession` instance (overridable for custom session types)
+- **FR-009**: System MUST provide a virtual `CreateSession()` method that creates a new `StrokeSshSession` instance (overridable for custom session types)
 - **FR-010**: System MUST provide a virtual `BeginAuth(string username)` method that returns false by default (overridable for custom authentication)
 - **FR-011**: System MUST call `SetLineMode(false)` when the session starts to disable library line editing; for FxSsh this is a no-op since SSH protocol has no built-in line mode (unlike Telnet), but the call maintains API consistency with ISshChannel interface
 - **FR-012**: System MUST properly dispose resources (PipeInput, AppSession) when the session ends
@@ -376,8 +376,8 @@ Other exceptions should propagate to surface bugs.
 
 ### Key Entities
 
-- **PromptToolkitSshServer**: Inheritable server class that creates sessions for incoming SSH connections. Holds the interact callback and CPR configuration. Provides virtual authentication hook (`BeginAuth`) and virtual session factory (`CreateSession`) for subclass customization, matching Python PTK's extensibility pattern.
-- **PromptToolkitSshSession**: Represents a single SSH session. Manages the lifecycle of PipeInput, Vt100Output, and AppSession for one connection. Handles data routing between SSH channel and Stroke input/output system. Exposes `Interact`, `EnableCpr`, `AppSession`, `InteractTask`, and `GetSize()`.
+- **StrokeSshServer**: Inheritable server class that creates sessions for incoming SSH connections. Holds the interact callback and CPR configuration. Provides virtual authentication hook (`BeginAuth`) and virtual session factory (`CreateSession`) for subclass customization, matching Python PTK's extensibility pattern.
+- **StrokeSshSession**: Represents a single SSH session. Manages the lifecycle of PipeInput, Vt100Output, and AppSession for one connection. Handles data routing between SSH channel and Stroke input/output system. Exposes `Interact`, `EnableCpr`, `AppSession`, `InteractTask`, and `GetSize()`.
 - **ISshChannel**: Abstraction over the SSH channel for writing data, querying terminal info, and lifecycle management. Enables testing without actual SSH connections.
 - **SshChannelStdout**: Internal TextWriter wrapper that routes writes to the SSH channel with LF-to-CRLF conversion. Reports `IsAtty = true` for proper terminal detection.
 

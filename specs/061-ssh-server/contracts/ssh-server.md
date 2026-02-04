@@ -7,7 +7,7 @@
 
 ---
 
-## PromptToolkitSshServer
+## StrokeSshServer
 
 Main SSH server class that creates isolated sessions for incoming connections.
 
@@ -27,25 +27,25 @@ Main SSH server class that creates isolated sessions for incoming connections.
 /// concurrently accessible, and all public methods can be called from any thread.
 /// </para>
 /// </remarks>
-public class PromptToolkitSshServer
+public class StrokeSshServer
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PromptToolkitSshServer"/> class.
+    /// Initializes a new instance of the <see cref="StrokeSshServer"/> class.
     /// </summary>
     /// <param name="host">The host address to bind to (default: "127.0.0.1").</param>
     /// <param name="port">The port number to listen on (default: 2222).</param>
     /// <param name="interact">
     /// Async callback invoked for each new connection. The callback receives the
-    /// <see cref="PromptToolkitSshSession"/> and should implement the interactive session logic.
+    /// <see cref="StrokeSshSession"/> and should implement the interactive session logic.
     /// </param>
     /// <param name="hostKeyPath">Path to the SSH host key file (PEM format).</param>
     /// <param name="encoding">Character encoding (default: UTF-8).</param>
     /// <param name="style">Optional style for formatted text output.</param>
     /// <param name="enableCpr">Enable cursor position requests (default: true).</param>
-    public PromptToolkitSshServer(
+    public StrokeSshServer(
         string host = "127.0.0.1",
         int port = 2222,
-        Func<PromptToolkitSshSession, Task>? interact = null,
+        Func<StrokeSshSession, Task>? interact = null,
         string? hostKeyPath = null,
         Encoding? encoding = null,
         IStyle? style = null,
@@ -79,7 +79,7 @@ public class PromptToolkitSshServer
     /// <summary>
     /// Gets the set of currently active sessions.
     /// </summary>
-    public IReadOnlySet<PromptToolkitSshSession> Connections { get; }
+    public IReadOnlySet<StrokeSshSession> Connections { get; }
 
     /// <summary>
     /// Runs the SSH server until cancelled.
@@ -111,13 +111,13 @@ public class PromptToolkitSshServer
     /// <remarks>
     /// Override this method to create custom session types.
     /// </remarks>
-    protected virtual PromptToolkitSshSession CreateSession(ISshChannel channel);
+    protected virtual StrokeSshSession CreateSession(ISshChannel channel);
 }
 ```
 
 ---
 
-## PromptToolkitSshSession
+## StrokeSshSession
 
 Represents a single SSH session with isolated I/O.
 
@@ -137,12 +137,12 @@ Represents a single SSH session with isolated I/O.
 /// async context.
 /// </para>
 /// </remarks>
-public class PromptToolkitSshSession
+public class StrokeSshSession
 {
     /// <summary>
     /// Gets the interact callback for this session.
     /// </summary>
-    public Func<PromptToolkitSshSession, Task> Interact { get; }
+    public Func<StrokeSshSession, Task> Interact { get; }
 
     /// <summary>
     /// Gets whether cursor position requests are enabled.
@@ -304,7 +304,7 @@ internal sealed class SshChannelStdout : TextWriter
 ### Basic SSH Server
 
 ```csharp
-async Task InteractAsync(PromptToolkitSshSession session)
+async Task InteractAsync(StrokeSshSession session)
 {
     // Access the app session for printing
     var output = AppContext.GetOutput();
@@ -319,7 +319,7 @@ async Task InteractAsync(PromptToolkitSshSession session)
 }
 
 // Create and run server
-var server = new PromptToolkitSshServer(
+var server = new StrokeSshServer(
     port: 2222,
     interact: InteractAsync,
     hostKeyPath: "ssh_host_key"
@@ -334,7 +334,7 @@ await server.RunAsync(
 ### Custom Authentication
 
 ```csharp
-public class AuthenticatedSshServer : PromptToolkitSshServer
+public class AuthenticatedSshServer : StrokeSshServer
 {
     private readonly Dictionary<string, string> _users;
 
@@ -355,9 +355,9 @@ public class AuthenticatedSshServer : PromptToolkitSshServer
 ### Multi-User Chat Server
 
 ```csharp
-var sessions = new ConcurrentBag<PromptToolkitSshSession>();
+var sessions = new ConcurrentBag<StrokeSshSession>();
 
-async Task ChatInteract(PromptToolkitSshSession session)
+async Task ChatInteract(StrokeSshSession session)
 {
     sessions.Add(session);
 

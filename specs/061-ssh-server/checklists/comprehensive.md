@@ -22,8 +22,8 @@
 ### Class & Method Mapping
 
 - [x] CHK006 - Are all public classes from Python PTK's `contrib/ssh/server.py` explicitly mapped to C# equivalents? [Completeness, Spec §Key Entities] — **RESOLVED**: Added "API Mapping (Python PTK → C#)" section with complete class/method tables
-- [x] CHK007 - Is `PromptToolkitSSHSession` (Python) → `PromptToolkitSshSession` (C#) naming convention documented? [Clarity, Gap] — **RESOLVED**: Documented in Class Name Mapping table with notes on case convention
-- [x] CHK008 - Is `PromptToolkitSSHServer` (Python) → `PromptToolkitSshServer` (C#) naming convention documented? [Clarity, Gap] — **RESOLVED**: Documented in Class Name Mapping table
+- [x] CHK007 - Is `PromptToolkitSSHSession` (Python) → `StrokeSshSession` (C#) naming convention documented? [Clarity, Gap] — **RESOLVED**: Documented in Class Name Mapping table with notes on case convention
+- [x] CHK008 - Is `PromptToolkitSSHServer` (Python) → `StrokeSshServer` (C#) naming convention documented? [Clarity, Gap] — **RESOLVED**: Documented in Class Name Mapping table
 - [x] CHK009 - Are all Python PTK SSH module public methods listed with their C# equivalents? [Completeness, Spec §FR-001 to FR-015] — **RESOLVED**: Added comprehensive Method Mapping table
 - [x] CHK010 - Is the `session_requested()` Python method mapped to `CreateSession()` explicitly documented? [Clarity, Research §R2] — **RESOLVED**: Documented in Method Mapping table with notes
 - [x] CHK011 - Is the nested `Stdout` class pattern from Python faithfully ported as `SshChannelStdout`? [Completeness, Research §R3] — **RESOLVED**: Added "Nested Stdout Class → SshChannelStdout" mapping table
@@ -74,7 +74,7 @@
 
 ### Session-Level Threading
 
-- [x] CHK033 - Is it specified which operations on `PromptToolkitSshSession` are thread-safe? [Completeness, Contracts §PromptToolkitSshSession] — **RESOLVED**: Thread safety table shows Lock for session state, volatile for booleans
+- [x] CHK033 - Is it specified which operations on `StrokeSshSession` are thread-safe? [Completeness, Contracts §StrokeSshSession] — **RESOLVED**: Thread safety table shows Lock for session state, volatile for booleans
 - [x] CHK034 - Are requirements for concurrent `DataReceived` calls defined? [Coverage, Gap] — **RESOLVED**: Documented that FxSsh serializes per-session calls; cross-session is concurrent
 - [x] CHK035 - Is atomicity scope for session state mutations documented? [Clarity, Data-Model §Thread Safety] — **RESOLVED**: Documented per-operation atomicity; compound operations need caller sync
 - [x] CHK036 - Are requirements for cross-session communication (broadcast) defined? [Coverage, Gap] — **RESOLVED**: Out of scope for core spec; application code can use Connections snapshot for broadcast
