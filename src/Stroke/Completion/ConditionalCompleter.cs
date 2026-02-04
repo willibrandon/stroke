@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Stroke.Core;
+using Stroke.EventLoop;
 
 namespace Stroke.Completion;
 
@@ -70,8 +71,11 @@ public sealed class ConditionalCompleter : CompleterBase
     {
         if (_filter())
         {
-            await foreach (var completion in _completer.GetCompletionsAsync(document, completeEvent, cancellationToken)
-                .ConfigureAwait(false))
+            // Use Aclosing to ensure proper cleanup on early exit or cancellation.
+            await using var wrapper = AsyncGeneratorUtils.Aclosing(
+                _completer.GetCompletionsAsync(document, completeEvent, cancellationToken));
+
+            await foreach (var completion in wrapper.Value.ConfigureAwait(false))
             {
                 yield return completion;
             }
