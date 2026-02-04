@@ -451,6 +451,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + Stroke.Application, Stroke.Widgets.Lists (RadioList), Stroke.Layout (HSplit, ConditionalContainer, Box, Frame), Stroke.KeyBinding, Stroke.Filters (056-choice-input)
 - C# 13 / .NET 10+ + Stroke library (`Stroke.Shortcuts.Prompt.RunPrompt`) (122-get-input-example)
 - C# 13 / .NET 10+ + `Stroke.Contrib.RegularLanguages` (Grammar, GrammarCompleter), `Stroke.Completion` (ExecutableCompleter, PathCompleter) (058-system-completer)
+- C# 13 / .NET 10+ + .NET BCL only (`System.Threading.Channels`, `System.Collections.Concurrent`, `System.Threading.Tasks`) (059-async-generator-utils)
 
 ## Recent Changes
 
