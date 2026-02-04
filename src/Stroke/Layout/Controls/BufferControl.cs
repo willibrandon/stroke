@@ -47,6 +47,9 @@ public class BufferControl : IUIControl
     // Cache for lexer fragments - keyed by (text, lexer invalidation hash)
     private readonly SimpleCache<(string Text, object LexerHash), Func<int, IReadOnlyList<StyleAndTextTuple>>> _fragmentCache = new(8);
 
+    // Last processed line function, used for mouse handler coordinate translation
+    private Func<int, ProcessedLine>? _lastGetProcessedLine;
+
     // Mouse click tracking for double/triple click detection
     private DateTime? _lastClickTimestamp;
     private Point? _lastClickPosition;
@@ -193,21 +196,32 @@ public class BufferControl : IUIControl
     public UIContent CreateContent(int width, int height, bool previewSearch)
     {
         var document = _buffer.Document;
-        var getLine = GetFormattedTextForLineFunc(document);
 
-        // Create a wrapper that adds a trailing space for cursor positioning
-        IReadOnlyList<StyleAndTextTuple> GetLineWithTrailingSpace(int lineNo)
+        // Create the processed line function that applies all input processors
+        var getProcessedLine = CreateGetProcessedLineFunc(document, width, height);
+        _lastGetProcessedLine = getProcessedLine;
+
+        // Helper to translate source coordinates to display coordinates
+        Point TranslateRowCol(int row, int col)
         {
-            var fragments = getLine(lineNo);
+            return new Point(getProcessedLine(row).SourceToDisplay(col), row);
+        }
+
+        // Create a wrapper that gets processed fragments and adds trailing space
+        IReadOnlyList<StyleAndTextTuple> GetLine(int lineNo)
+        {
+            var fragments = getProcessedLine(lineNo).Fragments;
+            // Add a space at the end for cursor positioning (when inserting after input)
+            // This is done on all lines, not just the cursor line, for consistent wrapping
             var result = fragments.ToList();
             result.Add(new StyleAndTextTuple("", " "));
             return result;
         }
 
         // Calculate cursor position in display coordinates
-        var cursorRow = document.CursorPositionRow;
-        var cursorCol = document.CursorPositionCol;
-        var cursorPosition = new Point(cursorCol, cursorRow);
+        var cursorPosition = TranslateRowCol(
+            document.CursorPositionRow,
+            document.CursorPositionCol);
 
         // Calculate menu position
         Point? menuPos = null;
@@ -217,7 +231,7 @@ public class BufferControl : IUIControl
             if (menuIndex.HasValue)
             {
                 var (row, col) = document.TranslateIndexToPosition(menuIndex.Value);
-                menuPos = new Point(col, row);
+                menuPos = TranslateRowCol(row, col);
             }
         }
         else if (_buffer.CompleteState != null)
@@ -227,11 +241,11 @@ public class BufferControl : IUIControl
                 _buffer.CursorPosition,
                 _buffer.CompleteState.OriginalDocument.CursorPosition);
             var (row, col) = document.TranslateIndexToPosition(originalPos);
-            menuPos = new Point(col, row);
+            menuPos = TranslateRowCol(row, col);
         }
 
         return new UIContent(
-            getLine: GetLineWithTrailingSpace,
+            getLine: GetLine,
             lineCount: document.LineCount,
             cursorPosition: cursorPosition,
             menuPosition: menuPos,
@@ -423,6 +437,73 @@ public class BufferControl : IUIControl
     }
 
     /// <summary>
+    /// Creates a function that processes a line by applying all input processors.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>_create_get_processed_line_func</c> method.
+    /// This is the core rendering logic that transforms lexed fragments into display
+    /// fragments by applying processors (selection highlighting, auto-suggestions, etc.).
+    /// </para>
+    /// </remarks>
+    private Func<int, ProcessedLine> CreateGetProcessedLineFunc(Document document, int width, int height)
+    {
+        // Merge all input processors together
+        var inputProcessors = new List<IProcessor>();
+        if (_includeDefaultInputProcessors)
+        {
+            inputProcessors.AddRange(DefaultInputProcessors);
+        }
+        if (_inputProcessors != null)
+        {
+            inputProcessors.AddRange(_inputProcessors);
+        }
+
+        var mergedProcessor = ProcessorUtils.MergeProcessors(inputProcessors);
+
+        // Get the lexer function for this document
+        var getLine = GetFormattedTextForLineFunc(document);
+
+        // Cache for processed lines
+        var cache = new Dictionary<int, ProcessedLine>();
+
+        ProcessedLine GetProcessedLine(int lineNo)
+        {
+            if (cache.TryGetValue(lineNo, out var cached))
+            {
+                return cached;
+            }
+
+            var fragments = getLine(lineNo);
+
+            // Initial identity mapping
+            int SourceToDisplay(int i) => i;
+
+            // Apply the merged processor
+            var transformation = mergedProcessor.ApplyTransformation(
+                new TransformationInput(
+                    this,
+                    document,
+                    lineNo,
+                    SourceToDisplay,
+                    fragments,
+                    width,
+                    height,
+                    getLine));
+
+            var processed = new ProcessedLine(
+                transformation.Fragments,
+                transformation.SourceToDisplay,
+                transformation.DisplayToSource);
+
+            cache[lineNo] = processed;
+            return processed;
+        }
+
+        return GetProcessedLine;
+    }
+
+    /// <summary>
     /// Finds word boundaries around the given position.
     /// </summary>
     private static (int Start, int End) FindWordBoundaries(string text, int position)
@@ -457,3 +538,15 @@ public class BufferControl : IUIControl
         return char.IsLetterOrDigit(c) || c == '_';
     }
 }
+
+/// <summary>
+/// Result of processing a single line through input processors.
+/// Contains the transformed fragments and bidirectional position mappings.
+/// </summary>
+/// <remarks>
+/// Port of Python Prompt Toolkit's <c>_ProcessedLine</c> NamedTuple.
+/// </remarks>
+internal sealed record ProcessedLine(
+    IReadOnlyList<StyleAndTextTuple> Fragments,
+    Func<int, int> SourceToDisplay,
+    Func<int, int> DisplayToSource);

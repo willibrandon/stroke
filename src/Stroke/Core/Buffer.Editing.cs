@@ -527,6 +527,16 @@ public sealed partial class Buffer
                 if (completions.Count > 0)
                 {
                     SetCompletions(completions);
+
+                    // Invalidate the display to show the completions menu
+                    try
+                    {
+                        Application.AppContext.GetApp().Invalidate();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // No application context available (e.g., in tests)
+                    }
                 }
             }
         }
@@ -565,6 +575,16 @@ public sealed partial class Buffer
                 if (shouldFireEvent)
                 {
                     OnSuggestionSet?.Invoke(this);
+
+                    // Invalidate the display to show the new suggestion
+                    try
+                    {
+                        Application.AppContext.GetApp().Invalidate();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // No application context available (e.g., in tests)
+                    }
                 }
             }
         }

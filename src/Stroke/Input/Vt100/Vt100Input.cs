@@ -167,12 +167,20 @@ public sealed partial class Vt100Input : IInput
     }
 
     /// <summary>
-    /// Stops the input monitor thread.
+    /// Stops the input monitor thread and waits for it to exit.
     /// </summary>
     private void StopInputMonitor()
     {
         _monitorRunning = false;
-        // The thread will exit on the next poll timeout
+
+        // Wait for the thread to exit (up to 500ms) to prevent race conditions
+        // where a new Attach() call checks IsAlive before the thread terminates.
+        var thread = _inputMonitorThread;
+        if (thread is not null && thread.IsAlive)
+        {
+            thread.Join(500);
+        }
+        _inputMonitorThread = null;
     }
 
     /// <summary>

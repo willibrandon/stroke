@@ -617,14 +617,17 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (6/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (9/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
+  - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
+  - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
+  - `fuzzy-word-completer` — Auto-completion while typing with fuzzy matching (`Stroke.Examples.Prompts`)
   - `hello-world` — Basic telnet prompt (`Stroke.Examples.Telnet`)
   - `chat-app` — Multi-client chat server (`Stroke.Examples.Telnet`)
   - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
   - `toolbar` — Bottom toolbar with completions (`Stroke.Examples.Telnet`)
   - `asyncssh-server` — SSH server with prompts, dialogs, autocompletion (`Stroke.Examples.Ssh`)
-  - Remaining: 123 examples across 9 projects
+  - Remaining: 120 examples across 9 projects
 
 ## Requirements
 

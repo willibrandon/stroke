@@ -9,6 +9,9 @@ namespace Stroke.Examples.Prompts;
 /// </para>
 /// <para>
 /// Available examples:
+/// - autocompletion: Tab completion with WordCompleter
+/// - auto-suggestion: Fish-style auto-suggestion from history
+/// - fuzzy-word-completer: Fuzzy completion that appears automatically while typing
 /// - get-input: Simple single-line prompt demonstrating basic PromptSession usage
 /// </para>
 /// </remarks>
@@ -19,6 +22,9 @@ internal static class Program
     /// </summary>
     private static readonly Dictionary<string, Action> Examples = new(StringComparer.OrdinalIgnoreCase)
     {
+        ["autocompletion"] = Autocompletion.Run,
+        ["auto-suggestion"] = AutoSuggestion.Run,
+        ["fuzzy-word-completer"] = FuzzyWordCompleterExample.Run,
         ["get-input"] = GetInput.Run,
     };
 
