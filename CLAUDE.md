@@ -453,6 +453,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + `Stroke.Contrib.RegularLanguages` (Grammar, GrammarCompleter), `Stroke.Completion` (ExecutableCompleter, PathCompleter) (058-system-completer)
 - C# 13 / .NET 10+ + .NET BCL only (`System.Threading.Channels`, `System.Collections.Concurrent`, `System.Threading.Tasks`) (059-async-generator-utils)
 - C# 13 / .NET 10+ + `Stroke.Application` (AppSession, AppContext), `Stroke.Output` (IOutput, Vt100Output), `Stroke.Input` (IInput), `Stroke.Styles` (BaseStyle), `Stroke.FormattedText`, `System.Net.Sockets` (060-telnet-server)
+- C# 13 / .NET 10+ + FxSsh (v1.3.0, MIT license) for SSH server functionality, existing Stroke libraries (Stroke.Application, Stroke.Input.Pipe, Stroke.Output, Stroke.Styles) (061-ssh-server)
+- N/A (in-memory session management only) (061-ssh-server)
 
 ## Recent Changes
 
