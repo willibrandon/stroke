@@ -5,6 +5,8 @@
   <ItemGroup>
     <!-- Unicode width calculation -->
     <PackageVersion Include="Wcwidth" Version="4.0.1" />
+    <!-- Logging abstractions -->
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.1.25080.5" />
     <!-- Test packages (xUnit v3 with native dynamic skipping) -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="xunit.v3" Version="3.0.1" />

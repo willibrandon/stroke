@@ -86,6 +86,43 @@ public sealed partial class Vt100Output : IOutput
             enableCpr);
     }
 
+    /// <summary>
+    /// Creates a <see cref="Vt100Output"/> instance with a custom size provider.
+    /// </summary>
+    /// <remarks>
+    /// This factory method is useful for network connections (telnet, SSH) where
+    /// terminal size is negotiated via the protocol rather than detected from
+    /// the operating system.
+    /// </remarks>
+    /// <param name="stdout">The output stream.</param>
+    /// <param name="getSize">Function to get terminal size.</param>
+    /// <param name="term">The TERM environment variable value, or null to read from environment.</param>
+    /// <param name="defaultColorDepth">The default color depth, or null to auto-detect.</param>
+    /// <param name="enableBell">Whether to enable the terminal bell (default: true).</param>
+    /// <param name="enableCpr">Whether to enable cursor position reporting (default: true).</param>
+    /// <returns>A new <see cref="Vt100Output"/> instance.</returns>
+    public static Vt100Output Create(
+        TextWriter stdout,
+        Func<Size> getSize,
+        string? term = null,
+        ColorDepth? defaultColorDepth = null,
+        bool enableBell = true,
+        bool enableCpr = true)
+    {
+        ArgumentNullException.ThrowIfNull(stdout);
+        ArgumentNullException.ThrowIfNull(getSize);
+
+        term ??= Environment.GetEnvironmentVariable("TERM");
+
+        return new Vt100Output(
+            stdout,
+            getSize,
+            term,
+            defaultColorDepth,
+            enableBell,
+            enableCpr);
+    }
+
     #region Writing
 
     /// <inheritdoc/>

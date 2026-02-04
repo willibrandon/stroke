@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/examples/">
+    <Project Path="examples/Stroke.Examples.Telnet/Stroke.Examples.Telnet.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Stroke/Stroke.csproj" />
   </Folder>
