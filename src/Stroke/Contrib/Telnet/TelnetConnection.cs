@@ -378,13 +378,9 @@ public sealed class TelnetConnection
 
     private void SizeReceived(int rows, int columns)
     {
-        // Clamp values (EC-004)
+        // Clamp values to [1, 500] - handles EC-004 (overflow) and EC-009 (0x0 size)
         rows = Math.Clamp(rows, 1, 500);
         columns = Math.Clamp(columns, 1, 500);
-
-        // Handle 0x0 as 1x1 (EC-009)
-        if (rows == 0) rows = 1;
-        if (columns == 0) columns = 1;
 
         _size = new Size(rows, columns);
 
