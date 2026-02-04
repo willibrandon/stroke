@@ -90,6 +90,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `DummyCompleter` null-object pattern for disabled completion
   - `NestedCompleter` for context-sensitive hierarchical completion
   - `ExecutableCompleter` for system executable completion
+  - `SystemCompleter` for shell command completion (executables + file paths with quoting)
   - `ConditionalCompleter` for filter-based conditional completion
   - `DynamicCompleter` for runtime completer switching
   - Thread-safe operations (>80% test coverage)
