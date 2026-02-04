@@ -310,13 +310,9 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
             _started = true;
         }
 
-        // Check for producer exception
-        if (_producerException is not null)
-        {
-            throw _producerException;
-        }
-
         // Take next item from queue (runs on thread pool to avoid blocking)
+        // Note: We don't check for producer exception here - we want to drain
+        // all buffered items first before propagating the exception
         var item = await Task.Run(() =>
         {
             try
@@ -333,15 +329,15 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
         // Check for cancellation after take
         _cancellationToken.ThrowIfCancellationRequested();
 
-        // Check for producer exception (may have been set while waiting)
-        if (_producerException is not null)
-        {
-            throw _producerException;
-        }
-
-        // Check for completion sentinel
+        // Check for completion sentinel - only then check for producer exception
+        // This ensures we drain all buffered items before propagating errors
         if (item is Done)
         {
+            // If producer threw an exception, propagate it now
+            if (_producerException is not null)
+            {
+                throw _producerException;
+            }
             return false;
         }
 
