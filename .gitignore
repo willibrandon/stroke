@@ -34,3 +34,7 @@ artifacts/
 
 # Benchmark artifacts
 BenchmarkDotNet.Artifacts/
+
+# SSH host keys (generated for examples)
+ssh_host_key
+ssh_host_key.pub
