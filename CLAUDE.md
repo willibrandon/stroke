@@ -452,6 +452,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + Stroke library (`Stroke.Shortcuts.Prompt.RunPrompt`) (122-get-input-example)
 - C# 13 / .NET 10+ + `Stroke.Contrib.RegularLanguages` (Grammar, GrammarCompleter), `Stroke.Completion` (ExecutableCompleter, PathCompleter) (058-system-completer)
 - C# 13 / .NET 10+ + .NET BCL only (`System.Threading.Channels`, `System.Collections.Concurrent`, `System.Threading.Tasks`) (059-async-generator-utils)
+- C# 13 / .NET 10+ + `Stroke.Application` (AppSession, AppContext), `Stroke.Output` (IOutput, Vt100Output), `Stroke.Input` (IInput), `Stroke.Styles` (BaseStyle), `Stroke.FormattedText`, `System.Net.Sockets` (060-telnet-server)
 
 ## Recent Changes
 
