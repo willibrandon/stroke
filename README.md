@@ -602,16 +602,29 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `NullLoggerFactory` default for zero performance impact when disabled
   - Integrated into telnet classes for protocol debugging
   - Thread-safe via `System.Threading.Lock` (26 tests, >80% coverage)
+- **SSH Server** — Secure network-accessible REPL support using FxSsh, ported from `contrib/ssh/`
+  - `PromptToolkitSshServer` class with host/port/interact/hostKeyPath/encoding/style/enableCpr configuration
+  - `RunAsync()` with ready callback and cancellation token for graceful shutdown (5-second timeout)
+  - `Connections` property returning snapshot of active sessions
+  - `BeginAuth()` virtual method for custom authentication (defaults to no auth)
+  - `CreateSession()` virtual method for custom session types
+  - `PromptToolkitSshSession` with GetSize/DataReceived/TerminalSizeChanged/Close methods
+  - `ISshChannel` abstraction for testability with `SshChannel` FxSsh adapter
+  - `SshChannelStdout` TextWriter with LF→CRLF conversion per NVT specification
+  - Terminal type and size tracking from PTY request
+  - asyncssh-server example: progress dialog, prompts, autocompletion, dialogs
+  - Thread-safe via Lock and ConcurrentDictionary (80 tests, >80% coverage)
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (5/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (6/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - `hello-world` — Basic telnet prompt (`Stroke.Examples.Telnet`)
   - `chat-app` — Multi-client chat server (`Stroke.Examples.Telnet`)
   - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
   - `toolbar` — Bottom toolbar with completions (`Stroke.Examples.Telnet`)
-  - Remaining: 124 examples across 9 projects
+  - `asyncssh-server` — SSH server with prompts, dialogs, autocompletion (`Stroke.Examples.Ssh`)
+  - Remaining: 123 examples across 9 projects
 
 ## Requirements
 

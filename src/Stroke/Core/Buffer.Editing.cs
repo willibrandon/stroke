@@ -467,13 +467,68 @@ public sealed partial class Buffer
     /// <summary>
     /// Start async completion operation.
     /// </summary>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's async completer logic.
+    /// Called when <see cref="CompleteWhileTyping"/> is enabled and text is inserted.
+    /// </remarks>
     private async Task StartAsyncCompletionAsync()
     {
         await _completionLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            // Completion implementation will be added in Phase 8
-            await Task.CompletedTask;
+            // Don't complete when we already have completions or no completer
+            if (CompleteState is not null || Completer is null)
+            {
+                return;
+            }
+
+            // Capture the document at the start of completion
+            var startDocument = Document;
+            var completeEvent = new Stroke.Completion.CompleteEvent(TextInserted: true);
+
+            // Collect completions asynchronously
+            var completions = new List<Stroke.Completion.Completion>();
+            await foreach (var completion in Completer.GetCompletionsAsync(startDocument, completeEvent).ConfigureAwait(false))
+            {
+                completions.Add(completion);
+
+                // If the document changed during completion, abort
+                var currentDoc = Document;
+                if (currentDoc.Text != startDocument.Text || currentDoc.CursorPosition != startDocument.CursorPosition)
+                {
+                    return;
+                }
+
+                // Stop at 10k completions (matching Python PTK's max_number_of_completions)
+                if (completions.Count >= 10000)
+                {
+                    break;
+                }
+            }
+
+            // When there is only one completion which doesn't add anything, ignore it
+            if (completions.Count == 1)
+            {
+                var c = completions[0];
+                var textBeforeCursor = startDocument.TextBeforeCursor;
+                var replacedText = textBeforeCursor.Length + c.StartPosition >= 0
+                    ? textBeforeCursor[(textBeforeCursor.Length + c.StartPosition)..]
+                    : "";
+                if (replacedText == c.Text)
+                {
+                    return; // Completion does nothing
+                }
+            }
+
+            // Set completions if document hasn't changed
+            var finalDoc = Document;
+            if (finalDoc.Text == startDocument.Text && finalDoc.CursorPosition == startDocument.CursorPosition)
+            {
+                if (completions.Count > 0)
+                {
+                    SetCompletions(completions);
+                }
+            }
         }
         finally
         {

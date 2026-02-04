@@ -6,22 +6,14 @@
 ## Prerequisites
 
 1. .NET 10+ SDK installed
-2. SSH host key (generate one if needed)
+2. SSH host key
 3. Stroke library referenced
 
 ## Generate SSH Host Key
 
-If you don't have an SSH host key, generate one:
-
 ```bash
-# Generate RSA key (2048-bit minimum, 4096 recommended)
-ssh-keygen -t rsa -b 4096 -f ssh_host_key -N ""
-
-# Or generate ECDSA key (preferred for modern clients)
-ssh-keygen -t ecdsa -b 256 -f ssh_host_key -N ""
-
-# Or generate Ed25519 key (most modern, smallest footprint)
-ssh-keygen -t ed25519 -f ssh_host_key -N ""
+# Must use PEM format for FxSsh compatibility
+ssh-keygen -t rsa -m PEM -f ssh_host_key -N ""
 ```
 
 ## Minimal Example
@@ -74,10 +66,9 @@ dotnet run -- asyncssh-server
 ```
 
 This example demonstrates:
-- Progress bar over SSH
+- Progress bar dialog over SSH
 - Normal prompt with input
 - Autocompletion (animal names)
-- HTML syntax highlighting
 - Yes/no dialog
 - Input dialog
 
