@@ -605,9 +605,13 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (1/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (5/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
-  - Remaining: 128 examples across 9 projects
+  - `hello-world` — Basic telnet prompt (`Stroke.Examples.Telnet`)
+  - `chat-app` — Multi-client chat server (`Stroke.Examples.Telnet`)
+  - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
+  - `toolbar` — Bottom toolbar with completions (`Stroke.Examples.Telnet`)
+  - Remaining: 124 examples across 9 projects
 
 ## Requirements
 
