@@ -250,6 +250,7 @@ internal sealed class SyncToAsyncEnumerable<T> : IAsyncEnumerable<T>
 
     public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
     {
+        // Eagerly fetch the first item to avoid thread startup latency on first MoveNextAsync
         return new SyncToAsyncEnumerator<T>(_getEnumerable, _bufferSize, cancellationToken);
     }
 }
@@ -263,24 +264,31 @@ internal sealed class SyncToAsyncEnumerable<T> : IAsyncEnumerable<T>
 /// communication. The <c>_quitting</c> flag is volatile for visibility across threads.
 /// </para>
 /// <para>
-/// The producer thread is started lazily on the first <see cref="MoveNextAsync"/> call,
-/// not when the enumerator is created.
+/// The first item is fetched synchronously during construction to minimize first-item latency.
+/// Subsequent items are produced by a background thread started on first <see cref="MoveNextAsync"/>.
 /// </para>
 /// </remarks>
 internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
 {
     private const int ProducerTimeoutMs = 1000;
 
-    private readonly Func<IEnumerable<T>> _getEnumerable;
     private readonly int _bufferSize;
     private readonly CancellationToken _cancellationToken;
+    private readonly IEnumerator<T> _syncEnumerator;
 
     private BlockingCollection<object?>? _queue;
     private Task? _producerTask;
     private volatile bool _quitting;
     private Exception? _producerException;
     private T _current = default!;
-    private bool _started;
+
+    // First item state: fetched eagerly to avoid thread startup latency
+    private T? _firstItem;
+    private bool _hasFirstItem;
+    private Exception? _firstItemException;
+    private bool _firstItemConsumed;
+
+    private bool _producerStarted;
     private int _disposed;
 
     public SyncToAsyncEnumerator(
@@ -288,28 +296,60 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
         int bufferSize,
         CancellationToken cancellationToken)
     {
-        _getEnumerable = getEnumerable;
         _bufferSize = bufferSize;
         _cancellationToken = cancellationToken;
+
+        // Eagerly get the enumerator and fetch the first item synchronously.
+        // This avoids thread startup latency on the first MoveNextAsync call.
+        _syncEnumerator = getEnumerable().GetEnumerator();
+        try
+        {
+            if (_syncEnumerator.MoveNext())
+            {
+                _firstItem = _syncEnumerator.Current;
+                _hasFirstItem = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            _firstItemException = ex;
+        }
     }
 
     public T Current => _current;
 
     public async ValueTask<bool> MoveNextAsync()
     {
-        // Check for cancellation
         _cancellationToken.ThrowIfCancellationRequested();
 
-        // Start producer on first call (lazy initialization per FR edge case)
-        if (!_started)
+        // Return the pre-fetched first item immediately (no thread startup delay)
+        if (!_firstItemConsumed)
         {
-            StartProducer();
-            _started = true;
+            _firstItemConsumed = true;
+
+            if (_firstItemException is not null)
+            {
+                throw _firstItemException;
+            }
+
+            if (_hasFirstItem)
+            {
+                _current = _firstItem!;
+                return true;
+            }
+
+            // No items at all
+            return false;
         }
 
-        // Take next item from queue (runs on thread pool to avoid blocking)
-        // Note: We don't check for producer exception here - we want to drain
-        // all buffered items first before propagating the exception
+        // Start producer for remaining items on second MoveNextAsync
+        if (!_producerStarted)
+        {
+            StartProducer();
+            _producerStarted = true;
+        }
+
+        // Take next item from queue
         var item = await Task.Run(() =>
         {
             try
@@ -318,19 +358,14 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
             }
             catch (InvalidOperationException) when (_queue!.IsCompleted)
             {
-                // Queue completed normally
                 return Done.Instance;
             }
         }, _cancellationToken).ConfigureAwait(false);
 
-        // Check for cancellation after take
         _cancellationToken.ThrowIfCancellationRequested();
 
-        // Check for completion sentinel - only then check for producer exception
-        // This ensures we drain all buffered items before propagating errors
         if (item is Done)
         {
-            // If producer threw an exception, propagate it now
             if (_producerException is not null)
             {
                 throw _producerException;
@@ -352,15 +387,15 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
         try
         {
-            foreach (var item in _getEnumerable())
+            // Continue from where the sync enumerator left off (after first item)
+            while (_syncEnumerator.MoveNext())
             {
                 if (_quitting)
                     break;
 
-                // Use timeout-based TryAdd for responsive cancellation checking (FR-008)
                 while (!_quitting)
                 {
-                    if (_queue!.TryAdd(item, ProducerTimeoutMs))
+                    if (_queue!.TryAdd(_syncEnumerator.Current, ProducerTimeoutMs))
                         break;
                 }
             }
@@ -371,11 +406,10 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
         }
         finally
         {
-            // Signal completion - use TryAdd to avoid blocking on full buffer during disposal
-            // If quitting, consumer won't read Done anyway, so skip it
+            _syncEnumerator.Dispose();
+
             if (!_quitting && _queue is not null)
             {
-                // Try to add Done with timeout; if buffer is full or we're being disposed, skip it
                 _queue.TryAdd(Done.Instance, ProducerTimeoutMs);
             }
             _queue?.CompleteAdding();
@@ -387,13 +421,16 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
         if (Interlocked.Exchange(ref _disposed, 1) != 0)
             return;
 
-        // Signal producer to stop
         _quitting = true;
 
-        // Wait for producer to finish (NFR-005: no thread leaks)
         if (_producerTask is not null)
         {
             await _producerTask.ConfigureAwait(false);
+        }
+        else
+        {
+            // Producer never started, dispose the enumerator ourselves
+            _syncEnumerator.Dispose();
         }
 
         _queue?.Dispose();
