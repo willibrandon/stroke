@@ -322,7 +322,7 @@ public class StrokeSshServer
 
     private void OnCommandOpened(object? sender, CommandRequestedArgs e)
     {
-        // FxSsh 1.3.0 implicitly accepts shell/exec requests when handler is wired up
+        // FxSsh 1.3.0 sends ChannelSuccessMessage before firing this event
 
         // Get or create the channel adapter
         if (!_channelToAdapter.TryGetValue(e.Channel, out var adapter))

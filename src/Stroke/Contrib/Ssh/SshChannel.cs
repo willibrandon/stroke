@@ -78,6 +78,11 @@ internal sealed class SshChannel : ISshChannel
 
         try
         {
+            // Small delay before closing to allow client to finish shell setup.
+            // Without this, if the interact callback returns immediately (e.g., in tests),
+            // the channel closes before SSH.NET finishes its ShellStream handshake,
+            // causing null waitHandle errors on the client side.
+            Thread.Sleep(50);
             _channel.SendClose();
         }
         catch
