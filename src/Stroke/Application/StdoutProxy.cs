@@ -276,6 +276,13 @@ public sealed class StdoutProxy : TextWriter
     }
 
     /// <summary>
+    /// Small delay after the blocking Take() to allow rapid writes to accumulate
+    /// before draining. This ensures batching works even without the sleep-between-writes
+    /// delay (which only applies when an app is running).
+    /// </summary>
+    private const int BatchingWindowMs = 1;
+
+    /// <summary>
     /// Port of Python's <c>_write_thread()</c>. Consumer loop for the flush queue.
     /// </summary>
     private void WriteThread()
@@ -300,6 +307,11 @@ public sealed class StdoutProxy : TextWriter
 
             if (item is not FlushItem.Text { Value: { Length: > 0 } firstText })
                 continue;
+
+            // Small delay to allow rapid writes to accumulate in the queue.
+            // Python relies on the sleep_between_writes for batching, but that only
+            // applies when an app is running. This ensures batching works regardless.
+            Thread.Sleep(BatchingWindowMs);
 
             // Drain remaining items from the queue.
             var textParts = new List<string> { firstText };
