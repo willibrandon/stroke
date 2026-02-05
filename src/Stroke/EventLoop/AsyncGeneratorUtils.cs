@@ -270,7 +270,9 @@ internal sealed class SyncToAsyncEnumerable<T> : IAsyncEnumerable<T>
 /// </remarks>
 internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
 {
-    private const int ProducerTimeoutMs = 1000;
+    // Short timeout so producer checks _quitting frequently during disposal.
+    // NFR-004 requires termination within 2 seconds; 100ms allows ~20 checks.
+    private const int ProducerTimeoutMs = 100;
 
     private readonly int _bufferSize;
     private readonly CancellationToken _cancellationToken;
