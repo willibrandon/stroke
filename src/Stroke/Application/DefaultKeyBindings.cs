@@ -22,11 +22,17 @@ public static class DefaultKeyBindings
     /// <returns>Merged default key bindings.</returns>
     public static IKeyBindingsBase Load()
     {
-        // Load basic bindings which include self-insert, navigation, etc.
-        // Mouse and CPR bindings are always active (not conditional on buffer focus),
-        // matching Python Prompt Toolkit's load_key_bindings().
+        // Load all bindings matching Python Prompt Toolkit's load_key_bindings().
+        // Basic bindings include self-insert, navigation, etc.
+        // Emacs/Vi bindings provide editing mode functionality including Enter handling.
+        // Mouse and CPR bindings are always active (not conditional on buffer focus).
         return new MergedKeyBindings(
             BasicBindings.LoadBasicBindings(),
+            EmacsBindings.LoadEmacsBindings(),
+            SearchBindings.LoadEmacsSearchBindings(),
+            EmacsBindings.LoadEmacsShiftSelectionBindings(),
+            ViBindings.LoadViBindings(),
+            SearchBindings.LoadViSearchBindings(),
             MouseBindings.LoadMouseBindings(),
             CprBindings.LoadCprBindings());
     }

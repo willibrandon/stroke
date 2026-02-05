@@ -166,14 +166,17 @@ public sealed class FloatContainer : IContainer
         var (floatX, floatY) = CalculateFloatPosition(
             floatElement, screen, writePosition, floatWidth, floatHeight);
 
-        // Clamp to available area (xpos/ypos can be negative: partially visible)
-        floatWidth = Math.Min(floatWidth, availableWidth - floatX);
-        floatHeight = Math.Min(floatHeight, availableHeight - floatY);
-
+        // Floats can be positioned outside parent bounds (e.g., shadows).
+        // Per Python PTK: "xpos and ypos can be negative: a float can be partially visible."
+        // The Screen handles out-of-bounds writes gracefully with sparse storage,
+        // and the Renderer clips to terminal bounds during output.
+        // Only skip rendering if the float is entirely off-screen (negative dimensions
+        // after position adjustment would indicate this, but we allow floats past
+        // parent bounds as long as their dimensions are positive).
         if (floatWidth <= 0 || floatHeight <= 0)
             return;
 
-        // Create write position for the float
+        // Create write position for the float (may extend outside parent bounds)
         var floatWritePosition = new WritePosition(
             writePosition.XPos + floatX,
             writePosition.YPos + floatY,

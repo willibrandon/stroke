@@ -94,7 +94,8 @@ public class Dialog : IMagicContainer
                             padding: 1,
                             keyBindings: buttonsKb)),
                         height: new Dimension(min: 1, max: 3, preferred: 3)).PtContainer(),
-                ]));
+                ],
+                align: VerticalAlign.Top));
         }
         else
         {

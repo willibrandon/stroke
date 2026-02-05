@@ -25,11 +25,11 @@ All paths relative to repository root:
 
 **Purpose**: Create project structure and entry point
 
-- [ ] T001 Create directory `examples/Stroke.Examples.Dialogs/`
-- [ ] T002 Create project file `examples/Stroke.Examples.Dialogs/Stroke.Examples.Dialogs.csproj` with .NET 10, Stroke reference
-- [ ] T003 Create entry point `examples/Stroke.Examples.Dialogs/Program.cs` with dictionary routing and graceful Ctrl+C/Ctrl+D handling
-- [ ] T004 Add project to `examples/Stroke.Examples.sln` solution file
-- [ ] T005 Verify build succeeds with `dotnet build examples/Stroke.Examples.sln`
+- [x] T001 Create directory `examples/Stroke.Examples.Dialogs/`
+- [x] T002 Create project file `examples/Stroke.Examples.Dialogs/Stroke.Examples.Dialogs.csproj` with .NET 10, Stroke reference
+- [x] T003 Create entry point `examples/Stroke.Examples.Dialogs/Program.cs` with dictionary routing and graceful Ctrl+C/Ctrl+D handling
+- [x] T004 Add project to `examples/Stroke.Examples.sln` solution file
+- [x] T005 Verify build succeeds with `dotnet build examples/Stroke.Examples.sln`
 
 **Checkpoint**: Project builds and runs with usage help (no examples yet)
 
@@ -43,10 +43,10 @@ All paths relative to repository root:
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Implement MessageBox example in `examples/Stroke.Examples.Dialogs/MessageBox.cs` (port from `messagebox.py`)
-- [ ] T007 [US1] Register MessageBox in Program.cs dictionary routing
-- [ ] T008 [US1] Set MessageBox as default when no arguments provided (FR-003)
-- [ ] T009 [US1] Verify with TUI Driver: dialog appears, Enter dismisses
+- [x] T006 [US1] Implement MessageBox example in `examples/Stroke.Examples.Dialogs/MessageBox.cs` (port from `messagebox.py`)
+- [x] T007 [US1] Register MessageBox in Program.cs dictionary routing
+- [x] T008 [US1] Set MessageBox as default when no arguments provided (FR-003)
+- [x] T009 [US1] Verify with TUI Driver: dialog appears, Enter dismisses
 
 **Checkpoint**: MessageBox example works end-to-end — this is the MVP
 
@@ -60,9 +60,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 2
 
-- [ ] T010 [US2] Implement YesNoDialog example in `examples/Stroke.Examples.Dialogs/YesNoDialog.cs` (port from `yes_no_dialog.py`)
-- [ ] T011 [US2] Register YesNoDialog in Program.cs dictionary routing
-- [ ] T012 [US2] Verify with TUI Driver: Yes returns True, Tab+Enter returns False
+- [x] T010 [US2] Implement YesNoDialog example in `examples/Stroke.Examples.Dialogs/YesNoDialog.cs` (port from `yes_no_dialog.py`)
+- [x] T011 [US2] Register YesNoDialog in Program.cs dictionary routing
+- [x] T012 [US2] Verify with TUI Driver: Yes returns True, Tab+Enter returns False
 
 **Checkpoint**: YesNoDialog example works independently
 
@@ -76,9 +76,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 3
 
-- [ ] T013 [US3] Implement InputDialog example in `examples/Stroke.Examples.Dialogs/InputDialog.cs` (port from `input_dialog.py`)
-- [ ] T014 [US3] Register InputDialog in Program.cs dictionary routing
-- [ ] T015 [US3] Verify with TUI Driver: typed text captured and printed, empty input returns empty string (not null)
+- [x] T013 [US3] Implement InputDialog example in `examples/Stroke.Examples.Dialogs/InputDialog.cs` (port from `input_dialog.py`)
+- [x] T014 [US3] Register InputDialog in Program.cs dictionary routing
+- [x] T015 [US3] Verify with TUI Driver: typed text captured and printed, empty input returns empty string (not null)
 
 **Checkpoint**: All P1 stories complete — core dialog patterns demonstrated
 
@@ -92,9 +92,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 4
 
-- [ ] T016 [P] [US4] Implement ButtonDialog example in `examples/Stroke.Examples.Dialogs/ButtonDialog.cs` (port from `button_dialog.py`)
-- [ ] T017 [US4] Register ButtonDialog in Program.cs dictionary routing
-- [ ] T018 [US4] Verify with TUI Driver: three buttons, nullable value works
+- [x] T016 [P] [US4] Implement ButtonDialog example in `examples/Stroke.Examples.Dialogs/ButtonDialog.cs` (port from `button_dialog.py`)
+- [x] T017 [US4] Register ButtonDialog in Program.cs dictionary routing
+- [x] T018 [US4] Verify with TUI Driver: three buttons, nullable value works
 
 **Checkpoint**: ButtonDialog example works independently
 
@@ -108,9 +108,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 5
 
-- [ ] T019 [P] [US5] Implement PasswordDialog example in `examples/Stroke.Examples.Dialogs/PasswordDialog.cs` (port from `password_dialog.py`)
-- [ ] T020 [US5] Register PasswordDialog in Program.cs dictionary routing
-- [ ] T021 [US5] Verify with TUI Driver: input masked, actual value returned
+- [x] T019 [P] [US5] Implement PasswordDialog example in `examples/Stroke.Examples.Dialogs/PasswordDialog.cs` (port from `password_dialog.py`)
+- [x] T020 [US5] Register PasswordDialog in Program.cs dictionary routing
+- [x] T021 [US5] Verify with TUI Driver: input masked, actual value returned
 
 **Checkpoint**: PasswordDialog example works independently
 
@@ -124,9 +124,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 6
 
-- [ ] T022 [P] [US6] Implement RadioDialog example in `examples/Stroke.Examples.Dialogs/RadioDialog.cs` (port from `radio_dialog.py`)
-- [ ] T023 [US6] Register RadioDialog in Program.cs dictionary routing
-- [ ] T024 [US6] Verify with TUI Driver: arrow navigation, two dialogs (plain + HTML styled)
+- [x] T022 [P] [US6] Implement RadioDialog example in `examples/Stroke.Examples.Dialogs/RadioDialog.cs` (port from `radio_dialog.py`)
+- [x] T023 [US6] Register RadioDialog in Program.cs dictionary routing
+- [x] T024 [US6] Verify with TUI Driver: arrow navigation, two dialogs (plain + HTML styled)
 
 **Checkpoint**: RadioDialog example works independently
 
@@ -140,9 +140,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 7
 
-- [ ] T025 [P] [US7] Implement CheckboxDialog example in `examples/Stroke.Examples.Dialogs/CheckboxDialog.cs` (port from `checkbox_dialog.py`)
-- [ ] T026 [US7] Register CheckboxDialog in Program.cs dictionary routing
-- [ ] T027 [US7] Verify with TUI Driver: Space toggles, custom pastel styling, follow-up dialog
+- [x] T025 [P] [US7] Implement CheckboxDialog example in `examples/Stroke.Examples.Dialogs/CheckboxDialog.cs` (port from `checkbox_dialog.py`)
+- [x] T026 [US7] Register CheckboxDialog in Program.cs dictionary routing
+- [x] T027 [US7] Verify with TUI Driver: Space toggles, custom pastel styling, follow-up dialog
 
 **Checkpoint**: All P2 stories complete — advanced selection patterns demonstrated
 
@@ -156,10 +156,10 @@ All paths relative to repository root:
 
 ### Implementation for User Story 8
 
-- [ ] T028 [P] [US8] Implement ProgressDialog example in `examples/Stroke.Examples.Dialogs/ProgressDialog.cs` (port from `progress_dialog.py`)
-- [ ] T029 [US8] Add file enumeration worker with UnauthorizedAccessException handling (edge case)
-- [ ] T030 [US8] Register ProgressDialog in Program.cs dictionary routing
-- [ ] T031 [US8] Verify with TUI Driver: progress bar advances, auto-closes at 100%
+- [x] T028 [P] [US8] Implement ProgressDialog example in `examples/Stroke.Examples.Dialogs/ProgressDialog.cs` (port from `progress_dialog.py`)
+- [x] T029 [US8] Add file enumeration worker with UnauthorizedAccessException handling (edge case)
+- [x] T030 [US8] Register ProgressDialog in Program.cs dictionary routing
+- [x] T031 [US8] Verify with TUI Driver: progress bar advances, auto-closes at 100%
 
 **Checkpoint**: ProgressDialog example works independently
 
@@ -173,9 +173,9 @@ All paths relative to repository root:
 
 ### Implementation for User Story 9
 
-- [ ] T032 [P] [US9] Implement StyledMessageBox example in `examples/Stroke.Examples.Dialogs/StyledMessageBox.cs` (port from `styled_messagebox.py`)
-- [ ] T033 [US9] Register StyledMessageBox in Program.cs dictionary routing
-- [ ] T034 [US9] Verify with TUI Driver: green background, HTML title styling
+- [x] T032 [P] [US9] Implement StyledMessageBox example in `examples/Stroke.Examples.Dialogs/StyledMessageBox.cs` (port from `styled_messagebox.py`)
+- [x] T033 [US9] Register StyledMessageBox in Program.cs dictionary routing
+- [x] T034 [US9] Verify with TUI Driver: green background, HTML title styling
 
 **Checkpoint**: All P3 stories complete — all 9 examples implemented
 
@@ -185,11 +185,11 @@ All paths relative to repository root:
 
 **Purpose**: Final validation and documentation
 
-- [ ] T035 Verify all 9 examples build with `dotnet build examples/Stroke.Examples.sln`
-- [ ] T036 Verify unknown example name shows usage help and exits with code 1 (FR-004)
-- [ ] T037 Verify Ctrl+C graceful exit for all examples (FR-005)
-- [ ] T038 Verify Ctrl+D graceful exit for all examples (FR-006)
-- [ ] T039 Run quickstart.md validation steps
+- [x] T035 Verify all 9 examples build with `dotnet build examples/Stroke.Examples.sln`
+- [x] T036 Verify unknown example name shows usage help and exits with code 1 (FR-004)
+- [x] T037 Verify Ctrl+C graceful exit for all examples (FR-005)
+- [x] T038 Verify Ctrl+D graceful exit for all examples (FR-006)
+- [x] T039 Run quickstart.md validation steps
 
 **Checkpoint**: Feature complete — all success criteria met
 

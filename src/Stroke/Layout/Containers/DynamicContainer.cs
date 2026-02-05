@@ -60,7 +60,7 @@ public sealed class DynamicContainer : IContainer
     {
         var container = GetResolvedContainer();
         if (container == null)
-            return new Dimension();
+            return Dimension.Zero();
         return container.PreferredWidth(maxAvailableWidth);
     }
 
@@ -69,7 +69,7 @@ public sealed class DynamicContainer : IContainer
     {
         var container = GetResolvedContainer();
         if (container == null)
-            return new Dimension();
+            return Dimension.Zero();
         return container.PreferredHeight(width, maxAvailableHeight);
     }
 

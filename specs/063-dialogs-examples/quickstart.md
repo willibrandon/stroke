@@ -22,24 +22,24 @@ dotnet build examples/Stroke.Examples.sln
 
 ```bash
 # General pattern
-dotnet run --project examples/Stroke.Examples.Dialogs -- <ExampleName>
+dotnet run --project examples/Stroke.Examples.Dialogs -- <example-name>
 
 # Examples:
-dotnet run --project examples/Stroke.Examples.Dialogs -- MessageBox
-dotnet run --project examples/Stroke.Examples.Dialogs -- YesNoDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- ButtonDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- InputDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- PasswordDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- RadioDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- CheckboxDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- ProgressDialog
-dotnet run --project examples/Stroke.Examples.Dialogs -- StyledMessageBox
+dotnet run --project examples/Stroke.Examples.Dialogs -- message-box
+dotnet run --project examples/Stroke.Examples.Dialogs -- yes-no-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- button-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- input-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- password-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- radio-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- checkbox-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- progress-dialog
+dotnet run --project examples/Stroke.Examples.Dialogs -- styled-message-box
 ```
 
 ### Run Default Example
 
 ```bash
-# Without arguments, runs MessageBox (default)
+# Without arguments, runs message-box (default)
 dotnet run --project examples/Stroke.Examples.Dialogs
 ```
 
@@ -47,23 +47,23 @@ dotnet run --project examples/Stroke.Examples.Dialogs
 
 | Example | Description | Key API |
 |---------|-------------|---------|
-| `MessageBox` | Simple message dialog with OK button | `Dialogs.MessageDialog()` |
-| `YesNoDialog` | Yes/No confirmation returning boolean | `Dialogs.YesNoDialog()` |
-| `ButtonDialog` | Custom buttons with nullable values | `Dialogs.ButtonDialog<T>()` |
-| `InputDialog` | Text input with prompt | `Dialogs.InputDialog()` |
-| `PasswordDialog` | Masked password input | `Dialogs.InputDialog(password: true)` |
-| `RadioDialog` | Single-selection list (plain + styled) | `Dialogs.RadioListDialog<T>()` |
-| `CheckboxDialog` | Multi-selection with custom styling | `Dialogs.CheckboxListDialog<T>()` |
-| `ProgressDialog` | Background task with progress bar | `Dialogs.ProgressDialog()` |
-| `StyledMessageBox` | Custom colors via Style.FromDict() | `Style.FromDict()` + HTML title |
+| `message-box` | Simple message dialog with OK button | `Dialogs.MessageDialog()` |
+| `yes-no-dialog` | Yes/No confirmation returning boolean | `Dialogs.YesNoDialog()` |
+| `button-dialog` | Custom buttons with nullable values | `Dialogs.ButtonDialog<T>()` |
+| `input-dialog` | Text input with prompt | `Dialogs.InputDialog()` |
+| `password-dialog` | Masked password input | `Dialogs.InputDialog(password: true)` |
+| `radio-dialog` | Single-selection list (plain + styled) | `Dialogs.RadioListDialog<T>()` |
+| `checkbox-dialog` | Multi-selection with custom styling | `Dialogs.CheckboxListDialog<T>()` |
+| `progress-dialog` | Background task with progress bar | `Dialogs.ProgressDialog()` |
+| `styled-message-box` | Custom colors via Style.FromDict() | `Style.FromDict()` + HTML title |
 
 ## Keyboard Navigation
 
 All dialog examples support:
 - **Tab** / **Shift+Tab**: Move focus between buttons/fields
 - **Enter**: Activate focused button
-- **Space**: Toggle checkbox selection (CheckboxDialog only)
-- **Arrow keys**: Navigate lists (RadioDialog, CheckboxDialog)
+- **Space**: Toggle checkbox selection (checkbox-dialog only)
+- **Arrow keys**: Navigate lists (radio-dialog, checkbox-dialog)
 - **Ctrl+C**: Cancel and exit gracefully
 - **Ctrl+D**: Exit gracefully (EOF)
 
@@ -106,10 +106,10 @@ internal static class ExampleName
 ### TUI Driver Verification (Automated)
 
 ```javascript
-// Example: Verify MessageBox
+// Example: Verify message-box
 const session = await tui.launch({
   command: "dotnet",
-  args: ["run", "--project", "examples/Stroke.Examples.Dialogs", "--", "MessageBox"]
+  args: ["run", "--project", "examples/Stroke.Examples.Dialogs", "--", "message-box"]
 });
 
 await tui.waitForText(session, "Example dialog window", 5000);
@@ -129,7 +129,7 @@ await tui.close(session);
 ### Colors look wrong
 
 - Check terminal color scheme supports 256-color or true color
-- The `StyledMessageBox` example uses bright green background
+- The `styled-message-box` example uses bright green background
 
 ### ProgressDialog runs too long
 

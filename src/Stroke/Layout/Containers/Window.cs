@@ -427,6 +427,18 @@ public class Window : IContainer, IWindow
         // Apply window style
         ApplyStyle(screen, writePosition, parentStyle);
 
+        // Apply 'last-line' class to the last line of each Window.
+        // This can be used to apply an underline to the user control.
+        if (writePosition.Height > 0)
+        {
+            var lastLineWp = new WritePosition(
+                writePosition.XPos,
+                writePosition.YPos + writePosition.Height - 1,
+                writePosition.Width,
+                1);
+            screen.FillArea(lastLineWp, "class:last-line", after: true);
+        }
+
         // Register window position
         screen.VisibleWindowsToWritePositions[this] = writePosition;
     }
@@ -757,15 +769,24 @@ public class Window : IContainer, IWindow
             currentLine++;
         }
 
-        // Set cursor position
-        if (!alwaysHideCursor && uiContent.ShowCursor && uiContent.CursorPosition != null)
+        // Set cursor position and visibility
+        if (alwaysHideCursor)
         {
-            var cursorRow = uiContent.CursorPosition.Value.Y;
-            var cursorCol = uiContent.CursorPosition.Value.X;
+            screen.ShowCursor = false;
+        }
+        else if (uiContent.ShowCursor)
+        {
+            screen.ShowCursor = true;
 
-            if (rowColToYX.TryGetValue((cursorRow, cursorCol), out var cursorYX))
+            if (uiContent.CursorPosition != null)
             {
-                screen.SetCursorPosition(this, new Point(cursorYX.X, cursorYX.Y));
+                var cursorRow = uiContent.CursorPosition.Value.Y;
+                var cursorCol = uiContent.CursorPosition.Value.X;
+
+                if (rowColToYX.TryGetValue((cursorRow, cursorCol), out var cursorYX))
+                {
+                    screen.SetCursorPosition(this, new Point(cursorYX.X, cursorYX.Y));
+                }
             }
         }
 
@@ -867,9 +888,11 @@ public class Window : IContainer, IWindow
                     for (int col = writePosition.XPos; col < writePosition.XPos + writePosition.Width; col++)
                     {
                         var existing = screen[row, col];
+                        // Parent style goes first (left), fragment style goes after (right).
+                        // "Things on the right take precedence" - so fragment style wins.
                         var newStyle = string.IsNullOrEmpty(existing.Style)
                             ? combinedStyle
-                            : $"{existing.Style} {combinedStyle}";
+                            : $"{combinedStyle} {existing.Style}";
                         screen[row, col] = Char.Create(existing.Character, newStyle);
                     }
                 }

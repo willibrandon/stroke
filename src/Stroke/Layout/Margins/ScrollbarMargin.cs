@@ -78,52 +78,48 @@ public sealed class ScrollbarMargin : IMargin
         var (thumbStart, thumbEnd) = CalculateThumbPosition(
             contentHeight, verticalScroll, windowHeight, bodyHeight);
 
-        // Determine height available for scrollbar (minus arrows if displayed)
-        var scrollbarStart = displayArrows ? 1 : 0;
-        var scrollbarEnd = displayArrows ? height - 1 : height;
-
-        for (int i = 0; i < height; i++)
+        // Up arrow
+        if (displayArrows)
         {
-            string style;
-            char symbol;
+            result.Add(new StyleAndTextTuple("class:scrollbar.arrow", UpArrowSymbol.ToString()));
+            result.Add(new StyleAndTextTuple("class:scrollbar", "\n"));
+        }
 
-            if (displayArrows && i == 0)
+        // Scrollbar body - matches Python PTK's is_scroll_button logic
+        for (int i = 0; i < bodyHeight; i++)
+        {
+            var isButton = i >= thumbStart && i < thumbEnd;
+            var isNextButton = (i + 1) >= thumbStart && (i + 1) < thumbEnd;
+
+            string style;
+            if (isButton)
             {
-                // Up arrow
-                style = "class:scrollbar.arrow";
-                symbol = UpArrowSymbol;
-            }
-            else if (displayArrows && i == height - 1)
-            {
-                // Down arrow
-                style = "class:scrollbar.arrow";
-                symbol = DownArrowSymbol;
+                // Give the last cell of the button a different style for underline effect
+                style = !isNextButton
+                    ? "class:scrollbar.button,scrollbar.end"
+                    : "class:scrollbar.button";
             }
             else
             {
-                // Scrollbar body
-                var scrollbarIndex = i - scrollbarStart;
-                if (scrollbarIndex >= thumbStart && scrollbarIndex < thumbEnd)
-                {
-                    // Thumb (scrollbar button)
-                    style = "class:scrollbar.button";
-                    symbol = ' ';
-                }
-                else
-                {
-                    // Background
-                    style = "class:scrollbar.background";
-                    symbol = ' ';
-                }
+                // Give the cell before the button a different style for underline effect
+                style = isNextButton
+                    ? "class:scrollbar.background,scrollbar.start"
+                    : "class:scrollbar.background";
             }
 
-            result.Add(new StyleAndTextTuple(style, symbol.ToString()));
+            result.Add(new StyleAndTextTuple(style, " "));
 
-            // Add newline for all but the last line
-            if (i < height - 1)
+            // Add newline between rows, but not after the last row (unless down arrow follows)
+            if (i < bodyHeight - 1 || displayArrows)
             {
                 result.Add(new StyleAndTextTuple("", "\n"));
             }
+        }
+
+        // Down arrow
+        if (displayArrows)
+        {
+            result.Add(new StyleAndTextTuple("class:scrollbar.arrow", DownArrowSymbol.ToString()));
         }
 
         return result;
