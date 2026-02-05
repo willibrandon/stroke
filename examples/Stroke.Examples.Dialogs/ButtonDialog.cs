@@ -1,6 +1,5 @@
 using Stroke.Shortcuts;
 
-
 namespace Stroke.Examples.DialogExamples;
 
 /// <summary>

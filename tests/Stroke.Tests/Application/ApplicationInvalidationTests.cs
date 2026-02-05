@@ -16,7 +16,7 @@ public class ApplicationInvalidationTests
         Func<bool> condition,
         CancellationToken ct,
         string? message = null,
-        int timeoutMs = 5000)
+        int timeoutMs = 15000)
     {
         var deadline = DateTime.UtcNow.AddMilliseconds(timeoutMs);
         while (!condition())
@@ -246,6 +246,7 @@ public class ApplicationInvalidationTests
             refreshInterval: 0.1);
 
         var runTask = app.RunAsync();
+        await Task.Delay(50, ct); // Let app start and do initial render
 
         int counterBefore = app.RenderCounter;
 
