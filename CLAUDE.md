@@ -458,6 +458,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10 + Stroke library (Stroke.Shortcuts, Stroke.FormattedText, Stroke.Styles, Stroke.Filters, Stroke.Application) (062-choices-examples)
 - N/A (examples only) (062-choices-examples)
 - C# 13 / .NET 10+ + Stroke library (Stroke.Shortcuts, Stroke.FormattedText, Stroke.Styles) (063-dialogs-examples)
+- C# 13 / .NET 10 + Stroke library (Application, Layout, Widgets, KeyBinding, Styles, Completion, Lexers namespaces) (064-fullscreen-examples)
+- N/A (examples only, in-memory) (064-fullscreen-examples)
 
 ## Recent Changes
 
