@@ -336,11 +336,12 @@ public sealed class DummyOutputTests
     }
 
     [Fact]
-    public void GetRowsBelowCursorPosition_ReturnsZero()
+    public void GetRowsBelowCursorPosition_ReturnsFixedValue()
     {
+        // DummyOutput returns 40, matching Python Prompt Toolkit's DummyOutput.
         var output = new DummyOutput();
 
-        Assert.Equal(0, output.GetRowsBelowCursorPosition());
+        Assert.Equal(40, output.GetRowsBelowCursorPosition());
     }
 
     #endregion

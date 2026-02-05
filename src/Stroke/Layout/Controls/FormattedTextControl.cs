@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Core;
 using Stroke.Core.Primitives;
 using Stroke.Filters;
@@ -32,7 +33,6 @@ public class FormattedTextControl : IUIControl
     private readonly SimpleCache<object, UIContent> _contentCache = new(18);
     private readonly SimpleCache<int, IReadOnlyList<StyleAndTextTuple>> _fragmentCache = new(1);
     private readonly Func<IReadOnlyList<StyleAndTextTuple>> _textGetter;
-    private int _renderCounter;
 
     /// <summary>
     /// Gets the style to apply to the text.
@@ -142,9 +142,9 @@ public class FormattedTextControl : IUIControl
     /// <inheritdoc/>
     public void Reset()
     {
-        // Increment render counter to invalidate caches between render passes.
-        // Within a single render pass, the counter stays constant so caches hit.
-        _renderCounter++;
+        // No-op: Cache invalidation is handled by AppContext.GetApp().RenderCounter.
+        // This matches Python Prompt Toolkit's behavior where FormattedTextControl.reset()
+        // only clears _fragments (used for mouse support), not the fragment cache.
     }
 
     /// <inheritdoc/>
@@ -251,7 +251,11 @@ public class FormattedTextControl : IUIControl
 
     private IReadOnlyList<StyleAndTextTuple> GetFormattedTextCached()
     {
-        return _fragmentCache.Get(_renderCounter, () =>
+        // Use AppContext.GetApp().RenderCounter as the cache key, matching Python Prompt Toolkit.
+        // This ensures fragments are re-evaluated once per render pass (RenderCounter increments
+        // in Application.Redraw before each render).
+        var renderCounter = Stroke.Application.AppContext.GetApp().RenderCounter;
+        return _fragmentCache.Get(renderCounter, () =>
         {
             var result = _textGetter();
 

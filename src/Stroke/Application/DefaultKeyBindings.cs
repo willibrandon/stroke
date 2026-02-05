@@ -1,5 +1,6 @@
 using Stroke.Application.Bindings;
 using Stroke.KeyBinding;
+using Stroke.KeyBinding.Bindings;
 
 namespace Stroke.Application;
 
@@ -22,7 +23,12 @@ public static class DefaultKeyBindings
     public static IKeyBindingsBase Load()
     {
         // Load basic bindings which include self-insert, navigation, etc.
-        return BasicBindings.LoadBasicBindings();
+        // Mouse and CPR bindings are always active (not conditional on buffer focus),
+        // matching Python Prompt Toolkit's load_key_bindings().
+        return new MergedKeyBindings(
+            BasicBindings.LoadBasicBindings(),
+            MouseBindings.LoadMouseBindings(),
+            CprBindings.LoadCprBindings());
     }
 
     /// <summary>

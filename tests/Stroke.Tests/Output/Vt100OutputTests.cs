@@ -478,12 +478,14 @@ public sealed class Vt100OutputTests
     }
 
     [Fact]
-    public void GetRowsBelowCursorPosition_ReturnsZero()
+    public void GetRowsBelowCursorPosition_ThrowsNotImplementedException()
     {
+        // VT100 terminals use CPR (Cursor Position Report) for cursor position,
+        // so this Windows-specific method is not supported.
         var writer = new StringWriter();
         var output = Vt100Output.FromPty(writer);
 
-        Assert.Equal(0, output.GetRowsBelowCursorPosition());
+        Assert.Throws<NotImplementedException>(() => output.GetRowsBelowCursorPosition());
     }
 
     #endregion

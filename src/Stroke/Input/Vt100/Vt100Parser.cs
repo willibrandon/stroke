@@ -529,6 +529,9 @@ public sealed class Vt100Parser
 
     private void EmitCharacter(char c)
     {
+        // Emit printable characters as Keys.Any with the character as data.
+        // The Application layer's ConvertKeyPress method will convert this to a
+        // character-based KeyOrChar for proper binding matching.
         _feedKeyCallback(new KeyPress(Keys.Any, c.ToString()));
     }
 

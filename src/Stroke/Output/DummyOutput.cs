@@ -287,7 +287,7 @@ public sealed class DummyOutput : IOutput
     }
 
     /// <inheritdoc/>
-    public int GetRowsBelowCursorPosition() => 0;
+    public int GetRowsBelowCursorPosition() => 40;
 
     #endregion
 }

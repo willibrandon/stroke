@@ -1,5 +1,6 @@
 using System.Threading.Channels;
 using Stroke.Input.Typeahead;
+using Stroke.KeyBinding;
 
 using InputKeyPress = Stroke.Input.KeyPress;
 using KBKeyPress = Stroke.KeyBinding.KeyPress;
@@ -11,6 +12,29 @@ namespace Stroke.Application;
 /// </summary>
 public partial class Application<TResult>
 {
+    /// <summary>
+    /// Converts an Input.KeyPress to a KeyBinding.KeyPress, correctly handling
+    /// character input. When Key is Keys.Any and Data is a single character,
+    /// creates a character-based KeyOrChar for proper binding matching.
+    /// </summary>
+    /// <remarks>
+    /// This matches Python Prompt Toolkit's behavior where regular characters
+    /// are emitted as themselves (single-character strings), not as Keys.Any.
+    /// </remarks>
+    private static KBKeyPress ConvertKeyPress(InputKeyPress inputKp)
+    {
+        // When Key is Keys.Any and Data is a single character, create a char-based KeyPress.
+        // This allows bindings for specific characters (like 'j' and 'k' for Vi mode)
+        // to match correctly.
+        if (inputKp.Key == Stroke.Input.Keys.Any && inputKp.Data.Length == 1)
+        {
+            return new KBKeyPress(new KeyOrChar(inputKp.Data[0]), inputKp.Data);
+        }
+
+        // For all other keys, use the Keys enum directly
+        return new KBKeyPress(inputKp.Key, inputKp.Data);
+    }
+
     /// <summary>
     /// Run the application asynchronously until Exit() is called.
     /// Returns the value passed to Exit().
@@ -61,7 +85,7 @@ public partial class Application<TResult>
             var typeahead = TypeaheadBuffer.Get(Input);
             foreach (var inputKp in typeahead)
             {
-                KeyProcessor.Feed(new KBKeyPress(inputKp.Key, inputKp.Data));
+                KeyProcessor.Feed(ConvertKeyPress(inputKp));
             }
             KeyProcessor.ProcessKeys();
 
@@ -83,7 +107,7 @@ public partial class Application<TResult>
                 // Feed to key processor
                 foreach (var inputKp in keys)
                 {
-                    KeyProcessor.Feed(new KBKeyPress(inputKp.Key, inputKp.Data));
+                    KeyProcessor.Feed(ConvertKeyPress(inputKp));
                 }
                 KeyProcessor.ProcessKeys();
                 Invalidate();
@@ -121,7 +145,7 @@ public partial class Application<TResult>
                     var keys = Input.FlushKeys();
                     foreach (var inputKp in keys)
                     {
-                        KeyProcessor.Feed(new KBKeyPress(inputKp.Key, inputKp.Data));
+                        KeyProcessor.Feed(ConvertKeyPress(inputKp));
                     }
                     KeyProcessor.ProcessKeys();
 

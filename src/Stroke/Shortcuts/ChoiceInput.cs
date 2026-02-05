@@ -321,6 +321,15 @@ public sealed class ChoiceInput<T>
             return null;
         });
 
+        // Ctrl+D - EOF/exit (similar to Ctrl+C but throws EOFException)
+        kb.Add<KeyHandlerCallable>(
+            [new KeyOrChar(Keys.ControlD)],
+            filter: new FilterOrBool(enableInterruptFilter))((@event) =>
+        {
+            AppContext.GetApp().Exit(exception: new EOFException(), style: "class:exiting");
+            return null;
+        });
+
         // Ctrl+Z suspend (Unix only) [FR-012, XP-001]
         var suspendSupported = new Condition(() => PlatformUtils.SuspendToBackgroundSupported);
         var enableSuspendFilter = new Condition(() => FilterUtils.IsTrue(EnableSuspend));
