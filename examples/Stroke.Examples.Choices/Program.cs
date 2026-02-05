@@ -1,7 +1,7 @@
-namespace Stroke.Examples.Prompts;
+namespace Stroke.Examples.Choices;
 
 /// <summary>
-/// Entry point for prompt examples with command-line routing.
+/// Entry point for choice examples with command-line routing.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -9,10 +9,14 @@ namespace Stroke.Examples.Prompts;
 /// </para>
 /// <para>
 /// Available examples:
-/// - autocompletion: Tab completion with WordCompleter
-/// - auto-suggestion: Fish-style auto-suggestion from history
-/// - fuzzy-word-completer: Fuzzy completion that appears automatically while typing
-/// - get-input: Simple single-line prompt demonstrating basic PromptSession usage
+/// - simple-selection: Basic 3-option selection
+/// - default: Pre-selected default + HTML message
+/// - color: Custom styling with colored text
+/// - with-frame: Frame border that hides on accept
+/// - frame-and-bottom-toolbar: Frame + navigation instructions
+/// - gray-frame-on-accept: Frame color changes when accepted
+/// - many-choices: 99 scrollable options
+/// - mouse-support: Click to select options
 /// </para>
 /// </remarks>
 internal static class Program
@@ -22,10 +26,14 @@ internal static class Program
     /// </summary>
     private static readonly Dictionary<string, Action> Examples = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["autocompletion"] = Autocompletion.Run,
-        ["auto-suggestion"] = AutoSuggestion.Run,
-        ["fuzzy-word-completer"] = FuzzyWordCompleterExample.Run,
-        ["get-input"] = GetInput.Run,
+        ["simple-selection"] = SimpleSelection.Run,
+        ["default"] = Default.Run,
+        ["color"] = Color.Run,
+        ["with-frame"] = WithFrame.Run,
+        ["frame-and-bottom-toolbar"] = FrameAndBottomToolbar.Run,
+        ["gray-frame-on-accept"] = GrayFrameOnAccept.Run,
+        ["many-choices"] = ManyChoices.Run,
+        ["mouse-support"] = MouseSupport.Run,
     };
 
     public static void Main(string[] args)
@@ -62,9 +70,9 @@ internal static class Program
 
     private static void ShowUsage()
     {
-        Console.WriteLine("Stroke Prompt Examples");
+        Console.WriteLine("Stroke Choice Examples");
         Console.WriteLine();
-        Console.WriteLine("Usage: dotnet run --project examples/Stroke.Examples.Prompts -- <example-name>");
+        Console.WriteLine("Usage: dotnet run --project examples/Stroke.Examples.Choices -- <example-name>");
         Console.WriteLine();
         Console.WriteLine("Available examples:");
         foreach (var name in Examples.Keys.Order())

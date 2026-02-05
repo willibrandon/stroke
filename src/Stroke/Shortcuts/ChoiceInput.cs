@@ -180,8 +180,9 @@ public sealed class ChoiceInput<T>
         BottomToolbar = bottomToolbar;
         ShowFrame = showFrame;
         EnableSuspend = enableSuspend;
-        // Default enableInterrupt to true if not specified [FR-008]
-        EnableInterrupt = enableInterrupt.HasValue ? enableInterrupt : new FilterOrBool(true);
+        // Default enableInterrupt to false for clean CLI experience (no stack traces).
+        // Set to true explicitly if you want KeyboardInterrupt exceptions.
+        EnableInterrupt = enableInterrupt.HasValue ? enableInterrupt : new FilterOrBool(false);
         // Default interruptException to KeyboardInterrupt [FR-008]
         InterruptException = interruptException ?? typeof(KeyboardInterrupt);
         KeyBindings = keyBindings;
@@ -299,25 +300,28 @@ public sealed class ChoiceInput<T>
             return null;
         });
 
-        // Ctrl+C interrupt filter [FR-008]
-        var enableInterruptFilter = new Condition(() => FilterUtils.IsTrue(EnableInterrupt));
-
-        // Ctrl+C and SIGINT - keyboard interrupt [FR-008]
+        // Ctrl+C and SIGINT - cancel with OperationCanceledException (standard .NET pattern)
+        // This follows the Spectre.Console pattern where cancellation throws a standard exception
+        // that callers can catch and handle gracefully.
         kb.Add<KeyHandlerCallable>(
-            [new KeyOrChar(Keys.ControlC)],
-            filter: new FilterOrBool(enableInterruptFilter))((@event) =>
+            [new KeyOrChar(Keys.ControlC)])((@event) =>
         {
-            var exception = (Exception)Activator.CreateInstance(InterruptException)!;
-            AppContext.GetApp().Exit(exception: exception, style: "class:aborting");
+            AppContext.GetApp().Exit(exception: new OperationCanceledException(), style: "class:aborting");
             return null;
         });
 
         kb.Add<KeyHandlerCallable>(
-            [new KeyOrChar(Keys.SIGINT)],
-            filter: new FilterOrBool(enableInterruptFilter))((@event) =>
+            [new KeyOrChar(Keys.SIGINT)])((@event) =>
         {
-            var exception = (Exception)Activator.CreateInstance(InterruptException)!;
-            AppContext.GetApp().Exit(exception: exception, style: "class:aborting");
+            AppContext.GetApp().Exit(exception: new OperationCanceledException(), style: "class:aborting");
+            return null;
+        });
+
+        // Ctrl+D (EOF) - also cancel, as user wants to exit without selecting
+        kb.Add<KeyHandlerCallable>(
+            [new KeyOrChar(Keys.ControlD)])((@event) =>
+        {
+            AppContext.GetApp().Exit(exception: new OperationCanceledException(), style: "class:aborting");
             return null;
         });
 

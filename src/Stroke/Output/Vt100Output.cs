@@ -519,8 +519,13 @@ public sealed partial class Vt100Output : IOutput
     /// <inheritdoc/>
     public int GetRowsBelowCursorPosition()
     {
-        // Windows-specific operation - return 0 on other platforms
-        return 0;
+        // This is a Windows-specific operation that uses console buffer APIs.
+        // VT100 terminals must use CPR (Cursor Position Report) to determine
+        // cursor position, which is handled asynchronously by the Renderer.
+        // Throwing NotImplementedException signals that CPR should be used.
+        throw new NotImplementedException(
+            "VT100 terminals do not support synchronous cursor position queries. " +
+            "Use CPR (Cursor Position Report) instead.");
     }
 
     #endregion

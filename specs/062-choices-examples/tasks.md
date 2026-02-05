@@ -19,10 +19,10 @@
 
 **Purpose**: Create project structure and solution integration
 
-- [ ] T001 Create project directory `examples/Stroke.Examples.Choices/`
-- [ ] T002 Create `examples/Stroke.Examples.Choices/Stroke.Examples.Choices.csproj` with Stroke reference
-- [ ] T003 Add Stroke.Examples.Choices project to `examples/Stroke.Examples.sln`
-- [ ] T004 Create `examples/Stroke.Examples.Choices/Program.cs` with dictionary-based routing to 8 examples
+- [x] T001 Create project directory `examples/Stroke.Examples.Choices/`
+- [x] T002 Create `examples/Stroke.Examples.Choices/Stroke.Examples.Choices.csproj` with Stroke reference
+- [x] T003 Add Stroke.Examples.Choices project to `examples/Stroke.Examples.sln`
+- [x] T004 Create `examples/Stroke.Examples.Choices/Program.cs` with dictionary-based routing to 8 examples
 
 **Checkpoint**: Project builds with `dotnet build examples/Stroke.Examples.sln` (SC-001 partial)
 
@@ -36,7 +36,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Implement SimpleSelection example in `examples/Stroke.Examples.Choices/SimpleSelection.cs`
+- [x] T005 [US1] Implement SimpleSelection example in `examples/Stroke.Examples.Choices/SimpleSelection.cs`
 
 **Checkpoint**: SimpleSelection example runs, displays 3 options, accepts selection, prints result
 
@@ -50,7 +50,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T006 [US2] Implement Default example in `examples/Stroke.Examples.Choices/Default.cs`
+- [x] T006 [US2] Implement Default example in `examples/Stroke.Examples.Choices/Default.cs`
 
 **Checkpoint**: Default example shows underlined message, pre-selects "salad", prints on Enter
 
@@ -64,7 +64,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T007 [US3] Implement Color example in `examples/Stroke.Examples.Choices/Color.cs`
+- [x] T007 [US3] Implement Color example in `examples/Stroke.Examples.Choices/Color.cs`
 
 **Checkpoint**: Color example displays custom styles matching Python PTK example
 
@@ -78,7 +78,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T008 [US4] Implement WithFrame example in `examples/Stroke.Examples.Choices/WithFrame.cs`
+- [x] T008 [US4] Implement WithFrame example in `examples/Stroke.Examples.Choices/WithFrame.cs`
 
 **Checkpoint**: WithFrame example shows frame during selection, hides on accept
 
@@ -92,7 +92,7 @@
 
 ### Implementation for User Story 5
 
-- [ ] T009 [US5] Implement FrameAndBottomToolbar example in `examples/Stroke.Examples.Choices/FrameAndBottomToolbar.cs`
+- [x] T009 [US5] Implement FrameAndBottomToolbar example in `examples/Stroke.Examples.Choices/FrameAndBottomToolbar.cs`
 
 **Checkpoint**: FrameAndBottomToolbar shows red frame + styled toolbar, both hide on accept
 
@@ -108,7 +108,7 @@
 
 ### Implementation for User Story 7
 
-- [ ] T010 [US7] Implement ManyChoices example in `examples/Stroke.Examples.Choices/ManyChoices.cs`
+- [x] T010 [US7] Implement ManyChoices example in `examples/Stroke.Examples.Choices/ManyChoices.cs`
 
 **Checkpoint**: ManyChoices displays 99 options, scrolls correctly, prints selected number
 
@@ -122,7 +122,7 @@
 
 ### Implementation for User Story 6
 
-- [ ] T011 [US6] Implement GrayFrameOnAccept example in `examples/Stroke.Examples.Choices/GrayFrameOnAccept.cs`
+- [x] T011 [US6] Implement GrayFrameOnAccept example in `examples/Stroke.Examples.Choices/GrayFrameOnAccept.cs`
 
 **Checkpoint**: GrayFrameOnAccept shows red frame, changes to gray on accept, stays visible
 
@@ -136,7 +136,7 @@
 
 ### Implementation for User Story 8
 
-- [ ] T012 [US8] Implement MouseSupport example in `examples/Stroke.Examples.Choices/MouseSupport.cs`
+- [x] T012 [US8] Implement MouseSupport example in `examples/Stroke.Examples.Choices/MouseSupport.cs`
 
 **Checkpoint**: MouseSupport allows clicking options, keyboard still works, prints selected value
 
@@ -149,7 +149,7 @@
 - [ ] T013 Verify all 8 examples handle Ctrl+C gracefully (FR-014, SC-008)
 - [ ] T014 Verify all 8 examples handle Ctrl+D gracefully (FR-014)
 - [ ] T015 Verify unknown example name shows error with list of valid examples (FR-005, SC-009)
-- [ ] T016 Verify no argument defaults to SimpleSelection (FR-004)
+- [ ] T016 Verify no argument shows usage (consistent with Stroke.Examples.Prompts)
 - [ ] T017 Run TUI Driver verification per `specs/062-choices-examples/quickstart.md`
 
 ---

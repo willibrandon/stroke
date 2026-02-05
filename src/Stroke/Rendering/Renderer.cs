@@ -268,6 +268,10 @@ public sealed class Renderer
         _lastTransformationHash = app.StyleTransformation.InvalidationHash;
         _lastColorDepth = app.ColorDepth;
 
+        // Reset all containers/controls to invalidate caches before this render pass.
+        // This increments each control's render counter so GetFormattedTextCached() returns fresh content.
+        layout.Container.Reset();
+
         // Write layout to screen
         layout.Container.WriteToScreen(
             screen,

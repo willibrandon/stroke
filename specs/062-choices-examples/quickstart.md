@@ -19,16 +19,16 @@ cd /Users/brandon/src/stroke
 dotnet build examples/Stroke.Examples.sln
 
 # Run an example by name
-dotnet run --project examples/Stroke.Examples.Choices -- SimpleSelection
-dotnet run --project examples/Stroke.Examples.Choices -- Default
-dotnet run --project examples/Stroke.Examples.Choices -- Color
-dotnet run --project examples/Stroke.Examples.Choices -- WithFrame
-dotnet run --project examples/Stroke.Examples.Choices -- FrameAndBottomToolbar
-dotnet run --project examples/Stroke.Examples.Choices -- GrayFrameOnAccept
-dotnet run --project examples/Stroke.Examples.Choices -- ManyChoices
-dotnet run --project examples/Stroke.Examples.Choices -- MouseSupport
+dotnet run --project examples/Stroke.Examples.Choices -- simple-selection
+dotnet run --project examples/Stroke.Examples.Choices -- default
+dotnet run --project examples/Stroke.Examples.Choices -- color
+dotnet run --project examples/Stroke.Examples.Choices -- with-frame
+dotnet run --project examples/Stroke.Examples.Choices -- frame-and-bottom-toolbar
+dotnet run --project examples/Stroke.Examples.Choices -- gray-frame-on-accept
+dotnet run --project examples/Stroke.Examples.Choices -- many-choices
+dotnet run --project examples/Stroke.Examples.Choices -- mouse-support
 
-# Run default example (SimpleSelection)
+# Show usage (no default - lists available examples)
 dotnet run --project examples/Stroke.Examples.Choices
 ```
 
@@ -36,14 +36,14 @@ dotnet run --project examples/Stroke.Examples.Choices
 
 | Name | Description |
 |------|-------------|
-| `SimpleSelection` | Basic 3-option selection |
-| `Default` | Pre-selected default + HTML message |
-| `Color` | Custom styling with colored text |
-| `WithFrame` | Frame border that hides on accept |
-| `FrameAndBottomToolbar` | Frame + navigation instructions |
-| `GrayFrameOnAccept` | Frame color changes when accepted |
-| `ManyChoices` | 99 scrollable options |
-| `MouseSupport` | Click to select options |
+| `simple-selection` | Basic 3-option selection |
+| `default` | Pre-selected default + HTML message |
+| `color` | Custom styling with colored text |
+| `with-frame` | Frame border that hides on accept |
+| `frame-and-bottom-toolbar` | Frame + navigation instructions |
+| `gray-frame-on-accept` | Frame color changes when accepted |
+| `many-choices` | 99 scrollable options |
+| `mouse-support` | Click to select options |
 
 ## Controls
 
@@ -79,7 +79,7 @@ using Stroke.FormattedText;
 using Stroke.Shortcuts;
 
 var result = Dialogs.Choice(
-    Html.Parse("<u>Please select a dish</u>:"),
+    new Html("<u>Please select a dish</u>:"),
     [
         ("pizza", "Pizza with mushrooms"),
         ("salad", "Salad with tomatoes"),
@@ -105,10 +105,10 @@ var style = Style.FromDict(new Dictionary<string, string>
 });
 
 var result = Dialogs.Choice(
-    Html.Parse("<u>Please select a dish</u>:"),
+    new Html("<u>Please select a dish</u>:"),
     [
         ("pizza", "Pizza with mushrooms"),
-        ("salad", Html.Parse("<ansigreen>Salad</ansigreen> with <ansired>tomatoes</ansired>")),
+        ("salad", new Html("<ansigreen>Salad</ansigreen> with <ansired>tomatoes</ansired>")),
         ("sushi", "Sushi"),
     ],
     style: style);
@@ -117,13 +117,14 @@ var result = Dialogs.Choice(
 ### Conditional Frame (WithFrame)
 
 ```csharp
+using Stroke.Application;
 using Stroke.Filters;
 using Stroke.Shortcuts;
 
 var result = Dialogs.Choice(
     "Please select a dish:",
     options,
-    showFrame: ~AppFilters.IsDone);  // Frame hides after selection
+    showFrame: new FilterOrBool(AppFilters.IsDone.Invert()));  // Frame hides after selection
 ```
 
 ### Style Change on Accept (GrayFrameOnAccept)
@@ -162,7 +163,7 @@ examples/Stroke.Examples.Choices/
 
 ```bash
 # Use TUI Driver MCP to automate testing
-tui_launch "dotnet run --project examples/Stroke.Examples.Choices -- SimpleSelection"
+tui_launch "dotnet run --project examples/Stroke.Examples.Choices -- simple-selection"
 tui_wait_for_text "Please select a dish:"
 tui_press_key "Down"
 tui_press_key "Down"
