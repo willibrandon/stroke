@@ -455,6 +455,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + `Stroke.Application` (AppSession, AppContext), `Stroke.Output` (IOutput, Vt100Output), `Stroke.Input` (IInput), `Stroke.Styles` (BaseStyle), `Stroke.FormattedText`, `System.Net.Sockets` (060-telnet-server)
 - C# 13 / .NET 10+ + FxSsh (v1.3.0, MIT license) for SSH server functionality, existing Stroke libraries (Stroke.Application, Stroke.Input.Pipe, Stroke.Output, Stroke.Styles) (061-ssh-server)
 - N/A (in-memory session management only) (061-ssh-server)
+- C# 13 / .NET 10 + Stroke library (Stroke.Shortcuts.Dialogs, Stroke.Styles, Stroke.FormattedText, Stroke.Filters) (062-choices-examples)
+- N/A (console applications, no persistence) (062-choices-examples)
 
 ## Recent Changes
 
