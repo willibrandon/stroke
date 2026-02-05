@@ -2,6 +2,7 @@ using Stroke.FormattedText;
 using Stroke.Shortcuts;
 using Stroke.Styles;
 
+using static Stroke.Shortcuts.Dialogs;
 
 namespace Stroke.Examples.DialogExamples;
 
@@ -9,13 +10,13 @@ namespace Stroke.Examples.DialogExamples;
 /// Example of a checkbox list dialog with custom styling.
 /// Port of Python Prompt Toolkit's checkbox_dialog.py example.
 /// </summary>
-internal static class CheckboxDialog
+internal static class CheckboxDialogExample
 {
     public static void Run()
     {
         try
         {
-            var results = Dialogs.CheckboxListDialog<string>(
+            var results = CheckboxListDialog<string>(
                 title: "CheckboxList dialog",
                 text: "What would you like in your breakfast ?",
                 values:
@@ -39,14 +40,14 @@ internal static class CheckboxDialog
 
             if (results is { Count: > 0 })
             {
-                Dialogs.MessageDialog(
+                MessageDialog(
                     title: "Room service",
                     text: $"You selected: {string.Join(",", results)}\nGreat choice sir !"
                 ).Run();
             }
             else
             {
-                Dialogs.MessageDialog(title: "*starves*").Run();
+                MessageDialog(title: "*starves*").Run();
             }
         }
         catch (KeyboardInterrupt)

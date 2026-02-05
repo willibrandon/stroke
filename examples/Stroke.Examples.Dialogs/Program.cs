@@ -27,15 +27,15 @@ internal static class Program
     /// </summary>
     private static readonly Dictionary<string, Action> Examples = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["message-box"] = MessageBox.Run,
-        ["yes-no-dialog"] = YesNoDialog.Run,
-        ["button-dialog"] = ButtonDialog.Run,
-        ["input-dialog"] = InputDialog.Run,
-        ["password-dialog"] = PasswordDialog.Run,
-        ["radio-dialog"] = RadioDialog.Run,
-        ["checkbox-dialog"] = CheckboxDialog.Run,
-        ["progress-dialog"] = ProgressDialog.Run,
-        ["styled-message-box"] = StyledMessageBox.Run,
+        ["message-box"] = MessageBoxExample.Run,
+        ["yes-no-dialog"] = YesNoDialogExample.Run,
+        ["button-dialog"] = ButtonDialogExample.Run,
+        ["input-dialog"] = InputDialogExample.Run,
+        ["password-dialog"] = PasswordDialogExample.Run,
+        ["radio-dialog"] = RadioDialogExample.Run,
+        ["checkbox-dialog"] = CheckboxDialogExample.Run,
+        ["progress-dialog"] = ProgressDialogExample.Run,
+        ["styled-message-box"] = StyledMessageBoxExample.Run,
     };
 
     public static void Main(string[] args)

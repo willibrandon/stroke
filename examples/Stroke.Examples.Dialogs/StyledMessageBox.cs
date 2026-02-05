@@ -2,6 +2,7 @@ using Stroke.FormattedText;
 using Stroke.Shortcuts;
 using Stroke.Styles;
 
+using static Stroke.Shortcuts.Dialogs;
 
 namespace Stroke.Examples.DialogExamples;
 
@@ -10,7 +11,7 @@ namespace Stroke.Examples.DialogExamples;
 /// Port of Python Prompt Toolkit's styled_messagebox.py example.
 /// Demonstrates Style.FromDict() and HTML-formatted title.
 /// </summary>
-internal static class StyledMessageBox
+internal static class StyledMessageBoxExample
 {
     /// <summary>
     /// Custom color scheme with green terminal aesthetic.
@@ -27,7 +28,7 @@ internal static class StyledMessageBox
     {
         try
         {
-            Dialogs.MessageDialog(
+            MessageDialog(
                 title: new Html(
                     "<style bg=\"blue\" fg=\"white\">Styled</style> " +
                     "<style fg=\"ansired\">dialog</style> window"),

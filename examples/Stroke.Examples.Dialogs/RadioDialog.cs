@@ -1,6 +1,7 @@
 using Stroke.FormattedText;
 using Stroke.Shortcuts;
 
+using static Stroke.Shortcuts.Dialogs;
 
 namespace Stroke.Examples.DialogExamples;
 
@@ -9,14 +10,14 @@ namespace Stroke.Examples.DialogExamples;
 /// Port of Python Prompt Toolkit's radio_dialog.py example.
 /// Demonstrates both plain text and HTML-styled options.
 /// </summary>
-internal static class RadioDialog
+internal static class RadioDialogExample
 {
     public static void Run()
     {
         try
         {
             // First dialog with plain text options
-            var result = Dialogs.RadioListDialog<string>(
+            var result = RadioListDialog<string>(
                 title: "Radiolist dialog example",
                 text: "Please select a color:",
                 values:
@@ -31,7 +32,7 @@ internal static class RadioDialog
             Console.WriteLine($"Result = {result}");
 
             // Second dialog with HTML-styled options
-            result = Dialogs.RadioListDialog<string>(
+            result = RadioListDialog<string>(
                 title: new Html("Radiolist dialog example <reverse>with colors</reverse>"),
                 text: "Please select a color:",
                 values:

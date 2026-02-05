@@ -1,5 +1,6 @@
 using Stroke.Shortcuts;
 
+using static Stroke.Shortcuts.Dialogs;
 
 namespace Stroke.Examples.DialogExamples;
 
@@ -7,13 +8,13 @@ namespace Stroke.Examples.DialogExamples;
 /// Example of a password input dialog with masked input.
 /// Port of Python Prompt Toolkit's password_dialog.py example.
 /// </summary>
-internal static class PasswordDialog
+internal static class PasswordDialogExample
 {
     public static void Run()
     {
         try
         {
-            var result = Dialogs.InputDialog(
+            var result = InputDialog(
                 title: "Password dialog example",
                 text: "Please type your password:",
                 password: true

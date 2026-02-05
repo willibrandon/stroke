@@ -1,5 +1,6 @@
 using Stroke.Shortcuts;
 
+using static Stroke.Shortcuts.Dialogs;
 
 namespace Stroke.Examples.DialogExamples;
 
@@ -7,13 +8,13 @@ namespace Stroke.Examples.DialogExamples;
 /// Example of a progress dialog with background task.
 /// Port of Python Prompt Toolkit's progress_dialog.py example.
 /// </summary>
-internal static class ProgressDialog
+internal static class ProgressDialogExample
 {
     public static void Run()
     {
         try
         {
-            Dialogs.ProgressDialog(
+            ProgressDialog(
                 title: "Progress dialog example",
                 text: "As an examples, we walk through the filesystem and print all directories",
                 runCallback: Worker

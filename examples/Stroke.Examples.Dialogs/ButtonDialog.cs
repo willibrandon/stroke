@@ -1,18 +1,20 @@
 using Stroke.Shortcuts;
 
+using static Stroke.Shortcuts.Dialogs;
+
 namespace Stroke.Examples.DialogExamples;
 
 /// <summary>
 /// Example of a button dialog with custom choices.
 /// Port of Python Prompt Toolkit's button_dialog.py example.
 /// </summary>
-internal static class ButtonDialog
+internal static class ButtonDialogExample
 {
     public static void Run()
     {
         try
         {
-            var result = Dialogs.ButtonDialog<bool?>(
+            var result = ButtonDialog<bool?>(
                 title: "Button dialog example",
                 text: "Are you sure?",
                 buttons:
