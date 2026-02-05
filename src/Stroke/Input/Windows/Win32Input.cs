@@ -144,8 +144,11 @@ public sealed class Win32Input : IInput
         {
             _callbackStack.Push(inputReadyCallback);
 
-            // Start the input monitor thread if this is the first callback
-            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
+            // Start the input monitor thread if no active monitor exists.
+            // Also restart if _monitorRunning is false — this handles the race where
+            // StopInputMonitor() set the flag but the thread hasn't exited yet,
+            // which would cause the new callback to never be invoked.
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive || !_monitorRunning)
             {
                 startMonitor = true;
             }
@@ -251,6 +254,14 @@ public sealed class Win32Input : IInput
     /// </summary>
     private void StartInputMonitor()
     {
+        // Wait for any previous monitor thread to finish before starting a new one.
+        // This handles the race where StopInputMonitor() set _monitorRunning = false
+        // but the thread hasn't exited yet due to WaitForSingleObject/Wait timeouts.
+        if (_inputMonitorThread is not null && _inputMonitorThread.IsAlive)
+        {
+            _inputMonitorThread.Join(500);
+        }
+
         _monitorRunning = true;
         _inputMonitorThread = new Thread(InputMonitorLoop)
         {
