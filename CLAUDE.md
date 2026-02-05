@@ -457,6 +457,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (in-memory session management only) (061-ssh-server)
 - C# 13 / .NET 10 + Stroke library (Stroke.Shortcuts, Stroke.FormattedText, Stroke.Styles, Stroke.Filters, Stroke.Application) (062-choices-examples)
 - N/A (examples only) (062-choices-examples)
+- C# 13 / .NET 10+ + Stroke library (Stroke.Shortcuts, Stroke.FormattedText, Stroke.Styles) (063-dialogs-examples)
 
 ## Recent Changes
 
