@@ -181,9 +181,9 @@ public static class DefaultStyles
         ("dialog.body text-area last-line", "underline"),
         ("dialog frame.label", "#ff0000 bold"),
         // Scrollbars in dialogs.
-        ("dialog.body scrollbar.background", ""),
+        ("dialog.body scrollbar.background", "bg:#000000"),
         ("dialog.body scrollbar.button", "bg:#000000"),
-        ("dialog.body scrollbar.arrow", ""),
+        ("dialog.body scrollbar.arrow", "bg:#000000 noinherit bold"),
         ("dialog.body scrollbar.start", "nounderline"),
         ("dialog.body scrollbar.end", "nounderline"),
         // Buttons.

@@ -20,13 +20,38 @@ public static class DefaultKeyBindings
     /// The editing-mode-specific bindings are conditional on buffer_has_focus.
     /// </summary>
     /// <returns>Merged default key bindings.</returns>
+    /// <remarks>
+    /// <para>
+    /// Editing bindings (basic, Emacs, Vi) are wrapped with <see cref="ConditionalKeyBindings"/>
+    /// using <see cref="AppFilters.BufferHasFocus"/>. This ensures these bindings only activate
+    /// when a <c>BufferControl</c> has focus, allowing other controls (like custom terminal
+    /// emulators) to handle <c>Keys.Any</c> themselves.
+    /// </para>
+    /// <para>
+    /// Mouse and CPR bindings are always active, even when no buffer has focus.
+    /// </para>
+    /// </remarks>
     public static IKeyBindingsBase Load()
     {
-        // Load basic bindings which include self-insert, navigation, etc.
-        // Mouse and CPR bindings are always active (not conditional on buffer focus),
-        // matching Python Prompt Toolkit's load_key_bindings().
-        return new MergedKeyBindings(
+        // First, merge all editing bindings (basic, Emacs, Vi)
+        var allEditingBindings = new MergedKeyBindings(
             BasicBindings.LoadBasicBindings(),
+            EmacsBindings.LoadEmacsBindings(),
+            SearchBindings.LoadEmacsSearchBindings(),
+            EmacsBindings.LoadEmacsShiftSelectionBindings(),
+            ViBindings.LoadViBindings(),
+            SearchBindings.LoadViSearchBindings());
+
+        // Wrap editing bindings with buffer_has_focus condition.
+        // This ensures editing bindings only activate when a BufferControl has focus,
+        // allowing other controls to handle Keys.Any themselves (e.g., ptterm).
+        var conditionalEditingBindings = new ConditionalKeyBindings(
+            allEditingBindings,
+            AppFilters.BufferHasFocus);
+
+        // Merge with mouse and CPR bindings (always active, not conditional on buffer focus)
+        return new MergedKeyBindings(
+            conditionalEditingBindings,
             MouseBindings.LoadMouseBindings(),
             CprBindings.LoadCprBindings());
     }

@@ -359,7 +359,34 @@ public sealed class TelnetServer
         {
             while (!cancellationToken.IsCancellationRequested && !connection.IsClosed)
             {
-                var received = await socket.ReceiveAsync(buffer, SocketFlags.None, cancellationToken).ConfigureAwait(false);
+                // Use a short timeout so we can periodically detect disconnection.
+                // On Windows, socket FIN packets may not be processed immediately,
+                // so we need to poll rather than block indefinitely.
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(500));
+
+                int received;
+                try
+                {
+                    received = await socket.ReceiveAsync(buffer, SocketFlags.None, timeoutCts.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+                {
+                    // Timeout - check if socket is still connected using Poll
+                    // Poll returns true if: data available, connection closed, or error
+                    // If Poll returns true but no data is available, connection is closed
+                    if (socket.Poll(0, SelectMode.SelectRead))
+                    {
+                        // Check if we can read (data available) or if connection closed
+                        int available = socket.Available;
+                        if (available == 0)
+                        {
+                            // Connection closed
+                            break;
+                        }
+                    }
+                    continue;
+                }
 
                 if (received == 0)
                 {

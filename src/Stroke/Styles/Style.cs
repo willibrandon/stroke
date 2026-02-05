@@ -180,6 +180,9 @@ public sealed class Style : IStyle
                     }
 
                     // Apply the styles that match these class names.
+                    // Note: We iterate in declaration order (no specificity sorting).
+                    // This matches Python Prompt Toolkit behavior where later rules
+                    // override earlier rules, allowing custom styles to override defaults.
                     foreach (var (names, attr) in _classNamesAndAttrs)
                     {
                         // Use set equality comparison

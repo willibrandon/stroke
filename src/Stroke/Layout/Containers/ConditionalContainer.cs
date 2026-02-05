@@ -76,7 +76,7 @@ public class ConditionalContainer : IContainer
     {
         var active = GetActiveContainer();
         if (active == null)
-            return new Dimension();
+            return Dimension.Zero();
         return active.PreferredWidth(maxAvailableWidth);
     }
 
@@ -85,7 +85,7 @@ public class ConditionalContainer : IContainer
     {
         var active = GetActiveContainer();
         if (active == null)
-            return new Dimension();
+            return Dimension.Zero();
         return active.PreferredHeight(width, maxAvailableHeight);
     }
 

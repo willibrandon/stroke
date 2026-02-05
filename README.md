@@ -617,7 +617,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (17/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (26/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
   - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
@@ -635,7 +635,16 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `gray-frame-on-accept` — Dynamic styling on selection (`Stroke.Examples.Choices`)
   - `many-choices` — Scrollable list with many options (`Stroke.Examples.Choices`)
   - `mouse-support` — Mouse click selection support (`Stroke.Examples.Choices`)
-  - Remaining: 112 examples across 9 projects
+  - `button-dialog` — Multiple button options (`Stroke.Examples.Dialogs`)
+  - `checkbox-dialog` — Multi-select checkbox list (`Stroke.Examples.Dialogs`)
+  - `input-dialog` — Text input dialog (`Stroke.Examples.Dialogs`)
+  - `message-box` — Simple message box (`Stroke.Examples.Dialogs`)
+  - `password-dialog` — Password input dialog (`Stroke.Examples.Dialogs`)
+  - `progress-dialog` — Background task progress (`Stroke.Examples.Dialogs`)
+  - `radio-dialog` — Single-select radio list (`Stroke.Examples.Dialogs`)
+  - `styled-message-box` — Styled message box (`Stroke.Examples.Dialogs`)
+  - `yes-no-dialog` — Boolean confirmation (`Stroke.Examples.Dialogs`)
+  - Remaining: 103 examples across 9 projects
 
 ## Requirements
 

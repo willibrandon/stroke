@@ -236,9 +236,12 @@ public sealed class KeyBindings : IKeyBindingsBase
             // Sort by Any count descending (more wildcards first) so that
             // matches[^1] returns the binding with fewest wildcards (highest priority).
             // Python uses: sorted(result, key=lambda item: -item[0])
-            matches.Sort((a, b) => b.AnyCount.CompareTo(a.AnyCount));
+            // IMPORTANT: Use stable sort (OrderBy) to preserve insertion order among
+            // bindings with the same AnyCount. The focused control's bindings are added
+            // last by CombinedRegistry and must remain last to have highest priority.
+            var sorted = matches.OrderByDescending(b => b.AnyCount).ToList();
 
-            return matches.AsReadOnly();
+            return sorted.AsReadOnly();
         });
     }
 

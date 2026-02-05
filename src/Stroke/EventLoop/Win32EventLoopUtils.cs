@@ -194,8 +194,9 @@ public static class Win32EventLoopUtils
     /// </exception>
     /// <remarks>
     /// <para>
-    /// For infinite timeouts, this method uses 100ms polling intervals
-    /// to check for cancellation while remaining responsive.
+    /// Cancellation is implemented using an additional Windows event handle that
+    /// is signaled when the cancellation token fires. This allows immediate
+    /// response to cancellation without polling delays.
     /// </para>
     /// </remarks>
     public static Task<nint?> WaitForHandlesAsync(
@@ -209,58 +210,103 @@ public static class Win32EventLoopUtils
             return Task.FromResult<nint?>(null);
         }
 
-        // FR-014: Validate handle count up front
-        if (handles.Count > MaximumWaitObjects)
+        // FR-014: Validate handle count up front (reserve 1 slot for cancellation event)
+        if (handles.Count >= MaximumWaitObjects)
         {
             throw new ArgumentOutOfRangeException(
                 nameof(handles),
                 handles.Count,
-                $"Cannot wait on more than {MaximumWaitObjects} handles.");
+                $"Cannot wait on more than {MaximumWaitObjects - 1} handles (one slot reserved for cancellation).");
+        }
+
+        // Check for already-cancelled token
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return Task.FromResult<nint?>(null);
         }
 
         // Capture handles as array for use in closure
         var handleArray = handles as nint[] ?? handles.ToArray();
 
-        // Compute deadline from the caller's wall-clock time, not from when the
-        // thread pool schedules the task. This ensures thread pool scheduling
-        // delay counts toward the timeout rather than being added on top of it.
+        // Compute deadline from the caller's wall-clock time
         var deadline = timeout == Infinite
             ? long.MaxValue
             : Environment.TickCount64 + timeout;
 
-        // Use a dedicated thread (LongRunning) for the blocking wait loop.
-        // Task.Run uses the thread pool, which can have significant scheduling
-        // delay under load (e.g., parallel test execution), causing the loop
-        // to start late. A dedicated thread starts immediately.
+        // Use a dedicated thread (LongRunning) for the blocking wait.
         return Task.Factory.StartNew(() =>
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var remaining = timeout == Infinite
-                    ? AsyncPollingInterval
-                    : (int)Math.Min(
-                        Math.Max(deadline - Environment.TickCount64, 0),
-                        AsyncPollingInterval);
+            // Create a cancellation event handle that will be signaled when token fires
+            nint cancelEvent = nint.Zero;
+            CancellationTokenRegistration registration = default;
 
-                var result = WaitForHandles(handleArray, remaining);
-                if (result is not null)
+            try
+            {
+                // Create event and register cancellation callback
+                if (cancellationToken.CanBeCanceled)
                 {
+                    cancelEvent = CreateWin32Event();
+                    registration = cancellationToken.Register(() =>
+                    {
+                        try { SetWin32Event(cancelEvent); }
+                        catch { /* Ignore - event may be closed */ }
+                    });
+                }
+
+                // Build combined handle array with cancellation event at the end
+                nint[] combinedHandles;
+                int userHandleCount = handleArray.Length;
+
+                if (cancelEvent != nint.Zero)
+                {
+                    combinedHandles = new nint[userHandleCount + 1];
+                    handleArray.CopyTo(combinedHandles, 0);
+                    combinedHandles[userHandleCount] = cancelEvent;
+                }
+                else
+                {
+                    combinedHandles = handleArray;
+                }
+
+                // Wait loop with polling for timeout
+                while (true)
+                {
+                    var remaining = timeout == Infinite
+                        ? Infinite
+                        : (int)Math.Max(deadline - Environment.TickCount64, 0);
+
+                    if (remaining == 0 && timeout != Infinite)
+                    {
+                        return null; // Timeout expired
+                    }
+
+                    var result = WaitForHandles(combinedHandles, remaining);
+
+                    if (result is null)
+                    {
+                        return null; // Timeout
+                    }
+
+                    // Check if the signaled handle is the cancellation event
+                    if (cancelEvent != nint.Zero && result.Value == cancelEvent)
+                    {
+                        return null; // Cancellation
+                    }
+
+                    // User handle was signaled
                     return result;
                 }
-
-                // For finite timeouts, check if deadline has passed
-                if (timeout != Infinite && Environment.TickCount64 >= deadline)
+            }
+            finally
+            {
+                registration.Dispose();
+                if (cancelEvent != nint.Zero)
                 {
-                    return null;
+                    try { CloseWin32Event(cancelEvent); }
+                    catch { /* Ignore cleanup errors */ }
                 }
             }
-
-            // Cancellation requested
-            return null;
-        }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
-        .ContinueWith(
-            t => t.IsCanceled ? null : t.Result,
-            TaskContinuationOptions.ExecuteSynchronously);
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
 
     /// <summary>

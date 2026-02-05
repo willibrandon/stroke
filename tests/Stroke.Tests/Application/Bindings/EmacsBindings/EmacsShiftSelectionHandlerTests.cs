@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Core;
 using Stroke.Input.Pipe;
 using Stroke.KeyBinding;
@@ -83,9 +84,10 @@ public sealed class EmacsShiftSelectionHandlerTests : IDisposable
             var kb = EmacsBindingsType.LoadEmacsShiftSelectionBindings();
             var bindings = kb.GetBindingsForKeys([new KeyOrChar(Keys.ShiftRight)]);
 
-            // Use Last() to get the most specific binding (fewest wildcards).
-            // Bindings are sorted descending by AnyCount.
-            var startBinding = bindings.Last();
+            // Find the binding whose filter passes (no selection exists yet).
+            // Multiple bindings exist for ShiftRight with same AnyCount but different filters.
+            // Use Where().Last() to ensure proper filter evaluation order.
+            var startBinding = bindings.Where(b => b.Filter.Invoke()).Last();
 
             var evt = CreateEvent(app, buffer, Keys.ShiftRight);
             startBinding.Handler(evt);

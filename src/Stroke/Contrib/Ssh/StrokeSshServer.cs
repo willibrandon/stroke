@@ -48,6 +48,8 @@ public class StrokeSshServer
     private readonly ConcurrentDictionary<StrokeSshSession, byte> _connections = new();
     private readonly ConcurrentDictionary<SessionChannel, StrokeSshSession> _channelToSession = new();
     private readonly ConcurrentDictionary<SessionChannel, SshChannel> _channelToAdapter = new();
+    private readonly ConcurrentDictionary<Session, List<StrokeSshSession>> _fxSessionToSessions = new();
+    private readonly ConcurrentDictionary<StrokeSshSession, Session> _sessionToFxSession = new();
     private readonly List<Task> _sessionTasks = new();
     private readonly Lock _tasksLock = new();
 
@@ -258,6 +260,41 @@ public class StrokeSshServer
 
         // Wire up service registration to get UserAuthService and ConnectionService
         session.ServiceRegistered += (s, service) => OnServiceRegistered(session, service);
+
+        // Wire up Disconnected event to handle connection-level disconnect (e.g., SSH_MSG_DISCONNECT)
+        // This is critical for cleanup when clients call Disconnect() rather than closing individual channels
+        session.Disconnected += (s, _) => OnFxSessionDisconnected(session);
+    }
+
+    private void OnFxSessionDisconnected(Session fxSession)
+    {
+        _logger.LogDebug("SSH connection disconnected");
+
+        // Close all sessions associated with this FxSsh connection
+        if (_fxSessionToSessions.TryRemove(fxSession, out var sessions))
+        {
+            List<StrokeSshSession> sessionsToClose;
+            lock (sessions)
+            {
+                sessionsToClose = [.. sessions];
+            }
+
+            foreach (var sshSession in sessionsToClose)
+            {
+                // Clean up reverse mapping
+                _sessionToFxSession.TryRemove(sshSession, out _);
+                _connections.TryRemove(sshSession, out _);
+
+                try
+                {
+                    sshSession.Close();
+                }
+                catch
+                {
+                    // Ignore close errors
+                }
+            }
+        }
     }
 
     private void OnServiceRegistered(Session session, SshService service)
@@ -289,7 +326,8 @@ public class StrokeSshServer
             // Wire up terminal events
             connectionService.PtyReceived += OnPtyReceived;
             connectionService.WindowChange += OnWindowChange;
-            connectionService.CommandOpened += OnCommandOpened;
+            // Pass the FxSsh session to track sessions for connection-level disconnect handling
+            connectionService.CommandOpened += (s, e) => OnCommandOpened(session, e);
         }
     }
 
@@ -320,7 +358,7 @@ public class StrokeSshServer
         }
     }
 
-    private void OnCommandOpened(object? sender, CommandRequestedArgs e)
+    private void OnCommandOpened(Session fxSession, CommandRequestedArgs e)
     {
         // FxSsh 1.3.0 sends ChannelSuccessMessage before firing this event
 
@@ -335,6 +373,13 @@ public class StrokeSshServer
         var session = CreateSession(adapter);
         _connections.TryAdd(session, 0);
         _channelToSession.TryAdd(e.Channel, session);
+
+        // Track session by FxSsh connection for Disconnected event handling
+        _sessionToFxSession.TryAdd(session, fxSession);
+        _fxSessionToSessions.AddOrUpdate(
+            fxSession,
+            _ => [session],
+            (_, list) => { lock (list) { list.Add(session); } return list; });
 
         // Wire up channel events
         e.Channel.DataReceived += (s, data) => session.DataReceived(data);
@@ -368,6 +413,18 @@ public class StrokeSshServer
         _connections.TryRemove(session, out _);
         _channelToSession.TryRemove(channel, out _);
         _channelToAdapter.TryRemove(channel, out _);
+
+        // Clean up FxSsh session tracking
+        if (_sessionToFxSession.TryRemove(session, out var fxSession))
+        {
+            if (_fxSessionToSessions.TryGetValue(fxSession, out var sessions))
+            {
+                lock (sessions)
+                {
+                    sessions.Remove(session);
+                }
+            }
+        }
 
         // Close session
         session.Close();

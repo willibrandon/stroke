@@ -309,8 +309,11 @@ public class HSplit : IContainer
     /// </summary>
     private static IContainer CreateFlexibleWindow()
     {
-        // A window that takes up flexible space but prefers 0
-        return new DummyWindow(new Dimension(preferred: 0));
+        // A window that takes up flexible space but prefers 0.
+        // Use max=0 to prevent this window from inflating the parent's
+        // summed max dimension. The actual remaining space is filled
+        // at render time in WriteToScreen (after all children are sized).
+        return new DummyWindow(Dimension.Zero());
     }
 
     /// <summary>

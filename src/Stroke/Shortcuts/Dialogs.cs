@@ -182,7 +182,7 @@ public static class Dialogs
                     new ValidationToolbar().PtContainer(),
                 ],
                 windowTooSmall: null,
-                align: VerticalAlign.Justify,
+                align: VerticalAlign.Top,
                 padding: new Dimension(preferred: 1, max: 1),
                 paddingChar: null,
                 paddingStyle: "",
