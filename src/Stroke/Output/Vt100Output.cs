@@ -519,8 +519,9 @@ public sealed partial class Vt100Output : IOutput
     /// <inheritdoc/>
     public int GetRowsBelowCursorPosition()
     {
-        // Windows-specific operation - return 0 on other platforms
-        return 0;
+        // Windows-specific operation - VT100 terminals rely on CPR for cursor position.
+        // Throw NotImplementedException so height_is_known returns false and CPR is used.
+        throw new NotImplementedException("VT100 terminals use CPR for cursor position.");
     }
 
     #endregion

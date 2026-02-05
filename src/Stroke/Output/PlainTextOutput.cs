@@ -345,7 +345,7 @@ public sealed class PlainTextOutput : IOutput
     }
 
     /// <inheritdoc/>
-    public int GetRowsBelowCursorPosition() => 0;
+    public int GetRowsBelowCursorPosition() => 8;
 
     #endregion
 }

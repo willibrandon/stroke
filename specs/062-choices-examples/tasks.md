@@ -24,10 +24,10 @@
 
 **Purpose**: Create project structure and entry point
 
-- [ ] T001 Create `examples/Stroke.Examples.Choices/Stroke.Examples.Choices.csproj` with .NET 10, Stroke reference
-- [ ] T002 Create `examples/Stroke.Examples.Choices/Program.cs` with dictionary-based routing (case-insensitive, default to SimpleSelection)
-- [ ] T003 Add Stroke.Examples.Choices project to `examples/Stroke.Examples.sln`
-- [ ] T004 Verify empty project builds: `dotnet build examples/Stroke.Examples.sln`
+- [x] T001 Create `examples/Stroke.Examples.Choices/Stroke.Examples.Choices.csproj` with .NET 10, Stroke reference
+- [x] T002 Create `examples/Stroke.Examples.Choices/Program.cs` with dictionary-based routing (case-insensitive, default to SimpleSelection)
+- [x] T003 Add Stroke.Examples.Choices project to `examples/Stroke.Examples.sln`
+- [x] T004 Verify empty project builds: `dotnet build examples/Stroke.Examples.sln`
 
 **Checkpoint**: Project skeleton builds successfully
 
@@ -41,8 +41,8 @@
 
 ### Implementation for User Story 1 + 8
 
-- [ ] T005 [US1] Create `examples/Stroke.Examples.Choices/SimpleSelection.cs` with `Run()` method using `Dialogs.Choice<T>()` for basic 3-option selection (pizza, salad, sushi)
-- [ ] T006 [US8] Update `examples/Stroke.Examples.Choices/Program.cs` to wire SimpleSelection.Run to dictionary and handle unknown example names with helpful error message
+- [x] T005 [US1] Create `examples/Stroke.Examples.Choices/SimpleSelection.cs` with `Run()` method using `Dialogs.Choice<T>()` for basic 3-option selection (pizza, salad, sushi)
+- [x] T006 [US8] Update `examples/Stroke.Examples.Choices/Program.cs` to wire SimpleSelection.Run to dictionary and handle unknown example names with helpful error message
 
 ### TUI Driver Verification for User Story 1
 
@@ -56,12 +56,12 @@
 
 **Goal**: Demonstrate pre-selected default value functionality
 
-**Independent Test**: Run `dotnet run -- Default`, press Enter immediately, verify "salad" is returned
+**Independent Test**: Run `dotnet run -- default`, press Enter immediately, verify "salad" is returned
 
 ### Implementation for User Story 2
 
-- [ ] T008 [P] [US2] Create `examples/Stroke.Examples.Choices/Default.cs` with `Run()` method using `Dialogs.Choice<T>()` with `defaultValue: "salad"` and `new Html("<u>...</u>:")` message
-- [ ] T009 [US2] Update `examples/Stroke.Examples.Choices/Program.cs` to add Default.Run to examples dictionary
+- [x] T008 [P] [US2] Create `examples/Stroke.Examples.Choices/Default.cs` with `Run()` method using `Dialogs.Choice<T>()` with `defaultValue: "salad"` and `new Html("<u>...</u>:")` message
+- [x] T009 [US2] Update `examples/Stroke.Examples.Choices/Program.cs` to add Default.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 2
 
@@ -75,12 +75,12 @@
 
 **Goal**: Demonstrate Style.FromDict() with custom colors and HTML formatted labels
 
-**Independent Test**: Run `dotnet run -- Color` and verify custom colors are visible
+**Independent Test**: Run `dotnet run -- color` and verify custom colors are visible
 
 ### Implementation for User Story 3
 
-- [ ] T011 [P] [US3] Create `examples/Stroke.Examples.Choices/Color.cs` with `Run()` method using `Style.FromDict()` with custom colors (#ff0000 selection, #884444 numbers, underline selected-option) and HTML formatted option labels (green Salad, red tomatoes)
-- [ ] T012 [US3] Update `examples/Stroke.Examples.Choices/Program.cs` to add Color.Run to examples dictionary
+- [x] T011 [P] [US3] Create `examples/Stroke.Examples.Choices/Color.cs` with `Run()` method using `Style.FromDict()` with custom colors (#ff0000 selection, #884444 numbers, underline selected-option) and HTML formatted option labels (green Salad, red tomatoes)
+- [x] T012 [US3] Update `examples/Stroke.Examples.Choices/Program.cs` to add Color.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 3
 
@@ -94,13 +94,13 @@
 
 **Goal**: Demonstrate frame borders with conditional visibility
 
-**Independent Test**: Run `dotnet run -- WithFrame`, make selection, verify frame disappears
+**Independent Test**: Run `dotnet run -- with-frame`, make selection, verify frame disappears
 
 ### Implementation for User Story 4
 
-- [ ] T014 [P] [US4] Create `examples/Stroke.Examples.Choices/WithFrame.cs` with `Run()` method using `showFrame: ~AppFilters.IsDone` for conditional frame visibility
-- [ ] T015 [P] [US4] Create `examples/Stroke.Examples.Choices/GrayFrameOnAccept.cs` with `Run()` method using `showFrame: true` and style with `"accepted frame.border": "#888888"` for color transition
-- [ ] T016 [US4] Update `examples/Stroke.Examples.Choices/Program.cs` to add WithFrame.Run and GrayFrameOnAccept.Run to examples dictionary
+- [x] T014 [P] [US4] Create `examples/Stroke.Examples.Choices/WithFrame.cs` with `Run()` method using `showFrame: ~AppFilters.IsDone` for conditional frame visibility
+- [x] T015 [P] [US4] Create `examples/Stroke.Examples.Choices/GrayFrameOnAccept.cs` with `Run()` method using `showFrame: true` and style with `"accepted frame.border": "#888888"` for color transition
+- [x] T016 [US4] Update `examples/Stroke.Examples.Choices/Program.cs` to add WithFrame.Run and GrayFrameOnAccept.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 4
 
@@ -115,12 +115,12 @@
 
 **Goal**: Demonstrate bottom toolbar with instructional text
 
-**Independent Test**: Run `dotnet run -- FrameAndBottomToolbar` and verify toolbar shows navigation instructions
+**Independent Test**: Run `dotnet run -- frame-and-bottom-toolbar` and verify toolbar shows navigation instructions
 
 ### Implementation for User Story 5
 
-- [ ] T019 [P] [US5] Create `examples/Stroke.Examples.Choices/FrameAndBottomToolbar.cs` with `Run()` method using `bottomToolbar: new Html(" Press <b>[Up]</b>/<b>[Down]</b> to select.")` and `showFrame: ~AppFilters.IsDone`
-- [ ] T020 [US5] Update `examples/Stroke.Examples.Choices/Program.cs` to add FrameAndBottomToolbar.Run to examples dictionary
+- [x] T019 [P] [US5] Create `examples/Stroke.Examples.Choices/FrameAndBottomToolbar.cs` with `Run()` method using `bottomToolbar: new Html(" Press <b>[Up]</b>/<b>[Down]</b> to select.")` and `showFrame: ~AppFilters.IsDone`
+- [x] T020 [US5] Update `examples/Stroke.Examples.Choices/Program.cs` to add FrameAndBottomToolbar.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 5
 
@@ -134,12 +134,12 @@
 
 **Goal**: Demonstrate scrolling behavior with 99 options
 
-**Independent Test**: Run `dotnet run -- ManyChoices`, navigate down 50 times, verify scrolling
+**Independent Test**: Run `dotnet run -- many-choices`, navigate down 50 times, verify scrolling
 
 ### Implementation for User Story 6
 
-- [ ] T022 [P] [US6] Create `examples/Stroke.Examples.Choices/ManyChoices.cs` with `Run()` method generating 99 options (1-99) using LINQ and `Dialogs.Choice<T>()`
-- [ ] T023 [US6] Update `examples/Stroke.Examples.Choices/Program.cs` to add ManyChoices.Run to examples dictionary
+- [x] T022 [P] [US6] Create `examples/Stroke.Examples.Choices/ManyChoices.cs` with `Run()` method generating 99 options (1-99) using LINQ and `Dialogs.Choice<T>()`
+- [x] T023 [US6] Update `examples/Stroke.Examples.Choices/Program.cs` to add ManyChoices.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 6
 
@@ -153,12 +153,12 @@
 
 **Goal**: Demonstrate mouse click selection
 
-**Independent Test**: Run `dotnet run -- MouseSupport`, click on option with mouse, verify selection moves
+**Independent Test**: Run `dotnet run -- mouse-support`, click on option with mouse, verify selection moves
 
 ### Implementation for User Story 7
 
-- [ ] T025 [P] [US7] Create `examples/Stroke.Examples.Choices/MouseSupport.cs` with `Run()` method using `mouseSupport: true`
-- [ ] T026 [US7] Update `examples/Stroke.Examples.Choices/Program.cs` to add MouseSupport.Run to examples dictionary
+- [x] T025 [P] [US7] Create `examples/Stroke.Examples.Choices/MouseSupport.cs` with `Run()` method using `mouseSupport: true`
+- [x] T026 [US7] Update `examples/Stroke.Examples.Choices/Program.cs` to add MouseSupport.Run to examples dictionary
 
 ### TUI Driver Verification for User Story 7
 
@@ -172,9 +172,9 @@
 
 **Purpose**: Ensure graceful exit handling and final validation
 
-- [ ] T028 Verify Ctrl+C graceful exit in all examples (no stack traces)
-- [ ] T029 Verify Ctrl+D graceful exit in all examples (no stack traces)
-- [ ] T030 Run full solution build: `dotnet build examples/Stroke.Examples.sln`
+- [x] T028 Verify Ctrl+C graceful exit in all examples (no stack traces)
+- [x] T029 Verify Ctrl+D graceful exit in all examples (no stack traces)
+- [x] T030 Run full solution build: `dotnet build examples/Stroke.Examples.sln`
 - [ ] T031 Validate all examples against quickstart.md documentation
 
 **Checkpoint**: All examples complete and verified

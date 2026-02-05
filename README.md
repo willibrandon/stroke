@@ -617,7 +617,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (9/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (17/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
   - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
@@ -627,7 +627,15 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
   - `toolbar` — Bottom toolbar with completions (`Stroke.Examples.Telnet`)
   - `asyncssh-server` — SSH server with prompts, dialogs, autocompletion (`Stroke.Examples.Ssh`)
-  - Remaining: 120 examples across 9 projects
+  - `simple-selection` — Basic choice selection with arrow keys (`Stroke.Examples.Choices`)
+  - `default` — Pre-selected default option (`Stroke.Examples.Choices`)
+  - `color` — Styled options with HTML formatting (`Stroke.Examples.Choices`)
+  - `with-frame` — Framed choice dialog with title (`Stroke.Examples.Choices`)
+  - `frame-and-bottom-toolbar` — Framed choice with bottom toolbar (`Stroke.Examples.Choices`)
+  - `gray-frame-on-accept` — Dynamic styling on selection (`Stroke.Examples.Choices`)
+  - `many-choices` — Scrollable list with many options (`Stroke.Examples.Choices`)
+  - `mouse-support` — Mouse click selection support (`Stroke.Examples.Choices`)
+  - Remaining: 112 examples across 9 projects
 
 ## Requirements
 
