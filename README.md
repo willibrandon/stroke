@@ -617,7 +617,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (26/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (51/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
   - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
@@ -644,7 +644,32 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `radio-dialog` — Single-select radio list (`Stroke.Examples.Dialogs`)
   - `styled-message-box` — Styled message box (`Stroke.Examples.Dialogs`)
   - `yes-no-dialog` — Boolean confirmation (`Stroke.Examples.Dialogs`)
-  - Remaining: 103 examples across 9 projects
+  - `hello-world` — Minimal full-screen app (`Stroke.Examples.FullScreen`)
+  - `calculator` — Interactive calculator layout (`Stroke.Examples.FullScreen`)
+  - `buttons` — Button widgets with key bindings (`Stroke.Examples.FullScreen`)
+  - `text-editor` — Multi-buffer text editor with syntax highlighting (`Stroke.Examples.FullScreen`)
+  - `pager` — Scrollable text viewer (`Stroke.Examples.FullScreen`)
+  - `split-screen` — Side-by-side text areas (`Stroke.Examples.FullScreen`)
+  - `full-screen-demo` — Feature showcase with menus and completion (`Stroke.Examples.FullScreen`)
+  - `dummy-app` — Minimal no-op application (`Stroke.Examples.FullScreen`)
+  - `no-layout` — Application without layout container (`Stroke.Examples.FullScreen`)
+  - `ansi-art-and-textarea` — ANSI art rendering with text area (`Stroke.Examples.FullScreen`)
+  - `alignment` — Content alignment in windows (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `auto-completion` — Completion menu in full-screen layout (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `color-column` — Color column indicator (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `cursor-highlight` — Cursor line/column highlighting (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `floats` — Floating window overlays (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `float-transparency` — Transparent floating windows (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `focus` — Focus switching between panes (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `horizontal-align` — Horizontal content alignment (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `horizontal-split` — Horizontal split layout (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `line-prefixes` — Line prefix rendering (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `margins` — Numbered and scrollbar margins (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `vertical-align` — Vertical content alignment (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `vertical-split` — Vertical split layout (`Stroke.Examples.FullScreen/SimpleDemos`)
+  - `simple-example` — Basic scrollable pane (`Stroke.Examples.FullScreen/ScrollablePanes`)
+  - `with-completion-menu` — Scrollable pane with completion menu (`Stroke.Examples.FullScreen/ScrollablePanes`)
+  - Remaining: 78 examples across 9 projects
 
 ## Requirements
 
