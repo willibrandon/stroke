@@ -68,7 +68,9 @@ public sealed partial class Document : IEquatable<Document>
     public Document(string? text = "", int? cursorPosition = null, SelectionState? selection = null)
     {
         // Handle null text as empty string (IC-017)
-        _text = text ?? "";
+        // Normalize line endings: \r\n → \n and bare \r → \n.
+        // Python text mode I/O handles this transparently; C# preserves \r\n on Windows.
+        _text = (text ?? "").Replace("\r\n", "\n").Replace("\r", "\n");
 
         // By default, if no cursor position was given, put the cursor at the end
         if (cursorPosition is null)

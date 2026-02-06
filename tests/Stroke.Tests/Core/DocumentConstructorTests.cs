@@ -124,6 +124,44 @@ public class DocumentConstructorTests
         Assert.Equal(doc1.GetHashCode(), doc2.GetHashCode());
     }
 
+    [Fact]
+    public void Constructor_CrLfLineEndings_NormalizedToLf()
+    {
+        var doc = new Document("hello\r\nworld");
+
+        Assert.Equal("hello\nworld", doc.Text);
+        Assert.Equal(2, doc.Lines.Count);
+        Assert.Equal("hello", doc.Lines[0]);
+        Assert.Equal("world", doc.Lines[1]);
+    }
+
+    [Fact]
+    public void Constructor_BareCarriageReturn_NormalizedToLf()
+    {
+        var doc = new Document("hello\rworld");
+
+        Assert.Equal("hello\nworld", doc.Text);
+        Assert.Equal(2, doc.Lines.Count);
+    }
+
+    [Fact]
+    public void Constructor_MixedLineEndings_AllNormalizedToLf()
+    {
+        var doc = new Document("a\r\nb\rc\nd");
+
+        Assert.Equal("a\nb\nc\nd", doc.Text);
+        Assert.Equal(4, doc.Lines.Count);
+    }
+
+    [Fact]
+    public void Constructor_CrLf_CursorDefaultsToNormalizedLength()
+    {
+        // "ab\r\ncd" (6 chars) normalizes to "ab\ncd" (5 chars)
+        var doc = new Document("ab\r\ncd");
+
+        Assert.Equal(5, doc.CursorPosition);
+    }
+
     #endregion
 
     #region Cache Sharing Tests
