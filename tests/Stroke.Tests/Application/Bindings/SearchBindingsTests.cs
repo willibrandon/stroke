@@ -347,7 +347,7 @@ public sealed class SearchBindingsTests : IDisposable
     {
         var mainBuffer = new Buffer(
             document: new Document("hello"),
-            acceptHandler: _ => false);
+            acceptHandler: _ => ValueTask.FromResult(false));
         var searchState = new SearchState();
         var searchBuffer = new Buffer();
         var sbc = new SearchBufferControl(
@@ -379,7 +379,7 @@ public sealed class SearchBindingsTests : IDisposable
         var accepted = false;
         var mainBuffer = new Buffer(
             document: new Document("hello world"),
-            acceptHandler: _ => { accepted = true; return false; });
+            acceptHandler: _ => { accepted = true; return ValueTask.FromResult(false); });
         var searchState = new SearchState();
         var searchBuffer = new Buffer();
         var sbc = new SearchBufferControl(
@@ -432,7 +432,7 @@ public sealed class SearchBindingsTests : IDisposable
         // Create a buffer with a validator that rejects input
         var mainBuffer = new Buffer(
             document: new Document("hello world"),
-            acceptHandler: _ => false);
+            acceptHandler: _ => ValueTask.FromResult(false));
         var searchState = new SearchState();
         var searchBuffer = new Buffer();
         var sbc = new SearchBufferControl(

@@ -16,6 +16,8 @@
   <ItemGroup>
     <PackageReference Include="FxSsh" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="TextMateSharp" />
+    <PackageReference Include="TextMateSharp.Grammars" />
     <PackageReference Include="Wcwidth" />
   </ItemGroup>
 </Project>

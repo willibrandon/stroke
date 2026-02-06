@@ -45,11 +45,10 @@ public sealed class NumberedMargin : IMargin
         var content = getUIContent();
         var lineCount = content.LineCount;
 
-        // Calculate digits needed for the highest line number
+        // Calculate digits needed for the highest line number, plus 1 for spacing.
+        // Minimum width of 3 ensures single-digit line numbers are indented (e.g., " 1 ").
         var digits = lineCount > 0 ? (int)Math.Floor(Math.Log10(lineCount)) + 1 : 1;
-
-        // Add 1 for spacing
-        return digits + 1;
+        return Math.Max(3, digits + 1);
     }
 
     /// <inheritdoc/>

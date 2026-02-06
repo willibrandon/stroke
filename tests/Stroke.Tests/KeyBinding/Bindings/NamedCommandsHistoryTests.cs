@@ -3,6 +3,10 @@ using Stroke.Core;
 using Stroke.Input.Pipe;
 using Stroke.KeyBinding;
 using Stroke.KeyBinding.Bindings;
+using Stroke.Layout;
+using Stroke.Layout.Containers;
+using Stroke.Layout.Controls;
+using Stroke.Layout.Windows;
 using Stroke.Output;
 using Xunit;
 using AppContext = Stroke.Application.AppContext;
@@ -14,9 +18,23 @@ namespace Stroke.Tests.KeyBinding.Bindings;
 /// <summary>
 /// Tests for the 6 history named commands.
 /// </summary>
-public sealed class NamedCommandsHistoryTests
+public sealed class NamedCommandsHistoryTests : IDisposable
 {
-    private static KeyPressEvent CreateEvent(
+    private readonly SimplePipeInput _input;
+    private readonly DummyOutput _output;
+
+    public NamedCommandsHistoryTests()
+    {
+        _input = new SimplePipeInput();
+        _output = new DummyOutput();
+    }
+
+    public void Dispose()
+    {
+        _input.Dispose();
+    }
+
+    private KeyPressEvent CreateEvent(
         Buffer buffer,
         string? arg = null,
         bool isRepeat = false,
@@ -36,9 +54,15 @@ public sealed class NamedCommandsHistoryTests
     public void AcceptLine_CallsValidateAndHandle()
     {
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 0));
+        var bc = new BufferControl(buffer: buffer);
+        var window = new Window(content: bc);
+        var layout = new Stroke.Layout.Layout(new AnyContainer(window));
+        var app = new Application<object>(input: _input, output: _output, layout: layout);
+        using var scope = AppContext.SetApp(app.UnsafeCast);
+
         var binding = NamedCommands.GetByName("accept-line");
         // ValidateAndHandle should not throw on a basic buffer
-        binding.Call(CreateEvent(buffer));
+        binding.Call(CreateEvent(buffer, app: app));
     }
 
     [Fact]

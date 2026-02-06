@@ -59,7 +59,7 @@ public class SearchBufferControl : BufferControl
             inputProcessors: inputProcessors,
             lexer: lexer,
             focusOnClick: focusOnClick.HasValue ? focusOnClick : new FilterOrBool(false),
-            focusable: focusable.HasValue ? focusable : new FilterOrBool(false),
+            focusable: focusable,
             keyBindings: keyBindings)
     {
         IgnoreCase = ignoreCase.HasValue

@@ -34,3 +34,6 @@ enumerables = "enumerables"
 fo = "fo"
 # Base64 encoded SSH keys contain random character sequences
 Pn = "Pn"
+# Lorem Ipsum text in full-screen examples (ported from Python Prompt Toolkit)
+Nam = "Nam"
+varius = "varius"

@@ -299,7 +299,7 @@ public class BufferValidationTests
         var validator = new SimpleValidator();
         var buffer = new Buffer(
             validator: validator,
-            acceptHandler: b => { handlerCalled = true; return false; },
+            acceptHandler: b => { handlerCalled = true; return ValueTask.FromResult(false); },
             document: new Document("hello"));
 
         // Act
@@ -316,7 +316,7 @@ public class BufferValidationTests
         var validator = new SimpleValidator();
         var buffer = new Buffer(
             validator: validator,
-            acceptHandler: _ => true, // Keep text
+            acceptHandler: _ => ValueTask.FromResult(true), // Keep text
             document: new Document("hello"));
 
         // Act
@@ -324,6 +324,84 @@ public class BufferValidationTests
 
         // Assert - text should be kept
         Assert.Equal("hello", buffer.Text);
+    }
+
+    [Fact]
+    public async Task ValidateAndHandleAsync_Valid_ResetsBuffer()
+    {
+        // Arrange
+        var validator = new SimpleValidator();
+        var buffer = new Buffer(validator: validator, document: new Document("hello"));
+
+        // Act
+        await buffer.ValidateAndHandleAsync();
+
+        // Assert - buffer should be reset
+        Assert.Equal("", buffer.Text);
+    }
+
+    [Fact]
+    public async Task ValidateAndHandleAsync_WithAsyncAcceptHandler_AwaitsHandler()
+    {
+        // Arrange
+        var handlerCalled = false;
+        var validator = new SimpleValidator();
+        var buffer = new Buffer(
+            validator: validator,
+            acceptHandler: async b =>
+            {
+                await Task.Delay(10);
+                handlerCalled = true;
+                return false;
+            },
+            document: new Document("hello"));
+
+        // Act
+        await buffer.ValidateAndHandleAsync();
+
+        // Assert
+        Assert.True(handlerCalled);
+        Assert.Equal("", buffer.Text);
+    }
+
+    [Fact]
+    public async Task ValidateAndHandleAsync_AsyncHandlerReturnsTrue_KeepsText()
+    {
+        // Arrange
+        var validator = new SimpleValidator();
+        var buffer = new Buffer(
+            validator: validator,
+            acceptHandler: async _ =>
+            {
+                await Task.Delay(10);
+                return true; // Keep text
+            },
+            document: new Document("hello"));
+
+        // Act
+        await buffer.ValidateAndHandleAsync();
+
+        // Assert - text should be kept
+        Assert.Equal("hello", buffer.Text);
+    }
+
+    [Fact]
+    public async Task ValidateAndHandleAsync_Invalid_DoesNotCallHandler()
+    {
+        // Arrange
+        var handlerCalled = false;
+        var validator = new SimpleValidator();
+        var buffer = new Buffer(
+            validator: validator,
+            acceptHandler: b => { handlerCalled = true; return ValueTask.FromResult(false); },
+            document: new Document("test invalid"));
+
+        // Act
+        await buffer.ValidateAndHandleAsync();
+
+        // Assert
+        Assert.False(handlerCalled);
+        Assert.Equal("test invalid", buffer.Text);
     }
 
     #endregion

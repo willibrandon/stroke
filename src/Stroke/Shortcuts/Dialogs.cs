@@ -166,7 +166,7 @@ public static class Dialogs
             acceptHandler: buf =>
             {
                 Application.AppContext.GetApp().Layout.Focus(okButton.Window);
-                return true; // Keep text.
+                return ValueTask.FromResult(true); // Keep text.
             });
 
         void OkHandler() => Application.AppContext.GetApp().Exit(result: textfield.Text);

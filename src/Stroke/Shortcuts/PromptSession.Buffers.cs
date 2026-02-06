@@ -62,7 +62,7 @@ public partial class PromptSession<TResult>
     /// only executes via Enter key on the default buffer.
     /// </para>
     /// </remarks>
-    private bool AcceptInput(Buffer buffer)
+    private ValueTask<bool> AcceptInput(Buffer buffer)
     {
         var app = Application.AppContext.GetApp();
         var text = buffer.Document.Text;
@@ -89,7 +89,7 @@ public partial class PromptSession<TResult>
             }
         }
 
-        return true; // Keep text, we call Reset later
+        return ValueTask.FromResult(true); // Keep text, we call Reset later
     }
 
     /// <summary>

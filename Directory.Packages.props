@@ -4,9 +4,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Unicode width calculation -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.0.0" />
     <PackageVersion Include="Wcwidth" Version="4.0.1" />
     <!-- Logging abstractions -->
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-preview.1.25080.5" />
+    <!-- Syntax highlighting via TextMate grammars (MIT) -->
+    <PackageVersion Include="TextMateSharp" Version="1.0.70" />
+    <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.69" />
     <!-- SSH server library (MIT) -->
     <PackageVersion Include="FxSsh" Version="1.3.0" />
     <!-- SSH client for testing (MIT) -->

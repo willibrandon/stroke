@@ -50,7 +50,7 @@ public sealed class ScrollbarMargin : IMargin
     {
         _displayArrowsFilter = displayArrows.HasValue
             ? FilterUtils.ToFilter(displayArrows)
-            : Filters.Always.Instance;
+            : Filters.Never.Instance;
         UpArrowSymbol = upArrowSymbol;
         DownArrowSymbol = downArrowSymbol;
     }

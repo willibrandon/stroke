@@ -310,10 +310,10 @@ public class HSplit : IContainer
     private static IContainer CreateFlexibleWindow()
     {
         // A window that takes up flexible space but prefers 0.
-        // Use max=0 to prevent this window from inflating the parent's
-        // summed max dimension. The actual remaining space is filled
-        // at render time in WriteToScreen (after all children are sized).
-        return new DummyWindow(Dimension.Zero());
+        // Uses default dimension (min=0, max=huge, preferred=0, weight=1) so the
+        // layout engine can expand it to fill remaining space — matching Python's
+        // Window(width=Dimension(preferred=0)) used for alignment spacers.
+        return new DummyWindow(new Dimension(preferred: 0));
     }
 
     /// <summary>

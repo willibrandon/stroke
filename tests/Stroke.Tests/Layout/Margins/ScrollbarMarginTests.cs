@@ -20,7 +20,8 @@ public sealed class ScrollbarMarginTests
     {
         var margin = new ScrollbarMargin();
 
-        Assert.True(margin.DisplayArrows);
+        // Python Prompt Toolkit defaults display_arrows to False
+        Assert.False(margin.DisplayArrows);
         Assert.Equal('^', margin.UpArrowSymbol);
         Assert.Equal('v', margin.DownArrowSymbol);
     }
