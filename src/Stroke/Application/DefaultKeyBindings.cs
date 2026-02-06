@@ -60,10 +60,9 @@ public static class DefaultKeyBindings
     /// Load page navigation bindings (Emacs and Vi page up/down, scroll).
     /// Conditional on buffer_has_focus.
     /// </summary>
-    /// <returns>Page navigation key bindings (currently empty stub).</returns>
+    /// <returns>Page navigation key bindings.</returns>
     public static IKeyBindingsBase LoadPageNavigation()
     {
-        // Return empty merged bindings — actual page navigation bindings are a separate feature.
-        return new MergedKeyBindings(Array.Empty<IKeyBindingsBase>());
+        return PageNavigationBindings.LoadPageNavigationBindings();
     }
 }
