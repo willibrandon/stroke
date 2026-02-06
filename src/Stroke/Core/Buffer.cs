@@ -111,10 +111,18 @@ public sealed partial class Buffer : IBuffer
 
     /// <summary>Gets or sets the accept handler.</summary>
     /// <remarks>
-    /// This is mutable to match Python Prompt Toolkit's <c>Buffer.accept_handler</c>,
-    /// which is a plain attribute that can be reassigned after construction.
+    /// <para>
+    /// Returns a <see cref="ValueTask{TResult}"/> so that both synchronous and asynchronous
+    /// handlers can be assigned to the same property. Synchronous handlers should return
+    /// <c>ValueTask.FromResult(false)</c>; asynchronous handlers can use <c>async</c>/<c>await</c>.
+    /// </para>
+    /// <para>
+    /// .NET deviation from Python Prompt Toolkit: Python's <c>accept_handler</c> returns <c>bool</c>.
+    /// <see cref="ValueTask{TResult}"/> unifies sync and async in a single idiomatic .NET property
+    /// with zero allocation for the synchronous fast path.
+    /// </para>
     /// </remarks>
-    public Func<Buffer, bool>? AcceptHandler { get; set; }
+    public Func<Buffer, ValueTask<bool>>? AcceptHandler { get; set; }
 
     // ════════════════════════════════════════════════════════════════════════
     // FILTERS
@@ -188,7 +196,7 @@ public sealed partial class Buffer : IBuffer
         Func<bool>? validateWhileTyping = null,
         Func<bool>? enableHistorySearch = null,
         Document? document = null,
-        Func<Buffer, bool>? acceptHandler = null,
+        Func<Buffer, ValueTask<bool>>? acceptHandler = null,
         Func<bool>? readOnly = null,
         Func<bool>? multiline = null,
         int maxNumberOfCompletions = 10000,

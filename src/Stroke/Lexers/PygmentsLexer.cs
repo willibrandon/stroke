@@ -95,9 +95,9 @@ public sealed class PygmentsLexer : ILexer
     /// Port of Python's <c>from_filename</c> class method.
     /// </para>
     /// <para>
-    /// This method is intended for integration with external lexer registries.
-    /// The current implementation always returns <see cref="SimpleLexer"/> since no
-    /// lexer registry is built-in. Extensions can override detection logic.
+    /// Uses TextMateSharp to detect the language from the file extension.
+    /// Supports 50+ languages including C#, F#, Visual Basic, Python, JavaScript, and more.
+    /// Falls back to <see cref="SimpleLexer"/> for unrecognized extensions.
     /// </para>
     /// <para>
     /// For empty filename <c>""</c>: Returns <see cref="SimpleLexer"/> (no extension to detect).
@@ -107,7 +107,14 @@ public sealed class PygmentsLexer : ILexer
     {
         ArgumentNullException.ThrowIfNull(filename);
 
-        // No built-in lexer registry - return SimpleLexer as fallback
+        var ext = Path.GetExtension(filename);
+        if (!string.IsNullOrEmpty(ext))
+        {
+            var lineLexer = TextMateLineLexer.FromExtension(ext);
+            if (lineLexer is not null)
+                return new LineLexer(lineLexer, syncFromStart);
+        }
+
         return new SimpleLexer();
     }
 

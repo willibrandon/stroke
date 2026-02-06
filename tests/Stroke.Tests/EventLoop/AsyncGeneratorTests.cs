@@ -473,24 +473,23 @@ public class AsyncGeneratorTests
 
         // Act
         var asyncSequence = AsyncGeneratorUtils.GeneratorToAsyncGenerator(LargeSequence);
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        var enumerator = asyncSequence.GetAsyncEnumerator(TestContext.Current.CancellationToken);
 
-        await using (var enumerator = asyncSequence.GetAsyncEnumerator(TestContext.Current.CancellationToken))
+        // Iterate a few items then break (simulating early exit)
+        int count = 0;
+        while (await enumerator.MoveNextAsync())
         {
-            // Iterate a few items then break (simulating early exit)
-            int count = 0;
-            while (await enumerator.MoveNextAsync())
-            {
-                count++;
-                if (count == 10)
-                    break;
-            }
+            count++;
+            if (count == 10)
+                break;
         }
-        // DisposeAsync called here by await using
 
+        // Measure only disposal time — not enumeration, which is subject to thread pool scheduling
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        await enumerator.DisposeAsync();
         stopwatch.Stop();
 
-        // Assert - cleanup should complete within 2 seconds
+        // Assert - producer termination should complete within 2 seconds
         Assert.True(stopwatch.ElapsedMilliseconds < 2000,
             $"Break + dispose should complete within 2 seconds. Actual: {stopwatch.ElapsedMilliseconds}ms");
     }

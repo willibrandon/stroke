@@ -272,11 +272,13 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
 {
     // Short timeout so producer checks _quitting frequently during disposal.
     // NFR-004 requires termination within 2 seconds; 100ms allows ~20 checks.
+    // Additionally, _cts is cancelled on disposal to immediately unblock TryAdd.
     private const int ProducerTimeoutMs = 100;
 
     private readonly int _bufferSize;
     private readonly CancellationToken _cancellationToken;
     private readonly IEnumerator<T> _syncEnumerator;
+    private readonly CancellationTokenSource _cts = new();
 
     private BlockingCollection<object?>? _queue;
     private Task? _producerTask;
@@ -397,8 +399,15 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
 
                 while (!_quitting)
                 {
-                    if (_queue!.TryAdd(_syncEnumerator.Current, ProducerTimeoutMs))
+                    try
+                    {
+                        if (_queue!.TryAdd(_syncEnumerator.Current, ProducerTimeoutMs, _cts.Token))
+                            break;
+                    }
+                    catch (OperationCanceledException)
+                    {
                         break;
+                    }
                 }
             }
         }
@@ -423,6 +432,9 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
         if (Interlocked.Exchange(ref _disposed, 1) != 0)
             return;
 
+        // Cancel the CTS first to immediately unblock any TryAdd waiting in the producer,
+        // then set _quitting so the producer loop exits on next iteration.
+        _cts.Cancel();
         _quitting = true;
 
         if (_producerTask is not null)
@@ -434,6 +446,8 @@ internal sealed class SyncToAsyncEnumerator<T> : IAsyncEnumerator<T>
             // Producer never started, dispose the enumerator ourselves
             _syncEnumerator.Dispose();
         }
+
+        _cts.Dispose();
 
         // Note: We intentionally do NOT call _queue.Dispose() here.
         // BlockingCollection.Dispose() is not thread-safe with Take().

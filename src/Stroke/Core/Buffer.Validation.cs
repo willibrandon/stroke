@@ -58,8 +58,16 @@ public sealed partial class Buffer
     }
 
     /// <summary>
-    /// Validate buffer and handle the accept action.
+    /// Validate buffer and handle the accept action (synchronous fast path).
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// For synchronous accept handlers (those returning <c>ValueTask.FromResult(...)</c>),
+    /// this method completes without allocation. For asynchronous accept handlers, this
+    /// method blocks until the handler completes. Prefer <see cref="ValidateAndHandleAsync"/>
+    /// when the accept handler may perform I/O or other async work.
+    /// </para>
+    /// </remarks>
     public void ValidateAndHandle()
     {
         var valid = Validate(setCursor: true);
@@ -67,14 +75,49 @@ public sealed partial class Buffer
         // When the validation succeeded, accept the input
         if (valid)
         {
-            bool keepText;
+            bool keepText = false;
             if (AcceptHandler != null)
             {
-                keepText = AcceptHandler(this);
+                var result = AcceptHandler(this);
+                keepText = result.IsCompletedSuccessfully
+                    ? result.Result
+                    : result.AsTask().GetAwaiter().GetResult();
             }
-            else
+
+            AppendToHistory();
+
+            if (!keepText)
             {
-                keepText = false;
+                Reset();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Validate buffer and handle the accept action (async).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// .NET deviation from Python Prompt Toolkit: Python's <c>validate_and_handle</c> is
+    /// synchronous. This async variant enables callers to <c>await</c> I/O-bound accept
+    /// handlers (e.g., Roslyn script evaluation) without blocking the event loop.
+    /// </para>
+    /// <para>
+    /// For synchronous accept handlers, the <c>await</c> on the <see cref="ValueTask{TResult}"/>
+    /// completes immediately with zero allocation.
+    /// </para>
+    /// </remarks>
+    public async Task ValidateAndHandleAsync()
+    {
+        var valid = Validate(setCursor: true);
+
+        // When the validation succeeded, accept the input
+        if (valid)
+        {
+            bool keepText = false;
+            if (AcceptHandler != null)
+            {
+                keepText = await AcceptHandler(this);
             }
 
             AppendToHistory();

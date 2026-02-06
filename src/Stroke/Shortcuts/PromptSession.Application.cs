@@ -97,7 +97,11 @@ public partial class PromptSession<TResult>
             filter: enterFilter)(
             (@event) =>
             {
-                DefaultBuffer.ValidateAndHandle();
+                App.CreateBackgroundTask(async _ =>
+                {
+                    await DefaultBuffer.ValidateAndHandleAsync();
+                    App.Invalidate();
+                });
                 return null;
             });
 

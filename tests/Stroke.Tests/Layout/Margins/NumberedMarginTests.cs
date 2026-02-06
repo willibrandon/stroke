@@ -45,14 +45,16 @@ public sealed class NumberedMarginTests
     #region GetWidth Tests
 
     [Fact]
-    public void GetWidth_SingleDigitLineCount_Returns2()
+    public void GetWidth_SingleDigitLineCount_Returns3()
     {
         var margin = new NumberedMargin();
         var content = CreateUIContent(5);
 
         var width = margin.GetWidth(() => content);
 
-        Assert.Equal(2, width); // 1 digit + 1 space
+        // Python: max(3, len(f"{line_count}") + 1) → max(3, 2) = 3
+        // Minimum width of 3 ensures single-digit line numbers are indented (e.g., " 1 ")
+        Assert.Equal(3, width);
     }
 
     [Fact]

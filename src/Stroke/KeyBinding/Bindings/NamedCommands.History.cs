@@ -24,7 +24,13 @@ public static partial class NamedCommands
     /// <summary>Accept the line regardless of where the cursor is.</summary>
     private static NotImplementedOrNone? AcceptLine(KeyPressEvent @event)
     {
-        @event.CurrentBuffer!.ValidateAndHandle();
+        var buffer = @event.CurrentBuffer!;
+        var app = @event.GetApp();
+        app.CreateBackgroundTask(async _ =>
+        {
+            await buffer.ValidateAndHandleAsync();
+            app.Invalidate();
+        });
         return null;
     }
 

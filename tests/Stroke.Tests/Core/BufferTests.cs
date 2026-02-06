@@ -152,7 +152,7 @@ public class BufferTests
     public void Constructor_WithAcceptHandler_SetsHandler()
     {
         // Arrange
-        Func<Buffer, bool> handler = b => true;
+        Func<Buffer, ValueTask<bool>> handler = b => ValueTask.FromResult(true);
 
         // Act
         var buffer = new Buffer(acceptHandler: handler);

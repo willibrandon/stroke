@@ -2,6 +2,7 @@ using Stroke.Core.Primitives;
 using Stroke.Filters;
 using Stroke.KeyBinding;
 using Stroke.Layout.Controls;
+using AppContext = Stroke.Application.AppContext;
 
 namespace Stroke.Layout.Containers;
 
@@ -257,6 +258,10 @@ public sealed class FloatContainer : IContainer
     /// <summary>
     /// Calculates the position of a float element.
     /// </summary>
+    /// <remarks>
+    /// Per Python PTK's _draw_float, the menu position is resolved once (absolute screen coords)
+    /// and converted to relative coords for use by xcursor/ycursor positioning.
+    /// </remarks>
     private (int x, int y) CalculateFloatPosition(
         Float floatElement,
         Screen screen,
@@ -268,12 +273,20 @@ public sealed class FloatContainer : IContainer
         var availableWidth = writePosition.Width;
         var availableHeight = writePosition.Height;
 
+        // Per Python PTK: resolve menu position once (falls back to cursor, then zero).
+        // Convert absolute screen coords to relative coords within the write position.
+        var menuPos = GetMenuPosition(screen, floatElement.AttachToWindow);
+        var relativeX = menuPos.X - writePosition.XPos;
+        var relativeY = menuPos.Y - writePosition.YPos;
+
         // Calculate X position
         if (floatElement.XCursor)
         {
-            // Position relative to cursor
-            var cursorPos = GetCursorPosition(screen, floatElement.AttachToWindow);
-            x = cursorPos?.X ?? 0;
+            x = relativeX;
+
+            // Per Python PTK: if float would extend past right edge, shift left.
+            if (x + floatWidth > availableWidth)
+                x = Math.Max(0, availableWidth - floatWidth);
         }
         else if (floatElement.Left.HasValue)
         {
@@ -292,11 +305,8 @@ public sealed class FloatContainer : IContainer
         // Calculate Y position
         if (floatElement.YCursor)
         {
-            // Position relative to cursor. When AllowCoverCursor is false,
-            // offset by +1 to place the float below the cursor line (per Python PTK).
-            var cursorPos = GetCursorPosition(screen, floatElement.AttachToWindow);
-            var cursorY = cursorPos?.Y ?? 0;
-            y = cursorY + (floatElement.AllowCoverCursor ? 0 : 1);
+            // When AllowCoverCursor is false, offset by +1 to place below cursor (per Python PTK).
+            y = relativeY + (floatElement.AllowCoverCursor ? 0 : 1);
 
             // If not enough space below cursor, try fitting above
             if (y + floatHeight > availableHeight)
@@ -308,8 +318,8 @@ public sealed class FloatContainer : IContainer
                 else
                 {
                     // Fit above the cursor
-                    var aboveHeight = Math.Min(floatHeight, cursorY);
-                    y = cursorY - aboveHeight;
+                    var aboveHeight = Math.Min(floatHeight, relativeY);
+                    y = relativeY - aboveHeight;
                 }
             }
         }
@@ -331,31 +341,25 @@ public sealed class FloatContainer : IContainer
     }
 
     /// <summary>
-    /// Gets the cursor position from a window or the screen.
+    /// Gets the menu position for float positioning.
+    /// Uses <see cref="Screen.GetMenuPosition"/> which falls back: menu → cursor → zero.
+    /// When no attach window is specified, uses the current window (per Python PTK).
     /// </summary>
-    private static Point? GetCursorPosition(Screen screen, Window? window)
+    private static Point GetMenuPosition(Screen screen, Window? window)
     {
         if (window != null)
         {
-            var pos = screen.GetCursorPosition(window);
-            // Return null if position is zero (not set)
-            if (pos == Point.Zero)
-                return null;
-            return pos;
+            return screen.GetMenuPosition(window);
         }
 
-        // Find the first cursor position from any visible window
-        foreach (var visibleWindow in screen.VisibleWindows)
+        // Per Python PTK: fl.attach_to_window or get_app().layout.current_window
+        var currentWindow = AppContext.GetApp().Layout.CurrentWindow;
+        if (currentWindow is Window w)
         {
-            if (visibleWindow is Window w)
-            {
-                var pos = screen.GetCursorPosition(w);
-                if (pos != Point.Zero)
-                    return pos;
-            }
+            return screen.GetMenuPosition(w);
         }
 
-        return null;
+        return Point.Zero;
     }
 
     /// <summary>

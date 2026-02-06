@@ -91,7 +91,12 @@ public class TextArea : IMagicContainer
     }
 
     /// <summary>Gets or sets the accept handler, called when the user accepts the input.</summary>
-    public Func<Buffer, bool>? AcceptHandler
+    /// <remarks>
+    /// Returns <see cref="ValueTask{TResult}"/> to support both sync and async handlers.
+    /// Sync handlers: <c>AcceptHandler = buf => ValueTask.FromResult(false);</c>
+    /// Async handlers: <c>AcceptHandler = async buf => { await ...; return false; };</c>
+    /// </remarks>
+    public Func<Buffer, ValueTask<bool>>? AcceptHandler
     {
         get => Buffer.AcceptHandler;
         set => Buffer.AcceptHandler = value;
@@ -153,7 +158,7 @@ public class TextArea : IMagicContainer
         ICompleter? completer = null,
         FilterOrBool completeWhileTyping = default,
         IValidator? validator = null,
-        Func<Buffer, bool>? acceptHandler = null,
+        Func<Buffer, ValueTask<bool>>? acceptHandler = null,
         Stroke.History.IHistory? history = null,
         FilterOrBool focusable = default,
         FilterOrBool focusOnClick = default,

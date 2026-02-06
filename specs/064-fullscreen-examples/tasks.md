@@ -19,11 +19,11 @@
 
 **Purpose**: Create the project, solution entry, and routing infrastructure
 
-- [ ] T001 Create project file `examples/Stroke.Examples.FullScreen/Stroke.Examples.FullScreen.csproj` with net10.0 target and Stroke project reference per contracts/example-interface.md
-- [ ] T002 Create directory structure: `examples/Stroke.Examples.FullScreen/SimpleDemos/` and `examples/Stroke.Examples.FullScreen/ScrollablePanes/`
-- [ ] T003 Add Stroke.Examples.FullScreen project to `examples/Stroke.Examples.sln` solution file
-- [ ] T004 Create Program.cs router at `examples/Stroke.Examples.FullScreen/Program.cs` with case-insensitive dictionary routing for all 25 examples, --help flag, and categorized usage display per contracts/example-interface.md
-- [ ] T005 Verify project builds with `dotnet build examples/Stroke.Examples.FullScreen` (Program.cs will reference example classes that don't exist yet — use stub routing or compile check after Phase 2)
+- [x] T001 Create project file `examples/Stroke.Examples.FullScreen/Stroke.Examples.FullScreen.csproj` with net10.0 target and Stroke project reference per contracts/example-interface.md
+- [x] T002 Create directory structure: `examples/Stroke.Examples.FullScreen/SimpleDemos/` and `examples/Stroke.Examples.FullScreen/ScrollablePanes/`
+- [x] T003 Add Stroke.Examples.FullScreen project to `examples/Stroke.Examples.sln` solution file
+- [x] T004 Create Program.cs router at `examples/Stroke.Examples.FullScreen/Program.cs` with case-insensitive dictionary routing for all 25 examples, --help flag, and categorized usage display per contracts/example-interface.md
+- [x] T005 Verify project builds with `dotnet build examples/Stroke.Examples.FullScreen` (Program.cs will reference example classes that don't exist yet — use stub routing or compile check after Phase 2)
 
 **Checkpoint**: Project scaffolding complete. Build may fail until example classes are created (expected).
 
@@ -37,10 +37,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Implement HelloWorld example at `examples/Stroke.Examples.FullScreen/HelloWorld.cs` — port of `hello-world.py`: Box wrapping Frame wrapping TextArea ("Hello world!\nPress control-c to quit."), KeyBindings with Ctrl+C exit, Application fullScreen=true. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/hello-world.py`
-- [ ] T007 [P] [US1] Implement DummyApp example at `examples/Stroke.Examples.FullScreen/DummyApp.cs` — port of `dummy-app.py`: minimal Application with fullScreen=false, no layout, immediate exit on any key. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/dummy-app.py`
-- [ ] T008 [P] [US1] Implement NoLayout example at `examples/Stroke.Examples.FullScreen/NoLayout.cs` — port of `no-layout.py`: Application with fullScreen=true, no layout (null), exits on Ctrl+C. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/no-layout.py`
-- [ ] T009 [US1] Build and verify all 3 US1 examples compile and run: `dotnet run --project examples/Stroke.Examples.FullScreen -- HelloWorld`, `DummyApp`, `NoLayout`
+- [x] T006 [P] [US1] Implement HelloWorld example at `examples/Stroke.Examples.FullScreen/HelloWorld.cs` — port of `hello-world.py`: Box wrapping Frame wrapping TextArea ("Hello world!\nPress control-c to quit."), KeyBindings with Ctrl+C exit, Application fullScreen=true. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/hello-world.py`
+- [x] T007 [P] [US1] Implement DummyApp example at `examples/Stroke.Examples.FullScreen/DummyApp.cs` — port of `dummy-app.py`: minimal Application with fullScreen=false, no layout, immediate exit on any key. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/dummy-app.py`
+- [x] T008 [P] [US1] Implement NoLayout example at `examples/Stroke.Examples.FullScreen/NoLayout.cs` — port of `no-layout.py`: Application with fullScreen=true, no layout (null), exits on Ctrl+C. Reference: `/Users/brandon/src/python-prompt-toolkit/examples/full-screen/no-layout.py`
+- [x] T009 [US1] Build and verify all 3 US1 examples compile and run: `dotnet run --project examples/Stroke.Examples.FullScreen -- HelloWorld`, `DummyApp`, `NoLayout`
 
 **Checkpoint**: Simplest full-screen examples working. Developers can see basic Application structure.
 

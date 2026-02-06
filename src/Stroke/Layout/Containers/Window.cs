@@ -7,6 +7,7 @@ using Stroke.KeyBinding;
 using Stroke.Layout.Controls;
 using Stroke.Layout.Margins;
 using Stroke.Layout.Windows;
+using Wcwidth;
 
 namespace Stroke.Layout.Containers;
 
@@ -749,16 +750,101 @@ public class Window : IContainer, IWindow
                 }
             }
 
-            // Copy remaining content
-            while (fragmentIndex < fragments.Count && x < xPos + width)
+            // Align this line. (Note that this doesn't work well when we use
+            // get_line_prefix and that function returns variable width prefixes.)
+            if (align == WindowAlign.Center || align == WindowAlign.Right)
+            {
+                // Calculate the width of the remaining (visible) content on this line.
+                int lineWidth = 0;
+                var fi = fragmentIndex;
+                var ci = charIndex;
+                while (fi < fragments.Count)
+                {
+                    var frag = fragments[fi];
+                    bool isZeroWidth = frag.Style.Contains("[ZeroWidthEscape]");
+                    if (!isZeroWidth)
+                    {
+                        for (int i = ci; i < frag.Text.Length; i++)
+                        {
+                            int cw = UnicodeCalculator.GetWidth(frag.Text[i]);
+                            if (cw > 0) lineWidth += cw;
+                        }
+                    }
+                    fi++;
+                    ci = 0;
+                }
+
+                if (lineWidth < width)
+                {
+                    if (align == WindowAlign.Center)
+                        x += (width - lineWidth) / 2;
+                    else // Right
+                        x += width - lineWidth;
+                }
+            }
+
+            // Copy remaining content (with optional line wrapping)
+            var wrapCount = 0;
+            var contentDone = false;
+
+            while (fragmentIndex < fragments.Count && !contentDone)
             {
                 var fragment = fragments[fragmentIndex];
-                for (int i = charIndex; i < fragment.Text.Length && x < xPos + width; i++)
+                bool isZeroWidth = fragment.Style.Contains("[ZeroWidthEscape]");
+
+                for (int i = charIndex; i < fragment.Text.Length && !contentDone; i++)
                 {
                     var c = fragment.Text[i];
-                    screen[y, x] = Char.Create(c.ToString(), fragment.Style);
-                    rowColToYX[(currentLine, col)] = (y, x);
-                    x++;
+                    var charWidth = isZeroWidth ? 0 : 1;
+
+                    // Wrap when the line width is exceeded (matching Python's _copy_body).
+                    if (wrapLines && charWidth > 0 && x + charWidth > xPos + width)
+                    {
+                        y++;
+                        wrapCount++;
+                        x = xPos;
+
+                        if (y >= yPos + writePosition.Height)
+                        {
+                            contentDone = true;
+                            break;
+                        }
+
+                        visibleLineToRowCol[y - yPos] = (currentLine, col);
+
+                        // Draw continuation line prefix
+                        if (getLinePrefix != null)
+                        {
+                            var wrapPrefixFragments = getLinePrefix(currentLine, wrapCount);
+                            foreach (var prefixFragment in wrapPrefixFragments)
+                            {
+                                foreach (var pc in prefixFragment.Text)
+                                {
+                                    if (x < xPos + width)
+                                    {
+                                        screen[y, x] = Char.Create(pc.ToString(), prefixFragment.Style);
+                                        x++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Stop if past right edge in non-wrapping mode
+                    if (!wrapLines && x >= xPos + width)
+                    {
+                        contentDone = true;
+                        break;
+                    }
+
+                    // Set character in screen
+                    if (x >= xPos && x < xPos + width)
+                    {
+                        screen[y, x] = Char.Create(c.ToString(), fragment.Style);
+                        rowColToYX[(currentLine, col)] = (y, x);
+                    }
+
+                    x += charWidth;
                     col++;
                 }
                 fragmentIndex++;

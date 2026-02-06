@@ -23,11 +23,13 @@ public sealed class SearchBufferControlTests
     }
 
     [Fact]
-    public void Constructor_Default_NotFocusable()
+    public void Constructor_Default_IsFocusable()
     {
+        // Python PTK's SearchBufferControl doesn't override BufferControl's
+        // default focusable=True, so search controls are focusable by default.
         var control = new SearchBufferControl();
 
-        Assert.False(control.IsFocusable);
+        Assert.True(control.IsFocusable);
     }
 
     [Fact]

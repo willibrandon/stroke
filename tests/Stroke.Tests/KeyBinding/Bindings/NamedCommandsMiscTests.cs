@@ -59,7 +59,7 @@ public sealed class NamedCommandsMiscTests
         string? capturedText = null;
         var buffer = new Buffer(
             document: new Document("hello\nworld", cursorPosition: 0),
-            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+            acceptHandler: b => { capturedText = b.Document.Text; return ValueTask.FromResult(true); });
         var binding = NamedCommands.GetByName("insert-comment");
         binding.Call(CreateEvent(buffer));
 
@@ -72,7 +72,7 @@ public sealed class NamedCommandsMiscTests
         string? capturedText = null;
         var buffer = new Buffer(
             document: new Document("#hello\n#world", cursorPosition: 0),
-            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+            acceptHandler: b => { capturedText = b.Document.Text; return ValueTask.FromResult(true); });
         var binding = NamedCommands.GetByName("insert-comment");
         binding.Call(CreateEvent(buffer, arg: "2"));
 
@@ -85,7 +85,7 @@ public sealed class NamedCommandsMiscTests
         string? capturedText = null;
         var buffer = new Buffer(
             document: new Document("#hello\nworld", cursorPosition: 0),
-            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+            acceptHandler: b => { capturedText = b.Document.Text; return ValueTask.FromResult(true); });
         var binding = NamedCommands.GetByName("insert-comment");
         binding.Call(CreateEvent(buffer, arg: "2"));
 
@@ -98,7 +98,7 @@ public sealed class NamedCommandsMiscTests
         string? capturedText = null;
         var buffer = new Buffer(
             document: new Document("echo test", cursorPosition: 0),
-            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+            acceptHandler: b => { capturedText = b.Document.Text; return ValueTask.FromResult(true); });
         var binding = NamedCommands.GetByName("insert-comment");
         binding.Call(CreateEvent(buffer));
 
@@ -113,7 +113,7 @@ public sealed class NamedCommandsMiscTests
         string? capturedText = null;
         var buffer = new Buffer(
             document: new Document("a\nb\n", cursorPosition: 0),
-            acceptHandler: b => { capturedText = b.Document.Text; return true; });
+            acceptHandler: b => { capturedText = b.Document.Text; return ValueTask.FromResult(true); });
         var binding = NamedCommands.GetByName("insert-comment");
         binding.Call(CreateEvent(buffer));
 

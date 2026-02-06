@@ -188,7 +188,7 @@ public class TextAreaTests
         var ta = new TextArea();
         Assert.Null(ta.AcceptHandler);
 
-        Func<Buffer, bool> handler = _ => true;
+        Func<Buffer, ValueTask<bool>> handler = _ => ValueTask.FromResult(true);
         ta.AcceptHandler = handler;
 
         Assert.Same(handler, ta.AcceptHandler);
@@ -198,7 +198,7 @@ public class TextAreaTests
     [Fact]
     public void AcceptHandler_Constructor_IsReadableViaProperty()
     {
-        Func<Buffer, bool> handler = _ => false;
+        Func<Buffer, ValueTask<bool>> handler = _ => ValueTask.FromResult(false);
         var ta = new TextArea(acceptHandler: handler);
 
         Assert.Same(handler, ta.AcceptHandler);
@@ -207,7 +207,7 @@ public class TextAreaTests
     [Fact]
     public void AcceptHandler_SetToNull_ClearsHandler()
     {
-        Func<Buffer, bool> handler = _ => true;
+        Func<Buffer, ValueTask<bool>> handler = _ => ValueTask.FromResult(true);
         var ta = new TextArea(acceptHandler: handler);
 
         ta.AcceptHandler = null;
