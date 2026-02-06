@@ -1,3 +1,4 @@
+using System.Threading;
 using Stroke.Core;
 using Stroke.Filters;
 using Stroke.FormattedText;
@@ -24,9 +25,15 @@ namespace Stroke.Widgets.Menus;
 /// <para>
 /// Port of Python Prompt Toolkit's <c>MenuContainer</c> class from <c>widgets/menus.py</c>.
 /// </para>
+/// <para>
+/// This class is thread-safe. All mutable state (<c>_selectedMenu</c>) is protected
+/// by a <see cref="Lock"/>. Individual operations are atomic; compound operations
+/// require external synchronization by the caller.
+/// </para>
 /// </remarks>
 public class MenuContainer : IMagicContainer
 {
+    private readonly Lock _lock = new();
     private readonly List<int> _selectedMenu = [0];
     private readonly FloatContainer _container;
 
@@ -74,15 +81,16 @@ public class MenuContainer : IMagicContainer
         // Key bindings for menu navigation.
         var kb = new KeyBindings();
 
-        var inMainMenu = new Condition(() => _selectedMenu.Count == 1);
-        var inSubMenu = new Condition(() => _selectedMenu.Count > 1);
+        var inMainMenu = new Condition(() => { using (_lock.EnterScope()) return _selectedMenu.Count == 1; });
+        var inSubMenu = new Condition(() => { using (_lock.EnterScope()) return _selectedMenu.Count > 1; });
 
         // Navigation through the main menu.
         kb.Add<KeyHandlerCallable>(
             [new KeyOrChar(Keys.Left)],
             filter: new FilterOrBool(inMainMenu))((e) =>
         {
-            _selectedMenu[0] = Math.Max(0, _selectedMenu[0] - 1);
+            using (_lock.EnterScope())
+                _selectedMenu[0] = Math.Max(0, _selectedMenu[0] - 1);
             return null;
         });
 
@@ -90,7 +98,8 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Right)],
             filter: new FilterOrBool(inMainMenu))((e) =>
         {
-            _selectedMenu[0] = Math.Min(MenuItems.Count - 1, _selectedMenu[0] + 1);
+            using (_lock.EnterScope())
+                _selectedMenu[0] = Math.Min(MenuItems.Count - 1, _selectedMenu[0] + 1);
             return null;
         });
 
@@ -98,7 +107,8 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Down)],
             filter: new FilterOrBool(inMainMenu))((e) =>
         {
-            _selectedMenu.Add(0);
+            using (_lock.EnterScope())
+                _selectedMenu.Add(0);
             return null;
         });
 
@@ -123,8 +133,11 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Left)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            if (_selectedMenu.Count > 1)
-                _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            using (_lock.EnterScope())
+            {
+                if (_selectedMenu.Count > 1)
+                    _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            }
             return null;
         });
 
@@ -132,8 +145,11 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.ControlG)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            if (_selectedMenu.Count > 1)
-                _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            using (_lock.EnterScope())
+            {
+                if (_selectedMenu.Count > 1)
+                    _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            }
             return null;
         });
 
@@ -141,8 +157,11 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.ControlC)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            if (_selectedMenu.Count > 1)
-                _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            using (_lock.EnterScope())
+            {
+                if (_selectedMenu.Count > 1)
+                    _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+            }
             return null;
         });
 
@@ -150,19 +169,22 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Right)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            var menu = GetMenu(_selectedMenu.Count - 1);
-            if (menu.Children.Count > 0)
+            using (_lock.EnterScope())
             {
-                _selectedMenu.Add(0);
-            }
-            else if (_selectedMenu.Count == 2
-                     && _selectedMenu[0] < MenuItems.Count - 1)
-            {
-                _selectedMenu.Clear();
-                _selectedMenu.Add(Math.Min(MenuItems.Count - 1, _selectedMenu.Count > 0
-                    ? _selectedMenu[0] + 1 : 1));
-                if (MenuItems[_selectedMenu[0]].Children.Count > 0)
+                var menu = GetMenu(_selectedMenu.Count - 1);
+                if (menu.Children.Count > 0)
+                {
                     _selectedMenu.Add(0);
+                }
+                else if (_selectedMenu.Count == 2
+                         && _selectedMenu[0] < MenuItems.Count - 1)
+                {
+                    var currentIndex = _selectedMenu[0];
+                    _selectedMenu.Clear();
+                    _selectedMenu.Add(Math.Min(MenuItems.Count - 1, currentIndex + 1));
+                    if (MenuItems[_selectedMenu[0]].Children.Count > 0)
+                        _selectedMenu.Add(0);
+                }
             }
             return null;
         });
@@ -171,21 +193,23 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Up)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            var menu = GetMenu(_selectedMenu.Count - 2);
-            var index = _selectedMenu[^1];
-
-            var previousIndex = -1;
-            for (var i = 0; i < menu.Children.Count; i++)
+            using (_lock.EnterScope())
             {
-                if (i < index && !menu.Children[i].Disabled)
-                    previousIndex = i;
+                var menu = GetMenu(_selectedMenu.Count - 2);
+                var index = _selectedMenu[^1];
+
+                var previousIndex = -1;
+                for (var i = 0; i < menu.Children.Count; i++)
+                {
+                    if (i < index && !menu.Children[i].Disabled)
+                        previousIndex = i;
+                }
+
+                if (previousIndex >= 0)
+                    _selectedMenu[^1] = previousIndex;
+                else if (_selectedMenu.Count == 2)
+                    _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
             }
-
-            if (previousIndex >= 0)
-                _selectedMenu[^1] = previousIndex;
-            else if (_selectedMenu.Count == 2)
-                _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
-
             return null;
         });
 
@@ -193,33 +217,40 @@ public class MenuContainer : IMagicContainer
             [new KeyOrChar(Keys.Down)],
             filter: new FilterOrBool(inSubMenu))((e) =>
         {
-            var menu = GetMenu(_selectedMenu.Count - 2);
-            var index = _selectedMenu[^1];
-
-            var nextIndex = -1;
-            for (var i = 0; i < menu.Children.Count; i++)
+            using (_lock.EnterScope())
             {
-                if (i > index && !menu.Children[i].Disabled)
+                var menu = GetMenu(_selectedMenu.Count - 2);
+                var index = _selectedMenu[^1];
+
+                var nextIndex = -1;
+                for (var i = 0; i < menu.Children.Count; i++)
                 {
-                    nextIndex = i;
-                    break;
+                    if (i > index && !menu.Children[i].Disabled)
+                    {
+                        nextIndex = i;
+                        break;
+                    }
                 }
+
+                if (nextIndex >= 0)
+                    _selectedMenu[^1] = nextIndex;
             }
-
-            if (nextIndex >= 0)
-                _selectedMenu[^1] = nextIndex;
-
             return null;
         });
 
         kb.Add<KeyHandlerCallable>(
             [new KeyOrChar(Keys.ControlM)])((e) =>
         {
-            var item = GetMenu(_selectedMenu.Count - 1);
-            if (item.Handler != null)
+            Action? handler;
+            using (_lock.EnterScope())
+            {
+                var item = GetMenu(_selectedMenu.Count - 1);
+                handler = item.Handler;
+            }
+            if (handler != null)
             {
                 e.GetApp().Layout.FocusLast();
-                item.Handler();
+                handler();
             }
             return null;
         });
@@ -259,7 +290,7 @@ public class MenuContainer : IMagicContainer
                 content: new AnyContainer(new ConditionalContainer(
                     content: new AnyContainer(new Shadow(new AnyContainer(submenu2)).PtContainer()),
                     filter: new FilterOrBool(hasFocus
-                        & new Condition(() => _selectedMenu.Count >= 1))))),
+                        & new Condition(() => { using (_lock.EnterScope()) return _selectedMenu.Count >= 1; }))))),
             new Float(
                 attachToWindow: submenu2,
                 xcursor: true,
@@ -268,7 +299,7 @@ public class MenuContainer : IMagicContainer
                 content: new AnyContainer(new ConditionalContainer(
                     content: new AnyContainer(new Shadow(new AnyContainer(submenu3)).PtContainer()),
                     filter: new FilterOrBool(hasFocus
-                        & new Condition(() => _selectedMenu.Count >= 2))))),
+                        & new Condition(() => { using (_lock.EnterScope()) return _selectedMenu.Count >= 2; }))))),
         };
 
         if (floats != null)
@@ -315,163 +346,178 @@ public class MenuContainer : IMagicContainer
     {
         var focused = AppContext.GetApp().Layout.HasFocus(Window);
 
-        // Reset menu state when focus is lost.
-        if (!focused)
+        using (_lock.EnterScope())
         {
-            _selectedMenu.Clear();
-            _selectedMenu.Add(0);
-        }
-
-        var result = new List<StyleAndTextTuple>();
-
-        for (var i = 0; i < MenuItems.Count; i++)
-        {
-            var item = MenuItems[i];
-            var idx = i; // capture for closure
-
-            NotImplementedOrNone MouseHandler(MouseEvent mouseEvent)
+            // Reset menu state when focus is lost.
+            if (!focused)
             {
-                var hover = mouseEvent.EventType == MouseEventType.MouseMove;
-                if (mouseEvent.EventType == MouseEventType.MouseDown
-                    || (hover && focused))
+                _selectedMenu.Clear();
+                _selectedMenu.Add(0);
+            }
+
+            var result = new List<StyleAndTextTuple>();
+
+            for (var i = 0; i < MenuItems.Count; i++)
+            {
+                var item = MenuItems[i];
+                var idx = i; // capture for closure
+
+                NotImplementedOrNone MouseHandler(MouseEvent mouseEvent)
                 {
-                    var app = AppContext.GetApp();
-                    if (!hover)
+                    var hover = mouseEvent.EventType == MouseEventType.MouseMove;
+                    if (mouseEvent.EventType == MouseEventType.MouseDown
+                        || (hover && focused))
                     {
-                        if (app.Layout.HasFocus(Window))
+                        var app = AppContext.GetApp();
+                        if (!hover)
                         {
-                            if (_selectedMenu.Count == 1 && _selectedMenu[0] == idx)
-                                app.Layout.FocusLast();
+                            if (app.Layout.HasFocus(Window))
+                            {
+                                using (_lock.EnterScope())
+                                {
+                                    if (_selectedMenu.Count == 1 && _selectedMenu[0] == idx)
+                                        app.Layout.FocusLast();
+                                }
+                            }
+                            else
+                            {
+                                app.Layout.Focus(Window);
+                            }
                         }
-                        else
+                        using (_lock.EnterScope())
                         {
-                            app.Layout.Focus(Window);
+                            _selectedMenu.Clear();
+                            _selectedMenu.Add(idx);
                         }
                     }
-                    _selectedMenu.Clear();
-                    _selectedMenu.Add(idx);
+                    return NotImplementedOrNone.None;
                 }
-                return NotImplementedOrNone.None;
+
+                result.Add(new StyleAndTextTuple("class:menu-bar", " ", MouseHandler));
+
+                if (i == _selectedMenu[0] && focused)
+                {
+                    result.Add(new StyleAndTextTuple("[SetMenuPosition]", "", MouseHandler));
+                    result.Add(new StyleAndTextTuple("class:menu-bar.selected-item", item.Text, MouseHandler));
+                }
+                else
+                {
+                    result.Add(new StyleAndTextTuple("class:menu-bar", item.Text, MouseHandler));
+                }
             }
 
-            result.Add(new StyleAndTextTuple("class:menu-bar", " ", MouseHandler));
-
-            if (i == _selectedMenu[0] && focused)
-            {
-                result.Add(new StyleAndTextTuple("[SetMenuPosition]", "", MouseHandler));
-                result.Add(new StyleAndTextTuple("class:menu-bar.selected-item", item.Text, MouseHandler));
-            }
-            else
-            {
-                result.Add(new StyleAndTextTuple("class:menu-bar", item.Text, MouseHandler));
-            }
+            return result;
         }
-
-        return result;
     }
 
     private Window CreateSubmenu(int level)
     {
         IReadOnlyList<StyleAndTextTuple> GetTextFragments()
         {
-            var result = new List<StyleAndTextTuple>();
-
-            if (level < _selectedMenu.Count)
+            using (_lock.EnterScope())
             {
-                var menu = GetMenu(level);
-                if (menu.Children.Count > 0)
+                var result = new List<StyleAndTextTuple>();
+
+                if (level < _selectedMenu.Count)
                 {
-                    result.Add(new StyleAndTextTuple("class:menu", Border.TopLeft));
-                    result.Add(new StyleAndTextTuple("class:menu",
-                        new string(Border.Horizontal[0], menu.Width + 4)));
-                    result.Add(new StyleAndTextTuple("class:menu", Border.TopRight));
-                    result.Add(new StyleAndTextTuple("", "\n"));
-
-                    var selectedItem = level + 1 < _selectedMenu.Count
-                        ? _selectedMenu[level + 1]
-                        : -1;
-
-                    for (var i = 0; i < menu.Children.Count; i++)
+                    var menu = GetMenu(level);
+                    if (menu.Children.Count > 0)
                     {
-                        var item = menu.Children[i];
-                        var idx = i;
-
-                        NotImplementedOrNone MouseHandler(MouseEvent mouseEvent)
-                        {
-                            if (item.Disabled)
-                                return NotImplementedOrNone.None;
-
-                            var hover = mouseEvent.EventType == MouseEventType.MouseMove;
-                            if (mouseEvent.EventType == MouseEventType.MouseUp || hover)
-                            {
-                                var app = AppContext.GetApp();
-                                if (!hover && item.Handler != null)
-                                {
-                                    app.Layout.FocusLast();
-                                    item.Handler();
-                                }
-                                else
-                                {
-                                    // Update selected path.
-                                    while (_selectedMenu.Count > level + 1)
-                                        _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
-                                    if (_selectedMenu.Count == level + 1)
-                                        _selectedMenu.Add(idx);
-                                    else
-                                        _selectedMenu[level + 1] = idx;
-                                }
-                            }
-                            return NotImplementedOrNone.None;
-                        }
-
-                        string style;
-                        if (i == selectedItem)
-                        {
-                            result.Add(new StyleAndTextTuple("[SetCursorPosition]", ""));
-                            style = "class:menu-bar.selected-item";
-                        }
-                        else
-                        {
-                            style = "";
-                        }
-
-                        result.Add(new StyleAndTextTuple("class:menu", Border.Vertical));
-
-                        if (item.Text == "-")
-                        {
-                            result.Add(new StyleAndTextTuple(
-                                style + "class:menu-border",
-                                new string(Border.Horizontal[0], menu.Width + 3),
-                                MouseHandler));
-                        }
-                        else
-                        {
-                            result.Add(new StyleAndTextTuple(
-                                style,
-                                ($" {item.Text}").PadRight(menu.Width + 3),
-                                MouseHandler));
-                        }
-
-                        if (item.Children.Count > 0)
-                            result.Add(new StyleAndTextTuple(style, ">", MouseHandler));
-                        else
-                            result.Add(new StyleAndTextTuple(style, " ", MouseHandler));
-
-                        if (i == selectedItem)
-                            result.Add(new StyleAndTextTuple("[SetMenuPosition]", ""));
-
-                        result.Add(new StyleAndTextTuple("class:menu", Border.Vertical));
+                        result.Add(new StyleAndTextTuple("class:menu", Border.TopLeft));
+                        result.Add(new StyleAndTextTuple("class:menu",
+                            new string(Border.Horizontal[0], menu.Width + 4)));
+                        result.Add(new StyleAndTextTuple("class:menu", Border.TopRight));
                         result.Add(new StyleAndTextTuple("", "\n"));
+
+                        var selectedItem = level + 1 < _selectedMenu.Count
+                            ? _selectedMenu[level + 1]
+                            : -1;
+
+                        for (var i = 0; i < menu.Children.Count; i++)
+                        {
+                            var item = menu.Children[i];
+                            var idx = i;
+
+                            NotImplementedOrNone MouseHandler(MouseEvent mouseEvent)
+                            {
+                                if (item.Disabled)
+                                    return NotImplementedOrNone.None;
+
+                                var hover = mouseEvent.EventType == MouseEventType.MouseMove;
+                                if (mouseEvent.EventType == MouseEventType.MouseUp || hover)
+                                {
+                                    var app = AppContext.GetApp();
+                                    if (!hover && item.Handler != null)
+                                    {
+                                        app.Layout.FocusLast();
+                                        item.Handler();
+                                    }
+                                    else
+                                    {
+                                        using (_lock.EnterScope())
+                                        {
+                                            // Update selected path.
+                                            while (_selectedMenu.Count > level + 1)
+                                                _selectedMenu.RemoveAt(_selectedMenu.Count - 1);
+                                            if (_selectedMenu.Count == level + 1)
+                                                _selectedMenu.Add(idx);
+                                            else
+                                                _selectedMenu[level + 1] = idx;
+                                        }
+                                    }
+                                }
+                                return NotImplementedOrNone.None;
+                            }
+
+                            string style;
+                            if (i == selectedItem)
+                            {
+                                result.Add(new StyleAndTextTuple("[SetCursorPosition]", ""));
+                                style = "class:menu-bar.selected-item";
+                            }
+                            else
+                            {
+                                style = "";
+                            }
+
+                            result.Add(new StyleAndTextTuple("class:menu", Border.Vertical));
+
+                            if (item.Text == "-")
+                            {
+                                result.Add(new StyleAndTextTuple(
+                                    style + "class:menu-border",
+                                    new string(Border.Horizontal[0], menu.Width + 3),
+                                    MouseHandler));
+                            }
+                            else
+                            {
+                                result.Add(new StyleAndTextTuple(
+                                    style,
+                                    ($" {item.Text}").PadRight(menu.Width + 3),
+                                    MouseHandler));
+                            }
+
+                            if (item.Children.Count > 0)
+                                result.Add(new StyleAndTextTuple(style, ">", MouseHandler));
+                            else
+                                result.Add(new StyleAndTextTuple(style, " ", MouseHandler));
+
+                            if (i == selectedItem)
+                                result.Add(new StyleAndTextTuple("[SetMenuPosition]", ""));
+
+                            result.Add(new StyleAndTextTuple("class:menu", Border.Vertical));
+                            result.Add(new StyleAndTextTuple("", "\n"));
+                        }
+
+                        result.Add(new StyleAndTextTuple("class:menu", Border.BottomLeft));
+                        result.Add(new StyleAndTextTuple("class:menu",
+                            new string(Border.Horizontal[0], menu.Width + 4)));
+                        result.Add(new StyleAndTextTuple("class:menu", Border.BottomRight));
                     }
-
-                    result.Add(new StyleAndTextTuple("class:menu", Border.BottomLeft));
-                    result.Add(new StyleAndTextTuple("class:menu",
-                        new string(Border.Horizontal[0], menu.Width + 4)));
-                    result.Add(new StyleAndTextTuple("class:menu", Border.BottomRight));
                 }
-            }
 
-            return result;
+                return result;
+            }
         }
 
         return new Window(
