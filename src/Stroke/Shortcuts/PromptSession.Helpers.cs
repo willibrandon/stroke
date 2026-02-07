@@ -40,6 +40,20 @@ public partial class PromptSession<TResult>
         {
             continuation = callable(width, lineNumber, wrapCount);
         }
+        else if (promptContinuation is Func<int, int, int, object> func)
+        {
+            // Fallback for Func<int, int, int, object> delegate (different nominal type
+            // than PromptContinuationCallable but compatible signature).
+            var result = func(width, lineNumber, wrapCount);
+            continuation = result switch
+            {
+                AnyFormattedText aft => aft,
+                string s => (AnyFormattedText)s,
+                FormattedText.FormattedText ft => (AnyFormattedText)ft,
+                not null => (AnyFormattedText)result.ToString(),
+                _ => default,
+            };
+        }
         else
         {
             continuation = promptContinuation switch

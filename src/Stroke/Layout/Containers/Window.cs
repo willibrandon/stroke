@@ -648,6 +648,14 @@ public partial class Window : IContainer, IWindow
                 var prefixFragments = getLinePrefix(currentLine, 0);
                 foreach (var prefixFragment in prefixFragments)
                 {
+                    // Zero-width escape fragments go into screen.ZeroWidthEscapes,
+                    // not into regular character cells. Matches Python's copy_line.
+                    if (prefixFragment.Style.Contains("[ZeroWidthEscape]"))
+                    {
+                        screen.AddZeroWidthEscape(y, x, prefixFragment.Text);
+                        continue;
+                    }
+
                     foreach (var c in prefixFragment.Text)
                     {
                         if (x < xPos + width)
@@ -721,10 +729,20 @@ public partial class Window : IContainer, IWindow
                 var fragment = fragments[fragmentIndex];
                 bool isZeroWidth = fragment.Style.Contains("[ZeroWidthEscape]");
 
+                // Zero-width escape fragments go into screen.ZeroWidthEscapes,
+                // not into regular character cells. Matches Python's _copy_body.
+                if (isZeroWidth)
+                {
+                    screen.AddZeroWidthEscape(y, x, fragment.Text[charIndex..]);
+                    fragmentIndex++;
+                    charIndex = 0;
+                    continue;
+                }
+
                 for (int i = charIndex; i < fragment.Text.Length && !contentDone; i++)
                 {
                     var c = fragment.Text[i];
-                    var charWidth = isZeroWidth ? 0 : 1;
+                    var charWidth = 1;
 
                     // Wrap when the line width is exceeded (matching Python's _copy_body).
                     if (wrapLines && charWidth > 0 && x + charWidth > xPos + width)
@@ -747,6 +765,13 @@ public partial class Window : IContainer, IWindow
                             var wrapPrefixFragments = getLinePrefix(currentLine, wrapCount);
                             foreach (var prefixFragment in wrapPrefixFragments)
                             {
+                                // Zero-width escape fragments in wrap prefix.
+                                if (prefixFragment.Style.Contains("[ZeroWidthEscape]"))
+                                {
+                                    screen.AddZeroWidthEscape(y, x, prefixFragment.Text);
+                                    continue;
+                                }
+
                                 foreach (var pc in prefixFragment.Text)
                                 {
                                     if (x < xPos + width)

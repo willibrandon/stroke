@@ -271,21 +271,21 @@ public class Vt100ParserTests
     }
 
     [Fact]
-    public void Feed_BracketedPasteStart_OutputsBracketedPasteKey()
+    public void Feed_BracketedPasteStart_EntersPasteModeWithoutEmittingKey()
     {
+        // Per Python PTK: start marker enters paste mode silently, no key emitted.
         _parser.Feed("\x1b[200~");
 
-        Assert.Single(_keys);
-        Assert.Equal(Keys.BracketedPaste, _keys[0].Key);
+        Assert.Empty(_keys);
     }
 
     [Fact]
-    public void Feed_BracketedPasteEnd_OutputsBracketedPasteKey()
+    public void Feed_BracketedPasteEnd_IgnoredSilentlyWhenNotInPasteMode()
     {
+        // Stray end marker without a start — ignored silently.
         _parser.Feed("\x1b[201~");
 
-        Assert.Single(_keys);
-        Assert.Equal(Keys.BracketedPaste, _keys[0].Key);
+        Assert.Empty(_keys);
     }
 
     [Fact]
@@ -611,13 +611,13 @@ public class Vt100ParserTests
     public void Reset_WithRequest_ClearsPasteBuffer()
     {
         _parser.Feed("\x1b[200~paste");
-        Assert.Single(_keys); // BracketedPaste start marker
+        Assert.Empty(_keys); // Start marker enters paste mode silently
 
         _parser.Reset(request: true);
 
         // After reset, new content should be treated normally
         _parser.Feed("abc");
-        Assert.Equal(4, _keys.Count); // 1 from paste start + 3 from "abc"
+        Assert.Equal(3, _keys.Count); // 3 from "abc"
     }
 
     #endregion

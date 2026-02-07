@@ -161,6 +161,19 @@ public sealed class TextObject
             to -= 1;
         }
 
+        // Clamp positions to valid Document range. Python's Document allows
+        // negative cursor_position and relies on string slicing to clamp;
+        // Stroke's Document throws on out-of-range values.
+        var textLength = buffer.Text.Length;
+        from = Math.Clamp(from, 0, textLength);
+        to = Math.Clamp(to, 0, textLength);
+
+        // After clamping, if from == to, nothing to cut.
+        if (from == to && Type != TextObjectType.Linewise)
+        {
+            return (buffer.Document, new ClipboardData("", SelectionType));
+        }
+
         var document = new Document(
             buffer.Text,
             to,

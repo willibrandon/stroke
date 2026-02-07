@@ -359,11 +359,26 @@ public sealed class StdoutProxy : TextWriter
     /// Check whether an application is currently running in our captured session.
     /// Port of Python's <c>_get_app_loop()</c>.
     /// </summary>
+    /// <remarks>
+    /// Uses the same <c>Unsafe.As</c> pattern as <see cref="AppContext.GetAppOrNull"/>
+    /// because C# generic classes are invariant: <c>Application&lt;string&gt;</c> does
+    /// not match <c>Application&lt;object?&gt;</c> in a pattern match.
+    /// </remarks>
     private Application<object?>? GetAppOrNull()
     {
-        return _appSession.App is Application<object?> { IsRunning: true } app
-            ? app
-            : null;
+        var app = _appSession.App;
+        if (app is not null)
+        {
+            var appType = app.GetType();
+            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
+            {
+                var typedApp = System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
+                if (typedApp.IsRunning)
+                    return typedApp;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -391,10 +406,15 @@ public sealed class StdoutProxy : TextWriter
         if (GetAppOrNull() is not null)
         {
             // Application is running — use RunInTerminal to coordinate with renderer.
-            // Block synchronously: this is a dedicated thread, not a thread pool thread.
-            RunInTerminal.RunAsync(WriteAction, inExecutor: false)
-                .GetAwaiter()
-                .GetResult();
+            // The flush thread is a raw Thread, so the AsyncLocal<AppSession> doesn't
+            // flow from the creating thread. Temporarily activate our captured session
+            // so that RunInTerminal can find the running application.
+            using (AppContext.ActivateSession(_appSession))
+            {
+                RunInTerminal.RunAsync(WriteAction, inExecutor: false)
+                    .GetAwaiter()
+                    .GetResult();
+            }
         }
         else
         {

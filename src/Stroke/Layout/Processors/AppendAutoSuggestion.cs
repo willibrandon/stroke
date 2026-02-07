@@ -35,7 +35,15 @@ public sealed class AppendAutoSuggestion : IProcessor
             string suggestion;
             if (buffer.Suggestion is not null && ti.Document.IsCursorAtTheEnd)
             {
-                suggestion = buffer.Suggestion.Text;
+                var text = buffer.Suggestion.Text;
+
+                // When the document is multiline and the suggestion is also
+                // multiline, step aside entirely — a custom multiline processor
+                // (e.g. AppendMultilineAutoSuggestionInAnyLine) owns rendering.
+                if (ti.Document.LineCount > 1 && text.Contains('\n'))
+                    suggestion = "";
+                else
+                    suggestion = text;
             }
             else
             {
