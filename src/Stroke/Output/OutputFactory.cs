@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
+using Stroke.Core;
 using Stroke.Input.Posix;
+using Stroke.Output.Windows;
 
 namespace Stroke.Output;
 
@@ -41,6 +43,8 @@ public static class OutputFactory
     ///   <item><description>If stdout is redirected and <paramref name="alwaysPreferTty"/> is true
     ///   and stderr is a TTY, uses stderr via <see cref="Vt100Output"/></description></item>
     ///   <item><description>If stdout is redirected, returns <see cref="PlainTextOutput"/></description></item>
+    ///   <item><description>On Windows with VT100 support, returns <see cref="Windows10Output"/></description></item>
+    ///   <item><description>On Windows without VT100 support, returns <see cref="Win32Output"/></description></item>
     ///   <item><description>Otherwise returns <see cref="Vt100Output"/></description></item>
     /// </list>
     /// </remarks>
@@ -72,7 +76,22 @@ public static class OutputFactory
             return new PlainTextOutput(stdout);
         }
 
-        // Interactive terminal - use VT100
+        // Windows: use Win32-based output for proper console buffer integration.
+        // This matches Python PTK's create_output which creates Windows10_Output
+        // (VT100 rendering + Win32 console APIs) or Win32Output (legacy 16-color).
+        // Without this, Vt100Output relies on async CPR for cursor position queries,
+        // causing a double-render that pushes terminal content off screen.
+        if (OperatingSystem.IsWindows())
+        {
+            if (WindowsVt100Support.IsVt100Enabled())
+            {
+                return new Windows10Output(stdout);
+            }
+
+            return new Win32Output(stdout);
+        }
+
+        // Unix/macOS: use VT100
         return Vt100Output.FromPty(stdout);
     }
 
