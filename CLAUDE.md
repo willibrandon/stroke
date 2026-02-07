@@ -462,6 +462,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - N/A (examples only, in-memory) (064-fullscreen-examples)
 - C# 13 / .NET 10 + Stroke library (`../../src/Stroke/Stroke.csproj`) — all APIs already implemented (065-prompt-examples)
 - N/A (examples only; PersistentHistory uses temp file) (065-prompt-examples)
+- C# 13 / .NET 10+ + .NET BCL only — `System.Diagnostics.Process` (subprocess providers), `System.Runtime.InteropServices` (Win32 P/Invoke), `System.Threading.Lock` (thread safety) (066-system-clipboard)
+- N/A (in-memory caching of last-written ClipboardData only) (066-system-clipboard)
 
 ## Recent Changes
 
