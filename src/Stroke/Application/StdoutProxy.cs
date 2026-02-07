@@ -387,17 +387,17 @@ public sealed class StdoutProxy : TextWriter
     /// </summary>
     private void WriteAndFlush(string text)
     {
-        void WriteAction()
+        void WriteOutput(string data)
         {
             _output.EnableAutowrap();
 
             if (Raw)
             {
-                _output.WriteRaw(text);
+                _output.WriteRaw(data);
             }
             else
             {
-                _output.Write(text);
+                _output.Write(data);
             }
 
             _output.Flush();
@@ -405,21 +405,27 @@ public sealed class StdoutProxy : TextWriter
 
         if (GetAppOrNull() is not null)
         {
-            // Application is running — use RunInTerminal to coordinate with renderer.
+            // Application is running — terminal is in raw mode (OPOST disabled),
+            // so the terminal won't convert LF → CRLF. Do it explicitly so
+            // newlines return the cursor to column 0.
+            var outputText = text.Replace("\n", "\r\n");
+
+            // Use RunInTerminal to coordinate with renderer.
             // The flush thread is a raw Thread, so the AsyncLocal<AppSession> doesn't
             // flow from the creating thread. Temporarily activate our captured session
             // so that RunInTerminal can find the running application.
             using (AppContext.ActivateSession(_appSession))
             {
-                RunInTerminal.RunAsync(WriteAction, inExecutor: false)
+                RunInTerminal.RunAsync(() => WriteOutput(outputText), inExecutor: false)
                     .GetAwaiter()
                     .GetResult();
             }
         }
         else
         {
-            // No application running — write directly.
-            WriteAction();
+            // No application running — terminal not in raw mode, OPOST handles
+            // LF → CRLF translation. Write directly without conversion.
+            WriteOutput(text);
         }
     }
 }

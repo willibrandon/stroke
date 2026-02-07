@@ -120,13 +120,24 @@ public partial class PromptSession<TResult>
             });
 
         // Ctrl-C: keyboard interrupt
+        // Guard with try/catch: in .NET's async model, the accept handler's Exit()
+        // (from Enter key) can race with Ctrl-C. If Enter already set the result,
+        // Exit() throws InvalidOperationException — swallow it since the app is
+        // already exiting with the accepted input.
         kb.Add<KeyHandlerCallable>(
             [new KeyOrChar(Keys.ControlC)],
             filter: new FilterOrBool(defaultFocused))(
             (@event) =>
             {
-                var exception = (Exception)Activator.CreateInstance(InterruptException)!;
-                @event.GetApp().Exit(exception: exception, style: "class:aborting");
+                try
+                {
+                    var exception = (Exception)Activator.CreateInstance(InterruptException)!;
+                    @event.GetApp().Exit(exception: exception, style: "class:aborting");
+                }
+                catch (InvalidOperationException)
+                {
+                    // App already exiting (Enter raced with Ctrl-C) — ignore.
+                }
                 return null;
             });
 
@@ -135,8 +146,15 @@ public partial class PromptSession<TResult>
             [new KeyOrChar(Keys.SIGINT)])(
             (@event) =>
             {
-                var exception = (Exception)Activator.CreateInstance(InterruptException)!;
-                @event.GetApp().Exit(exception: exception, style: "class:aborting");
+                try
+                {
+                    var exception = (Exception)Activator.CreateInstance(InterruptException)!;
+                    @event.GetApp().Exit(exception: exception, style: "class:aborting");
+                }
+                catch (InvalidOperationException)
+                {
+                    // App already exiting — ignore.
+                }
                 return null;
             });
 

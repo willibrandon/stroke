@@ -19,30 +19,19 @@ public partial class Application<TResult>
     /// <param name="style">Style to apply to content on exit. Stored in <see cref="ExitStyle"/>.</param>
     /// <exception cref="InvalidOperationException">
     /// Thrown when the application is not running (message: "Application is not running") —
-    /// i.e., <see cref="RunAsync"/> has not been called or has already completed.
+    /// i.e., <see cref="RunAsync"/> has not been called or has already completed,
+    /// or when the result has already been set (message: "Result has already been set.").
     /// </exception>
-    /// <remarks>
-    /// <para>
-    /// If the result has already been set (e.g., Enter accepted input), subsequent Exit()
-    /// calls are silently ignored. This is a deliberate .NET adaptation: Python's single-
-    /// threaded event loop prevents concurrent Exit() calls, but .NET's async model allows
-    /// Ctrl-C/SIGINT to race with the accept handler's Exit(). Making Exit() idempotent
-    /// prevents crashes from these legitimate race conditions.
-    /// </para>
-    /// </remarks>
     public void Exit(
         TResult? result = default,
         Exception? exception = null,
         string style = "")
     {
-        // If the result has already been set, this is a duplicate Exit call (e.g., Ctrl-C
-        // racing with Enter's async accept handler). Silently ignore — the app is already
-        // exiting with the first result.
-        if (_future is not null && _future.Task.IsCompleted)
-            return;
-
         if (!_isRunning || _future is null)
             throw new InvalidOperationException("Application is not running.");
+
+        if (_future.Task.IsCompleted)
+            throw new InvalidOperationException("Result has already been set.");
 
         ExitStyle = style;
 
