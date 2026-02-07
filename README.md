@@ -21,11 +21,20 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Paragraph navigation
   - Bracket matching
   - Flyweight caching for memory efficiency
-- **Clipboard System** — Text storage with Emacs-style kill ring
+- **Clipboard System** — Text storage with Emacs-style kill ring and OS clipboard integration
   - `IClipboard` interface with SetData, GetData, SetText, Rotate
   - `InMemoryClipboard` with configurable kill ring size (default 60)
+  - `SystemClipboard` for OS clipboard synchronization via platform-specific providers
+    - macOS: `pbcopy`/`pbpaste`
+    - Windows: Win32 `OpenClipboard`/`SetClipboardData` P/Invoke
+    - Linux X11: `xclip` or `xsel`
+    - Linux Wayland: `wl-copy`/`wl-paste`
+    - WSL: `clip.exe`/`powershell.exe Get-Clipboard`
+  - `ClipboardProviderDetector` auto-detects platform and available tools
   - `DynamicClipboard` for runtime clipboard switching
   - `DummyClipboard` for disabled clipboard scenarios
+  - Selection type preservation (Characters, Lines, Block) across clipboard round-trips
+  - Best-effort error handling (write failures silently swallowed, read failures return empty)
   - Thread-safe operations
 - **Auto Suggest System** — History-based input suggestions
   - `ISuggestion` interface for suggestion providers
@@ -617,11 +626,62 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (51/129 complete)
-  - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
+- **Examples** — Port of Python Prompt Toolkit examples (102/129 complete)
+  - `accept-default` — Prompt with default value auto-accepted (`Stroke.Examples.Prompts`)
+  - `async-prompt` — Async prompt with background tasks (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
   - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
+  - `autocorrection` — Auto-correct common typos via key bindings (`Stroke.Examples.Prompts`)
+  - `bottom-toolbar` — Prompt with bottom toolbar display (`Stroke.Examples.Prompts`)
+  - `clock-input` — Prompt with live clock in toolbar (`Stroke.Examples.Prompts`)
+  - `colored-prompt` — Prompt with ANSI-colored prompt text (`Stroke.Examples.Prompts`)
+  - `confirmation-prompt` — Yes/no confirmation prompt (`Stroke.Examples.Prompts`)
+  - `cursor-shapes` — Different cursor shapes per editing mode (`Stroke.Examples.Prompts`)
+  - `custom-key-binding` — Custom key bindings with prompt (`Stroke.Examples.Prompts`)
+  - `custom-lexer` — Prompt with custom syntax highlighting (`Stroke.Examples.Prompts`)
+  - `custom-vi-operator` — Custom Vi operator implementation (`Stroke.Examples.Prompts`)
+  - `enforce-tty-input-output` — Force TTY even when redirected (`Stroke.Examples.Prompts`)
+  - `fancy-zsh-prompt` — Multi-segment Zsh-style prompt (`Stroke.Examples.Prompts`)
   - `fuzzy-word-completer` — Auto-completion while typing with fuzzy matching (`Stroke.Examples.Prompts`)
+  - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
+  - `get-input-vi-mode` — Single-line prompt with Vi editing mode (`Stroke.Examples.Prompts`)
+  - `get-input-with-default` — Prompt pre-filled with default text (`Stroke.Examples.Prompts`)
+  - `get-multiline-input` — Multi-line text input (`Stroke.Examples.Prompts`)
+  - `get-password` — Password input with hidden characters (`Stroke.Examples.Prompts`)
+  - `get-password-with-toggle` — Password with visibility toggle (`Stroke.Examples.Prompts`)
+  - `history/persistent-history` — File-backed command history (`Stroke.Examples.Prompts`)
+  - `history/slow-history` — History with simulated slow loading (`Stroke.Examples.Prompts`)
+  - `html-input` — Prompt with HTML-styled formatted text (`Stroke.Examples.Prompts`)
+  - `input-validation` — Input validation with error messages (`Stroke.Examples.Prompts`)
+  - `mouse-support` — Prompt with mouse click support (`Stroke.Examples.Prompts`)
+  - `multiline-autosuggest` — Auto-suggestion in multiline mode (`Stroke.Examples.Prompts`)
+  - `multiline-prompt` — Multi-line prompt with line continuations (`Stroke.Examples.Prompts`)
+  - `no-wrapping` — Prompt without line wrapping (`Stroke.Examples.Prompts`)
+  - `operate-and-get-next` — Readline operate-and-get-next behavior (`Stroke.Examples.Prompts`)
+  - `patch-stdout` — Background output while prompt is active (`Stroke.Examples.Prompts`)
+  - `placeholder-text` — Prompt with grayed placeholder text (`Stroke.Examples.Prompts`)
+  - `regular-language` — Completion from formal grammar (`Stroke.Examples.Prompts`)
+  - `right-prompt` — Right-aligned prompt text (`Stroke.Examples.Prompts`)
+  - `shell-integration` — Terminal shell integration sequences (`Stroke.Examples.Prompts`)
+  - `swap-light-dark-colors` — Toggle light/dark color scheme (`Stroke.Examples.Prompts`)
+  - `switch-vi-emacs` — Toggle between Vi and Emacs modes (`Stroke.Examples.Prompts`)
+  - `system-clipboard` — Emacs-style clipboard integration with OS clipboard (`Stroke.Examples.Prompts`)
+  - `system-prompt` — System-level prompt integration (`Stroke.Examples.Prompts`)
+  - `terminal-title` — Set terminal window title (`Stroke.Examples.Prompts`)
+  - `up-arrow-partial-match` — History search by prefix with up arrow (`Stroke.Examples.Prompts`)
+  - `with-frames/basic-frame` — Prompt wrapped in a frame border (`Stroke.Examples.Prompts`)
+  - `with-frames/frame-with-completion` — Framed prompt with completion menu (`Stroke.Examples.Prompts`)
+  - `with-frames/gray-frame-on-accept` — Frame that grays out on accept (`Stroke.Examples.Prompts`)
+  - `auto-completion/colored-completions` — Completions with colored display text (`Stroke.Examples.Prompts`)
+  - `auto-completion/control-space-trigger` — Manual completion trigger with Ctrl+Space (`Stroke.Examples.Prompts`)
+  - `auto-completion/formatted-completions` — Completions with formatted meta text (`Stroke.Examples.Prompts`)
+  - `auto-completion/fuzzy-custom-completer` — Fuzzy matching with custom completer (`Stroke.Examples.Prompts`)
+  - `auto-completion/merged-completers` — Multiple merged completion sources (`Stroke.Examples.Prompts`)
+  - `auto-completion/multi-column` — Multi-column completion menu layout (`Stroke.Examples.Prompts`)
+  - `auto-completion/multi-column-with-meta` — Multi-column completions with metadata (`Stroke.Examples.Prompts`)
+  - `auto-completion/nested-completion` — Hierarchical nested completion (`Stroke.Examples.Prompts`)
+  - `auto-completion/readline-style` — Readline-style inline completion (`Stroke.Examples.Prompts`)
+  - `auto-completion/slow-completions` — Async completions with loading indicator (`Stroke.Examples.Prompts`)
   - `hello-world` — Basic telnet prompt (`Stroke.Examples.Telnet`)
   - `chat-app` — Multi-client chat server (`Stroke.Examples.Telnet`)
   - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
@@ -669,7 +729,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `vertical-split` — Vertical split layout (`Stroke.Examples.FullScreen/SimpleDemos`)
   - `simple-example` — Basic scrollable pane (`Stroke.Examples.FullScreen/ScrollablePanes`)
   - `with-completion-menu` — Scrollable pane with completion menu (`Stroke.Examples.FullScreen/ScrollablePanes`)
-  - Remaining: 78 examples across 9 projects
+  - Remaining: 27 examples across 3 projects (PrintText, ProgressBar, Tutorial)
 
 ## Requirements
 

@@ -322,6 +322,30 @@ public class ApplicationLifecycleTests
     }
 
     [Fact]
+    public async Task Exit_AfterRunAsyncCompletes_ThrowsAlreadySet()
+    {
+        // Reproduces the race window from code review: after RunAsync cleanup sets
+        // _isRunning = false, _future is intentionally kept alive. A second Exit()
+        // must throw "Result has already been set." (not "Application is not running.").
+        var ct = TestContext.Current.CancellationToken;
+        using var input = new SimplePipeInput();
+        var output = new DummyOutput();
+
+        var app = new Application<object?>(input: input, output: output);
+
+        var runTask = app.RunAsync();
+        await Task.Delay(50, ct);
+
+        app.Exit(result: null);
+        await runTask;
+
+        // Now _isRunning is false and _future.Task.IsCompleted is true.
+        // The correct diagnostic is "Result has already been set."
+        var ex = Assert.Throws<InvalidOperationException>(() => app.Exit());
+        Assert.Equal("Result has already been set.", ex.Message);
+    }
+
+    [Fact]
     public async Task RunAsync_CanRunAgainAfterCompletion()
     {
         var ct = TestContext.Current.CancellationToken;

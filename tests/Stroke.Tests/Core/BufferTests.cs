@@ -849,4 +849,22 @@ public class BufferTests
     }
 
     #endregion
+
+    #region Property Getter Coverage
+
+    [Fact]
+    public void PreferredColumn_Default_IsNull()
+    {
+        var buffer = new Buffer();
+        Assert.Null(buffer.PreferredColumn);
+    }
+
+    [Fact]
+    public void HistorySearchText_Default_IsNull()
+    {
+        var buffer = new Buffer();
+        Assert.Null(buffer.HistorySearchText);
+    }
+
+    #endregion
 }

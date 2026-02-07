@@ -359,11 +359,26 @@ public sealed class StdoutProxy : TextWriter
     /// Check whether an application is currently running in our captured session.
     /// Port of Python's <c>_get_app_loop()</c>.
     /// </summary>
+    /// <remarks>
+    /// Uses the same <c>Unsafe.As</c> pattern as <see cref="AppContext.GetAppOrNull"/>
+    /// because C# generic classes are invariant: <c>Application&lt;string&gt;</c> does
+    /// not match <c>Application&lt;object?&gt;</c> in a pattern match.
+    /// </remarks>
     private Application<object?>? GetAppOrNull()
     {
-        return _appSession.App is Application<object?> { IsRunning: true } app
-            ? app
-            : null;
+        var app = _appSession.App;
+        if (app is not null)
+        {
+            var appType = app.GetType();
+            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
+            {
+                var typedApp = System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
+                if (typedApp.IsRunning)
+                    return typedApp;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -372,17 +387,17 @@ public sealed class StdoutProxy : TextWriter
     /// </summary>
     private void WriteAndFlush(string text)
     {
-        void WriteAction()
+        void WriteOutput(string data)
         {
             _output.EnableAutowrap();
 
             if (Raw)
             {
-                _output.WriteRaw(text);
+                _output.WriteRaw(data);
             }
             else
             {
-                _output.Write(text);
+                _output.Write(data);
             }
 
             _output.Flush();
@@ -391,15 +406,22 @@ public sealed class StdoutProxy : TextWriter
         if (GetAppOrNull() is not null)
         {
             // Application is running — use RunInTerminal to coordinate with renderer.
-            // Block synchronously: this is a dedicated thread, not a thread pool thread.
-            RunInTerminal.RunAsync(WriteAction, inExecutor: false)
-                .GetAwaiter()
-                .GetResult();
+            // OPOST remains enabled (matching Python Prompt Toolkit's raw_mode which
+            // never clears c_oflag), so the kernel handles LF → CRLF conversion.
+            // The flush thread is a raw Thread, so the AsyncLocal<AppSession> doesn't
+            // flow from the creating thread. Temporarily activate our captured session
+            // so that RunInTerminal can find the running application.
+            using (AppContext.ActivateSession(_appSession))
+            {
+                RunInTerminal.RunAsync(() => WriteOutput(text), inExecutor: false)
+                    .GetAwaiter()
+                    .GetResult();
+            }
         }
         else
         {
             // No application running — write directly.
-            WriteAction();
+            WriteOutput(text);
         }
     }
 }

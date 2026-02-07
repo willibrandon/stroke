@@ -128,8 +128,6 @@ public sealed partial class Vt100Input : IInput
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
 
-        bool startMonitor = false;
-
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(inputReadyCallback);
@@ -137,16 +135,14 @@ public sealed partial class Vt100Input : IInput
             // Enable non-blocking mode when attached
             _stdinReader.NonBlocking = true;
 
-            // Start the input monitor thread if this is the first callback
+            // Start the input monitor thread if this is the first callback.
+            // Must be inside the lock to prevent TOCTOU race where two concurrent
+            // Attach() calls both see _inputMonitorThread as null, both start a
+            // thread, and the second overwrites the first (leaking it).
             if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
             {
-                startMonitor = true;
+                StartInputMonitor();
             }
-        }
-
-        if (startMonitor)
-        {
-            StartInputMonitor();
         }
 
         return new AttachDisposable(this, inputReadyCallback);
@@ -254,6 +250,7 @@ public sealed partial class Vt100Input : IInput
     public IDisposable Detach()
     {
         Action? currentCallback;
+        bool stopMonitor = false;
 
         using (_callbackLock.EnterScope())
         {
@@ -262,12 +259,57 @@ public sealed partial class Vt100Input : IInput
 
             currentCallback = _callbackStack.Pop();
 
-            // Disable non-blocking mode if no more callbacks
+            // Disable non-blocking mode and stop monitor if no more callbacks
             if (_callbackStack.Count == 0)
+            {
                 _stdinReader.NonBlocking = false;
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
 
         return new ReattachDisposable(this, currentCallback);
+    }
+
+    /// <summary>
+    /// Reads a line from the terminal file descriptor using direct POSIX read(),
+    /// bypassing .NET's Console class which manages its own terminal state.
+    /// Used by RunSystemCommandAsync to wait for Enter after running
+    /// a system command.
+    /// </summary>
+    public unsafe void ReadLineFromFd()
+    {
+        // Read one byte at a time until we get a newline.
+        // We're in cooked mode here, so the kernel line-buffers and we'll
+        // get the full line when Enter is pressed. But we read byte-by-byte
+        // to be safe with partial reads.
+        var buf = new byte[1];
+
+        fixed (byte* ptr = buf)
+        {
+            while (true)
+            {
+                nint bytesRead = PosixStdinReader.PosixRead(_fd, ptr, 1);
+                int errno = Marshal.GetLastPInvokeError();
+
+                if (bytesRead <= 0)
+                {
+                    if (bytesRead < 0)
+                    {
+                        if (errno == EINTR)
+                            continue; // Retry on EINTR
+                    }
+                    break; // EOF or error
+                }
+
+                if (buf[0] == (byte)'\n' || buf[0] == (byte)'\r')
+                    break;
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -338,6 +380,13 @@ public sealed partial class Vt100Input : IInput
         {
             _callbackStack.Push(callback);
             _stdinReader.NonBlocking = true;
+
+            // Restart the monitor thread if it was stopped during Detach.
+            // Must be inside the lock to prevent TOCTOU race (see Attach()).
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
+            {
+                StartInputMonitor();
+            }
         }
     }
 

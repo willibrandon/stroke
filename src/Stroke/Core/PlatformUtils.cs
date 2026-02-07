@@ -48,6 +48,35 @@ public static partial class PlatformUtils
     public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
     /// <summary>
+    /// Gets a value indicating whether the application is running inside Windows Subsystem for Linux.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if <c>/proc/version</c> contains "microsoft" (case-insensitive); otherwise, <c>false</c>.
+    /// Returns <c>false</c> on non-Linux platforms or if <c>/proc/version</c> is unreadable.
+    /// </value>
+    public static bool IsWsl => _isWsl.Value;
+
+    private static readonly Lazy<bool> _isWsl = new(DetectWsl);
+
+    private static bool DetectWsl()
+    {
+        if (!IsLinux)
+        {
+            return false;
+        }
+
+        try
+        {
+            var version = File.ReadAllText("/proc/version");
+            return version.Contains("microsoft", StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Gets a value indicating whether suspend-to-background (SIGTSTP) is supported.
     /// </summary>
     /// <value>

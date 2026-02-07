@@ -141,8 +141,9 @@ public unsafe class RawModeIntegrationTests
         Assert.Equal(0u, raw.c_iflag & Termios.ICRNL);
         Assert.Equal(0u, raw.c_iflag & Termios.IXON);
 
-        // Verify output flags cleared
-        Assert.Equal(0u, raw.c_oflag & Termios.OPOST);
+        // Verify output flags are NOT modified (matches Python Prompt Toolkit's
+        // raw_mode which never touches c_oflag — OPOST stays enabled)
+        Assert.NotEqual(0u, raw.c_oflag & Termios.OPOST);
 
         // Verify local flags cleared
         Assert.Equal(0u, raw.c_lflag & Termios.ECHO);

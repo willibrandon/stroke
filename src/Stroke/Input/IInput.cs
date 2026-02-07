@@ -164,6 +164,27 @@ public interface IInput : IDisposable
     string TypeaheadHash();
 
     /// <summary>
+    /// Reads a line directly from the underlying file descriptor/handle,
+    /// bypassing .NET's Console class. Used to wait for Enter after running
+    /// a system command while the application is suspended.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// On POSIX, .NET's <c>Console.ReadLine()</c> internally manages terminal
+    /// state via termios, which conflicts with <see cref="CookedMode"/> changes.
+    /// This method uses direct POSIX <c>read()</c> to avoid that conflict.
+    /// </para>
+    /// <para>
+    /// The default implementation falls back to <c>Console.ReadLine()</c> for
+    /// platforms or implementations where direct fd reading is not available.
+    /// </para>
+    /// </remarks>
+    void ReadLineFromFd()
+    {
+        Console.ReadLine();
+    }
+
+    /// <summary>
     /// Closes the input.
     /// </summary>
     /// <remarks>

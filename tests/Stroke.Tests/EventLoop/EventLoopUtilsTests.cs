@@ -721,6 +721,39 @@ public sealed class EventLoopUtilsTests : IDisposable
 
     #endregion
 
+    #region PostOrFallback Exception Paths
+
+    [Fact]
+    public void CallSoonThreadSafe_SyncContextPostThrows_FallsBackToImmediateExecution()
+    {
+        var executed = false;
+        var context = new ThrowingSynchronizationContext();
+        SynchronizationContext.SetSynchronizationContext(context);
+
+        EventLoopUtils.CallSoonThreadSafe(() => { executed = true; });
+
+        // Post threw, so the action should have been invoked immediately as fallback
+        Assert.True(executed);
+    }
+
+    [Fact]
+    public void CallSoonThreadSafe_ZeroDeadline_SyncContextPostThrows_FallsBackToImmediateExecution()
+    {
+        var executed = false;
+        var context = new ThrowingSynchronizationContext();
+        SynchronizationContext.SetSynchronizationContext(context);
+
+        // Zero deadline takes the immediate-post path (postponeMs <= 0),
+        // which uses PostOrFallback(syncContext, action) directly.
+        EventLoopUtils.CallSoonThreadSafe(
+            () => { executed = true; },
+            TimeSpan.Zero);
+
+        Assert.True(executed);
+    }
+
+    #endregion
+
     #region Test Helper: TestSynchronizationContext
 
     /// <summary>
@@ -777,6 +810,27 @@ public sealed class EventLoopUtilsTests : IDisposable
                 PumpOne();
                 iterations++;
             }
+        }
+    }
+
+    #endregion
+
+    #region Test Helper: ThrowingSynchronizationContext
+
+    /// <summary>
+    /// A <see cref="SynchronizationContext"/> that always throws on Post,
+    /// simulating a disposed or broken context.
+    /// </summary>
+    private sealed class ThrowingSynchronizationContext : SynchronizationContext
+    {
+        public override void Post(SendOrPostCallback d, object? state)
+        {
+            throw new ObjectDisposedException("SyncContext disposed");
+        }
+
+        public override void Send(SendOrPostCallback d, object? state)
+        {
+            throw new ObjectDisposedException("SyncContext disposed");
         }
     }
 

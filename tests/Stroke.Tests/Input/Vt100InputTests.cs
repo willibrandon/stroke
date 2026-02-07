@@ -318,27 +318,27 @@ public class Vt100InputTests
     }
 
     [Fact]
-    public void ReadKeys_BracketedPasteStart_ReturnsBracketedPasteKey()
+    public void ReadKeys_BracketedPasteStart_EntersPasteModeWithoutEmittingKey()
     {
         using var pipe = InputFactory.CreatePipe();
         pipe.SendText("\x1b[200~");
 
         var keys = pipe.ReadKeys();
 
-        Assert.Single(keys);
-        Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        // Start marker enters paste mode silently — no key emitted.
+        Assert.Empty(keys);
     }
 
     [Fact]
-    public void ReadKeys_BracketedPasteEnd_ReturnsBracketedPasteKey()
+    public void ReadKeys_BracketedPasteEnd_IgnoredWhenNotInPasteMode()
     {
         using var pipe = InputFactory.CreatePipe();
         pipe.SendText("\x1b[201~");
 
         var keys = pipe.ReadKeys();
 
-        Assert.Single(keys);
-        Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        // Stray end marker without a start — ignored silently.
+        Assert.Empty(keys);
     }
 
     #endregion

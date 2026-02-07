@@ -174,6 +174,26 @@ public sealed class CursorShapeTests
 
     #endregion
 
+    #region Invalid Enum Values
+
+    [Fact]
+    public void GetDecscusrCode_InvalidEnumValue_ReturnsNull()
+    {
+        var result = ((CursorShape)999).GetDecscusrCode();
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetEscapeSequence_InvalidEnumValue_ReturnsNull()
+    {
+        var result = ((CursorShape)999).GetEscapeSequence();
+
+        Assert.Null(result);
+    }
+
+    #endregion
+
     #region DECSCUSR Code Correctness
 
     /// <summary>

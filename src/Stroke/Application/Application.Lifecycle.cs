@@ -18,25 +18,20 @@ public partial class Application<TResult>
     /// <param name="exception">Exception to throw from RunAsync.</param>
     /// <param name="style">Style to apply to content on exit. Stored in <see cref="ExitStyle"/>.</param>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when: (1) the result has already been set (message: "Result has already been set") —
-    /// i.e., <see cref="Exit"/> was already called; or
-    /// (2) the application is not running (message: "Application is not running") —
-    /// i.e., <see cref="RunAsync"/> has not been called or has already completed.
+    /// Thrown when the application is not running (message: "Application is not running") —
+    /// i.e., <see cref="RunAsync"/> has not been called or has already completed,
+    /// or when the result has already been set (message: "Result has already been set.").
     /// </exception>
-    /// <remarks>
-    /// The "Result has already been set" check is performed first because after Exit() sets the
-    /// result, RunAsync may clear <c>_isRunning</c> before a second Exit() call executes.
-    /// Checking the future first produces the correct diagnostic regardless of cleanup timing.
-    /// </remarks>
     public void Exit(
         TResult? result = default,
         Exception? exception = null,
         string style = "")
     {
-        // Check this first: after Exit() completes the future, RunAsync proceeds to cleanup
-        // and may clear _isRunning before a second Exit() call. The "result already set"
-        // diagnostic is the correct one regardless of cleanup timing.
-        if (_future is not null && _future.Task.IsCompleted)
+        // Check IsCompleted FIRST: during RunAsync cleanup, _isRunning may already
+        // be false while _future is still alive (see RunAsync's outer finally block).
+        // Checking _isRunning first would yield the wrong diagnostic ("not running"
+        // instead of "already set") in that race window.
+        if (_future?.Task.IsCompleted == true)
             throw new InvalidOperationException("Result has already been set.");
 
         if (!_isRunning || _future is null)
@@ -175,8 +170,17 @@ public partial class Application<TResult>
             {
                 Output.Write($"\r\n{waitText}");
                 Output.Flush();
-                // Wait for enter key in cooked mode
-                Console.ReadLine();
+
+                // Wait for Enter in cooked mode.
+                // Python uses a sub-application (PromptSession) here to avoid
+                // blocking the event loop and to share I/O. We use direct fd
+                // reading instead: on POSIX, Vt100Input.ReadLineFromFd() calls
+                // read() on the terminal fd, bypassing .NET's Console class which
+                // manages its own termios state and conflicts with our CookedMode.
+                // On Windows, the default IInput.ReadLineFromFd() falls through
+                // to Console.ReadLine(), which is safe since Windows has no
+                // termios conflict.
+                Input.ReadLineFromFd();
             }
         }
     }
@@ -246,4 +250,5 @@ public partial class Application<TResult>
         result.Sort();
         return result;
     }
+
 }

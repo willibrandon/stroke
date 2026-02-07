@@ -138,8 +138,6 @@ public sealed class Win32Input : IInput
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
 
-        bool startMonitor = false;
-
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(inputReadyCallback);
@@ -148,15 +146,13 @@ public sealed class Win32Input : IInput
             // Also restart if _monitorRunning is false — this handles the race where
             // StopInputMonitor() set the flag but the thread hasn't exited yet,
             // which would cause the new callback to never be invoked.
+            // Must be inside the lock to prevent TOCTOU race where two concurrent
+            // Attach() calls both see the thread as null/dead, both start a thread,
+            // and the second overwrites the first (leaking it).
             if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive || !_monitorRunning)
             {
-                startMonitor = true;
+                StartInputMonitor();
             }
-        }
-
-        if (startMonitor)
-        {
-            StartInputMonitor();
         }
 
         return new AttachDisposable(this, inputReadyCallback);
@@ -166,6 +162,7 @@ public sealed class Win32Input : IInput
     public IDisposable Detach()
     {
         Action? currentCallback;
+        bool stopMonitor = false;
 
         using (_callbackLock.EnterScope())
         {
@@ -173,6 +170,17 @@ public sealed class Win32Input : IInput
                 return NoOpDisposable.Instance;
 
             currentCallback = _callbackStack.Pop();
+
+            // Stop monitor if no more callbacks
+            if (_callbackStack.Count == 0)
+            {
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
 
         return new ReattachDisposable(this, currentCallback);
@@ -450,6 +458,13 @@ public sealed class Win32Input : IInput
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(callback);
+
+            // Restart the monitor thread if it was stopped during Detach.
+            // Must be inside the lock to prevent TOCTOU race (see Attach()).
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive || !_monitorRunning)
+            {
+                StartInputMonitor();
+            }
         }
     }
 

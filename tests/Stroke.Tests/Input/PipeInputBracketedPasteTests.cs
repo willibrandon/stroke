@@ -10,29 +10,27 @@ namespace Stroke.Tests.Input;
 public class PipeInputBracketedPasteTests
 {
     [Fact]
-    public void BracketedPasteStart_Detected()
+    public void BracketedPasteStart_EntersPasteModeWithoutEmittingKey()
     {
         using var pipe = InputFactory.CreatePipe();
         pipe.SendText("\x1b[200~");
 
         var keys = pipe.ReadKeys();
 
-        Assert.Single(keys);
-        Assert.Equal(Keys.BracketedPaste, keys[0].Key);
-        Assert.Equal("\x1b[200~", keys[0].Data);
+        // Start marker enters paste mode silently — no key emitted.
+        Assert.Empty(keys);
     }
 
     [Fact]
-    public void BracketedPasteEnd_Detected()
+    public void BracketedPasteEnd_IgnoredWhenNotInPasteMode()
     {
         using var pipe = InputFactory.CreatePipe();
         pipe.SendText("\x1b[201~");
 
         var keys = pipe.ReadKeys();
 
-        Assert.Single(keys);
-        Assert.Equal(Keys.BracketedPaste, keys[0].Key);
-        Assert.Equal("\x1b[201~", keys[0].Data);
+        // Stray end marker without a start — ignored silently.
+        Assert.Empty(keys);
     }
 
     [Fact]
@@ -44,10 +42,10 @@ public class PipeInputBracketedPasteTests
 
         var keys = pipe.ReadKeys();
 
-        // Should get: BracketedPaste start, then content as BracketedPaste with content
-        // The exact behavior depends on implementation - let's verify we at least detect it
-        Assert.True(keys.Count >= 1);
+        // Should get exactly one BracketedPaste key with the pasted content
+        Assert.Single(keys);
         Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        Assert.Equal("hello world", keys[0].Data);
     }
 
     [Fact]
@@ -58,10 +56,12 @@ public class PipeInputBracketedPasteTests
 
         var keys = pipe.ReadKeys();
 
-        // "before" should be 6 chars, then bracketed paste, then "after" 5 chars
-        Assert.True(keys.Count >= 1);
-        // First chars should be "before"
+        // "before" = 6 char keys, then 1 BracketedPaste, then "after" = 5 char keys
+        Assert.Equal(12, keys.Count);
         Assert.Equal("b", keys[0].Data);
+        Assert.Equal(Keys.BracketedPaste, keys[6].Key);
+        Assert.Equal("pasted", keys[6].Data);
+        Assert.Equal("a", keys[7].Data);
     }
 
     [Fact]
@@ -74,8 +74,9 @@ public class PipeInputBracketedPasteTests
         var keys = pipe.ReadKeys();
 
         // The escape sequence inside paste should be treated as paste content, not parsed
-        Assert.True(keys.Count >= 1);
+        Assert.Single(keys);
         Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        Assert.Equal("\x1b[A", keys[0].Data);
     }
 
     [Fact]
@@ -86,8 +87,10 @@ public class PipeInputBracketedPasteTests
 
         var keys = pipe.ReadKeys();
 
-        // Empty paste still produces key events
-        Assert.True(keys.Count >= 1);
+        // Empty paste produces one BracketedPaste key with empty content
+        Assert.Single(keys);
+        Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        Assert.Equal("", keys[0].Data);
     }
 
     [Fact]
@@ -98,7 +101,8 @@ public class PipeInputBracketedPasteTests
 
         var keys = pipe.ReadKeys();
 
-        Assert.True(keys.Count >= 1);
+        Assert.Single(keys);
         Assert.Equal(Keys.BracketedPaste, keys[0].Key);
+        Assert.Equal("line1\nline2\nline3", keys[0].Data);
     }
 }

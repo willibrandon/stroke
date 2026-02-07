@@ -244,9 +244,25 @@ public class BufferControl : IUIControl
             menuPos = TranslateRowCol(row, col);
         }
 
+        // Extend line count for multiline suggestions so that processors
+        // can render suggestion lines below the cursor even when the cursor
+        // is on the last document line.  Lexers already return empty fragments
+        // for lineNo >= document.LineCount, so the processors will see empty
+        // fragments and can replace them with suggestion content.
+        var lineCount = document.LineCount;
+        if (_buffer.Suggestion is { Text: { } suggestionText } && suggestionText.Contains('\n'))
+        {
+            var suggestionLineCount = suggestionText.Split('\n').Length;
+            var cursorRow = document.CursorPositionRow;
+            var linesAfterCursor = lineCount - cursorRow - 1;
+            var extraLinesNeeded = suggestionLineCount - 1 - linesAfterCursor;
+            if (extraLinesNeeded > 0)
+                lineCount += extraLinesNeeded;
+        }
+
         return new UIContent(
             getLine: GetLine,
-            lineCount: document.LineCount,
+            lineCount: lineCount,
             cursorPosition: cursorPosition,
             menuPosition: menuPos,
             showCursor: true);

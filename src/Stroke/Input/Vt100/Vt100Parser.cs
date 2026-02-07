@@ -102,18 +102,20 @@ public sealed class Vt100Parser
             // First character is ESC
             _feedKeyCallback(new KeyPress(Keys.Escape, "\x1b"));
 
-            // Remaining characters are literal
+            // Remaining characters: route through ground state logic
+            // so control characters (e.g. \r from Esc+Enter) are correctly
+            // emitted as their proper Keys (e.g. Keys.ControlM).
             for (int i = 1; i < buffered.Length; i++)
             {
-                EmitCharacter(buffered[i]);
+                EmitCharacterOrControl(buffered[i]);
             }
         }
         else
         {
-            // All characters are literal
+            // All characters: route through ground state logic
             foreach (char c in buffered)
             {
-                EmitCharacter(c);
+                EmitCharacterOrControl(c);
             }
         }
     }
@@ -404,10 +406,12 @@ public sealed class Vt100Parser
 
     private bool TryEmitCsiSequence(string sequence)
     {
-        // Check for bracketed paste start/end first
+        // Check for bracketed paste start/end first.
+        // Per Python PTK: start marker enters paste mode silently (no key emitted).
+        // Only the end marker (via ProcessBracketedPasteChar) emits the BracketedPaste key
+        // with the actual pasted content as data.
         if (sequence == BracketedPasteStart)
         {
-            _feedKeyCallback(new KeyPress(Keys.BracketedPaste, sequence));
             _inBracketedPaste = true;
             _pasteBuffer.Clear();
             return true;
@@ -415,7 +419,7 @@ public sealed class Vt100Parser
 
         if (sequence == BracketedPasteEnd)
         {
-            _feedKeyCallback(new KeyPress(Keys.BracketedPaste, sequence));
+            // Stray end marker without a start — ignore silently.
             return true;
         }
 
@@ -533,6 +537,20 @@ public sealed class Vt100Parser
         // The Application layer's ConvertKeyPress method will convert this to a
         // character-based KeyOrChar for proper binding matching.
         _feedKeyCallback(new KeyPress(Keys.Any, c.ToString()));
+    }
+
+    private void EmitCharacterOrControl(char c)
+    {
+        // Route through the same logic as ground state: control characters
+        // get their proper Keys enum value, printable characters get Keys.Any.
+        if (c < 32 || c == '\x7f')
+        {
+            EmitControlCharacter(c);
+        }
+        else
+        {
+            EmitCharacter(c);
+        }
     }
 
     /// <summary>

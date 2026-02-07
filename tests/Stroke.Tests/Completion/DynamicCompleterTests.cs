@@ -106,6 +106,31 @@ public sealed class DynamicCompleterTests
 
     #endregion
 
+    #region ToString
+
+    [Fact]
+    public void ToString_ContainsClassName()
+    {
+        var inner = new WordCompleter(["test"]);
+        var dynamic = new DynamicCompleter(() => inner);
+
+        var str = dynamic.ToString()!;
+
+        Assert.Contains("DynamicCompleter", str);
+    }
+
+    [Fact]
+    public void ToString_NullResolver_ContainsDynamicCompleter()
+    {
+        var dynamic = new DynamicCompleter(() => null);
+
+        var str = dynamic.ToString()!;
+
+        Assert.Contains("DynamicCompleter", str);
+    }
+
+    #endregion
+
     #region Callback Called Each Time
 
     [Fact]
