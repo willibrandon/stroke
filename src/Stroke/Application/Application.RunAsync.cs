@@ -712,7 +712,7 @@ public partial class Application<TResult>
     /// </remarks>
     private void OnResize()
     {
-        Renderer.Erase(leaveAlternateScreen: false);
+        Renderer.ResetForResize();
         Renderer.RequestAbsoluteCursorPosition();
         Invalidate();
     }

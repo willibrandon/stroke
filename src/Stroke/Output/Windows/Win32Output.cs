@@ -780,6 +780,22 @@ public sealed partial class Win32Output : IOutput, IDisposable
 
     #endregion
 
+    #region Synchronized Output
+
+    /// <inheritdoc />
+    public void BeginSynchronizedOutput()
+    {
+        // No-op on Win32 console (no equivalent to DEC Mode 2026)
+    }
+
+    /// <inheritdoc />
+    public void EndSynchronizedOutput()
+    {
+        // No-op on Win32 console (no equivalent to DEC Mode 2026)
+    }
+
+    #endregion
+
     #region IDisposable
 
     /// <summary>

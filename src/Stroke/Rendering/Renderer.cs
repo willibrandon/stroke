@@ -284,38 +284,47 @@ public sealed class Renderer
             screen.AppendStyleToContent(exitStyle);
         }
 
-        // Process diff and write to output
-        var (newCursorPos, newLastStyle) = ScreenDiff.OutputScreenDiff(
-            app,
-            output,
-            screen,
-            _cursorPos,
-            app.ColorDepth,
-            _lastScreen,
-            _lastStyle,
-            isDone,
-            fullScreen: _fullScreen,
-            attrsForStyleString: _attrsForStyle,
-            styleStringHasStyle: _styleStringHasStyle,
-            size: size,
-            previousWidth: _lastSize?.Columns ?? 0);
-
-        _cursorPos = newCursorPos;
-        _lastStyle = newLastStyle;
-        _lastScreen = screen;
-        _lastSize = size;
-        MouseHandlers = mouseHandlers;
-
-        // Handle cursor shapes
-        var newCursorShape = app.Cursor.GetCursorShape();
-        if (_lastCursorShape is null || _lastCursorShape != newCursorShape)
+        // Wrap screen diff and flush in synchronized output block
+        output.BeginSynchronizedOutput();
+        try
         {
-            output.SetCursorShape(newCursorShape);
-            _lastCursorShape = newCursorShape;
-        }
+            // Process diff and write to output
+            var (newCursorPos, newLastStyle) = ScreenDiff.OutputScreenDiff(
+                app,
+                output,
+                screen,
+                _cursorPos,
+                app.ColorDepth,
+                _lastScreen,
+                _lastStyle,
+                isDone,
+                fullScreen: _fullScreen,
+                attrsForStyleString: _attrsForStyle,
+                styleStringHasStyle: _styleStringHasStyle,
+                size: size,
+                previousWidth: _lastSize?.Columns ?? 0);
 
-        // Flush buffered output
-        output.Flush();
+            _cursorPos = newCursorPos;
+            _lastStyle = newLastStyle;
+            _lastScreen = screen;
+            _lastSize = size;
+            MouseHandlers = mouseHandlers;
+
+            // Handle cursor shapes
+            var newCursorShape = app.Cursor.GetCursorShape();
+            if (_lastCursorShape is null || _lastCursorShape != newCursorShape)
+            {
+                output.SetCursorShape(newCursorShape);
+                _lastCursorShape = newCursorShape;
+            }
+
+            // Flush buffered output
+            output.Flush();
+        }
+        finally
+        {
+            output.EndSynchronizedOutput();
+        }
 
         // Set visible windows in layout
         layout.SetVisibleWindows(screen.VisibleWindows.OfType<Window>().ToList());
@@ -334,13 +343,21 @@ public sealed class Renderer
     {
         var output = _output;
 
-        output.CursorBackward(_cursorPos.X);
-        output.CursorUp(_cursorPos.Y);
-        output.EraseDown();
-        output.ResetAttributes();
-        output.EnableAutowrap();
+        output.BeginSynchronizedOutput();
+        try
+        {
+            output.CursorBackward(_cursorPos.X);
+            output.CursorUp(_cursorPos.Y);
+            output.EraseDown();
+            output.ResetAttributes();
+            output.EnableAutowrap();
 
-        output.Flush();
+            output.Flush();
+        }
+        finally
+        {
+            output.EndSynchronizedOutput();
+        }
 
         Reset(leaveAlternateScreen: leaveAlternateScreen);
     }
@@ -350,13 +367,28 @@ public sealed class Renderer
     /// </summary>
     public void Clear()
     {
-        Erase();
-
         var output = _output;
-        output.EraseScreen();
-        output.CursorGoto(0, 0);
-        output.Flush();
 
+        output.BeginSynchronizedOutput();
+        try
+        {
+            // Inline erase logic (avoid nested sync blocks with Erase())
+            output.CursorBackward(_cursorPos.X);
+            output.CursorUp(_cursorPos.Y);
+            output.EraseDown();
+            output.ResetAttributes();
+            output.EnableAutowrap();
+
+            output.EraseScreen();
+            output.CursorGoto(0, 0);
+            output.Flush();
+        }
+        finally
+        {
+            output.EndSynchronizedOutput();
+        }
+
+        Reset();
         RequestAbsoluteCursorPosition();
     }
 
@@ -401,6 +433,30 @@ public sealed class Renderer
         _output.ResetCursorShape();
         _output.ShowCursor();
         _output.Flush();
+    }
+
+    /// <summary>
+    /// Resets renderer state for a terminal resize without performing any terminal I/O.
+    /// The actual erase and redraw happen during the next <see cref="Render"/> call,
+    /// inside a synchronized output block to prevent flicker.
+    /// </summary>
+    /// <remarks>
+    /// This method only modifies in-memory state. It does NOT write any escape sequences
+    /// to the terminal. This is critical for flicker-free resize: the erase and redraw
+    /// are deferred to the next Render() call where they occur atomically inside a
+    /// synchronized output block.
+    /// </remarks>
+    public void ResetForResize()
+    {
+        _cursorPos = new Point(0, 0);
+        _lastScreen = null;
+        _lastSize = null;
+        _lastStyle = null;
+        _lastCursorShape = null;
+        MouseHandlers = new MouseHandlers();
+        _minAvailableHeight = 0;
+        _cursorKeyModeReset = false;
+        _mouseSupportEnabled = false;
     }
 
     /// <summary>

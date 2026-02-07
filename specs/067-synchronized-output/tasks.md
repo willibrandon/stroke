@@ -19,7 +19,7 @@
 
 **Purpose**: Branch creation and orientation
 
-- [ ] T001 Create feature branch `067-synchronized-output` from `main`
+- [X] T001 Create feature branch `067-synchronized-output` from `main`
 
 ---
 
@@ -29,9 +29,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T002 Add `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to the `IOutput` interface in `src/Stroke/Output/IOutput.cs` per contract `contracts/ioutput-extension.md` (FR-001). Add XML doc comments. This will cause build errors in all 6 implementations — that is expected and resolved in subsequent tasks.
-- [ ] T003 Implement `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` in `src/Stroke/Output/Vt100Output.cs` (FR-002, FR-003, FR-015, FR-016, NFR-004). Add `private bool _synchronizedOutput` field (defaults to false). Begin sets flag to true under `_lock`, End sets to false under `_lock`. Lock held only for flag mutation duration. Both methods are idempotent.
-- [ ] T004 Modify `Flush()` in `src/Stroke/Output/Vt100Output.cs` to check `_synchronizedOutput` flag. When true and buffer is non-empty, prepend `\x1b[?2026h` and append `\x1b[?2026l` to the concatenated buffer content before writing to `_stdout`. When false or buffer is empty, behavior is unchanged (FR-002, FR-003).
+- [X] T002 Add `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to the `IOutput` interface in `src/Stroke/Output/IOutput.cs` per contract `contracts/ioutput-extension.md` (FR-001). Add XML doc comments. This will cause build errors in all 6 implementations — that is expected and resolved in subsequent tasks.
+- [X] T003 Implement `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` in `src/Stroke/Output/Vt100Output.cs` (FR-002, FR-003, FR-015, FR-016, NFR-004). Add `private bool _synchronizedOutput` field (defaults to false). Begin sets flag to true under `_lock`, End sets to false under `_lock`. Lock held only for flag mutation duration. Both methods are idempotent.
+- [X] T004 Modify `Flush()` in `src/Stroke/Output/Vt100Output.cs` to check `_synchronizedOutput` flag. When true and buffer is non-empty, prepend `\x1b[?2026h` and append `\x1b[?2026l` to the concatenated buffer content before writing to `_stdout`. When false or buffer is empty, behavior is unchanged (FR-002, FR-003).
 
 **Checkpoint**: Vt100Output now supports synchronized output. Build still fails on other IOutput implementations (expected — resolved in US4 phase). Run Vt100Output-specific tests to verify no regressions.
 
@@ -47,11 +47,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T005 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/DummyOutput.cs` (FR-006)
-- [ ] T006 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/PlainTextOutput.cs` (FR-005). Mode 2026 sequences must never appear in plain text output.
-- [ ] T007 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/Win32Output.cs` (FR-004)
-- [ ] T008 [P] [US4] Add delegating `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/Windows10Output.cs` — delegate to `_vt100Output` (FR-007)
-- [ ] T009 [P] [US4] Add delegating `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/ConEmuOutput.cs` — delegate to `_vt100Output` (FR-008)
+- [X] T005 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/DummyOutput.cs` (FR-006)
+- [X] T006 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/PlainTextOutput.cs` (FR-005). Mode 2026 sequences must never appear in plain text output.
+- [X] T007 [P] [US4] Add no-op `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/Win32Output.cs` (FR-004)
+- [X] T008 [P] [US4] Add delegating `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/Windows10Output.cs` — delegate to `_vt100Output` (FR-007)
+- [X] T009 [P] [US4] Add delegating `BeginSynchronizedOutput()` and `EndSynchronizedOutput()` to `src/Stroke/Output/Windows/ConEmuOutput.cs` — delegate to `_vt100Output` (FR-008)
 
 **Checkpoint**: Full build succeeds (`dotnet build src/Stroke/Stroke.csproj`). All IOutput implementations satisfy the interface. Run full test suite to verify zero regressions (NFR-003).
 
@@ -65,12 +65,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Add `ResetForResize()` method to `src/Stroke/Rendering/Renderer.cs` per contract `contracts/renderer-extension.md` (FR-013). Reset all 9 state fields to initial values: `_cursorPos` to origin, `_lastScreen` to null, `_lastSize` to null, `_lastStyle` to null, `_lastCursorShape` to null, `MouseHandlers` to new empty instance, `_minAvailableHeight` to zero, `_cursorKeyModeReset` to false, `_mouseSupportEnabled` to false. No terminal I/O.
-- [ ] T011 [US1] Change `OnResize()` in `src/Stroke/Application/Application.RunAsync.cs` to call `Renderer.ResetForResize()` instead of `Renderer.Erase(leaveAlternateScreen: false)` (FR-012). Keep `Renderer.RequestAbsoluteCursorPosition()` and `Invalidate()` calls.
-- [ ] T012 [US1] Change the full-redraw path in `src/Stroke/Rendering/Renderer.Diff.cs` to use absolute cursor positioning `output.WriteRaw("\x1b[H")` instead of `MoveCursor(new Point(0, 0))` when `isDone`, `previousScreen is null`, or `previousWidth != width` (FR-014). Update `currentPos` to `new Point(0, 0)` after the write.
-- [ ] T013 [US1] Wrap `Renderer.Render()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-009, FR-017). Place begin after setup operations (alternate screen, bracketed paste, cursor key mode, mouse support) and before screen diff. Place end in finally block after flush. Per contract `contracts/renderer-extension.md`.
-- [ ] T014 [US1] Wrap `Renderer.Erase()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-010, FR-017). Per contract.
-- [ ] T015 [US1] Wrap `Renderer.Clear()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-011, FR-017). Inline erase logic — do NOT delegate to `Erase()` to avoid nested sync blocks. Per contract.
+- [X] T010 [US1] Add `ResetForResize()` method to `src/Stroke/Rendering/Renderer.cs` per contract `contracts/renderer-extension.md` (FR-013). Reset all 9 state fields to initial values: `_cursorPos` to origin, `_lastScreen` to null, `_lastSize` to null, `_lastStyle` to null, `_lastCursorShape` to null, `MouseHandlers` to new empty instance, `_minAvailableHeight` to zero, `_cursorKeyModeReset` to false, `_mouseSupportEnabled` to false. No terminal I/O.
+- [X] T011 [US1] Change `OnResize()` in `src/Stroke/Application/Application.RunAsync.cs` to call `Renderer.ResetForResize()` instead of `Renderer.Erase(leaveAlternateScreen: false)` (FR-012). Keep `Renderer.RequestAbsoluteCursorPosition()` and `Invalidate()` calls.
+- [X] T012 [US1] Change the full-redraw path in `src/Stroke/Rendering/Renderer.Diff.cs` to use absolute cursor positioning `output.WriteRaw("\x1b[H")` instead of `MoveCursor(new Point(0, 0))` when `isDone`, `previousScreen is null`, or `previousWidth != width` (FR-014). Update `currentPos` to `new Point(0, 0)` after the write.
+- [X] T013 [US1] Wrap `Renderer.Render()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-009, FR-017). Place begin after setup operations (alternate screen, bracketed paste, cursor key mode, mouse support) and before screen diff. Place end in finally block after flush. Per contract `contracts/renderer-extension.md`.
+- [X] T014 [US1] Wrap `Renderer.Erase()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-010, FR-017). Per contract.
+- [X] T015 [US1] Wrap `Renderer.Clear()` in `src/Stroke/Rendering/Renderer.cs` with `BeginSynchronizedOutput()`/`EndSynchronizedOutput()` using try/finally (FR-011, FR-017). Inline erase logic — do NOT delegate to `Erase()` to avoid nested sync blocks. Per contract.
 
 **Checkpoint**: Build succeeds. Full test suite passes (NFR-003). Resize no longer calls `Erase()` directly. The full-redraw path uses `\x1b[H` instead of relative movement. All render/erase/clear operations are wrapped in synchronized output blocks with try/finally.
 
@@ -84,7 +84,7 @@
 
 ### Tests for User Story 2
 
-- [ ] T016 [US2] Create `tests/Stroke.Tests/Output/Vt100OutputSynchronizedOutputTests.cs` with xUnit tests (NFR-004, NFR-005). Use `StringWriter` as stdout for output capture. Test cases:
+- [X] T016 [US2] Create `tests/Stroke.Tests/Output/Vt100OutputSynchronizedOutputTests.cs` with xUnit tests (NFR-004, NFR-005). Use `StringWriter` as stdout for output capture. Test cases:
   - Begin sets flag, Flush wraps output in `\x1b[?2026h`...`\x1b[?2026l` markers (FR-002, SC-002)
   - End clears flag, Flush emits no markers (FR-003)
   - Empty buffer produces no markers even when flag is set (FR-002 empty-buffer behavior)
@@ -107,7 +107,7 @@
 
 ### Tests for User Story 3
 
-- [ ] T017 [US3] Create `tests/Stroke.Tests/Rendering/RendererSynchronizedOutputTests.cs` with xUnit tests (NFR-005). Test cases cover both renderer wrapping (shared US1/US2 infrastructure) and graceful degradation (US3-specific):
+- [X] T017 [US3] Create `tests/Stroke.Tests/Rendering/RendererSynchronizedOutputTests.cs` with xUnit tests (NFR-005). Test cases cover both renderer wrapping (shared US1/US2 infrastructure) and graceful degradation (US3-specific):
   - **Renderer wrapping (shared infrastructure — verifies US1/US2 behavior):**
     - Render wraps output in sync markers (capture via Vt100Output + StringWriter) (FR-009, SC-008)
     - Erase wraps output in sync markers (FR-010, SC-008)
@@ -128,9 +128,9 @@
 
 **Purpose**: Full regression verification and visual confirmation
 
-- [ ] T018 Run full test suite (`dotnet test tests/Stroke.Tests/Stroke.Tests.csproj`) — all 9,311+ existing tests must pass with zero regressions (NFR-003, SC-006)
-- [ ] T019 Run quickstart.md validation: build with `dotnet build src/Stroke/Stroke.csproj`, run sync-specific tests with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~SynchronizedOutput"`
-- [ ] T020 Visual verification via TUI driver (SC-001, SC-007): launch a representative set of Stroke examples (at minimum: `get-input`, `fancy-zsh-prompt`, `full-screen/calculator`, `full-screen/text-editor`), resize the terminal for each, and confirm no visible blank frame or flicker. Compare with `main` branch behavior. A full sweep of all 102+ examples is deferred to CI; this task verifies the key interaction patterns (simple prompt, live-updating prompt, full-screen app).
+- [X] T018 Run full test suite (`dotnet test tests/Stroke.Tests/Stroke.Tests.csproj`) — all 9,311+ existing tests must pass with zero regressions (NFR-003, SC-006)
+- [X] T019 Run quickstart.md validation: build with `dotnet build src/Stroke/Stroke.csproj`, run sync-specific tests with `dotnet test tests/Stroke.Tests/Stroke.Tests.csproj --filter "FullyQualifiedName~SynchronizedOutput"`
+- [X] T020 Visual verification via TUI driver (SC-001, SC-007): launch a representative set of Stroke examples (at minimum: `get-input`, `fancy-zsh-prompt`, `full-screen/calculator`, `full-screen/text-editor`), resize the terminal for each, and confirm no visible blank frame or flicker. Compare with `main` branch behavior. A full sweep of all 102+ examples is deferred to CI; this task verifies the key interaction patterns (simple prompt, live-updating prompt, full-screen app).
 
 ---
 

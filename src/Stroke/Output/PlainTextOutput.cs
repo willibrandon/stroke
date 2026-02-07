@@ -336,6 +336,22 @@ public sealed class PlainTextOutput : IOutput
 
     #endregion
 
+    #region Synchronized Output
+
+    /// <inheritdoc/>
+    public void BeginSynchronizedOutput()
+    {
+        // No-op for plain text
+    }
+
+    /// <inheritdoc/>
+    public void EndSynchronizedOutput()
+    {
+        // No-op for plain text
+    }
+
+    #endregion
+
     #region Windows-Specific
 
     /// <inheritdoc/>

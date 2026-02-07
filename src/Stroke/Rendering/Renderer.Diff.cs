@@ -154,7 +154,8 @@ internal static class ScreenDiff
         // When the previous screen has a different size, redraw everything anyway
         if (isDone || previousScreen is null || previousWidth != width)
         {
-            currentPos = MoveCursor(new Point(0, 0));
+            output.WriteRaw("\x1b[H");
+            currentPos = new Point(0, 0);
             ResetAttributes();
             output.EraseDown();
             previousScreen = new Screen();
