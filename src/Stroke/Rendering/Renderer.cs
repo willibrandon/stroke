@@ -457,6 +457,7 @@ public sealed class Renderer
         _minAvailableHeight = 0;
         _cursorKeyModeReset = false;
         _mouseSupportEnabled = false;
+        _bracketedPasteEnabled = false;
     }
 
     /// <summary>
