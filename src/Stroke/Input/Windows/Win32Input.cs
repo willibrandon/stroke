@@ -50,8 +50,12 @@ public sealed class Win32Input : IInput
             return;
         }
 
-        // Check if VT100 mode is available (Windows 10 1511+)
-        _useVt100Mode = TryEnableVt100Mode();
+        // Probe whether VT100 input mode is available (Windows 10 1511+).
+        // This only tests capability — it does NOT permanently enable VT100.
+        // VT100 mode is activated/deactivated inside Win32RawMode, matching
+        // Python Prompt Toolkit's design where raw_mode.__enter__/__exit__
+        // manages the VT100 flag lifecycle.
+        _useVt100Mode = IsVt100InputSupported();
 
         if (_useVt100Mode)
         {
@@ -122,7 +126,7 @@ public sealed class Win32Input : IInput
     public IDisposable RawMode()
     {
         ThrowIfDisposed();
-        return new Win32RawMode();
+        return new Win32RawMode(useVt100Input: _useVt100Mode);
     }
 
     /// <inheritdoc/>
@@ -243,18 +247,32 @@ public sealed class Win32Input : IInput
     }
 
     /// <summary>
-    /// Attempts to enable VT100 input mode on Windows Console.
+    /// Probes whether VT100 input mode is supported on this console.
+    /// Tests the capability and immediately restores the original mode.
     /// </summary>
-    /// <returns>True if VT100 mode was enabled; false otherwise.</returns>
-    private bool TryEnableVt100Mode()
+    /// <returns>True if VT100 input mode is supported; false otherwise.</returns>
+    /// <remarks>
+    /// Port of Python Prompt Toolkit's <c>_is_win_vt100_input_enabled()</c>.
+    /// VT100 mode is only activated inside <see cref="Win32RawMode"/>,
+    /// not permanently in the constructor, to avoid leaking modified console
+    /// state to the parent shell on exit.
+    /// </remarks>
+    private bool IsVt100InputSupported()
     {
-        if (!ConsoleApi.GetConsoleMode(_handle, out uint mode))
+        if (!ConsoleApi.GetConsoleMode(_handle, out uint originalMode))
             return false;
 
-        // Try to enable virtual terminal input
-        uint newMode = mode | ConsoleApi.ENABLE_VIRTUAL_TERMINAL_INPUT;
-
-        return ConsoleApi.SetConsoleMode(_handle, newMode);
+        try
+        {
+            // Try to enable virtual terminal input
+            uint newMode = originalMode | ConsoleApi.ENABLE_VIRTUAL_TERMINAL_INPUT;
+            return ConsoleApi.SetConsoleMode(_handle, newMode);
+        }
+        finally
+        {
+            // Always restore the original mode — this is just a probe.
+            ConsoleApi.SetConsoleMode(_handle, originalMode);
+        }
     }
 
     /// <summary>

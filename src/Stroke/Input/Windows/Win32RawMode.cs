@@ -36,7 +36,11 @@ public sealed class Win32RawMode : IDisposable
     /// Initializes a new instance of the <see cref="Win32RawMode"/> class
     /// and puts the console into raw mode.
     /// </summary>
-    public Win32RawMode()
+    /// <param name="useVt100Input">
+    /// When true, enable <c>ENABLE_VIRTUAL_TERMINAL_INPUT</c> for VT100
+    /// escape sequence processing. Should only be true on Windows 10 1511+.
+    /// </param>
+    public Win32RawMode(bool useVt100Input = false)
     {
         _handle = ConsoleApi.GetStdHandle(ConsoleApi.STD_INPUT_HANDLE);
 
@@ -55,10 +59,14 @@ public sealed class Win32RawMode : IDisposable
             return;
         }
 
-        // Calculate raw mode flags
+        // Calculate raw mode flags: clear echo, line input, processed input.
+        // Conditionally enable VT100 input (matching Python's raw_mode._patch()).
         uint rawMode = _originalMode;
         rawMode &= ~ConsoleApi.RAW_MODE_CLEAR_FLAGS;
-        rawMode |= ConsoleApi.RAW_MODE_SET_FLAGS;
+        if (useVt100Input)
+        {
+            rawMode |= ConsoleApi.ENABLE_VIRTUAL_TERMINAL_INPUT;
+        }
 
         // Apply raw mode
         if (!ConsoleApi.SetConsoleMode(_handle, rawMode))
