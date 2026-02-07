@@ -21,11 +21,20 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Paragraph navigation
   - Bracket matching
   - Flyweight caching for memory efficiency
-- **Clipboard System** — Text storage with Emacs-style kill ring
+- **Clipboard System** — Text storage with Emacs-style kill ring and OS clipboard integration
   - `IClipboard` interface with SetData, GetData, SetText, Rotate
   - `InMemoryClipboard` with configurable kill ring size (default 60)
+  - `SystemClipboard` for OS clipboard synchronization via platform-specific providers
+    - macOS: `pbcopy`/`pbpaste`
+    - Windows: Win32 `OpenClipboard`/`SetClipboardData` P/Invoke
+    - Linux X11: `xclip` or `xsel`
+    - Linux Wayland: `wl-copy`/`wl-paste`
+    - WSL: `clip.exe`/`powershell.exe Get-Clipboard`
+  - `ClipboardProviderDetector` auto-detects platform and available tools
   - `DynamicClipboard` for runtime clipboard switching
   - `DummyClipboard` for disabled clipboard scenarios
+  - Selection type preservation (Characters, Lines, Block) across clipboard round-trips
+  - Best-effort error handling (write failures silently swallowed, read failures return empty)
   - Thread-safe operations
 - **Auto Suggest System** — History-based input suggestions
   - `ISuggestion` interface for suggestion providers
@@ -617,11 +626,12 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (51/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (52/129 complete)
   - `get-input` — Simple single-line prompt (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
   - `autocompletion` — Tab completion with WordCompleter (`Stroke.Examples.Prompts`)
   - `fuzzy-word-completer` — Auto-completion while typing with fuzzy matching (`Stroke.Examples.Prompts`)
+  - `system-clipboard` — Emacs-style clipboard integration with OS clipboard (`Stroke.Examples.Prompts`)
   - `hello-world` — Basic telnet prompt (`Stroke.Examples.Telnet`)
   - `chat-app` — Multi-client chat server (`Stroke.Examples.Telnet`)
   - `dialog` — Yes/No dialog demo (`Stroke.Examples.Telnet`)
@@ -669,7 +679,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `vertical-split` — Vertical split layout (`Stroke.Examples.FullScreen/SimpleDemos`)
   - `simple-example` — Basic scrollable pane (`Stroke.Examples.FullScreen/ScrollablePanes`)
   - `with-completion-menu` — Scrollable pane with completion menu (`Stroke.Examples.FullScreen/ScrollablePanes`)
-  - Remaining: 78 examples across 9 projects
+  - Remaining: 77 examples across 9 projects
 
 ## Requirements
 

@@ -8,9 +8,9 @@ namespace Stroke.Examples.Prompts;
 /// Port of Python Prompt Toolkit's system-clipboard-integration.py example.
 /// </summary>
 /// <remarks>
-/// The Python version uses PyperclipClipboard. In Stroke, the InMemoryClipboard
-/// is used as the clipboard implementation. In a real application, you could
-/// implement IClipboard to integrate with the system clipboard.
+/// The Python version uses PyperclipClipboard. Stroke uses SystemClipboard
+/// which delegates to platform-specific clipboard mechanisms (pbcopy/pbpaste
+/// on macOS, Win32 API on Windows, xclip/xsel/wl-clipboard on Linux).
 /// </remarks>
 public static class SystemClipboard
 {
@@ -26,7 +26,7 @@ public static class SystemClipboard
         {
             var answer = Prompt.RunPrompt(
                 "Give me some input: ",
-                clipboard: new InMemoryClipboard());
+                clipboard: new Stroke.Clipboard.SystemClipboard());
             Console.WriteLine($"You said: {answer}");
         }
         catch (KeyboardInterruptException)
