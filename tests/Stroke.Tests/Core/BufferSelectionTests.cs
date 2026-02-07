@@ -554,4 +554,55 @@ public class BufferSelectionTests
     }
 
     #endregion
+
+    #region JoinSelectedLines Tests
+
+    [Fact]
+    public void JoinSelectedLines_NoSelection_DoesNothing()
+    {
+        var buffer = new Buffer(document: new Document("hello\nworld"));
+
+        buffer.JoinSelectedLines();
+
+        Assert.Equal("hello\nworld", buffer.Text);
+    }
+
+    [Fact]
+    public void JoinSelectedLines_WithSelection_JoinsLines()
+    {
+        var buffer = new Buffer(document: new Document("hello\nworld\nfoo", cursorPosition: 0));
+        buffer.StartSelection();
+        buffer.CursorPosition = 11; // Select "hello\nworld"
+
+        buffer.JoinSelectedLines();
+
+        Assert.Contains("hello world", buffer.Text);
+        Assert.Null(buffer.SelectionState);
+    }
+
+    [Fact]
+    public void JoinSelectedLines_CustomSeparator_UsesIt()
+    {
+        var buffer = new Buffer(document: new Document("hello\nworld\nfoo", cursorPosition: 0));
+        buffer.StartSelection();
+        buffer.CursorPosition = 11; // Select "hello\nworld"
+
+        buffer.JoinSelectedLines(separator: ", ");
+
+        Assert.Contains("hello, world", buffer.Text);
+    }
+
+    [Fact]
+    public void JoinSelectedLines_MultipleLines_JoinsAll()
+    {
+        var buffer = new Buffer(document: new Document("a\nb\nc\nd", cursorPosition: 0));
+        buffer.StartSelection();
+        buffer.CursorPosition = 7; // Select all
+
+        buffer.JoinSelectedLines();
+
+        Assert.Contains("a b c d", buffer.Text);
+    }
+
+    #endregion
 }

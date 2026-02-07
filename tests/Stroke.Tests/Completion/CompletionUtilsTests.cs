@@ -163,6 +163,43 @@ public sealed class CompletionUtilsTests
 
     #endregion
 
+    #region GetCommonSuffix With Negative StartPosition
+
+    [Fact]
+    public void GetCommonSuffix_NegativeStartPosition_MatchingPrefix_ReturnsSuffix()
+    {
+        // Document is "hel", completions replace "hel" (-3) with full words.
+        // "hel".EndsWith("hel") is true, so both pass the filter.
+        // GetSuffix extracts: "hello"[3..] = "lo", "hellos"[3..] = "los"
+        // Common prefix of "lo" and "los" = "lo"
+        var document = new Document("hel");
+        var completions = new[]
+        {
+            new CompletionItem("hello", startPosition: -3),
+            new CompletionItem("hellos", startPosition: -3)
+        };
+
+        var suffix = CompletionUtils.GetCommonCompleteSuffix(document, completions);
+
+        Assert.Equal("lo", suffix);
+    }
+
+    [Fact]
+    public void GetCommonSuffix_NegativeStartPosition_SingleCompletion_ReturnsFullSuffix()
+    {
+        var document = new Document("hel");
+        var completions = new[]
+        {
+            new CompletionItem("hello", startPosition: -3) // suffix = "lo"
+        };
+
+        var suffix = CompletionUtils.GetCommonCompleteSuffix(document, completions);
+
+        Assert.Equal("lo", suffix);
+    }
+
+    #endregion
+
     #region GetCommonSuffix No Common
 
     [Fact]

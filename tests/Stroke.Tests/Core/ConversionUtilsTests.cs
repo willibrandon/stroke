@@ -186,6 +186,157 @@ public class ConversionUtilsTests
 
     #endregion
 
+    [Fact]
+    public void ToStr_NestedFunc_InnerReturnsNull_ReturnsEmptyString()
+    {
+        Func<Func<string?>?> nested = () => null;
+        Assert.Equal("", ConversionUtils.ToStr(nested));
+    }
+
+    [Fact]
+    public void ToStr_NullNestedFunc_ReturnsEmptyString()
+    {
+        Func<Func<string?>?>? nested = null;
+        Assert.Equal("", ConversionUtils.ToStr(nested));
+    }
+
+    [Fact]
+    public void ToInt_ObjectThatIsFuncInt_InvokesFunc()
+    {
+        object obj = (Func<int>)(() => 99);
+        Assert.Equal(99, ConversionUtils.ToInt(obj));
+    }
+
+    #region AnyFloat Tests
+
+    [Fact]
+    public void AnyFloat_GetHashCode_DefaultValue_ReturnsZero()
+    {
+        AnyFloat value = default;
+        Assert.Equal(0, value.GetHashCode());
+    }
+
+    [Fact]
+    public void AnyFloat_GetHashCode_ConcreteValue_ReturnsDoubleHashCode()
+    {
+        AnyFloat value = 3.14;
+        Assert.Equal(3.14.GetHashCode(), value.GetHashCode());
+    }
+
+    [Fact]
+    public void AnyFloat_GetHashCode_Getter_ReturnsGetterHashCode()
+    {
+        Func<double> getter = () => 1.0;
+        AnyFloat value = getter;
+        Assert.Equal(getter.GetHashCode(), value.GetHashCode());
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_BothDefault_AreEqual()
+    {
+        AnyFloat a = default;
+        AnyFloat b = default;
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_OneDefault_NotEqual()
+    {
+        AnyFloat a = default;
+        AnyFloat b = 1.0;
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_BothSameConcreteValue_AreEqual()
+    {
+        AnyFloat a = 5.5;
+        AnyFloat b = 5.5;
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_DifferentConcreteValues_NotEqual()
+    {
+        AnyFloat a = 5.5;
+        AnyFloat b = 6.6;
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_BothSameGetter_AreEqual()
+    {
+        Func<double> getter = () => 1.0;
+        AnyFloat a = getter;
+        AnyFloat b = getter;
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_DifferentGetters_NotEqual()
+    {
+        AnyFloat a = (Func<double>)(() => 1.0);
+        AnyFloat b = (Func<double>)(() => 1.0);
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_Equals_ConcreteVsGetter_NotEqual()
+    {
+        AnyFloat a = 1.0;
+        AnyFloat b = (Func<double>)(() => 1.0);
+        Assert.False(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_EqualsObject_BoxedAnyFloat_ReturnsTrue()
+    {
+        AnyFloat a = 5.5;
+        object b = (AnyFloat)5.5;
+        Assert.True(a.Equals(b));
+    }
+
+    [Fact]
+    public void AnyFloat_EqualsObject_NonAnyFloat_ReturnsFalse()
+    {
+        AnyFloat a = 5.5;
+        Assert.False(a.Equals("not an AnyFloat"));
+    }
+
+    [Fact]
+    public void AnyFloat_EqualityOperator_Equal_ReturnsTrue()
+    {
+        AnyFloat a = 5.5;
+        AnyFloat b = 5.5;
+        Assert.True(a == b);
+    }
+
+    [Fact]
+    public void AnyFloat_InequalityOperator_Different_ReturnsTrue()
+    {
+        AnyFloat a = 5.5;
+        AnyFloat b = 6.6;
+        Assert.True(a != b);
+    }
+
+    [Fact]
+    public void AnyFloat_ExplicitCast_ReturnsValue()
+    {
+        AnyFloat f = 7.7;
+        double d = (double)f;
+        Assert.Equal(7.7, d);
+    }
+
+    [Fact]
+    public void AnyFloat_Value_FromGetter_InvokesGetter()
+    {
+        Func<double> getter = () => 42.0;
+        AnyFloat value = getter;
+        Assert.Equal(42.0, value.Value);
+    }
+
+    #endregion
+
     #region Test Helpers
 
     private sealed class TestObject(string value)

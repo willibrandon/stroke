@@ -285,6 +285,75 @@ public sealed class NestedCompleterTests
 
     #endregion
 
+    #region FromNestedDict Error Handling
+
+    [Fact]
+    public void FromNestedDict_UnsupportedValueType_ThrowsArgumentException()
+    {
+        var data = new Dictionary<string, object?>
+        {
+            ["cmd"] = 42 // int is not a supported value type
+        };
+
+        Assert.Throws<ArgumentException>(() => NestedCompleter.FromNestedDict(data));
+    }
+
+    #endregion
+
+    #region Sub-Completer Case-Insensitive Delegation
+
+    [Fact]
+    public void GetCompletions_CaseInsensitive_DelegatesToSubCompleterWithDifferentCase()
+    {
+        var subCompleter = new WordCompleter(["details", "dump"]);
+        var options = new Dictionary<string, ICompleter?>
+        {
+            ["Show"] = subCompleter
+        };
+        var completer = new NestedCompleter(options, ignoreCase: true);
+
+        var completions = GetCompletions(completer, "show de");
+
+        Assert.Single(completions);
+        Assert.Equal("details", completions[0].Text);
+    }
+
+    [Fact]
+    public void GetCompletions_CaseSensitive_DoesNotDelegateWithDifferentCase()
+    {
+        var subCompleter = new WordCompleter(["details"]);
+        var options = new Dictionary<string, ICompleter?>
+        {
+            ["Show"] = subCompleter
+        };
+        var completer = new NestedCompleter(options, ignoreCase: false);
+
+        var completions = GetCompletions(completer, "show de");
+
+        Assert.Empty(completions);
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_ContainsClassName()
+    {
+        var options = new Dictionary<string, ICompleter?>
+        {
+            ["a"] = null,
+            ["b"] = null
+        };
+        var completer = new NestedCompleter(options);
+
+        var str = completer.ToString()!;
+        Assert.Contains("NestedCompleter", str);
+        Assert.Contains("2", str);
+    }
+
+    #endregion
+
     #region Interface Implementation
 
     [Fact]

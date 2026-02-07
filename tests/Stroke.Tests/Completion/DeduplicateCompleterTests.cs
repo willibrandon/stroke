@@ -149,6 +149,98 @@ public sealed class DeduplicateCompleterTests
 
     #endregion
 
+    #region Async Tests
+
+    [Fact]
+    public async Task GetCompletionsAsync_DuplicatesRemoved()
+    {
+        var inner = new ManualCompleter([
+            new CompletionItem("hello"),
+            new CompletionItem("hello")
+        ]);
+        var dedup = new DeduplicateCompleter(inner);
+
+        var completions = await CollectAsync(dedup, "", TestContext.Current.CancellationToken);
+
+        Assert.Single(completions);
+        Assert.Equal("hello", completions[0].Text);
+    }
+
+    [Fact]
+    public async Task GetCompletionsAsync_NoChangeCompletions_Skipped()
+    {
+        var inner = new ManualCompleter([
+            new CompletionItem("hello", startPosition: -5),
+            new CompletionItem("world")
+        ]);
+        var dedup = new DeduplicateCompleter(inner);
+
+        var completions = await CollectAsync(dedup, "hello", TestContext.Current.CancellationToken);
+
+        Assert.Single(completions);
+        Assert.Equal("world", completions[0].Text);
+    }
+
+    [Fact]
+    public async Task GetCompletionsAsync_OrderPreserved()
+    {
+        var inner = new ManualCompleter([
+            new CompletionItem("alpha"),
+            new CompletionItem("beta"),
+            new CompletionItem("alpha"),
+            new CompletionItem("gamma"),
+        ]);
+        var dedup = new DeduplicateCompleter(inner);
+
+        var completions = await CollectAsync(dedup, "", TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, completions.Count);
+        Assert.Equal("alpha", completions[0].Text);
+        Assert.Equal("beta", completions[1].Text);
+        Assert.Equal("gamma", completions[2].Text);
+    }
+
+    [Fact]
+    public async Task GetCompletionsAsync_UniqueCompletions_PassThrough()
+    {
+        var inner = new ManualCompleter([
+            new CompletionItem("one"),
+            new CompletionItem("two"),
+            new CompletionItem("three")
+        ]);
+        var dedup = new DeduplicateCompleter(inner);
+
+        var completions = await CollectAsync(dedup, "", TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, completions.Count);
+    }
+
+    private static async Task<List<CompletionItem>> CollectAsync(
+        ICompleter completer, string text, CancellationToken ct = default)
+    {
+        var result = new List<CompletionItem>();
+        await foreach (var c in completer.GetCompletionsAsync(new Document(text), new CompleteEvent(), ct))
+        {
+            result.Add(c);
+        }
+        return result;
+    }
+
+    #endregion
+
+    #region ToString
+
+    [Fact]
+    public void ToString_IncludesWrappedCompleter()
+    {
+        var inner = new WordCompleter(["test"]);
+        var dedup = new DeduplicateCompleter(inner);
+
+        Assert.Contains("DeduplicateCompleter", dedup.ToString());
+    }
+
+    #endregion
+
     #region Helper Classes
 
     private sealed class ManualCompleter : CompleterBase

@@ -120,6 +120,18 @@ public sealed class ModalCursorShapeConfigTests
 
     #endregion
 
+    #region Unknown Editing Mode
+
+    [Fact]
+    public void GetCursorShape_UnknownEditingMode_ReturnsNeverChange()
+    {
+        var config = new ModalCursorShapeConfig(() => (EditingMode)999);
+
+        Assert.Equal(CursorShape.NeverChange, config.GetCursorShape());
+    }
+
+    #endregion
+
     #region Constructor Validation
 
     [Fact]
