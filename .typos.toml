@@ -17,6 +17,15 @@ OnExceptionRaised = "OnExceptionRaised"
 [default.extend-words]
 # Technical terms that are not typos
 nd = "nd"
+# Autocorrection example: intentional misspellings used as dictionary keys
+impotr = "impotr"
+improt = "improt"
+wolrd = "wolrd"
+wrold = "wrold"
+teh = "teh"
+hte = "hte"
+# ANSI escape sequence "\x1b[4mis\x1b[0m" — typos sees "mis" but it's "is" after underline code
+mis = "mis"
 # Hex color codes (valid CSS colors, not typos)
 daa = "daa"
 ba = "ba"

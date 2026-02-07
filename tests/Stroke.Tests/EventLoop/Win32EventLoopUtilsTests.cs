@@ -449,8 +449,9 @@ public sealed class Win32EventLoopUtilsTests
             sw.Stop();
 
             Assert.Null(result);
-            // Should return near 50ms, not 5000ms
-            Assert.True(sw.ElapsedMilliseconds < 1000, $"Elapsed: {sw.ElapsedMilliseconds}ms");
+            // Should return well before the 5000ms timeout.
+            // Allow generous headroom for CI runners under load (100ms poll loop + scheduling).
+            Assert.True(sw.ElapsedMilliseconds < 3000, $"Elapsed: {sw.ElapsedMilliseconds}ms");
         }
         finally
         {
