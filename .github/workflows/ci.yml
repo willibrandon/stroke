@@ -38,11 +38,15 @@ jobs:
         with:
           config: ./.typos.toml
 
+      - name: Install clipboard tools
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y xclip xvfb
+
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
       - name: Test with coverage
-        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+        run: ${{ matrix.os == 'ubuntu-latest' && 'xvfb-run' || '' }} dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
       - name: Verify coverage threshold
         if: matrix.os == 'ubuntu-latest'
