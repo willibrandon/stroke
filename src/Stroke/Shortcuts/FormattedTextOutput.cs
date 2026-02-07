@@ -115,7 +115,7 @@ public static class FormattedTextOutput
         if (output is null)
         {
             output = file is not null
-                ? OutputFactory.Create(stdout: file)
+                ? OutputFactory.CreateFromStream(file)
                 : Stroke.Application.AppContext.GetAppSession().Output;
         }
 
@@ -194,7 +194,7 @@ public static class FormattedTextOutput
         bool includeDefaultPygmentsStyle = true)
     {
         var output = file is not null
-            ? OutputFactory.Create(stdout: file)
+            ? OutputFactory.CreateFromStream(file)
             : Stroke.Application.AppContext.GetAppSession().Output;
 
         using var input = new DummyInput();
