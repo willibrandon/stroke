@@ -376,6 +376,35 @@ public interface IOutput
 
     #endregion
 
+    #region Synchronized Output
+
+    /// <summary>
+    /// Begins a synchronized output region. The terminal buffers all subsequent
+    /// output until <see cref="EndSynchronizedOutput"/> is called.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// On VT100-based outputs, this sets an internal flag that causes the next
+    /// <see cref="Flush"/> to wrap its content in DEC Mode 2026 markers.
+    /// On non-VT100 outputs, this is a no-op.
+    /// </para>
+    /// </remarks>
+    void BeginSynchronizedOutput();
+
+    /// <summary>
+    /// Ends a synchronized output region. The terminal commits all buffered
+    /// output atomically.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// On VT100-based outputs, this clears the synchronized output flag.
+    /// On non-VT100 outputs, this is a no-op.
+    /// </para>
+    /// </remarks>
+    void EndSynchronizedOutput();
+
+    #endregion
+
     #region Windows-Specific (Optional)
 
     /// <summary>

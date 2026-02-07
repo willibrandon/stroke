@@ -175,6 +175,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `ICursorShapeConfig` with modal Vi/Emacs cursor shape support
   - `OutputFactory` for platform detection (TTY vs redirected)
   - `FlushStdout` helper for immediate write-and-flush operations
+  - Synchronized output (DEC Mode 2026) for atomic frame commits — terminals buffer all output between begin/end markers and paint as a single frame; unsupported terminals silently ignore the sequences *(documented deviation: not present in Python Prompt Toolkit)*
   - Thread-safe operations (85.7% test coverage)
 - **Key Bindings System** — Extensible key binding infrastructure for terminal input handling
   - `IKeyBindings` interface with binding lookup and prefix matching
@@ -263,7 +264,8 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `Application<TResult>` with `RunAsync`/`Run` lifecycle and generic result type
   - Channel-based event loop for thread-safe redraws (bounded channel with coalescing)
   - Action channel for marshaling flush timeout and SIGINT callbacks to the event loop
-  - `Renderer` with differential screen updates (compares previous/current screen, emits only changes)
+  - `Renderer` with differential screen updates (compares previous/current screen, emits only changes) and synchronized output wrapping (all render/erase/clear wrapped in DEC Mode 2026 for flicker-free display)
+  - Flicker-free terminal resize via `ResetForResize()` — defers screen clear to next render cycle instead of immediate erase, eliminating visible blank frames during resize *(documented deviation: not present in Python Prompt Toolkit)*
   - `KeyProcessor` state machine for key binding dispatch with Vi repeat, operator-pending, prefix matching
   - `Layout` class with focus management, walk/find utilities, window tracking
   - `RunInTerminal` for suspending UI to run external commands

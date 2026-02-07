@@ -310,6 +310,16 @@ public sealed class Windows10Output : IOutput, IDisposable
 
     #endregion
 
+    #region Synchronized Output
+
+    /// <inheritdoc />
+    public void BeginSynchronizedOutput() => _vt100Output.BeginSynchronizedOutput();
+
+    /// <inheritdoc />
+    public void EndSynchronizedOutput() => _vt100Output.EndSynchronizedOutput();
+
+    #endregion
+
     #region IDisposable
 
     /// <summary>

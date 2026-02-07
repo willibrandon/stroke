@@ -31,6 +31,7 @@ public sealed partial class Vt100Output : IOutput
     private readonly Lock _lock = new();
     private readonly List<string> _buffer = [];
 
+    private bool _synchronizedOutput;
     private bool? _cursorVisible;
     private bool _cursorShapeChanged;
 
@@ -162,6 +163,11 @@ public sealed partial class Vt100Output : IOutput
 
             var output = string.Concat(_buffer);
             _buffer.Clear();
+
+            if (_synchronizedOutput)
+            {
+                output = string.Concat("\x1b[?2026h", output, "\x1b[?2026l");
+            }
 
             try
             {
@@ -504,6 +510,28 @@ public sealed partial class Vt100Output : IOutput
 
         // Fall back to TERM-based detection
         return ColorDepthExtensions.GetDefaultForTerm(_term);
+    }
+
+    #endregion
+
+    #region Synchronized Output
+
+    /// <inheritdoc/>
+    public void BeginSynchronizedOutput()
+    {
+        using (_lock.EnterScope())
+        {
+            _synchronizedOutput = true;
+        }
+    }
+
+    /// <inheritdoc/>
+    public void EndSynchronizedOutput()
+    {
+        using (_lock.EnterScope())
+        {
+            _synchronizedOutput = false;
+        }
     }
 
     #endregion

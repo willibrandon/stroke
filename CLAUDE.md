@@ -436,6 +436,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - **External NuGet**: Wcwidth (v4.0.1, MIT) for character width; TextMateSharp (v1.0.70, MIT) for syntax highlighting; FxSsh (v1.3.0, MIT) for SSH server; Microsoft.Extensions.Logging.Abstractions for logging
 - **Storage**: In-memory only (except FileHistory which uses filesystem)
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
+- C# 13 / .NET 10+ + None new — internal rendering pipeline changes only (067-synchronized-output)
+- N/A (in-memory rendering state) (067-synchronized-output)
 
 ## Recent Changes
 

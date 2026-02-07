@@ -278,6 +278,22 @@ public sealed class DummyOutput : IOutput
 
     #endregion
 
+    #region Synchronized Output
+
+    /// <inheritdoc/>
+    public void BeginSynchronizedOutput()
+    {
+        // No-op
+    }
+
+    /// <inheritdoc/>
+    public void EndSynchronizedOutput()
+    {
+        // No-op
+    }
+
+    #endregion
+
     #region Windows-Specific
 
     /// <inheritdoc/>

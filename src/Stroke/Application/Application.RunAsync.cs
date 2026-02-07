@@ -667,7 +667,7 @@ public partial class Application<TResult>
         {
             return System.Runtime.InteropServices.PosixSignalRegistration.Create(
                 System.Runtime.InteropServices.PosixSignal.SIGWINCH,
-                _ => OnResize());
+                _ => _actionChannel?.Writer.TryWrite(OnResize));
         }
         catch (PlatformNotSupportedException)
         {
@@ -701,18 +701,19 @@ public partial class Application<TResult>
     }
 
     /// <summary>
-    /// Handle terminal resize: erase, request cursor position, and schedule redraw.
+    /// Handle terminal resize: reset renderer state, request cursor position, and schedule redraw.
     /// Port of Python Prompt Toolkit's <c>Application._on_resize</c>.
     /// </summary>
     /// <remarks>
-    /// This method is called from a SIGWINCH signal handler thread. The Erase and
-    /// RequestAbsoluteCursorPosition calls write escape sequences to the output
-    /// (simple I/O). The actual redraw is scheduled via Invalidate() to run on the
-    /// RunAsync async context, preserving Renderer thread-safety.
+    /// This method is marshaled from the SIGWINCH signal handler thread to the event loop
+    /// via <c>_actionChannel</c>, ensuring all Renderer field mutations occur on the same
+    /// thread as <see cref="Rendering.Renderer.Render"/>. <see cref="Rendering.Renderer.ResetForResize"/>
+    /// performs only in-memory state reset (zero terminal I/O). The actual erase and redraw
+    /// are deferred to the next Render() call inside a synchronized output block.
     /// </remarks>
     private void OnResize()
     {
-        Renderer.Erase(leaveAlternateScreen: false);
+        Renderer.ResetForResize();
         Renderer.RequestAbsoluteCursorPosition();
         Invalidate();
     }
