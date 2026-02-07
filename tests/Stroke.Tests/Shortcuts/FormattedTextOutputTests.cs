@@ -19,7 +19,7 @@ public class FormattedTextOutputTests
     private static (IOutput output, StringWriter writer) CreateCaptureOutput()
     {
         var writer = new StringWriter();
-        var output = OutputFactory.Create(stdout: writer);
+        var output = new PlainTextOutput(writer);
         return (output, writer);
     }
 

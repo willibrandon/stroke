@@ -13,9 +13,6 @@ public static class AsyncPrompt
     {
         try
         {
-            Console.WriteLine("Async prompt example.");
-            Console.WriteLine("Background counter prints above prompt every second.");
-
             using (StdoutPatching.PatchStdout())
             {
                 var running = true;
@@ -26,9 +23,9 @@ public static class AsyncPrompt
                 {
                     while (running)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(3000);
                         if (running)
-                            Console.WriteLine($"Background counter: {Interlocked.Increment(ref counter)}");
+                            Console.WriteLine($"Counter: {counter++}");
                     }
                 })
                 { IsBackground = true };
@@ -42,7 +39,7 @@ public static class AsyncPrompt
                         try
                         {
                             var text = session.Prompt();
-                            Console.WriteLine($"You said: {text}");
+                            Console.WriteLine($"You said: \"{text}\"");
                         }
                         catch (EOFException)
                         {
@@ -55,6 +52,8 @@ public static class AsyncPrompt
                     running = false;
                 }
             }
+
+            Console.WriteLine("Quitting event loop. Bye.");
         }
         catch (KeyboardInterruptException)
         {

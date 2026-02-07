@@ -1,5 +1,8 @@
 using System.Runtime.InteropServices;
+using Stroke.Application;
+using Stroke.Core;
 using Stroke.Input.Posix;
+using Stroke.Output.Windows;
 
 namespace Stroke.Output;
 
@@ -8,15 +11,15 @@ namespace Stroke.Output;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is a faithful port of Python Prompt Toolkit's <c>create_output</c> function
+/// Faithful port of Python Prompt Toolkit's <c>create_output</c> function
 /// from <c>prompt_toolkit.output.defaults</c>.
 /// </para>
 /// <para>
 /// The factory auto-selects the appropriate output type based on:
 /// <list type="bullet">
 ///   <item><description>Whether stdout is null</description></item>
-///   <item><description>Whether stdout is redirected to a file/pipe</description></item>
-///   <item><description>Whether running on a TTY</description></item>
+///   <item><description>The operating system platform (Windows vs Unix)</description></item>
+///   <item><description>Whether stdout is a TTY (Unix only)</description></item>
 /// </list>
 /// </para>
 /// </remarks>
@@ -35,44 +38,76 @@ public static class OutputFactory
     /// </param>
     /// <returns>An appropriate <see cref="IOutput"/> implementation.</returns>
     /// <remarks>
-    /// <para>Selection logic:</para>
+    /// <para>
+    /// Selection logic matches Python PTK's <c>create_output</c>:
+    /// </para>
     /// <list type="number">
+    ///   <item><description>Resolve stdout, unwrap <see cref="StdoutProxy"/> if needed</description></item>
     ///   <item><description>If stdout is null, returns <see cref="DummyOutput"/></description></item>
-    ///   <item><description>If stdout is redirected and <paramref name="alwaysPreferTty"/> is true
+    ///   <item><description>On Windows: returns <see cref="Windows10Output"/> (VT100 enabled),
+    ///   <see cref="ConEmuOutput"/> (ConEmu/Cmder), or <see cref="Win32Output"/> (legacy)</description></item>
+    ///   <item><description>On Unix: if not a TTY and <paramref name="alwaysPreferTty"/> is true
     ///   and stderr is a TTY, uses stderr via <see cref="Vt100Output"/></description></item>
-    ///   <item><description>If stdout is redirected, returns <see cref="PlainTextOutput"/></description></item>
-    ///   <item><description>Otherwise returns <see cref="Vt100Output"/></description></item>
+    ///   <item><description>On Unix: if not a TTY, returns <see cref="PlainTextOutput"/></description></item>
+    ///   <item><description>On Unix: returns <see cref="Vt100Output"/></description></item>
     /// </list>
     /// </remarks>
     public static IOutput Create(TextWriter? stdout = null, bool alwaysPreferTty = false)
     {
-        // Resolve stdout
-        stdout ??= Console.Out;
+        // Resolve stdout. If alwaysPreferTty, prefer a TTY stream.
+        if (stdout is null)
+        {
+            stdout = Console.Out;
 
-        // Check if stdout is a "null" stream
-        if (stdout == TextWriter.Null)
+            if (alwaysPreferTty)
+            {
+                // Check stdout first, then stderr — use the first TTY found.
+                if (!IsStdoutTty() && IsStderrTty())
+                {
+                    stdout = Console.Error;
+                }
+            }
+        }
+
+        // Unwrap StdoutProxy to get the real stdout stream.
+        // When PatchStdout is active, Console.Out is replaced by StdoutProxy.
+        // For prompt_toolkit applications, we want the real stdout.
+        while (stdout is StdoutProxy proxy)
+        {
+            stdout = proxy.OriginalStdout ?? Console.Out;
+        }
+
+        // If stdout is null or a null stream, return DummyOutput.
+        // This can happen on Windows when running under pythonw.exe equivalent
+        // (no console window, stdin/stdout/stderr are null).
+        if (stdout is null || stdout == TextWriter.Null)
         {
             return new DummyOutput();
         }
 
-        // Check for redirection using proper TTY detection.
-        // Console.IsOutputRedirected can be unreliable on Unix systems,
-        // so we use the isatty() system call for accurate TTY detection.
-        bool isStdoutTty = IsStdoutTty();
-
-        if (!isStdoutTty)
+        // Windows: always use Win32-based output. Win32 console APIs work via
+        // handles regardless of stream redirection, so no isatty() check needed.
+        if (OperatingSystem.IsWindows())
         {
-            // If alwaysPreferTty and stderr is a TTY, use stderr for colored output
-            if (alwaysPreferTty && IsStderrTty())
+            if (WindowsVt100Support.IsVt100Enabled())
             {
-                return Vt100Output.FromPty(Console.Error);
+                return new Windows10Output(stdout);
             }
 
-            // Plain text for redirected output
+            if (PlatformUtils.IsConEmuAnsi)
+            {
+                return new ConEmuOutput(stdout);
+            }
+
+            return new Win32Output(stdout);
+        }
+
+        // Unix/macOS: check if stdout is a TTY.
+        if (!IsStdoutTty())
+        {
             return new PlainTextOutput(stdout);
         }
 
-        // Interactive terminal - use VT100
         return Vt100Output.FromPty(stdout);
     }
 

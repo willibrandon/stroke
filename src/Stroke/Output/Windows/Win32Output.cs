@@ -326,8 +326,9 @@ public sealed partial class Win32Output : IOutput, IDisposable
                 return 0;
             }
 
-            // Rows from cursor to bottom of visible window
-            return info.Window.Bottom - info.CursorPosition.Y;
+            // Rows from cursor to bottom of visible window (inclusive, hence +1).
+            // Matches Python PTK: info.srWindow.Bottom - info.dwCursorPosition.Y + 1
+            return info.Window.Bottom - info.CursorPosition.Y + 1;
         }
     }
 
@@ -652,9 +653,46 @@ public sealed partial class Win32Output : IOutput, IDisposable
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// Scrolls the console window so the cursor is near the bottom.
+    /// Called before drawing the prompt to ensure sufficient visible space.
+    /// Port of Python PTK's <c>Win32Output.scroll_buffer_to_prompt</c>.
+    /// </remarks>
     public void ScrollBufferToPrompt()
     {
-        // No-op on Win32 console
+        using (_lock.EnterScope())
+        {
+            if (!ConsoleApi.GetConsoleScreenBufferInfo(_hConsole, out var info))
+            {
+                return;
+            }
+
+            var sr = info.Window;
+            var cursorY = info.CursorPosition.Y;
+
+            // Scroll to the left, keep the same window width.
+            short left = 0;
+            short right = (short)(sr.Right - sr.Left);
+
+            // Vertical scroll: if cursor is already visible within the window
+            // (not at the very bottom edge), keep the current vertical position.
+            // Otherwise, scroll so the cursor is at the bottom of the window.
+            short winHeight = (short)(sr.Bottom - sr.Top);
+            short bottom;
+            if (0 < sr.Bottom - cursorY && sr.Bottom - cursorY < winHeight - 1)
+            {
+                // Cursor is on-screen with margin — no vertical scroll needed.
+                bottom = sr.Bottom;
+            }
+            else
+            {
+                bottom = (short)Math.Max(winHeight, cursorY);
+            }
+            short top = (short)(bottom - winHeight);
+
+            var newWindow = new SmallRect(left, top, right, bottom);
+            ConsoleApi.SetConsoleWindowInfo(_hConsole, true, in newWindow);
+        }
     }
 
     #endregion
