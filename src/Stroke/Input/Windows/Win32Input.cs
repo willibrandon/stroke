@@ -166,6 +166,7 @@ public sealed class Win32Input : IInput
     public IDisposable Detach()
     {
         Action? currentCallback;
+        bool stopMonitor = false;
 
         using (_callbackLock.EnterScope())
         {
@@ -173,6 +174,17 @@ public sealed class Win32Input : IInput
                 return NoOpDisposable.Instance;
 
             currentCallback = _callbackStack.Pop();
+
+            // Stop monitor if no more callbacks
+            if (_callbackStack.Count == 0)
+            {
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
 
         return new ReattachDisposable(this, currentCallback);
@@ -447,9 +459,22 @@ public sealed class Win32Input : IInput
 
     private void ReattachCallback(Action callback)
     {
+        bool startMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(callback);
+
+            // Restart the monitor thread if it was stopped during Detach
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive || !_monitorRunning)
+            {
+                startMonitor = true;
+            }
+        }
+
+        if (startMonitor)
+        {
+            StartInputMonitor();
         }
     }
 

@@ -171,17 +171,17 @@ public static unsafe partial class Termios
     {
         var raw = original;
 
-        // Disable input processing
         // Matches Python Prompt Toolkit's raw_mode._patch_iflag — disables
         // XON/XOFF flow control and newline translation on input.
         raw.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
 
-        // Disable output post-processing (matches cfmakeraw behavior).
-        // Callers that need LF → CRLF conversion (e.g., StdoutProxy) must
-        // handle it explicitly rather than relying on terminal translation.
-        raw.c_oflag &= ~OPOST;
+        // NOTE: c_oflag is intentionally NOT modified. Python Prompt Toolkit's
+        // raw_mode leaves OPOST enabled so the kernel continues to convert
+        // LF → CRLF on output. This ensures subprocess output (e.g., ls)
+        // renders correctly without application-level newline fixup.
 
-        // Disable canonical mode, echo, and signals
+        // Matches Python Prompt Toolkit's raw_mode._patch_lflag — disables
+        // canonical mode, echo, and signals.
         raw.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
 
         // Set VMIN=1, VTIME=0 for blocking read of single characters

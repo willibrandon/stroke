@@ -254,6 +254,7 @@ public sealed partial class Vt100Input : IInput
     public IDisposable Detach()
     {
         Action? currentCallback;
+        bool stopMonitor = false;
 
         using (_callbackLock.EnterScope())
         {
@@ -262,12 +263,57 @@ public sealed partial class Vt100Input : IInput
 
             currentCallback = _callbackStack.Pop();
 
-            // Disable non-blocking mode if no more callbacks
+            // Disable non-blocking mode and stop monitor if no more callbacks
             if (_callbackStack.Count == 0)
+            {
                 _stdinReader.NonBlocking = false;
+                stopMonitor = true;
+            }
+        }
+
+        if (stopMonitor)
+        {
+            StopInputMonitor();
         }
 
         return new ReattachDisposable(this, currentCallback);
+    }
+
+    /// <summary>
+    /// Reads a line from the terminal file descriptor using direct POSIX read(),
+    /// bypassing .NET's Console class which manages its own terminal state.
+    /// Used by RunSystemCommandAsync to wait for Enter after running
+    /// a system command.
+    /// </summary>
+    public unsafe void ReadLineFromFd()
+    {
+        // Read one byte at a time until we get a newline.
+        // We're in cooked mode here, so the kernel line-buffers and we'll
+        // get the full line when Enter is pressed. But we read byte-by-byte
+        // to be safe with partial reads.
+        var buf = new byte[1];
+
+        fixed (byte* ptr = buf)
+        {
+            while (true)
+            {
+                nint bytesRead = PosixStdinReader.PosixRead(_fd, ptr, 1);
+                int errno = Marshal.GetLastPInvokeError();
+
+                if (bytesRead <= 0)
+                {
+                    if (bytesRead < 0)
+                    {
+                        if (errno == EINTR)
+                            continue; // Retry on EINTR
+                    }
+                    break; // EOF or error
+                }
+
+                if (buf[0] == (byte)'\n' || buf[0] == (byte)'\r')
+                    break;
+            }
+        }
     }
 
     /// <inheritdoc/>
@@ -334,10 +380,23 @@ public sealed partial class Vt100Input : IInput
 
     private void ReattachCallback(Action callback)
     {
+        bool startMonitor = false;
+
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(callback);
             _stdinReader.NonBlocking = true;
+
+            // Restart the monitor thread if it was stopped during Detach
+            if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
+            {
+                startMonitor = true;
+            }
+        }
+
+        if (startMonitor)
+        {
+            StartInputMonitor();
         }
     }
 

@@ -405,26 +405,22 @@ public sealed class StdoutProxy : TextWriter
 
         if (GetAppOrNull() is not null)
         {
-            // Application is running — terminal is in raw mode (OPOST disabled),
-            // so the terminal won't convert LF → CRLF. Do it explicitly so
-            // newlines return the cursor to column 0.
-            var outputText = text.Replace("\n", "\r\n");
-
-            // Use RunInTerminal to coordinate with renderer.
+            // Application is running — use RunInTerminal to coordinate with renderer.
+            // OPOST remains enabled (matching Python Prompt Toolkit's raw_mode which
+            // never clears c_oflag), so the kernel handles LF → CRLF conversion.
             // The flush thread is a raw Thread, so the AsyncLocal<AppSession> doesn't
             // flow from the creating thread. Temporarily activate our captured session
             // so that RunInTerminal can find the running application.
             using (AppContext.ActivateSession(_appSession))
             {
-                RunInTerminal.RunAsync(() => WriteOutput(outputText), inExecutor: false)
+                RunInTerminal.RunAsync(() => WriteOutput(text), inExecutor: false)
                     .GetAwaiter()
                     .GetResult();
             }
         }
         else
         {
-            // No application running — terminal not in raw mode, OPOST handles
-            // LF → CRLF translation. Write directly without conversion.
+            // No application running — write directly.
             WriteOutput(text);
         }
     }

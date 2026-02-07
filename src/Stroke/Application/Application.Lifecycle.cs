@@ -166,8 +166,17 @@ public partial class Application<TResult>
             {
                 Output.Write($"\r\n{waitText}");
                 Output.Flush();
-                // Wait for enter key in cooked mode
-                Console.ReadLine();
+
+                // Wait for Enter in cooked mode.
+                // Python uses a sub-application (PromptSession) here to avoid
+                // blocking the event loop and to share I/O. We use direct fd
+                // reading instead: on POSIX, Vt100Input.ReadLineFromFd() calls
+                // read() on the terminal fd, bypassing .NET's Console class which
+                // manages its own termios state and conflicts with our CookedMode.
+                // On Windows, the default IInput.ReadLineFromFd() falls through
+                // to Console.ReadLine(), which is safe since Windows has no
+                // termios conflict.
+                Input.ReadLineFromFd();
             }
         }
     }
@@ -237,4 +246,5 @@ public partial class Application<TResult>
         result.Sort();
         return result;
     }
+
 }

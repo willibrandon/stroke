@@ -421,7 +421,15 @@ public partial class Application<TResult>
     {
         // Only draw when no sub application was started (RunInTerminal).
         if (!_isRunning || _runningInTerminal)
+        {
+            // Clear the invalidated flag so future Invalidate() calls can
+            // schedule new redraws. Without this, the coalescing logic in
+            // Invalidate() (CompareExchange) would see _invalidated == 1
+            // and skip scheduling, causing the UI to never resume after
+            // RunInTerminal completes.
+            Interlocked.Exchange(ref _invalidated, 0);
             return;
+        }
 
         // Clear the invalidated flag
         Interlocked.Exchange(ref _invalidated, 0);

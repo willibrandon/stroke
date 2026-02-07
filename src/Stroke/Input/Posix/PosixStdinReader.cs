@@ -41,6 +41,14 @@ internal sealed unsafe partial class PosixStdinReader : IDisposable
     [LibraryImport(LibC, EntryPoint = "read", SetLastError = true)]
     private static partial nint Read(int fd, byte* buf, nuint count);
 
+    /// <summary>
+    /// Direct POSIX read() exposed for <see cref="Vt100.Vt100Input.ReadLineFromFd"/>.
+    /// </summary>
+    internal static nint PosixRead(int fd, byte* buf, nuint count)
+    {
+        return Read(fd, buf, count);
+    }
+
     [LibraryImport(LibC, EntryPoint = "fcntl", SetLastError = true)]
     private static partial int Fcntl(int fd, int cmd, int arg);
 
