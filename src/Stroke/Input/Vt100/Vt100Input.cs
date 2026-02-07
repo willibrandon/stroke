@@ -128,8 +128,6 @@ public sealed partial class Vt100Input : IInput
         ArgumentNullException.ThrowIfNull(inputReadyCallback);
         ThrowIfDisposed();
 
-        bool startMonitor = false;
-
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(inputReadyCallback);
@@ -137,16 +135,14 @@ public sealed partial class Vt100Input : IInput
             // Enable non-blocking mode when attached
             _stdinReader.NonBlocking = true;
 
-            // Start the input monitor thread if this is the first callback
+            // Start the input monitor thread if this is the first callback.
+            // Must be inside the lock to prevent TOCTOU race where two concurrent
+            // Attach() calls both see _inputMonitorThread as null, both start a
+            // thread, and the second overwrites the first (leaking it).
             if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
             {
-                startMonitor = true;
+                StartInputMonitor();
             }
-        }
-
-        if (startMonitor)
-        {
-            StartInputMonitor();
         }
 
         return new AttachDisposable(this, inputReadyCallback);
@@ -380,23 +376,17 @@ public sealed partial class Vt100Input : IInput
 
     private void ReattachCallback(Action callback)
     {
-        bool startMonitor = false;
-
         using (_callbackLock.EnterScope())
         {
             _callbackStack.Push(callback);
             _stdinReader.NonBlocking = true;
 
-            // Restart the monitor thread if it was stopped during Detach
+            // Restart the monitor thread if it was stopped during Detach.
+            // Must be inside the lock to prevent TOCTOU race (see Attach()).
             if (_inputMonitorThread is null || !_inputMonitorThread.IsAlive)
             {
-                startMonitor = true;
+                StartInputMonitor();
             }
-        }
-
-        if (startMonitor)
-        {
-            StartInputMonitor();
         }
     }
 

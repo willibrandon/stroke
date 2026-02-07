@@ -27,11 +27,15 @@ public partial class Application<TResult>
         Exception? exception = null,
         string style = "")
     {
+        // Check IsCompleted FIRST: during RunAsync cleanup, _isRunning may already
+        // be false while _future is still alive (see RunAsync's outer finally block).
+        // Checking _isRunning first would yield the wrong diagnostic ("not running"
+        // instead of "already set") in that race window.
+        if (_future?.Task.IsCompleted == true)
+            throw new InvalidOperationException("Result has already been set.");
+
         if (!_isRunning || _future is null)
             throw new InvalidOperationException("Application is not running.");
-
-        if (_future.Task.IsCompleted)
-            throw new InvalidOperationException("Result has already been set.");
 
         ExitStyle = style;
 
