@@ -438,6 +438,8 @@ This ensures examples behave correctly in real terminal environments before mark
 - **Layer dependencies**: Follow Constitution III strictly (see Architecture section above)
 - C# 13 / .NET 10+ + None new — internal rendering pipeline changes only (067-synchronized-output)
 - N/A (in-memory rendering state) (067-synchronized-output)
+- C# 13 / .NET 10+ + Stroke library (all subsystems already implemented: FormattedTextOutput, Html, Ansi, Style, ColorDepth, Frame, TextArea, KeyBindings, PatchStdout); Feature 71 ProgressBar API (not yet implemented — blocks runtime testing of 15 progress bar examples) (068-progressbar-printtext-examples)
+- N/A (in-memory only; examples are transient console applications) (068-progressbar-printtext-examples)
 
 ## Recent Changes
 
