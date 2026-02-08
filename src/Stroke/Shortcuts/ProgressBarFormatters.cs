@@ -154,7 +154,7 @@ public sealed class Bar : Formatter
         string symA, symB, symC;
         double percent;
 
-        if (progress.Done || progress.Total.HasValue || progress.Stopped)
+        if (progress.Done || progress.Total is > 0 || progress.Stopped)
         {
             symA = _symA;
             symB = _symB;
@@ -374,7 +374,10 @@ public static class FormatterUtils
     /// </summary>
     internal static string FormatTimeDelta(TimeSpan ts)
     {
-        var result = ts.ToString(@"h\:mm\:ss");
+        // Use TotalHours (not h specifier) to avoid wrapping at 24 hours.
+        // Matches Python's str(timedelta) which preserves total hours.
+        var totalHours = (int)ts.TotalHours;
+        var result = $"{totalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}";
         if (result.StartsWith("0:"))
             result = result[2..];
         return result;

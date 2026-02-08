@@ -28,6 +28,8 @@ public sealed class ProgressBarFormatterTests
     [InlineData(0, 0, 0, "00:00")]
     [InlineData(0, 10, 0, "10:00")]
     [InlineData(2, 0, 0, "2:00:00")]
+    [InlineData(25, 0, 0, "25:00:00")]
+    [InlineData(48, 30, 0, "48:30:00")]
     public void FormatTimeDelta_FormatsCorrectly(int hours, int minutes, int seconds, string expected)
     {
         var ts = new TimeSpan(hours, minutes, seconds);
@@ -274,6 +276,20 @@ public sealed class ProgressBarFormatterTests
         var formatter = new Bar();
         var result = ToPlainText(formatter.Format(pb, view, width: 22));
         // Should contain the unknown symbol (#)
+        Assert.Contains("#", result);
+    }
+
+    [Fact]
+    public async Task Bar_Format_TotalZero_ShowsAnimation()
+    {
+        await using var pb = CreateTestProgressBar();
+        // Total=0 should be treated as unknown (Python truthiness: 0 is falsy)
+        var counter = pb.Iterate(new List<int>(), total: 0);
+        var view = pb.Counters[0];
+
+        var formatter = new Bar();
+        var result = ToPlainText(formatter.Format(pb, view, width: 22));
+        // Should show bouncing animation with unknown symbol (#), not static empty bar
         Assert.Contains("#", result);
     }
 

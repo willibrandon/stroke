@@ -247,10 +247,18 @@ public sealed class ProgressBar : IAsyncDisposable
         // Wait for the app to be started
         _appStarted.Wait(TimeSpan.FromSeconds(5));
 
-        // Exit the application
-        if (_app is { IsRunning: true })
+        // Exit the application. The try/catch guards against a TOCTOU race where
+        // the background thread sets IsRunning=false between our check and Exit() call.
+        try
         {
-            _app.Exit();
+            if (_app is { IsRunning: true })
+            {
+                _app.Exit();
+            }
+        }
+        catch (InvalidOperationException)
+        {
+            // App already exited on the background thread — safe to ignore.
         }
 
         // Wait for the UI thread to finish
@@ -265,8 +273,30 @@ public sealed class ProgressBar : IAsyncDisposable
 
     private static void DefaultCancelCallback()
     {
-        // Send SIGINT to current process (equivalent to Python's os.kill(os.getpid(), signal.SIGINT))
-        using var process = System.Diagnostics.Process.GetCurrentProcess();
-        System.Diagnostics.Process.GetCurrentProcess().Kill();
+        // Send SIGINT to current process (equivalent to Python's os.kill(os.getpid(), signal.SIGINT)).
+        // SIGINT is catchable, allowing cleanup code (finally blocks, IAsyncDisposable) to execute.
+        // Process.Kill() would send SIGKILL which is uncatchable and terminates immediately.
+        if (OperatingSystem.IsWindows())
+            WindowsInterrupt();
+        else
+            UnixInterrupt();
     }
+
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+    private static void WindowsInterrupt()
+    {
+        GenerateConsoleCtrlEvent(0, 0);
+    }
+
+    private static void UnixInterrupt()
+    {
+        kill(Environment.ProcessId, 2); // SIGINT = 2
+    }
+
+    [System.Runtime.InteropServices.DllImport("libc", EntryPoint = "kill")]
+    private static extern int kill(int pid, int sig);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    private static extern bool GenerateConsoleCtrlEvent(uint dwCtrlEvent, uint dwProcessGroupId);
 }
