@@ -127,14 +127,14 @@ public sealed class RendererSynchronizedOutputTests
         renderer.Render(app.UnsafeCast, app.Layout);
 
         var result = writer.ToString();
-        // Full redraw uses absolute cursor home
-        Assert.Contains("\x1b[H", result);
+        // Full redraw uses relative cursor movement (no absolute cursor home)
+        Assert.DoesNotContain("\x1b[H", result);
         // And uses EraseDown
         Assert.Contains("\x1b[J", result);
     }
 
     [Fact]
-    public void FullRedrawPath_UsesAbsoluteCursorPositioning()
+    public void FullRedrawPath_UsesRelativeCursorMovement()
     {
         var writer = new StringWriter();
         var output = Vt100Output.FromPty(writer, enableCpr: false);
@@ -145,8 +145,11 @@ public sealed class RendererSynchronizedOutputTests
         renderer.Render(app.UnsafeCast, app.Layout);
 
         var result = writer.ToString();
-        // Should use \x1b[H (absolute cursor home) not relative movement
-        Assert.Contains("\x1b[H", result);
+        // Should use relative cursor movement (no absolute cursor home)
+        // so that prompts stack correctly in non-fullscreen mode
+        Assert.DoesNotContain("\x1b[H", result);
+        // EraseDown should still be present for clearing stale content
+        Assert.Contains("\x1b[J", result);
     }
 
     [Fact]
