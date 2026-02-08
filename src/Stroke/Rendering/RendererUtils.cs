@@ -35,22 +35,54 @@ public static class RendererUtils
         var fragments = formattedText.ToFormattedText();
         var depth = colorDepth ?? output.GetDefaultColorDepth();
 
+        // Reset first (matches Python's initial reset_attributes()).
+        output.ResetAttributes();
+        Attrs? lastAttrs = null;
+
         foreach (var fragment in fragments)
         {
             var styleStr = fragment.Style;
-            if (!string.IsNullOrEmpty(styleStr) && style is not null)
+
+            // Always resolve attrs, even for empty style strings, so that
+            // attribute resets (e.g. \x1b[0m) properly clear previous state.
+            var attrs = style is not null
+                ? style.GetAttrsForStyleStr(styleStr)
+                : DefaultAttrs.Default;
+
+            if (styleTransformation is not null)
             {
-                var attrs = style.GetAttrsForStyleStr(styleStr);
-                if (styleTransformation is not null)
-                {
-                    attrs = styleTransformation.TransformAttrs(attrs);
-                }
-                output.SetAttributes(attrs, depth);
+                attrs = styleTransformation.TransformAttrs(attrs);
             }
 
-            output.Write(fragment.Text);
+            // Set style attributes only if something changed.
+            if (attrs != lastAttrs)
+            {
+                if (attrs != DefaultAttrs.Default)
+                {
+                    output.SetAttributes(attrs, depth);
+                }
+                else
+                {
+                    output.ResetAttributes();
+                }
+            }
+            lastAttrs = attrs;
+
+            // Print escape sequences as raw output.
+            if (styleStr.Contains("[ZeroWidthEscape]"))
+            {
+                output.WriteRaw(fragment.Text);
+            }
+            else
+            {
+                // Eliminate carriage returns and insert CR before every newline
+                // (important when the front-end is a telnet client).
+                var text = fragment.Text.Replace("\r", "").Replace("\n", "\r\n");
+                output.Write(text);
+            }
         }
 
+        // Reset again.
         output.ResetAttributes();
         output.Flush();
     }

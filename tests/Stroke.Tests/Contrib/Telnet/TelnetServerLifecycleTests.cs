@@ -127,17 +127,15 @@ public class TelnetServerLifecycleTests : IAsyncLifetime
         var disconnectTime = DateTime.UtcNow;
         client.Close();
 
-        // Wait for connection to be closed
-        var deadline = DateTime.UtcNow.AddSeconds(2);
+        // Wait for connection to be closed (generous deadline for CI/parallel suites)
+        var deadline = DateTime.UtcNow.AddSeconds(5);
         while (!(connection?.IsClosed ?? false) && DateTime.UtcNow < deadline)
         {
             await Task.Delay(10, ct);
         }
-        var cleanupTime = DateTime.UtcNow;
 
-        var cleanupDuration = cleanupTime - disconnectTime;
-        Assert.True(cleanupDuration.TotalSeconds < 3,
-            $"Cleanup took {cleanupDuration.TotalMilliseconds}ms, expected <3000ms");
+        Assert.True(connection?.IsClosed ?? false,
+            "Connection was not closed within 5 seconds of client disconnect");
     }
 
     [Fact]

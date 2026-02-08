@@ -31,7 +31,7 @@ internal sealed class SixteenColorCache
         ("ansired", 205, 0, 0, 31, 41),
         ("ansigreen", 0, 205, 0, 32, 42),
         ("ansiyellow", 205, 205, 0, 33, 43),
-        ("ansiblue", 0, 0, 238, 34, 44),
+        ("ansiblue", 0, 0, 205, 34, 44),
         ("ansimagenta", 205, 0, 205, 35, 45),
         ("ansicyan", 0, 205, 205, 36, 46),
         ("ansigray", 229, 229, 229, 37, 47),         // Light gray (ansiwhite)
@@ -39,7 +39,7 @@ internal sealed class SixteenColorCache
         ("ansibrightred", 255, 0, 0, 91, 101),
         ("ansibrightgreen", 0, 255, 0, 92, 102),
         ("ansibrightyellow", 255, 255, 0, 93, 103),
-        ("ansibrightblue", 92, 92, 255, 94, 104),
+        ("ansibrightblue", 0, 0, 255, 94, 104),
         ("ansibrightmagenta", 255, 0, 255, 95, 105),
         ("ansibrightcyan", 0, 255, 255, 96, 106),
         ("ansiwhite", 255, 255, 255, 97, 107)        // Bright white
@@ -48,11 +48,15 @@ internal sealed class SixteenColorCache
     /// <summary>
     /// Gray-like color names to exclude when saturation is high.
     /// </summary>
+    /// <remarks>
+    /// Python uses alias names "ansilightgray" and "ansidarkgray" in its exclusion
+    /// list, but the palette uses canonical names "ansigray" and "ansibrightblack".
+    /// Since the aliases don't match palette entries, only "ansiwhite" and "ansiblack"
+    /// are effectively excluded. We reproduce Python's actual behavior here.
+    /// </remarks>
     private static readonly HashSet<string> GrayLikeColors =
     [
         "ansiblack",
-        "ansigray",
-        "ansibrightblack",
         "ansiwhite"
     ];
 
