@@ -10,6 +10,7 @@ using Stroke.Layout.Containers;
 using Stroke.Styles;
 using Stroke.Validation;
 using Stroke.Widgets.Base;
+using ProgressBarWidget = Stroke.Widgets.Base.ProgressBar;
 using Stroke.Widgets.Dialogs;
 using Stroke.Widgets.Lists;
 using Stroke.Widgets.Toolbars;
@@ -346,7 +347,7 @@ public static class Dialogs
         Action<Action<int>, Action<string>>? runCallback = null,
         IStyle? style = null)
     {
-        var progressbar = new ProgressBar();
+        var progressbar = new ProgressBarWidget();
         var textArea = new TextArea(
             focusable: false,
             // Prefer this text area as big as possible, to avoid having a window

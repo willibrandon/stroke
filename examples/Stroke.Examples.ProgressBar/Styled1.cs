@@ -1,3 +1,4 @@
+using Stroke.Shortcuts;
 using Stroke.Styles;
 
 namespace Stroke.Examples.ProgressBarExamples;
@@ -6,9 +7,6 @@ namespace Stroke.Examples.ProgressBarExamples;
 /// Progress bar with custom Style affecting 10 visual elements.
 /// Port of Python Prompt Toolkit's styled-1.py example.
 /// </summary>
-/// <remarks>
-/// Requires Feature 71 (ProgressBar API) for runtime testing.
-/// </remarks>
 public static class Styled1
 {
     public static async Task Run()
@@ -27,15 +25,12 @@ public static class Styled1
             ["time-left"] = "bg:#88ff88 #000000",
         });
 
-        // TODO: Uncomment when Feature 71 (ProgressBar shortcut API) is implemented.
-        // await using var pb = new ProgressBar(
-        //     style: style,
-        //     title: "Progress bar example with custom styling.");
-        // await foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Downloading..."))
-        // {
-        //     await Task.Delay(10);
-        // }
-        _ = style;
-        await Task.CompletedTask;
+        await using var pb = new ProgressBar(
+            style: style,
+            title: "Progress bar example with custom styling.");
+        foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Downloading..."))
+        {
+            Thread.Sleep(10);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using Stroke.Input;
 using Stroke.Input.Typeahead;
 using Stroke.KeyBinding;
 
@@ -196,7 +197,7 @@ public partial class Application<TResult>
             };
 
             // Request cursor position and draw initial UI
-            Renderer.RequestAbsoluteCursorPosition();
+            RequestAbsoluteCursorPosition();
             Redraw();
 
             // Start auto-refresh task if configured
@@ -714,7 +715,32 @@ public partial class Application<TResult>
     private void OnResize()
     {
         Renderer.ResetForResize();
-        Renderer.RequestAbsoluteCursorPosition();
+        RequestAbsoluteCursorPosition();
         Invalidate();
+    }
+
+    /// <summary>
+    /// Send CPR request, but only if the application is still running and the input
+    /// can consume the response.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>Application._request_absolute_cursor_position</c>.
+    /// Guards against sending CPR when the app is done or when keys are queued.
+    /// </para>
+    /// <para>
+    /// Additionally guards against DummyInput, which cannot read CPR responses from stdin.
+    /// Python avoids this by using <c>create_input(always_prefer_tty=True)</c> in
+    /// <c>print_container</c>, but Stroke uses DummyInput for one-shot rendering. Without
+    /// this guard, the terminal's CPR response (<c>\x1b[row;colR</c>) leaks to the shell's
+    /// stdin after process exit, causing display corruption.
+    /// </para>
+    /// </remarks>
+    private void RequestAbsoluteCursorPosition()
+    {
+        if (KeyProcessor.InputQueue.Count == 0 && !IsDone && Input is not DummyInput)
+        {
+            Renderer.RequestAbsoluteCursorPosition();
+        }
     }
 }

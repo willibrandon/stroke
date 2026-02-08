@@ -10,6 +10,7 @@ using Stroke.Lexers;
 using Stroke.Shortcuts;
 using Stroke.Styles;
 using Stroke.Widgets.Base;
+using ProgressBarWidget = Stroke.Widgets.Base.ProgressBar;
 using Stroke.Widgets.Dialogs;
 using Stroke.Widgets.Lists;
 using Stroke.Widgets.Menus;
@@ -93,7 +94,7 @@ internal static class FullScreenDemo
                 new VSplit(
                 [
                     new Frame(
-                        body: new AnyContainer(new ProgressBar().PtContainer()),
+                        body: new AnyContainer(new ProgressBarWidget().PtContainer()),
                         title: "Progress bar").PtContainer(),
                     new Frame(
                         title: "Checkbox list",

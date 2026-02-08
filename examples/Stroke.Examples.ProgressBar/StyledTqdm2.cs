@@ -1,3 +1,5 @@
+using Stroke.Shortcuts;
+using Stroke.Shortcuts.ProgressBarFormatters;
 using Stroke.Styles;
 
 namespace Stroke.Examples.ProgressBarExamples;
@@ -6,9 +8,6 @@ namespace Stroke.Examples.ProgressBarExamples;
 /// tqdm-style progress bar with reverse-video bar.
 /// Port of Python Prompt Toolkit's styled-tqdm-2.py example.
 /// </summary>
-/// <remarks>
-/// Requires Feature 71 (ProgressBar API) for runtime testing.
-/// </remarks>
 public static class StyledTqdm2
 {
     public static async Task Run()
@@ -18,29 +17,26 @@ public static class StyledTqdm2
             ["bar-a"] = "reverse",
         });
 
-        // TODO: Uncomment when Feature 71 (ProgressBar shortcut API) is implemented.
-        // var customFormatters = new IProgressBarFormatter[]
-        // {
-        //     new formatters.Label(suffix: ": "),
-        //     new formatters.Percentage(),
-        //     new formatters.Bar(start: "|", end: "|", symA: " ", symB: " ", symC: " "),
-        //     new formatters.Text(" "),
-        //     new formatters.Progress(),
-        //     new formatters.Text(" ["),
-        //     new formatters.TimeElapsed(),
-        //     new formatters.Text("<"),
-        //     new formatters.TimeLeft(),
-        //     new formatters.Text(", "),
-        //     new formatters.IterationsPerSecond(),
-        //     new formatters.Text("it/s]"),
-        // };
-        //
-        // await using var pb = new ProgressBar(style: style, formatters: customFormatters);
-        // await foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Installing"))
-        // {
-        //     await Task.Delay(10);
-        // }
-        _ = style;
-        await Task.CompletedTask;
+        var customFormatters = new List<Formatter>
+        {
+            new Label(suffix: ": "),
+            new Percentage(),
+            new Bar(start: "|", end: "|", symA: " ", symB: " ", symC: " "),
+            new Text(" "),
+            new Progress(),
+            new Text(" ["),
+            new TimeElapsed(),
+            new Text("<"),
+            new TimeLeft(),
+            new Text(", "),
+            new IterationsPerSecond(),
+            new Text("it/s]"),
+        };
+
+        await using var pb = new ProgressBar(style: style, formatters: customFormatters);
+        foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Installing"))
+        {
+            Thread.Sleep(10);
+        }
     }
 }

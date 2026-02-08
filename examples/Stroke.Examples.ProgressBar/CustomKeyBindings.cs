@@ -1,4 +1,6 @@
+using Stroke.Application;
 using Stroke.FormattedText;
+using Stroke.Input;
 using Stroke.KeyBinding;
 using Stroke.Shortcuts;
 
@@ -8,9 +10,6 @@ namespace Stroke.Examples.ProgressBarExamples;
 /// Progress bar with custom key bindings: f prints text, q cancels, x sends interrupt.
 /// Port of Python Prompt Toolkit's custom-key-bindings.py example.
 /// </summary>
-/// <remarks>
-/// Requires Feature 71 (ProgressBar API) for runtime testing.
-/// </remarks>
 public static class CustomKeyBindings
 {
     public static async Task Run()
@@ -44,22 +43,17 @@ public static class CustomKeyBindings
             throw new KeyboardInterruptException();
         });
 
-        // TODO: Uncomment when Feature 71 (ProgressBar shortcut API) is implemented.
-        // // Use PatchStdout to make sure that prints go above the application.
-        // using (StdoutPatching.PatchStdout())
-        // {
-        //     await using var pb = new ProgressBar(keyBindings: kb, bottomToolbar: bottomToolbar);
-        //     await foreach (var i in pb.Iterate(Enumerable.Range(0, 800)))
-        //     {
-        //         await Task.Delay(10);
-        //
-        //         if (cancel)
-        //             break;
-        //     }
-        // }
-        _ = bottomToolbar;
-        _ = kb;
-        _ = cancel;
-        await Task.CompletedTask;
+        // Use PatchStdout to make sure that prints go above the application.
+        using (StdoutPatching.PatchStdout())
+        {
+            await using var pb = new ProgressBar(keyBindings: kb, bottomToolbar: bottomToolbar);
+            foreach (var i in pb.Iterate(Enumerable.Range(0, 800)))
+            {
+                Thread.Sleep(10);
+
+                if (cancel)
+                    break;
+            }
+        }
     }
 }

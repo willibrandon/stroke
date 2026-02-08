@@ -1,3 +1,5 @@
+using Stroke.Shortcuts;
+using Stroke.Shortcuts.ProgressBarFormatters;
 using Stroke.Styles;
 
 namespace Stroke.Examples.ProgressBarExamples;
@@ -6,9 +8,6 @@ namespace Stroke.Examples.ProgressBarExamples;
 /// apt-get install style progress bar.
 /// Port of Python Prompt Toolkit's styled-apt-get-install.py example.
 /// </summary>
-/// <remarks>
-/// Requires Feature 71 (ProgressBar API) for runtime testing.
-/// </remarks>
 public static class StyledAptGet
 {
     public static async Task Run()
@@ -21,24 +20,21 @@ public static class StyledAptGet
             ["bar"] = "",
         });
 
-        // TODO: Uncomment when Feature 71 (ProgressBar shortcut API) is implemented.
-        // var customFormatters = new IProgressBarFormatter[]
-        // {
-        //     new formatters.Label(),
-        //     new formatters.Text(": [", style: "class:percentage"),
-        //     new formatters.Percentage(),
-        //     new formatters.Text("]", style: "class:percentage"),
-        //     new formatters.Text(" "),
-        //     new formatters.Bar(symA: "#", symB: "#", symC: "."),
-        //     new formatters.Text("  "),
-        // };
-        //
-        // await using var pb = new ProgressBar(style: style, formatters: customFormatters);
-        // await foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Installing"))
-        // {
-        //     await Task.Delay(10);
-        // }
-        _ = style;
-        await Task.CompletedTask;
+        var customFormatters = new List<Formatter>
+        {
+            new Label(),
+            new Text(": [", style: "class:percentage"),
+            new Percentage(),
+            new Text("]", style: "class:percentage"),
+            new Text(" "),
+            new Bar(symA: "#", symB: "#", symC: "."),
+            new Text("  "),
+        };
+
+        await using var pb = new ProgressBar(style: style, formatters: customFormatters);
+        foreach (var i in pb.Iterate(Enumerable.Range(0, 1600), label: "Installing"))
+        {
+            Thread.Sleep(10);
+        }
     }
 }
