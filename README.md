@@ -520,6 +520,21 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - Nesting support: multiple `PatchStdout()` calls stack correctly
   - Thread-safe via `System.Threading.Lock` for buffer access (55 tests, >80% coverage)
 
+- **Progress Bar Shortcut** — Full-featured progress tracking API ported from `shortcuts/progress_bar/`
+  - `ProgressBar` (`IAsyncDisposable`) with background UI thread, configurable formatters, title, bottom toolbar
+  - `Iterate<T>()` wraps any `IEnumerable<T>` with automatic progress tracking and optional label
+  - `ProgressBarCounter<T>` generic iteration tracker with `Percentage`, `TimeElapsed`, `TimeLeft`, `ItemsCompleted`, `Done`, `Stopped`
+  - `ProgressBarCounter` non-generic view via delegate proxy for formatter consumption
+  - 10 formatter classes: `Text`, `Label` (with scrolling), `Percentage`, `Bar`, `Progress`, `TimeElapsed`, `TimeLeft`, `IterationsPerSecond`, `SpinningWheel`, `Rainbow`
+  - `FormatterUtils.CreateDefaultFormatters()` for standard layout, `FormatTimeDelta` for time display
+  - `Bar` formatter handles known total (filled bar), unknown total (bouncing animation), and done state
+  - `Rainbow` decorator wraps any formatter with cycling hue-shifted colors
+  - `ProgressControl` internal `IUIControl` rendering all counters via formatter columns
+  - Total inference from `ICollection<T>` / `IReadOnlyCollection<T>`, explicit override, or null for generators
+  - Cancel support via SIGINT (P/Invoke `kill`/`GenerateConsoleCtrlEvent`) matching Python's `os.kill`
+  - Multiple concurrent counters with `RemoveWhenDone` auto-cleanup
+  - Thread-safe via `System.Threading.Lock` (98 tests, >80% coverage)
+
 - **Event Loop Utilities** — Context-preserving background execution and thread-safe callback scheduling, ported from `eventloop/utils.py`
   - `EventLoopUtils` static class with 3 public methods + 2 private helpers
   - `RunInExecutorWithContextAsync<T>` and void overload — `ExecutionContext.Capture()`/`Run()` for `AsyncLocal<T>` preservation across thread pool dispatch
