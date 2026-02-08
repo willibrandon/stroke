@@ -628,7 +628,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (102/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (126/129 complete)
   - `accept-default` — Prompt with default value auto-accepted (`Stroke.Examples.Prompts`)
   - `async-prompt` — Async prompt with background tasks (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
@@ -731,7 +731,31 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `vertical-split` — Vertical split layout (`Stroke.Examples.FullScreen/SimpleDemos`)
   - `simple-example` — Basic scrollable pane (`Stroke.Examples.FullScreen/ScrollablePanes`)
   - `with-completion-menu` — Scrollable pane with completion menu (`Stroke.Examples.FullScreen/ScrollablePanes`)
-  - Remaining: 27 examples across 3 projects (PrintText, ProgressBar, Tutorial)
+  - `simple-progress-bar` — Basic progress bar with default formatters (`Stroke.Examples.ProgressBar`)
+  - `two-tasks` — Two parallel progress bars (`Stroke.Examples.ProgressBar`)
+  - `unknown-length` — Generator iteration without known total (`Stroke.Examples.ProgressBar`)
+  - `nested-progress-bars` — Hierarchical nested progress bars (`Stroke.Examples.ProgressBar`)
+  - `styled-1` — Custom styled progress bar with spinning wheel (`Stroke.Examples.ProgressBar`)
+  - `styled-2` — Custom formatters with HTML tildes and spinning wheel (`Stroke.Examples.ProgressBar`)
+  - `styled-rainbow` — Rainbow-colored progress bar with color depth prompt (`Stroke.Examples.ProgressBar`)
+  - `styled-apt-get` — apt-get install style progress bar (`Stroke.Examples.ProgressBar`)
+  - `styled-tqdm-1` — tqdm-style with iterations per second (`Stroke.Examples.ProgressBar`)
+  - `styled-tqdm-2` — tqdm-style with reverse-video bar (`Stroke.Examples.ProgressBar`)
+  - `colored-title-label` — HTML-styled title and label colors (`Stroke.Examples.ProgressBar`)
+  - `custom-key-bindings` — Key bindings within progress bar context (`Stroke.Examples.ProgressBar`)
+  - `many-parallel-tasks` — 8 concurrent parallel progress bars (`Stroke.Examples.ProgressBar`)
+  - `lot-of-parallel-tasks` — 160 parallel tasks with random completion (`Stroke.Examples.ProgressBar`)
+  - `scrolling-task-name` — Scrolling label text on progress bars (`Stroke.Examples.ProgressBar`)
+  - `ansi-colors` — 16 ANSI color output (`Stroke.Examples.PrintText`)
+  - `pygments-tokens` — Syntax highlighting with Pygments tokens (`Stroke.Examples.PrintText`)
+  - `html` — HTML-formatted text output (`Stroke.Examples.PrintText`)
+  - `named-colors` — Named color palette display (`Stroke.Examples.PrintText`)
+  - `true-color-demo` — 24-bit color gradient rendering (`Stroke.Examples.PrintText`)
+  - `ansi` — ANSI escape sequence text output (`Stroke.Examples.PrintText`)
+  - `print-frame` — Container printing with Frame widget (`Stroke.Examples.PrintText`)
+  - `print-formatted-text` — Multiple formatted text output methods (`Stroke.Examples.PrintText`)
+  - `logo-ansi-art` — Prompt Toolkit ANSI art logo rendering (`Stroke.Examples.PrintText`)
+  - Remaining: 3 examples (Prompts/InputHook, Tutorial/SqliteCli, Standalone/AsyncEventLoop)
 
 ## Requirements
 
