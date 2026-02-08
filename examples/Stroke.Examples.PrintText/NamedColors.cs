@@ -16,8 +16,8 @@ public static class NamedColors
     public static void Run()
     {
         var tokens = new FormattedTextType(
-            NamedColorsDict.Colors.Select(kvp =>
-                new StyleAndTextTuple("fg:" + kvp.Key, kvp.Key + "  ")));
+            NamedColorsDict.Colors.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+                .Select(kvp => new StyleAndTextTuple("fg:" + kvp.Key, kvp.Key + "  ")));
 
         FormattedTextOutput.Print(new Html("\n<u>Named colors, using 16 color output.</u>"));
         FormattedTextOutput.Print("(Note that it doesn't really make sense to use named colors ");

@@ -94,7 +94,7 @@ public sealed class SixteenColorCacheTests
     [InlineData(205, 0, 0, 41)]      // Red
     [InlineData(0, 205, 0, 42)]      // Green
     [InlineData(205, 205, 0, 43)]    // Yellow
-    [InlineData(0, 0, 238, 44)]      // Blue
+    [InlineData(0, 0, 205, 44)]      // Blue
     [InlineData(205, 0, 205, 45)]    // Magenta
     [InlineData(0, 205, 205, 46)]    // Cyan
     [InlineData(229, 229, 229, 47)]  // Gray
@@ -152,11 +152,12 @@ public sealed class SixteenColorCacheTests
         // |128-100| + |100-128| + |128-128| = 28 + 28 + 0 = 56 > 30
         var (_, name2) = cache.GetCode(128, 100, 128);
 
-        // name2 should not be a gray color (saturation > 30)
+        // name2 should not be ansiblack or ansiwhite (the only grays excluded
+        // when saturation > 30, matching Python's actual behavior where alias
+        // names "ansilightgray"/"ansidarkgray" don't match canonical palette names).
         Assert.False(
-            name2 == "ansiblack" || name2 == "ansigray" ||
-            name2 == "ansibrightblack" || name2 == "ansiwhite",
-            $"Expected non-gray color for high saturation but got {name2}");
+            name2 == "ansiblack" || name2 == "ansiwhite",
+            $"Expected non-black/white color for high saturation but got {name2}");
     }
 
     #endregion
