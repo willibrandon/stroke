@@ -441,7 +441,7 @@ This ensures examples behave correctly in real terminal environments before mark
 - C# 13 / .NET 10+ + Stroke library (all subsystems: FormattedTextOutput, Html, Ansi, Style, ColorDepth, Frame, TextArea, KeyBindings, PatchStdout, ProgressBar shortcut API) (068-progressbar-printtext-examples)
 - N/A (in-memory only; examples are transient console applications) (068-progressbar-printtext-examples)
 - C# 13 / .NET 10 + Stroke (project reference), Microsoft.Data.Sqlite (NuGet v9.*) (069-tutorial-sqlite-cli)
-- SQLite — in-memory (`:memory:`) by default, optional file-based via CLI argumen (069-tutorial-sqlite-cli)
+- SQLite — in-memory (`:memory:`) by default, optional file-based via CLI argument (069-tutorial-sqlite-cli)
 
 ## Recent Changes
 
