@@ -302,6 +302,8 @@ public class TelnetServerLifecycleTests : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var firstConnectionFailed = false;
         var secondConnectionSucceeded = false;
+        var firstDone = new SemaphoreSlim(0, 1);
+        var secondDone = new SemaphoreSlim(0, 1);
 
         _server = new TelnetServer(
             port: 0,
@@ -310,11 +312,13 @@ public class TelnetServerLifecycleTests : IAsyncLifetime
                 if (!firstConnectionFailed)
                 {
                     firstConnectionFailed = true;
+                    firstDone.Release();
                     throw new InvalidOperationException("Simulated failure");
                 }
                 else
                 {
                     secondConnectionSucceeded = true;
+                    secondDone.Release();
                     await Task.Delay(100, ct);
                 }
             });
@@ -327,7 +331,7 @@ public class TelnetServerLifecycleTests : IAsyncLifetime
         var stream1 = client1.GetStream();
         await Task.Delay(20, ct);
         await stream1.WriteAsync(CreateTtypeResponse(), ct);
-        await Task.Delay(200, ct);
+        await firstDone.WaitAsync(TimeSpan.FromSeconds(5), ct);
 
         // Second connection (should succeed)
         using var client2 = new TcpClient();
@@ -335,7 +339,7 @@ public class TelnetServerLifecycleTests : IAsyncLifetime
         var stream2 = client2.GetStream();
         await Task.Delay(20, ct);
         await stream2.WriteAsync(CreateTtypeResponse(), ct);
-        await Task.Delay(200, ct);
+        await secondDone.WaitAsync(TimeSpan.FromSeconds(5), ct);
 
         Assert.True(firstConnectionFailed);
         Assert.True(secondConnectionSucceeded);
