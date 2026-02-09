@@ -202,7 +202,7 @@ public class ApplicationStyleMergingTests
         var app = new Application<object?>(output: output);
 
         // Trigger a render
-        app.Renderer.Render(app.UnsafeCast, app.Layout);
+        app.Renderer.Render(app, app.Layout);
 
         var strings = app.GetUsedStyleStrings();
         // After render, should have some style strings (sorted)

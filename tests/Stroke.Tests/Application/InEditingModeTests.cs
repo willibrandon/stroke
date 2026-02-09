@@ -33,7 +33,7 @@ public class InEditingModeTests
         var app = new Application<object?>(
             layout: layout, input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var filter = AppFilters.InEditingMode(EditingMode.Vi);
         Assert.True(filter.Invoke());
@@ -51,7 +51,7 @@ public class InEditingModeTests
         var app = new Application<object?>(
             layout: layout, input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var filter = AppFilters.InEditingMode(EditingMode.Emacs);
         Assert.False(filter.Invoke());

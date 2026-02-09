@@ -44,11 +44,11 @@ public static class InputFactory
     /// </item>
     /// <item>
     /// <term>Windows platform</term>
-    /// <description>Win32Input (not yet implemented; returns DummyInput)</description>
+    /// <description><see cref="Stroke.Input.Windows.Win32Input"/></description>
     /// </item>
     /// <item>
     /// <term>POSIX platform (Linux/macOS)</term>
-    /// <description>Vt100Input (not yet implemented; returns DummyInput)</description>
+    /// <description><see cref="Stroke.Input.Vt100.Vt100Input"/></description>
     /// </item>
     /// <item>
     /// <term>stdin doesn't support fileno()</term>
@@ -164,8 +164,8 @@ public static class InputFactory
     /// </example>
     public static IPipeInput CreatePipe()
     {
-        // For now, use cross-platform PipeInputBase implementation
-        // Platform-specific implementations will be added later
+        // Cross-platform SimplePipeInput. Platform-specific PosixPipeInput
+        // and Win32PipeInput are available for direct construction.
         return new SimplePipeInput();
     }
 }

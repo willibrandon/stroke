@@ -30,7 +30,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(SearchFilters.IsSearching.Invoke());
     }
@@ -53,7 +53,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(SearchFilters.ControlIsSearchable.Invoke());
     }
@@ -68,7 +68,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(SearchFilters.ControlIsSearchable.Invoke());
     }
@@ -82,7 +82,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(SearchFilters.ControlIsSearchable.Invoke());
     }
@@ -101,7 +101,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         buffer.StartSelection();
         buffer.SelectionState!.EnterShiftMode();
@@ -118,7 +118,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         buffer.StartSelection();
         Assert.False(SearchFilters.ShiftSelectionMode.Invoke());
@@ -134,7 +134,7 @@ public class SearchFiltersTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(SearchFilters.ShiftSelectionMode.Invoke());
     }

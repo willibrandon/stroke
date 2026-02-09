@@ -19,7 +19,7 @@ public sealed class NamedCommandsCompletionTests
     private static KeyPressEvent CreateEvent(
         Buffer buffer,
         string? arg = null,
-        object? app = null)
+        IApplication? app = null)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -36,7 +36,7 @@ public sealed class NamedCommandsCompletionTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("complete");
@@ -49,7 +49,7 @@ public sealed class NamedCommandsCompletionTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("menu-complete");

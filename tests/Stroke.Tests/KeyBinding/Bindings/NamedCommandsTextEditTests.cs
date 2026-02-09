@@ -21,7 +21,7 @@ public sealed class NamedCommandsTextEditTests
         string? arg = null,
         string? data = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         var keySequence = data is not null
             ? new List<KeyPress> { new(new KeyOrChar(data[0]), data) }
@@ -48,7 +48,7 @@ public sealed class NamedCommandsTextEditTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("end-of-file");
@@ -64,7 +64,7 @@ public sealed class NamedCommandsTextEditTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 0));
         var binding = NamedCommands.GetByName("delete-char");
@@ -78,7 +78,7 @@ public sealed class NamedCommandsTextEditTests
         using var input = new SimplePipeInput();
         var output = new DummyOutput();
         var app = new Application<object>(input: input, output: output);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("delete-char");
@@ -93,7 +93,7 @@ public sealed class NamedCommandsTextEditTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("backward-delete-char");
@@ -106,7 +106,7 @@ public sealed class NamedCommandsTextEditTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 0));
         var binding = NamedCommands.GetByName("backward-delete-char");
@@ -223,7 +223,7 @@ public sealed class NamedCommandsTextEditTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("quoted-insert");

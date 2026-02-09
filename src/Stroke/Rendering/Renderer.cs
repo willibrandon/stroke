@@ -179,7 +179,7 @@ public sealed class Renderer
     /// <param name="app">The application being rendered.</param>
     /// <param name="layout">The layout to render.</param>
     /// <param name="isDone">Render in 'done' state (cursor at end, no more updates).</param>
-    public void Render(Application.Application<object?> app, Layout.Layout layout, bool isDone = false)
+    public void Render(Application.IApplication app, Layout.Layout layout, bool isDone = false)
     {
         var output = _output;
 

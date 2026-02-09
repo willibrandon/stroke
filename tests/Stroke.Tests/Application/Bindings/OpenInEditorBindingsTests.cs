@@ -48,7 +48,7 @@ public sealed class OpenInEditorBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Application<object>(
             input: _input, output: _output, layout: layout, editingMode: editingMode);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
         return (buffer, app, scope);
     }
 

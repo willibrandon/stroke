@@ -202,6 +202,70 @@ public sealed partial class Buffer
     }
 
     // ════════════════════════════════════════════════════════════════════════
+    // HISTORY LINES COMPLETION
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Start a completion based on all the other lines in the document and the history.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>Buffer.start_history_lines_completion()</c>.
+    /// </para>
+    /// <para>
+    /// Iterates all working lines (history entries and current input), splits each by
+    /// newline, and finds lines matching the current line prefix before cursor. Creates
+    /// completion entries with metadata indicating source (current or history line number).
+    /// </para>
+    /// </remarks>
+    public void StartHistoryLinesCompletion()
+    {
+        // Read Document snapshot before acquiring _lock (Document getter acquires _lock)
+        var document = Document;
+        var currentLine = document.CurrentLineBeforeCursor.TrimStart();
+
+        List<CompletionItem> completions;
+
+        using (_lock.EnterScope())
+        {
+            var foundCompletions = new HashSet<string>();
+            completions = [];
+
+            for (int i = 0; i < _workingLines.Count; i++)
+            {
+                var lines = _workingLines[i].Split('\n');
+                for (int j = 0; j < lines.Length; j++)
+                {
+                    var line = lines[j].Trim();
+                    if (line.Length > 0 && line.StartsWith(currentLine, StringComparison.Ordinal))
+                    {
+                        if (foundCompletions.Add(line))
+                        {
+                            var displayMeta = i == _workingIndex
+                                ? $"Current, line {j + 1}"
+                                : $"History {i + 1}, line {j + 1}";
+
+                            completions.Add(new CompletionItem(
+                                text: line,
+                                startPosition: -currentLine.Length,
+                                displayMeta: (FormattedText.AnyFormattedText)displayMeta));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Reverse (matching Python's completions[::-1])
+        completions.Reverse();
+
+        if (completions.Count > 0)
+        {
+            SetCompletions(completions);
+            GoToCompletion(0);
+        }
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
     // START COMPLETION
     // ════════════════════════════════════════════════════════════════════════
 

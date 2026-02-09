@@ -31,7 +31,7 @@ public sealed class AppSession : IDisposable
     private bool _disposed;
 
     // Internal: the app set by SetApp context manager
-    private object? _app; // Application<object?> once Application is defined
+    private IApplication? _app;
 
     // The session that was current when this session was created via CreateAppSession.
     // Used to restore the previous session on Dispose, forming a proper stack.
@@ -90,7 +90,7 @@ public sealed class AppSession : IDisposable
     /// The currently active application in this session, or null if none is running.
     /// Set internally by the application during RunAsync via <see cref="AppContext.SetApp"/>.
     /// </summary>
-    internal object? App
+    internal IApplication? App
     {
         get
         {
@@ -140,15 +140,36 @@ public sealed class AppSession : IDisposable
 
     /// <summary>
     /// Dispose of the session, restoring the previous session as current.
+    /// Disposes lazily-created I/O resources that this session owns.
     /// Disposal is idempotent.
     /// </summary>
     public void Dispose()
     {
+        IInput? inputToDispose = null;
+        IOutput? outputToDispose = null;
+
         using (_lock.EnterScope())
         {
             if (_disposed) return;
             _disposed = true;
+
+            // If I/O was lazily created (explicit was null, but current is non-null),
+            // this session owns those resources and must dispose them.
+            if (_explicitInput is null && _input is not null)
+            {
+                inputToDispose = _input;
+            }
+
+            if (_explicitOutput is null && _output is IDisposable)
+            {
+                outputToDispose = _output;
+            }
         }
+
+        // Dispose outside the lock to avoid deadlocks during disposal
+        // (disposal could interact with terminal or Win32 APIs).
+        inputToDispose?.Dispose();
+        (outputToDispose as IDisposable)?.Dispose();
 
         // Restore previous session
         AppContext.RestorePreviousSession(this);

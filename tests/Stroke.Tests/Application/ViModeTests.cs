@@ -49,7 +49,7 @@ public sealed class ViModeTests : IDisposable
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout,
             editingMode: EditingMode.Vi);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (buffer, app, scope);
     }

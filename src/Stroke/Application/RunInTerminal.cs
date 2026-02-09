@@ -103,7 +103,7 @@ public static class RunInTerminal
     private sealed class InTerminalContext : IAsyncDisposable
     {
         private readonly bool _renderCliDone;
-        private Application<object?>? _app;
+        private IApplication? _app;
         private TaskCompletionSource<object?>? _newFuture;
         private IDisposable? _cookedMode;
         private IDisposable? _detach;
@@ -128,9 +128,9 @@ public static class RunInTerminal
             }
 
             // Chain to previous run_in_terminal call.
-            var previousFuture = _app._runningInTerminalFuture;
+            var previousFuture = _app.RunningInTerminalFuture;
             _newFuture = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
-            _app._runningInTerminalFuture = _newFuture;
+            _app.RunningInTerminalFuture = _newFuture;
 
             // Wait for the previous run_in_terminal to finish (synchronously — we're in a hot path).
             if (previousFuture is not null)
@@ -154,7 +154,7 @@ public static class RunInTerminal
                 }
                 else
                 {
-                    _app.Renderer.Render(_app.UnsafeCast, _app.Layout, isDone: true);
+                    _app.Renderer.Render(_app, _app.Layout, isDone: true);
                 }
             }
             else
@@ -163,7 +163,7 @@ public static class RunInTerminal
             }
 
             // Disable rendering.
-            _app._runningInTerminal = true;
+            _app.RunningInTerminal = true;
 
             // Detach input and enter cooked mode.
             _detach = _app.Input.Detach();
@@ -186,7 +186,7 @@ public static class RunInTerminal
                 _detach?.Dispose();
 
                 // Re-enable rendering.
-                _app._runningInTerminal = false;
+                _app.RunningInTerminal = false;
                 _app.Renderer.Reset();
                 _app.Renderer.RequestAbsoluteCursorPosition();
                 _app.Invalidate();

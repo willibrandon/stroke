@@ -87,7 +87,7 @@ public static class CompletionBindings
     /// pagination prompts.
     /// </remarks>
     private static void DisplayCompletionsLikeReadlineInternal(
-        Application.Application<object> app,
+        Application.IApplication app,
         List<Completion.Completion> completions)
     {
         // Get terminal dimensions.

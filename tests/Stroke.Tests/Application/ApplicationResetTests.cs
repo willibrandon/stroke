@@ -216,7 +216,7 @@ public class ApplicationResetTests
         var app = new Application<object?>(output: new DummyOutput());
 
         // Render to create a last rendered screen
-        app.Renderer.Render(app.UnsafeCast, app.Layout);
+        app.Renderer.Render(app, app.Layout);
         Assert.NotNull(app.Renderer.LastRenderedScreen);
 
         // Reset should clear the renderer

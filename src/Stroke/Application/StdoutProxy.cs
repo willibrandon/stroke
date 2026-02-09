@@ -359,23 +359,12 @@ public sealed class StdoutProxy : TextWriter
     /// Check whether an application is currently running in our captured session.
     /// Port of Python's <c>_get_app_loop()</c>.
     /// </summary>
-    /// <remarks>
-    /// Uses the same <c>Unsafe.As</c> pattern as <see cref="AppContext.GetAppOrNull"/>
-    /// because C# generic classes are invariant: <c>Application&lt;string&gt;</c> does
-    /// not match <c>Application&lt;object?&gt;</c> in a pattern match.
-    /// </remarks>
-    private Application<object?>? GetAppOrNull()
+    private IApplication? GetAppOrNull()
     {
         var app = _appSession.App;
-        if (app is not null)
+        if (app is not null && app.IsRunning)
         {
-            var appType = app.GetType();
-            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
-            {
-                var typedApp = System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
-                if (typedApp.IsRunning)
-                    return typedApp;
-            }
+            return app;
         }
 
         return null;

@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Core;
 using Stroke.Input.Pipe;
 using Stroke.KeyBinding;
@@ -20,7 +21,7 @@ public sealed class NamedCommandsMovementTests
         string? arg = null,
         string? data = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         var keySequence = data is not null
             ? [new KeyPress(new KeyOrChar(data[0]), data)]
@@ -171,7 +172,7 @@ public sealed class NamedCommandsMovementTests
         using var input = new SimplePipeInput();
         var output = new DummyOutput();
         var app = new Stroke.Application.Application<object>(input: input, output: output);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 0));
         var binding = NamedCommands.GetByName("clear-screen");

@@ -36,7 +36,7 @@ public class ScrollablePaneVisibilityTests
 
         var output = new DummyOutput();
         var app = new Application<object?>(layout: layout, output: output);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Focus the first window initially
         layout.Focus(new FocusableElement(windows[0]));
@@ -159,13 +159,13 @@ public class ScrollablePaneVisibilityTests
         var layout = new StrokeLayout(new AnyContainer(scrollable));
         var output = new DummyOutput();
         var app = new Application<object?>(layout: layout, output: output);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // VerticalScroll should remain 0 when the focused window is at the top
         Assert.Equal(0, scrollable.VerticalScroll);
 
         // Render to trigger MakeWindowVisible
-        app.Renderer.Render(app.UnsafeCast, app.Layout);
+        app.Renderer.Render(app, app.Layout);
 
         // Should still be 0 since the window is visible at scroll position 0
         Assert.Equal(0, scrollable.VerticalScroll);

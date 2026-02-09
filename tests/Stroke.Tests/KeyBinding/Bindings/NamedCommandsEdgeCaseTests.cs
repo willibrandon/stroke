@@ -21,7 +21,7 @@ public sealed class NamedCommandsEdgeCaseTests
         string? arg = null,
         string? data = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         var keySequence = data is not null
             ? new List<KeyPress> { new(new KeyOrChar(data[0]), data) }
@@ -116,7 +116,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void DeleteChar_AtEndOfBuffer_TriggersBell()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("delete-char");
@@ -128,7 +128,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void BackwardDeleteChar_WithNegativeArg_DeletesForward()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 0));
         var binding = NamedCommands.GetByName("backward-delete-char");
@@ -162,7 +162,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void KillLine_OnEmptyBuffer_SetsClipboardToEmpty()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("kill-line");
@@ -175,7 +175,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void KillLine_OnLastLineWithNoTrailingNewline()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello\nworld", cursorPosition: 6));
         var binding = NamedCommands.GetByName("kill-line");
@@ -189,7 +189,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void UnixWordRubout_WhenNothingToDelete_TriggersBell()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("unix-word-rubout");
@@ -200,7 +200,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void YankPop_WithoutPrecedingYank_IsNoOp()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("yank-pop");
@@ -214,7 +214,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void StartKbdMacro_WhenAlreadyRecording_DelegatesToEmacsState()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.EmacsState.StartMacro();
         var buffer = new Buffer();
@@ -227,7 +227,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void EndKbdMacro_WhenNotRecording_DelegatesToEmacsState()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("end-kbd-macro");
@@ -239,7 +239,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void CallLastKbdMacro_WhenNoMacroRecorded_IsNoOp()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("call-last-kbd-macro");
@@ -252,7 +252,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void Complete_WithNoCompleter_IsNoOp()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("complete");
@@ -263,7 +263,7 @@ public sealed class NamedCommandsEdgeCaseTests
     public void MenuComplete_WithNoCompleter_IsNoOp()
     {
         var app = CreateApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("menu-complete");

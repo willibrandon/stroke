@@ -6,8 +6,8 @@ namespace Stroke.Completion;
 /// Base interface for completion providers.
 /// </summary>
 /// <remarks>
-/// This is a stub interface for Feature 07 (Buffer).
-/// Full implementation will be provided in Feature 08 (Completion System).
+/// Port of Python Prompt Toolkit's <c>Completer</c> abstract class from
+/// <c>prompt_toolkit.completion.base</c>.
 /// </remarks>
 public interface ICompleter
 {

@@ -536,7 +536,7 @@ public class ApplicationConstructionTests
         Assert.Equal(0, app.RenderCounter);
 
         // Render the UI manually
-        app.Renderer.Render(app.UnsafeCast, app.Layout);
+        app.Renderer.Render(app, app.Layout);
 
         // Note: RenderCounter is incremented by Redraw, not by Renderer.Render directly.
         // Redraw is only callable when running. Direct render doesn't increment counter.

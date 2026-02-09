@@ -52,7 +52,7 @@ public sealed class EmacsEditingHandlerTests : IDisposable
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
         app.EditingMode = EditingMode.Emacs;
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (buffer, app, scope);
     }

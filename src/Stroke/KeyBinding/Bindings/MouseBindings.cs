@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Stroke.Core.Primitives;
 using Stroke.Input;
 using Stroke.Layout;
+using Stroke.Output.Windows;
 using Stroke.Rendering;
 
 namespace Stroke.KeyBinding.Bindings;
@@ -395,17 +396,37 @@ public static class MouseBindings
             var app = @event.GetApp();
             var output = app.Output;
 
-            // Check for Win32-compatible output type.
-            // Win32Output is not yet implemented (Feature 21/57).
-            // When it exists, add: if (output is Win32Output or Windows10Output win32Output)
-            // For now, return NotImplemented since no Win32-compatible output can exist.
-            // TODO: Add Win32Output type check when Feature 21 is implemented.
+            // Extract Win32Output from the output type. Windows10Output delegates
+            // rendering to VT100 but uses Win32Output for console buffer queries.
+            // Python: isinstance(output, (Win32Output, Windows10_Output))
+            Win32Output? win32Output = output switch
+            {
+                Win32Output w => w,
+                Windows10Output w10 => w10.Win32Output,
+                _ => null,
+            };
 
-            // No Win32-compatible output found.
-            return NotImplementedOrNone.NotImplemented;
+            if (win32Output is not null)
+            {
+                var screenBufferInfo = win32Output.GetWin32ScreenBufferInfo();
+                var rowsAboveCursor =
+                    screenBufferInfo.CursorPosition.Y - app.Renderer.CursorPos.Y;
+                y -= rowsAboveCursor;
+
+                // Call the mouse event handler.
+                // (Can return NotImplemented.)
+                var handler = app.Renderer.MouseHandlers.GetHandler(x, y);
+                return handler(
+                    new MouseEvent(
+                        Position: new Point(x, y),
+                        EventType: eventType,
+                        Button: button,
+                        Modifiers: UnknownModifier));
+            }
         }
 
-        // No mouse handler found on non-Windows platform.
+        // No mouse handler found. Return NotImplemented so that we don't
+        // invalidate the UI.
         return NotImplementedOrNone.NotImplemented;
     }
 }

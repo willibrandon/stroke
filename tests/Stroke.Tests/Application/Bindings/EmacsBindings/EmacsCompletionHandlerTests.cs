@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Core;
 using Stroke.Input.Pipe;
 using Stroke.KeyBinding;
@@ -50,14 +51,14 @@ public sealed class EmacsCompletionHandlerTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (buffer, app, scope);
     }
 
     private static KeyPressEvent CreateEvent(
         Buffer buffer,
-        object app,
+        IApplication app,
         IReadOnlyList<KeyPress> keySequence)
     {
         return new KeyPressEvent(

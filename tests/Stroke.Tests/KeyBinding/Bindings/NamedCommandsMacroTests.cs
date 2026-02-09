@@ -20,7 +20,7 @@ public sealed class NamedCommandsMacroTests
     private static KeyPressEvent CreateEvent(
         Buffer buffer,
         string? arg = null,
-        object? app = null)
+        IApplication? app = null)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -37,7 +37,7 @@ public sealed class NamedCommandsMacroTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("start-kbd-macro");
@@ -51,7 +51,7 @@ public sealed class NamedCommandsMacroTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.EmacsState.StartMacro();
         Assert.True(app.EmacsState.IsRecording);
@@ -68,7 +68,7 @@ public sealed class NamedCommandsMacroTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("call-last-kbd-macro");
@@ -89,7 +89,7 @@ public sealed class NamedCommandsMacroTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.EmacsState.StartMacro();
         var buffer = new Buffer();
@@ -103,7 +103,7 @@ public sealed class NamedCommandsMacroTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("end-kbd-macro");
