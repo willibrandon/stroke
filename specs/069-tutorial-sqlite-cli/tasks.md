@@ -19,9 +19,9 @@
 
 **Purpose**: Create the Tutorial example project, add NuGet dependency, register in the solution file
 
-- [ ] T001 Create project file `examples/Stroke.Examples.Tutorial/Stroke.Examples.Tutorial.csproj` with `net10.0`, `OutputType Exe`, `LangVersion 13`, `Nullable enable`, `ImplicitUsings enable`, `ProjectReference` to `../../src/Stroke/Stroke.csproj`, and `PackageReference` to `Microsoft.Data.Sqlite` v9.* (FR-014)
-- [ ] T002 Add `Stroke.Examples.Telnet`, `Stroke.Examples.Ssh`, and `Stroke.Examples.Tutorial` projects to `examples/Stroke.Examples.sln` — Telnet and SSH already exist but were omitted from the solution (Constitution §VII violation); all three MUST be added following the existing pattern (FR-015)
-- [ ] T003 Create skeleton `examples/Stroke.Examples.Tutorial/Program.cs` with `namespace Stroke.Examples.Tutorial`, `Main(string[] args)` entry point, conditional routing (single `"sqlite-cli"` example via `string.Equals` with `StringComparison.OrdinalIgnoreCase`, matching the contract), database argument parsing (`args.Length < 2 ? ":memory:" : args[1]`), `ShowUsage()` helper, and error path for unknown examples (FR-013, FR-010, FR-011)
+- [x] T001 Create project file `examples/Stroke.Examples.Tutorial/Stroke.Examples.Tutorial.csproj` with `net10.0`, `OutputType Exe`, `LangVersion 13`, `Nullable enable`, `ImplicitUsings enable`, `ProjectReference` to `../../src/Stroke/Stroke.csproj`, and `PackageReference` to `Microsoft.Data.Sqlite` v9.* (FR-014)
+- [x] T002 Add `Stroke.Examples.Telnet`, `Stroke.Examples.Ssh`, and `Stroke.Examples.Tutorial` projects to `examples/Stroke.Examples.sln` — Telnet and SSH already exist but were omitted from the solution (Constitution §VII violation); all three MUST be added following the existing pattern (FR-015)
+- [x] T003 Create skeleton `examples/Stroke.Examples.Tutorial/Program.cs` with `namespace Stroke.Examples.Tutorial`, `Main(string[] args)` entry point, conditional routing (single `"sqlite-cli"` example via `string.Equals` with `StringComparison.OrdinalIgnoreCase`, matching the contract), database argument parsing (`args.Length < 2 ? ":memory:" : args[1]`), `ShowUsage()` helper, and error path for unknown examples (FR-013, FR-010, FR-011)
 
 ---
 
@@ -33,11 +33,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Create `examples/Stroke.Examples.Tutorial/SqliteCli.cs` with static class `SqliteCli`, static `SqlCompleter` field as `WordCompleter` with exactly 124 SQL keywords (verbatim from spec FR-004) and `ignoreCase: true`
-- [ ] T005 [US1] Add static `SqlStyle` field to `SqliteCli.cs` using `Style.FromDict()` with four rules: `completion-menu.completion` → `bg:#008888 #ffffff`, `completion-menu.completion.current` → `bg:#00aaaa #000000`, `scrollbar.background` → `bg:#88aaaa`, `scrollbar.button` → `bg:#222222` (FR-006)
-- [ ] T006 [US1] Implement `SqliteCli.Run(string database)` method in `SqliteCli.cs`: open `SqliteConnection` with `Data Source={database}`, create `PromptSession<string>` with `lexer: PygmentsLexer.FromFilename("example.sql")`, `completer: SqlCompleter`, `style: SqlStyle` (FR-001, FR-005, FR-012)
-- [ ] T007 [US1] Implement REPL loop body in `SqliteCli.Run()`: call `session.Prompt("> ")`, execute SQL via `SqliteCommand.ExecuteReader()`, format each row as Python tuple string — single-quoted strings, bare integers/floats, `None` for NULL, trailing comma for single-element rows — and print with `Console.WriteLine()`. No explicit transaction needed for FR-016 — Microsoft.Data.Sqlite auto-commits individual statements (see plan.md §4 "Database Connection Scope"). Empty input is passed to SQLite as-is and produces no output (spec edge case) (FR-001, FR-002, FR-003, FR-016)
-- [ ] T008 [US1] Verify the project builds with `dotnet build examples/Stroke.Examples.Tutorial` and confirm no compilation errors
+- [x] T004 [US1] Create `examples/Stroke.Examples.Tutorial/SqliteCli.cs` with static class `SqliteCli`, static `SqlCompleter` field as `WordCompleter` with exactly 124 SQL keywords (verbatim from spec FR-004) and `ignoreCase: true`
+- [x] T005 [US1] Add static `SqlStyle` field to `SqliteCli.cs` using `Style.FromDict()` with four rules: `completion-menu.completion` → `bg:#008888 #ffffff`, `completion-menu.completion.current` → `bg:#00aaaa #000000`, `scrollbar.background` → `bg:#88aaaa`, `scrollbar.button` → `bg:#222222` (FR-006)
+- [x] T006 [US1] Implement `SqliteCli.Run(string database)` method in `SqliteCli.cs`: open `SqliteConnection` with `Data Source={database}`, create `PromptSession<string>` with `lexer: PygmentsLexer.FromFilename("example.sql")`, `completer: SqlCompleter`, `style: SqlStyle` (FR-001, FR-005, FR-012)
+- [x] T007 [US1] Implement REPL loop body in `SqliteCli.Run()`: call `session.Prompt("> ")`, execute SQL via `SqliteCommand.ExecuteReader()`, format each row as Python tuple string — single-quoted strings, bare integers/floats, `None` for NULL, trailing comma for single-element rows — and print with `Console.WriteLine()`. No explicit transaction needed for FR-016 — Microsoft.Data.Sqlite auto-commits individual statements (see plan.md §4 "Database Connection Scope"). Empty input is passed to SQLite as-is and produces no output (spec edge case) (FR-001, FR-002, FR-003, FR-016)
+- [x] T008 [US1] Verify the project builds with `dotnet build examples/Stroke.Examples.Tutorial` and confirm no compilation errors
 
 **Checkpoint**: At this point, the REPL should accept SQL input, display results in Python tuple format, offer Tab completion for SQL keywords with teal styling, and show syntax-highlighted input. Empty input and non-query statements produce no output.
 
@@ -51,9 +51,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Add `KeyboardInterruptException` handler to the REPL loop in `SqliteCli.cs` — `catch (KeyboardInterruptException) { continue; }` to discard current input and show a new prompt (FR-007)
-- [ ] T010 [US2] Add `EOFException` handler to the REPL loop in `SqliteCli.cs` — `catch (EOFException) { break; }` followed by `Console.WriteLine("GoodBye!")` after the loop (FR-008)
-- [ ] T011 [US2] Add SQL error handler to the SQL execution block in `SqliteCli.cs` — `catch (Exception e) { Console.WriteLine($"{e.GetType().Name}('{e.Message}')"); }` to display errors in Python `repr(e)` format (FR-009)
+- [x] T009 [US2] Add `KeyboardInterruptException` handler to the REPL loop in `SqliteCli.cs` — `catch (KeyboardInterruptException) { continue; }` to discard current input and show a new prompt (FR-007)
+- [x] T010 [US2] Add `EOFException` handler to the REPL loop in `SqliteCli.cs` — `catch (EOFException) { break; }` followed by `Console.WriteLine("GoodBye!")` after the loop (FR-008)
+- [x] T011 [US2] Add SQL error handler to the SQL execution block in `SqliteCli.cs` — `catch (Exception e) { Console.WriteLine($"{e.GetType().Name}('{e.Message}')"); }` to display errors in Python `repr(e)` format (FR-009)
 
 **Checkpoint**: At this point, the REPL is fully robust — invalid SQL, Ctrl-C, and Ctrl-D all behave correctly without crashing.
 
@@ -67,7 +67,7 @@
 
 ### Implementation for User Story 3
 
-- [ ] T012 [US3] Smoke-test file-based database support: run `dotnet run --project examples/Stroke.Examples.Tutorial -- sqlite-cli test.db`, execute `CREATE TABLE t(x)`, `INSERT INTO t VALUES(1)`, exit with Ctrl-D, relaunch with same path, run `SELECT * FROM t`, confirm `(1,)` output. Arg parsing (T003) and connection string + `using` disposal (T006) already implement FR-010, FR-011, FR-017 — this task validates the integration end-to-end
+- [x] T012 [US3] Smoke-test file-based database support: run `dotnet run --project examples/Stroke.Examples.Tutorial -- sqlite-cli test.db`, execute `CREATE TABLE t(x)`, `INSERT INTO t VALUES(1)`, exit with Ctrl-D, relaunch with same path, run `SELECT * FROM t`, confirm `(1,)` output. Arg parsing (T003) and connection string + `using` disposal (T006) already implement FR-010, FR-011, FR-017 — this task validates the integration end-to-end
 
 **Checkpoint**: At this point, all three user stories are complete — the REPL works with both in-memory and file-based databases.
 
@@ -77,9 +77,9 @@
 
 **Purpose**: End-to-end validation of all user stories via TUI Driver, confirming 128/128 example coverage
 
-- [ ] T013 Verify with TUI Driver: launch `dotnet run --project examples/Stroke.Examples.Tutorial -- sqlite-cli`, execute a full CRUD cycle (`CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`), confirm Python-style tuple output, test Tab completion appears for partial SQL keywords, verify syntax highlighting renders, test Ctrl-C recovery, test Ctrl-D exits with `"GoodBye!"`, test invalid SQL shows `TypeName('message')` error format (SC-001 through SC-008)
-- [ ] T014 Verify with TUI Driver: launch with file-based database argument, create data, exit, relaunch, confirm data persistence (US3 verification)
-- [ ] T015 Run `dotnet build examples/Stroke.Examples.sln` to verify all 9 example projects (Prompts, Choices, Dialogs, FullScreen, PrintText, ProgressBar, Telnet, Ssh, Tutorial) plus Stroke library build together without errors
+- [x] T013 Verify with TUI Driver: launch `dotnet run --project examples/Stroke.Examples.Tutorial -- sqlite-cli`, execute a full CRUD cycle (`CREATE TABLE`, `INSERT`, `SELECT`, `UPDATE`, `DELETE`), confirm Python-style tuple output, test Tab completion appears for partial SQL keywords, verify syntax highlighting renders, test Ctrl-C recovery, test Ctrl-D exits with `"GoodBye!"`, test invalid SQL shows `TypeName('message')` error format (SC-001 through SC-008)
+- [x] T014 Verify with TUI Driver: launch with file-based database argument, create data, exit, relaunch, confirm data persistence (US3 verification)
+- [x] T015 Run `dotnet build examples/Stroke.Examples.sln` to verify all 9 example projects (Prompts, Choices, Dialogs, FullScreen, PrintText, ProgressBar, Telnet, Ssh, Tutorial) plus Stroke library build together without errors
 
 ---
 
