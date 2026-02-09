@@ -643,7 +643,7 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
 
 ### Up Next
 
-- **Examples** — Port of Python Prompt Toolkit examples (126/129 complete)
+- **Examples** — Port of Python Prompt Toolkit examples (127/129 complete)
   - `accept-default` — Prompt with default value auto-accepted (`Stroke.Examples.Prompts`)
   - `async-prompt` — Async prompt with background tasks (`Stroke.Examples.Prompts`)
   - `auto-suggestion` — Fish-style auto-suggestion from history (`Stroke.Examples.Prompts`)
@@ -770,7 +770,8 @@ A .NET 10 port of [Python Prompt Toolkit](https://github.com/prompt-toolkit/pyth
   - `print-frame` — Container printing with Frame widget (`Stroke.Examples.PrintText`)
   - `print-formatted-text` — Multiple formatted text output methods (`Stroke.Examples.PrintText`)
   - `logo-ansi-art` — Prompt Toolkit ANSI art logo rendering (`Stroke.Examples.PrintText`)
-  - Remaining: 3 examples (Prompts/InputHook, Tutorial/SqliteCli, Standalone/AsyncEventLoop)
+  - `sqlite-cli` — Interactive SQLite REPL with completion, syntax highlighting, and styled completion menu (`Stroke.Examples.Tutorial`)
+  - Remaining: 2 examples (Prompts/InputHook, Standalone/AsyncEventLoop)
 
 ## Requirements
 
@@ -790,6 +791,16 @@ Performance benchmarks using BenchmarkDotNet:
 ```bash
 dotnet run -c Release --project benchmarks/Stroke.Benchmarks
 ```
+
+## Demos
+
+Terminal recordings are in [`demo/`](demo/) as [VHS](https://github.com/charmbracelet/vhs) `.tape` files. Install VHS and run:
+
+```bash
+vhs demo/sqlite-cli.tape
+```
+
+See [`demo/README.md`](demo/README.md) for requirements and troubleshooting.
 
 ## License
 

@@ -38,3 +38,8 @@ BenchmarkDotNet.Artifacts/
 # SSH host keys (generated for examples)
 ssh_host_key
 ssh_host_key.pub
+
+# VHS demo outputs (regenerate from .tape files)
+demo/*.gif
+demo/*.mp4
+demo/*.webm
