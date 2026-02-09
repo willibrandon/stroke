@@ -108,9 +108,26 @@ public static class SqliteCli
                     Console.WriteLine(FormatRow(reader));
                 }
             }
+            catch (SqliteException e)
+            {
+                // Python: print(repr(e)) → OperationalError('near "INVALID": syntax error')
+                // Microsoft.Data.Sqlite wraps as: "SQLite Error N: 'actual message'."
+                // Extract the inner message to match Python's raw error string.
+                var msg = e.Message;
+                var prefixEnd = msg.IndexOf(": '", StringComparison.Ordinal);
+                if (prefixEnd >= 0)
+                {
+                    msg = msg[(prefixEnd + 3)..];
+                    if (msg.EndsWith("'."))
+                    {
+                        msg = msg[..^2];
+                    }
+                }
+
+                Console.WriteLine($"{e.GetType().Name}('{msg}')");
+            }
             catch (Exception e)
             {
-                // Python: print(repr(e)) → OperationalError('message')
                 Console.WriteLine($"{e.GetType().Name}('{e.Message}')");
             }
         }
@@ -208,7 +225,18 @@ public static class SqliteCli
             }
 
             var value = reader.GetValue(i);
-            if (value is IFormattable formattable)
+            if (value is double d)
+            {
+                // Python's repr(5.0) → "5.0", never "5"
+                var s = d.ToString("G", CultureInfo.InvariantCulture);
+                if (!s.Contains('.') && !s.Contains('E'))
+                {
+                    s += ".0";
+                }
+
+                items[i] = s;
+            }
+            else if (value is IFormattable formattable)
             {
                 items[i] = formattable.ToString(null, CultureInfo.InvariantCulture) ?? string.Empty;
             }
