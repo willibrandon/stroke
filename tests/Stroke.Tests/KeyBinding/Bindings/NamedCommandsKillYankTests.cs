@@ -22,7 +22,7 @@ public sealed class NamedCommandsKillYankTests
         string? arg = null,
         string? data = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         var keySequence = data is not null
             ? new List<KeyPress> { new(new KeyOrChar(data[0]), data) }
@@ -48,7 +48,7 @@ public sealed class NamedCommandsKillYankTests
     public void KillLine_DeletesToEndOfLine_AndSetsClipboard()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 5));
         var binding = NamedCommands.GetByName("kill-line");
@@ -62,7 +62,7 @@ public sealed class NamedCommandsKillYankTests
     public void KillLine_NegativeArg_DeletesToStartOfLine()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 5));
         var binding = NamedCommands.GetByName("kill-line");
@@ -76,7 +76,7 @@ public sealed class NamedCommandsKillYankTests
     public void KillLine_AtNewline_DeletesNewlineChar()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello\nworld", cursorPosition: 5));
         var binding = NamedCommands.GetByName("kill-line");
@@ -90,7 +90,7 @@ public sealed class NamedCommandsKillYankTests
     public void KillLine_OnEmptyBuffer_SetsClipboardToEmpty()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("kill-line");
@@ -103,7 +103,7 @@ public sealed class NamedCommandsKillYankTests
     public void KillWord_DeletesToNextWordEnd()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 0));
         var binding = NamedCommands.GetByName("kill-word");
@@ -117,7 +117,7 @@ public sealed class NamedCommandsKillYankTests
     public void ConsecutiveKill_ConcatenatesClipboard()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world test", cursorPosition: 0));
 
@@ -136,7 +136,7 @@ public sealed class NamedCommandsKillYankTests
     public void UnixWordRubout_DeletesPreviousWord()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 11));
         var binding = NamedCommands.GetByName("unix-word-rubout");
@@ -149,7 +149,7 @@ public sealed class NamedCommandsKillYankTests
     public void UnixWordRubout_WhenNothingToDelete_TriggersBell()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("unix-word-rubout");
@@ -161,7 +161,7 @@ public sealed class NamedCommandsKillYankTests
     public void BackwardKillWord_DeletesPreviousWord()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 11));
         var binding = NamedCommands.GetByName("backward-kill-word");
@@ -175,7 +175,7 @@ public sealed class NamedCommandsKillYankTests
     public void BackwardKill_ConcatenationPrepends()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("one two three", cursorPosition: 13));
 
@@ -197,7 +197,7 @@ public sealed class NamedCommandsKillYankTests
         var buffer = new Buffer(document: new Document("hello   world", cursorPosition: 7));
         var binding = NamedCommands.GetByName("delete-horizontal-space");
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
         binding.Call(CreateEvent(buffer, app: app));
         Assert.Equal("helloworld", buffer.Document.Text);
     }
@@ -206,7 +206,7 @@ public sealed class NamedCommandsKillYankTests
     public void UnixLineDiscard_DeletesToLineStart()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello world", cursorPosition: 5));
         var binding = NamedCommands.GetByName("unix-line-discard");
@@ -220,7 +220,7 @@ public sealed class NamedCommandsKillYankTests
     public void UnixLineDiscard_AtColumnZero_DeletesOneCharBack()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello\nworld", cursorPosition: 6));
         var binding = NamedCommands.GetByName("unix-line-discard");
@@ -233,7 +233,7 @@ public sealed class NamedCommandsKillYankTests
     public void Yank_PastesClipboard()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.Clipboard.SetText("pasted");
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
@@ -247,7 +247,7 @@ public sealed class NamedCommandsKillYankTests
     public void YankNthArg_InsertsFromHistory()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("yank-nth-arg");
@@ -259,7 +259,7 @@ public sealed class NamedCommandsKillYankTests
     public void YankLastArg_InsertsLastWordFromHistory()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("", cursorPosition: 0));
         var binding = NamedCommands.GetByName("yank-last-arg");
@@ -271,7 +271,7 @@ public sealed class NamedCommandsKillYankTests
     public void YankPop_WithoutPrecedingYank_IsNoOp()
     {
         var app = CreateTestApp();
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("hello", cursorPosition: 5));
         var binding = NamedCommands.GetByName("yank-pop");

@@ -60,7 +60,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (bc, sbc, searchState, mainBuffer, searchBuffer, app, scope);
     }
@@ -70,7 +70,7 @@ public sealed class SearchBindingsTests : IDisposable
     /// </summary>
     private static KeyPressEvent CreateEvent(
         Buffer? buffer = null,
-        object? app = null,
+        IApplication? app = null,
         string? arg = null)
     {
         return new KeyPressEvent(
@@ -315,7 +315,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(SearchFilters.ControlIsSearchable.Invoke());
     }
@@ -363,7 +363,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         SearchOperations.StartSearch();
         Assert.True(SearchBindings.PreviousBufferIsReturnable.Invoke());
@@ -395,7 +395,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         SearchOperations.StartSearch();
         searchBuffer.Text = "hello";
@@ -448,7 +448,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         SearchOperations.StartSearch();
         searchBuffer.Text = "hello";
@@ -745,7 +745,7 @@ public sealed class SearchBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // SearchBufferControl is the current control, not a BufferControl
         // (unless SBC extends BufferControl — in that case it returns its search state)

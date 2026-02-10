@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Core;
 using Stroke.Core.Primitives;
 using Stroke.Input.Pipe;
@@ -127,7 +128,7 @@ public sealed class MouseBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Don't render — HeightIsKnown will be false
         var data = "\x1b[<0;10;5M";
@@ -322,11 +323,11 @@ public sealed class MouseBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
         return (buffer, window, app, scope);
     }
 
-    private static KeyPressEvent CreateEvent(string data, object app)
+    private static KeyPressEvent CreateEvent(string data, IApplication app)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -337,7 +338,7 @@ public sealed class MouseBindingsTests : IDisposable
             app: app);
     }
 
-    private static KeyPressEvent CreateWindowsEvent(string data, object app)
+    private static KeyPressEvent CreateWindowsEvent(string data, IApplication app)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,

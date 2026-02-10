@@ -38,7 +38,7 @@ public sealed class NamedCommandsHistoryTests : IDisposable
         Buffer buffer,
         string? arg = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -58,7 +58,7 @@ public sealed class NamedCommandsHistoryTests : IDisposable
         var window = new Window(content: bc);
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Application<object>(input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var binding = NamedCommands.GetByName("accept-line");
         // ValidateAndHandle should not throw on a basic buffer
@@ -103,7 +103,7 @@ public sealed class NamedCommandsHistoryTests : IDisposable
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("test", cursorPosition: 0));
         var binding = NamedCommands.GetByName("reverse-search-history");

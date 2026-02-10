@@ -37,7 +37,7 @@ internal static class ScreenDiff
     /// <param name="previousWidth">Previous terminal width.</param>
     /// <returns>Tuple of (CursorPos, LastStyle).</returns>
     internal static (Point CursorPos, string? LastStyle) OutputScreenDiff(
-        Application.Application<object?> app,
+        Application.IApplication app,
         IOutput output,
         Screen screen,
         Point currentPos,

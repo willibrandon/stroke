@@ -28,7 +28,7 @@ public sealed class RendererSynchronizedOutputTests
         var renderer = CreateRenderer(output);
         var app = new Application<object?>(output: output);
 
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         var result = writer.ToString();
         Assert.Contains("\x1b[?2026h", result);
@@ -49,7 +49,7 @@ public sealed class RendererSynchronizedOutputTests
 
         // Do a render first so there's state to erase
         var app = new Application<object?>(output: output);
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         writer.GetStringBuilder().Clear();
 
@@ -69,7 +69,7 @@ public sealed class RendererSynchronizedOutputTests
 
         // Do a render first so there's state to clear
         var app = new Application<object?>(output: output);
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         writer.GetStringBuilder().Clear();
 
@@ -95,7 +95,7 @@ public sealed class RendererSynchronizedOutputTests
 
         // Do a render first to establish state
         var app = new Application<object?>(output: output);
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         writer.GetStringBuilder().Clear();
 
@@ -114,7 +114,7 @@ public sealed class RendererSynchronizedOutputTests
         var app = new Application<object?>(output: output);
 
         // First render establishes state
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
         Assert.NotNull(renderer.LastRenderedScreen);
 
         // Reset clears state
@@ -124,7 +124,7 @@ public sealed class RendererSynchronizedOutputTests
         writer.GetStringBuilder().Clear();
 
         // Next render is a full redraw (previousScreen is null)
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         var result = writer.ToString();
         // Full redraw uses relative cursor movement (no absolute cursor home)
@@ -142,7 +142,7 @@ public sealed class RendererSynchronizedOutputTests
         var app = new Application<object?>(output: output);
 
         // First render is always a full redraw (previousScreen is null)
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         var result = writer.ToString();
         // Should use relative cursor movement (no absolute cursor home)
@@ -161,7 +161,7 @@ public sealed class RendererSynchronizedOutputTests
         var app = new Application<object?>(output: output);
 
         // Render to establish non-default state
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
         Assert.NotNull(renderer.LastRenderedScreen);
 
         // Reset clears all observable state

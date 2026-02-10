@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Application.Bindings;
 using Stroke.Core;
 using Stroke.Filters;
@@ -56,7 +57,7 @@ public sealed class BasicBindingsHandlerTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (buffer, app, scope);
     }
@@ -66,7 +67,7 @@ public sealed class BasicBindingsHandlerTests : IDisposable
     /// </summary>
     private static KeyPressEvent CreateEvent(
         Buffer? buffer = null,
-        object? app = null,
+        IApplication? app = null,
         Keys key = Keys.Any,
         string? data = null,
         bool isRepeat = false,

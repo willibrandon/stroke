@@ -154,28 +154,65 @@ public sealed partial class Win32Output : IOutput, IDisposable
     {
         using (_lock.EnterScope())
         {
-            if (_buffer.Count == 0)
-            {
-                return;
-            }
-
-            // Write character-by-character to avoid rendering artifacts
-            // (Windows Console rendering bug workaround)
-            foreach (var data in _buffer)
-            {
-                foreach (var ch in data)
-                {
-                    ConsoleApi.WriteConsole(
-                        _hConsole,
-                        ch.ToString(),
-                        1,
-                        out _,
-                        nint.Zero);
-                }
-            }
-
-            _buffer.Clear();
+            FlushBufferInternal();
         }
+    }
+
+    /// <summary>
+    /// Returns the current console screen buffer info.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Port of Python Prompt Toolkit's <c>Win32Output.get_win32_screen_buffer_info()</c>.
+    /// Used by the Windows mouse event handler to compute coordinate adjustments.
+    /// </para>
+    /// <para>
+    /// Flushes any buffered output before querying, ensuring the cursor position is accurate.
+    /// </para>
+    /// </remarks>
+    /// <returns>The current <see cref="ConsoleScreenBufferInfo"/>.</returns>
+    /// <exception cref="NoConsoleScreenBufferError">Thrown when screen buffer info cannot be retrieved.</exception>
+    public ConsoleScreenBufferInfo GetWin32ScreenBufferInfo()
+    {
+        using (_lock.EnterScope())
+        {
+            FlushBufferInternal();
+
+            if (!ConsoleApi.GetConsoleScreenBufferInfo(_hConsole, out var info))
+            {
+                throw new NoConsoleScreenBufferError();
+            }
+
+            return info;
+        }
+    }
+
+    /// <summary>
+    /// Flushes the internal write buffer. Must be called within <see cref="_lock"/> scope.
+    /// </summary>
+    private void FlushBufferInternal()
+    {
+        if (_buffer.Count == 0)
+        {
+            return;
+        }
+
+        // Write character-by-character to avoid rendering artifacts
+        // (Windows Console rendering bug workaround)
+        foreach (var data in _buffer)
+        {
+            foreach (var ch in data)
+            {
+                ConsoleApi.WriteConsole(
+                    _hConsole,
+                    ch.ToString(),
+                    1,
+                    out _,
+                    nint.Zero);
+            }
+        }
+
+        _buffer.Clear();
     }
 
     #endregion

@@ -30,7 +30,7 @@ public class ViFiltersTests
         var app = new Application<object?>(
             layout: layout, input: input, output: output,
             editingMode: EditingMode.Vi);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
         return (app, scope);
     }
 
@@ -55,7 +55,7 @@ public class ViFiltersTests
         var app = new Application<object?>(
             input: input, output: new DummyOutput(),
             editingMode: EditingMode.Emacs);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(ViFilters.ViMode.Invoke());
     }
@@ -335,7 +335,7 @@ public class ViFiltersTests
             input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi,
             reverseViSearchDirection: new FilterOrBool(true));
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(ViFilters.ViSearchDirectionReversed.Invoke());
     }

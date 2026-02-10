@@ -70,7 +70,7 @@ public sealed class SearchOperationsTests : IDisposable
         // Create application and set as current
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (bc, sbc, searchState, mainBuffer, searchBuffer, app, scope);
     }
@@ -150,7 +150,7 @@ public sealed class SearchOperationsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Should not throw
         Stroke.Application.SearchOperations.StartSearch();
@@ -166,7 +166,7 @@ public sealed class SearchOperationsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Should not throw
         Stroke.Application.SearchOperations.StartSearch();
@@ -500,7 +500,7 @@ public sealed class SearchOperationsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Current control is SBC (not a regular BufferControl in search links)
         // Should not throw

@@ -41,46 +41,20 @@ public static class AppContext
     /// If no application is running, returns a <see cref="DummyApplication"/>.
     /// </summary>
     /// <returns>The running application or a DummyApplication.</returns>
-    public static Application<object?> GetApp()
+    public static IApplication GetApp()
     {
         var session = GetAppSession();
-        var app = session.App;
-
-        // Check if session.App is any Application<T> (generic invariance means
-        // Application<string> is NOT Application<object?>, so we can't use pattern matching).
-        // Instead, check the generic type definition and use Unsafe.As.
-        if (app is not null)
-        {
-            var appType = app.GetType();
-            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
-            {
-                return System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
-            }
-        }
-
-        return new DummyApplication();
+        return session.App ?? new DummyApplication();
     }
 
     /// <summary>
     /// Get the current active (running) Application, or null if none is running.
     /// </summary>
     /// <returns>The running application or null.</returns>
-    public static Application<object?>? GetAppOrNull()
+    public static IApplication? GetAppOrNull()
     {
         var session = GetAppSession();
-        var app = session.App;
-
-        // Check if session.App is any Application<T> (generic invariance issue).
-        if (app is not null)
-        {
-            var appType = app.GetType();
-            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
-            {
-                return System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(app);
-            }
-        }
-
-        return null;
+        return session.App;
     }
 
     /// <summary>
@@ -90,7 +64,7 @@ public static class AppContext
     /// </summary>
     /// <param name="app">The application to set as active.</param>
     /// <returns>An IDisposable that restores the previous application.</returns>
-    public static IDisposable SetApp(Application<object?> app)
+    public static IDisposable SetApp(IApplication app)
     {
         ArgumentNullException.ThrowIfNull(app);
 
@@ -191,10 +165,10 @@ public static class AppContext
     private sealed class AppScopeDisposable : IDisposable
     {
         private readonly AppSession _session;
-        private readonly object? _previousApp;
+        private readonly IApplication? _previousApp;
         private bool _disposed;
 
-        internal AppScopeDisposable(AppSession session, object? previousApp)
+        internal AppScopeDisposable(AppSession session, IApplication? previousApp)
         {
             _session = session;
             _previousApp = previousApp;

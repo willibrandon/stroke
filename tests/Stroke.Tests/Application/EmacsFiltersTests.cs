@@ -29,7 +29,7 @@ public class EmacsFiltersTests
         var app = new Application<object?>(
             layout: layout, input: input, output: output,
             editingMode: EditingMode.Emacs);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
         return (app, scope);
     }
 
@@ -54,7 +54,7 @@ public class EmacsFiltersTests
         var app = new Application<object?>(
             input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(EmacsFilters.EmacsMode.Invoke());
     }
@@ -103,7 +103,7 @@ public class EmacsFiltersTests
         var app = new Application<object?>(
             input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(EmacsFilters.EmacsInsertMode.Invoke());
     }
@@ -146,7 +146,7 @@ public class EmacsFiltersTests
         var app = new Application<object?>(
             layout: layout, input: input, output: new DummyOutput(),
             editingMode: EditingMode.Vi);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         buffer.StartSelection();
         Assert.False(EmacsFilters.EmacsSelectionMode.Invoke());

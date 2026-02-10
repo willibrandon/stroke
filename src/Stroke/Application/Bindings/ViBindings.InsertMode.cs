@@ -135,16 +135,16 @@ public static partial class ViBindings
             });
 
         // ============================================================
-        // Insert mode: line/file completion stubs (Ctrl-X Ctrl-L, Ctrl-X Ctrl-F)
+        // Insert mode: line/file completion (Ctrl-X Ctrl-L, Ctrl-X Ctrl-F)
         // ============================================================
 
-        // Ctrl-X Ctrl-L — line completion (stub)
+        // Ctrl-X Ctrl-L — line completion
         kb.Add<KeyHandlerCallable>(
             [new KeyOrChar(Keys.ControlX), new KeyOrChar(Keys.ControlL)],
             filter: new FilterOrBool(viInsMode))(
             (@event) =>
             {
-                // TODO: start_history_lines_completion not yet ported
+                @event.CurrentBuffer?.StartHistoryLinesCompletion();
                 return null;
             });
 

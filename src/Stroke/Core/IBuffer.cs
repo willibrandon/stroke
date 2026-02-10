@@ -5,9 +5,6 @@ namespace Stroke.Core;
 /// <summary>
 /// Interface for text buffer with editing capabilities.
 /// </summary>
-/// <remarks>
-/// This is a minimal stub for the Auto Suggest feature; full implementation in Feature 05.
-/// </remarks>
 public interface IBuffer
 {
     /// <summary>

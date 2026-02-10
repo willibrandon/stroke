@@ -38,11 +38,11 @@ namespace Stroke.Application;
 /// </para>
 /// <para>
 /// <b>Generic covariance note:</b> C# classes are invariant, so <c>Application&lt;string&gt;</c>
-/// cannot be assigned to <c>Application&lt;object?&gt;</c>. Internal components that need to
-/// accept any application (CombinedRegistry, Renderer, KeyPressEvent) use
-/// <c>Application&lt;object?&gt;</c> as the parameter type. The Application class provides an
-/// internal property that returns itself cast to <c>Application&lt;object?&gt;</c>
-/// via <c>Unsafe.As</c>. This is an implementation detail not visible in the public API.
+/// cannot be assigned to <c>Application&lt;object?&gt;</c>. The <see cref="IApplication"/>
+/// interface provides a non-generic contract that all <c>Application&lt;T&gt;</c> instances
+/// implement, enabling type-safe polymorphism without <c>Unsafe.As</c> casts.
+/// Internal components (CombinedRegistry, Renderer, KeyPressEvent) use
+/// <c>IApplication</c> instead of <c>Application&lt;object?&gt;</c>.
 /// </para>
 /// <para>
 /// <b>Inheritance:</b> This class is NOT sealed because <see cref="DummyApplication"/>
@@ -55,7 +55,7 @@ namespace Stroke.Application;
 /// <c>prompt_toolkit.application.application</c>.
 /// </para>
 /// </remarks>
-public partial class Application<TResult> : IApplicationDoneCheck
+public partial class Application<TResult> : IApplication, IApplicationDoneCheck
 {
     private readonly Lock _lock = new();
     private readonly ColorDepthOption _colorDepthOption;
@@ -246,7 +246,7 @@ public partial class Application<TResult> : IApplicationDoneCheck
         _lastRedrawTime = 0.0;
 
         // Key processor (with combined registry)
-        KeyProcessor = new KeyProcessor(new CombinedRegistry(UnsafeCast));
+        KeyProcessor = new KeyProcessor(new CombinedRegistry(this));
 
         // RunInTerminal state
         _runningInTerminal = false;
@@ -309,7 +309,7 @@ public partial class Application<TResult> : IApplicationDoneCheck
         MergedStyle = CreateMergedStyle();
         Renderer = new Renderer(MergedStyle, Output);
         _renderCounter = 0;
-        KeyProcessor = new KeyProcessor(new CombinedRegistry(UnsafeCast));
+        KeyProcessor = new KeyProcessor(new CombinedRegistry(this));
     }
 
     // --- Properties (public, mutable with Lock) ---
@@ -475,10 +475,10 @@ public partial class Application<TResult> : IApplicationDoneCheck
     internal IStyle MergedStyle { get; }
 
     /// <summary>The default key bindings.</summary>
-    internal IKeyBindingsBase DefaultBindings { get; }
+    public IKeyBindingsBase DefaultBindings { get; }
 
     /// <summary>The page navigation key bindings.</summary>
-    internal IKeyBindingsBase PageNavigationBindings { get; }
+    public IKeyBindingsBase PageNavigationBindings { get; }
 
     // --- Computed Properties ---
 
@@ -559,24 +559,6 @@ public partial class Application<TResult> : IApplicationDoneCheck
     /// construction. Additional handlers can be added via the <c>+=</c> operator.
     /// </summary>
     public Event<Application<TResult>> AfterRender { get; }
-
-    // --- Internal: Generic covariance cast ---
-
-    /// <summary>
-    /// Returns this application cast to Application&lt;object?&gt; for use by internal
-    /// components that need to accept any application type.
-    /// </summary>
-    internal Application<object?> UnsafeCast
-    {
-        get
-        {
-            // Application<TResult> is a class (reference type). Since C# generics are invariant,
-            // we use Unsafe.As to reinterpret the reference. This is safe because the internal
-            // components only use the base members (Layout, KeyBindings, etc.) which are
-            // independent of TResult.
-            return System.Runtime.CompilerServices.Unsafe.As<Application<object?>>(this);
-        }
-    }
 
     // --- Private helpers ---
 

@@ -63,7 +63,7 @@ public sealed class AutoSuggestBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(container));
         var app = new Application<object>(
             input: _input, output: _output, layout: layout, editingMode: editingMode);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (buffer, app, scope);
     }
@@ -73,7 +73,7 @@ public sealed class AutoSuggestBindingsTests : IDisposable
     /// </summary>
     private static KeyPressEvent CreateEvent(
         Buffer? buffer = null,
-        object? app = null)
+        IApplication? app = null)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,

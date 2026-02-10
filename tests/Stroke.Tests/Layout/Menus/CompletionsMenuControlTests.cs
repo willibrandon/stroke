@@ -37,7 +37,7 @@ public sealed class CompletionsMenuControlTests
         var input = new SimplePipeInput();
         var output = new DummyOutput();
         var app = new Application<object?>(layout: layout, input: input, output: output);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         if (completions is not null)
         {

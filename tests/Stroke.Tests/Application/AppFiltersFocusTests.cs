@@ -31,7 +31,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.HasFocus("default").Invoke());
     }
@@ -46,7 +46,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(AppFilters.HasFocus("search").Invoke());
     }
@@ -65,7 +65,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.HasFocus(buffer).Invoke());
     }
@@ -81,7 +81,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(AppFilters.HasFocus(buffer2).Invoke());
     }
@@ -100,7 +100,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.HasFocus((IUIControl)control).Invoke());
     }
@@ -116,7 +116,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(AppFilters.HasFocus((IUIControl)control2).Invoke());
     }
@@ -136,7 +136,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.HasFocus(container).Invoke());
     }
@@ -157,7 +157,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Focus is on window1 (first focusable), so container2 should not have focus
         Assert.False(AppFilters.HasFocus(container2).Invoke());
@@ -173,7 +173,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Window implements IContainer, so this tests the Window fast path
         Assert.True(AppFilters.HasFocus((IContainer)window).Invoke());
@@ -193,7 +193,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.BufferHasFocus.Invoke());
     }
@@ -207,7 +207,7 @@ public class AppFiltersFocusTests
 
         using var input = new SimplePipeInput();
         var app = new Application<object?>(layout: layout, input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.False(AppFilters.BufferHasFocus.Invoke());
     }

@@ -157,7 +157,7 @@ public class ApplicationRunInTerminalTests
         // App exists but is not running
         var output = new DummyOutput();
         var app = new Application<object?>(output: output);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         bool executed = false;
         await RunInTerminal.RunAsync(() => { executed = true; });

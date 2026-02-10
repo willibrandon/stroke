@@ -29,10 +29,10 @@ namespace Stroke.Application;
 /// </remarks>
 internal sealed class CombinedRegistry : IKeyBindingsBase
 {
-    private readonly Application<object?> _app;
+    private readonly IApplication _app;
     private readonly SimpleCache<CacheKey, IKeyBindingsBase> _cache = new();
 
-    internal CombinedRegistry(Application<object?> app)
+    internal CombinedRegistry(IApplication app)
     {
         ArgumentNullException.ThrowIfNull(app);
         _app = app;

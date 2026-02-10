@@ -62,7 +62,7 @@ public partial class Application<TResult>
         _future = new TaskCompletionSource<TResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         // Set this application as the current application
-        using var appScope = AppContext.SetApp(UnsafeCast);
+        using var appScope = AppContext.SetApp(this);
 
         try
         {
@@ -456,12 +456,12 @@ public partial class Application<TResult>
             else
             {
                 // Draw in 'done' state and reset renderer.
-                Renderer.Render(UnsafeCast, Layout, isDone: true);
+                Renderer.Render(this, Layout, isDone: true);
             }
         }
         else
         {
-            Renderer.Render(UnsafeCast, Layout);
+            Renderer.Render(this, Layout);
         }
 
         // Update parent relations

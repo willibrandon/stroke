@@ -153,7 +153,7 @@ public class KeyProcessorTests
 
         // Need to set up AppContext for ProcessKeys to work
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -170,7 +170,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Feed a key that doesn't match
         processor.Feed(new KBKeyPress('z'));
@@ -190,7 +190,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Feed only the first key
         processor.Feed(new KBKeyPress('a'));
@@ -209,7 +209,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Feed both keys
         processor.Feed(new KBKeyPress('a'));
@@ -241,7 +241,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(merged);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Feed just 'a'
         processor.Feed(new KBKeyPress('a'));
@@ -277,7 +277,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         // Feed 'a' (prefix match, goes to buffer) and 'c' (stays in queue? No, all get processed)
         processor.Feed(new KBKeyPress('a'));
@@ -328,7 +328,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.SendSigint();
 
@@ -379,7 +379,7 @@ public class KeyProcessorTests
         processor.BeforeKeyPress.AddHandler(_ => Interlocked.Increment(ref beforeCount));
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -396,7 +396,7 @@ public class KeyProcessorTests
         processor.AfterKeyPress.AddHandler(_ => Interlocked.Increment(ref afterCount));
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -439,7 +439,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -465,7 +465,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -489,7 +489,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();
@@ -504,7 +504,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.Feed(new KBKeyPress('a'));
@@ -521,7 +521,7 @@ public class KeyProcessorTests
         var processor = new KeyProcessor(kb);
 
         var app = new Application<object?>(output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         processor.Feed(new KBKeyPress('a'));
         processor.ProcessKeys();

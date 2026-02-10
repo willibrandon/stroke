@@ -115,10 +115,7 @@ public class KeyPressEvent
     /// <summary>
     /// Gets the current application.
     /// </summary>
-    /// <remarks>
-    /// Returns object until IApplication interface is implemented.
-    /// </remarks>
-    public object? App { get; }
+    public Application.IApplication? App { get; }
 
     /// <summary>
     /// Gets the current buffer (shortcut for App.CurrentBuffer).
@@ -146,15 +143,15 @@ public class KeyPressEvent
     /// <param name="keySequence">The key sequence that triggered this event.</param>
     /// <param name="previousKeySequence">The previous key sequence.</param>
     /// <param name="isRepeat">Whether this is a repeat of the previous handler.</param>
-    /// <param name="app">The current application (optional until implemented).</param>
-    /// <param name="currentBuffer">The current buffer (optional until implemented).</param>
+    /// <param name="app">The current application.</param>
+    /// <param name="currentBuffer">The current buffer.</param>
     public KeyPressEvent(
         WeakReference<object>? keyProcessorRef,
         string? arg,
         IReadOnlyList<KeyPress> keySequence,
         IReadOnlyList<KeyPress> previousKeySequence,
         bool isRepeat,
-        object? app = null,
+        Application.IApplication? app = null,
         Stroke.Core.Buffer? currentBuffer = null)
     {
         ArgumentNullException.ThrowIfNull(keySequence);
@@ -259,7 +256,7 @@ public class KeyPressEvent
 
     /// <summary>Backwards compatibility alias for App.</summary>
     [Obsolete("Use App property instead.")]
-    public object? Cli => App;
+    public Application.IApplication? Cli => App;
 
     /// <inheritdoc/>
     public override string ToString()

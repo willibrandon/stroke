@@ -1,3 +1,4 @@
+using Stroke.Application;
 using Stroke.Application.Bindings;
 using Stroke.Core;
 using Stroke.Core.Primitives;
@@ -47,7 +48,7 @@ public sealed class ScrollBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         // Render to populate RenderInfo
         var screen = new Screen();
@@ -58,7 +59,7 @@ public sealed class ScrollBindingsTests : IDisposable
         return (buffer, window, app, scope);
     }
 
-    private static KeyPressEvent CreateEvent(Buffer buffer, object? app = null)
+    private static KeyPressEvent CreateEvent(Buffer buffer, IApplication? app = null)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -129,7 +130,7 @@ public sealed class ScrollBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.Null(window.RenderInfo);
 
@@ -258,7 +259,7 @@ public sealed class ScrollBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var initialCursor = buffer.CursorPosition;
         ScrollBindings.ScrollForward(CreateEvent(buffer, app));
@@ -439,7 +440,7 @@ public sealed class ScrollBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var initialScroll = window.VerticalScroll;
         ScrollBindings.ScrollOneLineDown(CreateEvent(buffer, app));
@@ -497,7 +498,7 @@ public sealed class ScrollBindingsTests : IDisposable
         var layout = new Stroke.Layout.Layout(new AnyContainer(window));
         var app = new Stroke.Application.Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var initialScroll = window.VerticalScroll;
         ScrollBindings.ScrollOneLineUp(CreateEvent(buffer, app));

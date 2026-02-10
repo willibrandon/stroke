@@ -32,7 +32,7 @@ public class ApplicationContextTests
         var output = new DummyOutput();
 
         var app = new Application<object?>(input: input, output: output);
-        Application<object?>? capturedApp = null;
+        IApplication? capturedApp = null;
 
         var runTask = app.RunAsync(preRun: () =>
         {
@@ -41,7 +41,7 @@ public class ApplicationContextTests
 
         await Task.Delay(50, ct);
 
-        // The captured app should be the running app (via UnsafeCast)
+        // The captured app should be the running app (via IApplication)
         Assert.NotNull(capturedApp);
 
         app.Exit();
@@ -56,11 +56,11 @@ public class ApplicationContextTests
         // Before SetApp, GetApp returns DummyApplication
         Assert.IsType<DummyApplication>(AppContext.GetApp());
 
-        using (var scope = AppContext.SetApp(app.UnsafeCast))
+        using (var scope = AppContext.SetApp(app))
         {
             // During scope, GetApp returns our app
             var current = AppContext.GetApp();
-            Assert.Same(app.UnsafeCast, current);
+            Assert.Same(app, current);
         }
 
         // After scope, GetApp returns DummyApplication again
@@ -73,17 +73,17 @@ public class ApplicationContextTests
         var app1 = new Application<object?>();
         var app2 = new Application<object?>();
 
-        using (var scope1 = AppContext.SetApp(app1.UnsafeCast))
+        using (var scope1 = AppContext.SetApp(app1))
         {
-            Assert.Same(app1.UnsafeCast, AppContext.GetApp());
+            Assert.Same(app1, AppContext.GetApp());
 
-            using (var scope2 = AppContext.SetApp(app2.UnsafeCast))
+            using (var scope2 = AppContext.SetApp(app2))
             {
-                Assert.Same(app2.UnsafeCast, AppContext.GetApp());
+                Assert.Same(app2, AppContext.GetApp());
             }
 
             // After inner scope, should restore outer app
-            Assert.Same(app1.UnsafeCast, AppContext.GetApp());
+            Assert.Same(app1, AppContext.GetApp());
         }
 
         Assert.IsType<DummyApplication>(AppContext.GetApp());
@@ -157,16 +157,16 @@ public class ApplicationContextTests
         var ct = TestContext.Current.CancellationToken;
         var app = new Application<object?>();
 
-        using (var scope = AppContext.SetApp(app.UnsafeCast))
+        using (var scope = AppContext.SetApp(app))
         {
             // Verify app is set before await
-            Assert.Same(app.UnsafeCast, AppContext.GetApp());
+            Assert.Same(app, AppContext.GetApp());
 
             // Yield to thread pool and verify context flows
             await Task.Yield();
 
             // AsyncLocal should preserve the app context
-            Assert.Same(app.UnsafeCast, AppContext.GetApp());
+            Assert.Same(app, AppContext.GetApp());
         }
     }
 
@@ -176,15 +176,15 @@ public class ApplicationContextTests
         var ct = TestContext.Current.CancellationToken;
         var app = new Application<object?>();
 
-        Application<object?>? capturedInTask = null;
+        IApplication? capturedInTask = null;
 
-        using (var scope = AppContext.SetApp(app.UnsafeCast))
+        using (var scope = AppContext.SetApp(app))
         {
             capturedInTask = await Task.Run(() => AppContext.GetApp(), ct);
         }
 
         // AsyncLocal flows into Task.Run
-        Assert.Same(app.UnsafeCast, capturedInTask);
+        Assert.Same(app, capturedInTask);
     }
 
     [Fact]
@@ -192,11 +192,11 @@ public class ApplicationContextTests
     {
         var app = new Application<object?>();
 
-        using (var scope = AppContext.SetApp(app.UnsafeCast))
+        using (var scope = AppContext.SetApp(app))
         {
             var result = AppContext.GetAppOrNull();
             Assert.NotNull(result);
-            Assert.Same(app.UnsafeCast, result);
+            Assert.Same(app, result);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Stroke.Application;
 
 namespace Stroke.KeyBinding.Bindings;
@@ -13,35 +12,17 @@ namespace Stroke.KeyBinding.Bindings;
 internal static class KeyPressEventExtensions
 {
     /// <summary>
-    /// Gets the <see cref="Application{TResult}"/> instance from the event, cast to
-    /// <c>Application&lt;object&gt;</c>.
+    /// Gets the <see cref="IApplication"/> instance from the event.
     /// </summary>
     /// <param name="event">The key press event.</param>
-    /// <returns>The typed Application instance.</returns>
+    /// <returns>The application instance.</returns>
     /// <exception cref="InvalidOperationException">
-    /// Thrown when <see cref="KeyPressEvent.App"/> is null or not an
-    /// <see cref="Application{TResult}"/>.
+    /// Thrown when <see cref="KeyPressEvent.App"/> is null.
     /// </exception>
-    /// <remarks>
-    /// C# generics are invariant, so <c>Application&lt;string&gt;</c> is NOT assignable to
-    /// <c>Application&lt;object&gt;</c>. This method uses <see cref="Unsafe.As{T}"/> to
-    /// safely reinterpret any <c>Application&lt;T&gt;</c> variant, matching the pattern
-    /// used in <see cref="AppContext"/>.
-    /// </remarks>
-    internal static Application<object> GetApp(this KeyPressEvent @event)
+    internal static IApplication GetApp(this KeyPressEvent @event)
     {
-        if (@event.App is not null)
-        {
-            var appType = @event.App.GetType();
-            if (appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(Application<>))
-            {
-                return Unsafe.As<Application<object>>(@event.App);
-            }
-        }
-
-        throw new InvalidOperationException(
-            @event.App is null
-                ? "KeyPressEvent.App is null. No Application is associated with this event."
-                : $"KeyPressEvent.App is not an Application<T>. Actual type: {@event.App.GetType().FullName}");
+        return @event.App
+            ?? throw new InvalidOperationException(
+                "KeyPressEvent.App is null. No Application is associated with this event.");
     }
 }

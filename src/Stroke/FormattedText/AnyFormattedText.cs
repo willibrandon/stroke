@@ -9,10 +9,6 @@ namespace Stroke.FormattedText;
 /// allowing flexible API usage. It can be converted to canonical <see cref="FormattedText"/>
 /// using <see cref="ToFormattedText"/> or to plain text using <see cref="ToPlainText"/>.
 /// </para>
-/// <para>
-/// This type is part of the minimal FormattedText implementation required by the Completion System.
-/// A full FormattedText implementation will be provided in Feature 13.
-/// </para>
 /// </remarks>
 public readonly struct AnyFormattedText : IEquatable<AnyFormattedText>
 {

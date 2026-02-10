@@ -88,7 +88,7 @@ public class RendererTests
         // Create a simple application and layout for rendering
         var app = new Application<object?>(output: output);
 
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         Assert.NotNull(renderer.LastRenderedScreen);
     }
@@ -102,12 +102,12 @@ public class RendererTests
         var app = new Application<object?>(output: output);
 
         // First render (full)
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
         var firstScreen = renderer.LastRenderedScreen;
         Assert.NotNull(firstScreen);
 
         // Second render (differential)
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
         var secondScreen = renderer.LastRenderedScreen;
         Assert.NotNull(secondScreen);
     }
@@ -121,7 +121,7 @@ public class RendererTests
         var app = new Application<object?>(output: output);
 
         // Render first
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
         Assert.NotNull(renderer.LastRenderedScreen);
 
         // Erase
@@ -137,7 +137,7 @@ public class RendererTests
 
         var app = new Application<object?>(output: output);
 
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
 
         // Clear should reset state
         renderer.Clear();
@@ -200,7 +200,7 @@ public class RendererTests
         var app = new Application<object?>(output: output);
 
         // Render as done
-        renderer.Render(app.UnsafeCast, app.Layout, isDone: true);
+        renderer.Render(app, app.Layout, isDone: true);
 
         // After isDone, renderer should have been reset
         Assert.Null(renderer.LastRenderedScreen);
@@ -239,7 +239,7 @@ public class RendererTests
         var app = new Application<object?>(output: output);
 
         // Should not throw; mouse is disabled
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
     }
 
     [Fact]
@@ -251,7 +251,7 @@ public class RendererTests
         var app = new Application<object?>(output: output);
 
         // Should not throw; mouse is enabled on DummyOutput
-        renderer.Render(app.UnsafeCast, app.Layout);
+        renderer.Render(app, app.Layout);
     }
 
     [Fact]

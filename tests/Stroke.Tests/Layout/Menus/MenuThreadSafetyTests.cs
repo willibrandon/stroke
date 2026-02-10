@@ -31,7 +31,7 @@ public sealed class MenuThreadSafetyTests
         var input = new SimplePipeInput();
         var output = new DummyOutput();
         var app = new Application<object?>(layout: layout, input: input, output: output);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         var completions = new List<CompletionItem>();
         for (int i = 0; i < count; i++)

@@ -251,4 +251,49 @@ public partial class Application<TResult>
         return result;
     }
 
+    // ════════════════════════════════════════════════════════════════════════
+    // IApplication — EXPLICIT IMPLEMENTATIONS
+    // ════════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Explicit implementation of <see cref="IApplication.RunningInTerminal"/>.
+    /// Routes to the internal field used by <see cref="RunInTerminal"/>.
+    /// </summary>
+    bool IApplication.RunningInTerminal
+    {
+        get => _runningInTerminal;
+        set => _runningInTerminal = value;
+    }
+
+    /// <summary>
+    /// Explicit implementation of <see cref="IApplication.RunningInTerminalFuture"/>.
+    /// Routes to the internal field used by <see cref="RunInTerminal"/>.
+    /// </summary>
+    TaskCompletionSource<object?>? IApplication.RunningInTerminalFuture
+    {
+        get => _runningInTerminalFuture;
+        set => _runningInTerminalFuture = value;
+    }
+
+    /// <summary>
+    /// Explicit non-generic <see cref="IApplication.Exit"/> implementation.
+    /// Converts the boxed <paramref name="result"/> to <typeparamref name="TResult"/>
+    /// and delegates to the typed <see cref="Exit(TResult?, Exception?, string)"/> method.
+    /// </summary>
+    void IApplication.Exit(object? result, Exception? exception, string style)
+    {
+        if (exception is not null)
+        {
+            Exit(default, exception, style);
+        }
+        else if (result is null)
+        {
+            Exit(default, null, style);
+        }
+        else
+        {
+            Exit((TResult)result, null, style);
+        }
+    }
+
 }

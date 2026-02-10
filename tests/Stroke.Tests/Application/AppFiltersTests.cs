@@ -45,7 +45,7 @@ public class AppFiltersTests
         {
             app = new Application<object?>(input: input, output: output, editingMode: editingMode);
         }
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
         return (app, scope);
     }
 
@@ -363,7 +363,7 @@ public class AppFiltersTests
         var app = new Application<object?>(
             input: input, output: new DummyOutput(),
             pasteMode: new FilterOrBool(true));
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         Assert.True(AppFilters.InPasteMode.Invoke());
     }

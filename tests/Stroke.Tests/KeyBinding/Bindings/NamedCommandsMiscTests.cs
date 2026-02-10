@@ -21,7 +21,7 @@ public sealed class NamedCommandsMiscTests
         string? arg = null,
         string? data = null,
         bool isRepeat = false,
-        object? app = null)
+        IApplication? app = null)
     {
         var keySequence = data is not null
             ? new List<KeyPress> { new(new KeyOrChar(data[0]), data) }
@@ -125,7 +125,7 @@ public sealed class NamedCommandsMiscTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.EditingMode = EditingMode.Emacs;
         var buffer = new Buffer();
@@ -140,7 +140,7 @@ public sealed class NamedCommandsMiscTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         app.EditingMode = EditingMode.Vi;
         var buffer = new Buffer();
@@ -155,7 +155,7 @@ public sealed class NamedCommandsMiscTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer();
         var binding = NamedCommands.GetByName("prefix-meta");
@@ -169,7 +169,7 @@ public sealed class NamedCommandsMiscTests
     {
         using var input = new SimplePipeInput();
         var app = new Application<object>(input: input, output: new DummyOutput());
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var buffer = new Buffer(document: new Document("current", cursorPosition: 0));
         var binding = NamedCommands.GetByName("operate-and-get-next");

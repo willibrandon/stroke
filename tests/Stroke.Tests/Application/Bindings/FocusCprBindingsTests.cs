@@ -68,7 +68,7 @@ public sealed class FocusCprBindingsTests : IDisposable
 
         var app = new Application<object>(
             input: _input, output: _output, layout: layout);
-        var scope = AppContext.SetApp(app.UnsafeCast);
+        var scope = AppContext.SetApp(app);
 
         return (windows, app, scope);
     }
@@ -76,7 +76,7 @@ public sealed class FocusCprBindingsTests : IDisposable
     /// <summary>
     /// Creates a KeyPressEvent for testing focus handler functions.
     /// </summary>
-    private static KeyPressEvent CreateEvent(object app)
+    private static KeyPressEvent CreateEvent(IApplication app)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -90,7 +90,7 @@ public sealed class FocusCprBindingsTests : IDisposable
     /// <summary>
     /// Creates a KeyPressEvent with CPR response data.
     /// </summary>
-    private static KeyPressEvent CreateCprEvent(object app, string data)
+    private static KeyPressEvent CreateCprEvent(IApplication app, string data)
     {
         return new KeyPressEvent(
             keyProcessorRef: null,
@@ -328,7 +328,7 @@ public sealed class FocusCprBindingsTests : IDisposable
 
         var app = new Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var evt = CreateEvent(app);
         var exception = Record.Exception(() => FocusFunctions.FocusNext(evt));
@@ -347,7 +347,7 @@ public sealed class FocusCprBindingsTests : IDisposable
 
         var app = new Application<object>(
             input: _input, output: _output, layout: layout);
-        using var scope = AppContext.SetApp(app.UnsafeCast);
+        using var scope = AppContext.SetApp(app);
 
         var evt = CreateEvent(app);
         var exception = Record.Exception(() => FocusFunctions.FocusPrevious(evt));

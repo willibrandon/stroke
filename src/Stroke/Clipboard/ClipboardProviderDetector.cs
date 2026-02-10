@@ -11,22 +11,34 @@ namespace Stroke.Clipboard;
 /// Detection order: Windows, macOS, WSL, Linux Wayland, Linux X11 (xclip then xsel).
 /// </para>
 /// <para>
-/// <b>Thread Safety:</b> This class is stateless (static methods only) and inherently thread-safe.
+/// The detection result is memoized after the first call. Clipboard tool availability
+/// does not change during a terminal application's lifetime.
+/// </para>
+/// <para>
+/// <b>Thread Safety:</b> Uses <see cref="Lazy{T}"/> for thread-safe one-time initialization.
+/// Concurrent calls to <see cref="Detect"/> are safe.
 /// </para>
 /// </remarks>
 internal static class ClipboardProviderDetector
 {
     private static readonly TimeSpan ToolDetectionTimeout = TimeSpan.FromSeconds(2);
 
+    // Memoize detection result. Lazy<T> default mode (ExecutionAndPublication)
+    // ensures exactly one thread runs DetectCore; all others wait and get the same result.
+    private static readonly Lazy<IClipboardProvider> s_cachedProvider = new(DetectCore);
+
     /// <summary>
     /// Detect the current platform and return the appropriate clipboard provider.
+    /// The result is cached after the first successful detection.
     /// </summary>
     /// <returns>A platform-appropriate <see cref="IClipboardProvider"/>.</returns>
     /// <exception cref="ClipboardProviderNotAvailableException">
     /// Thrown when no clipboard mechanism is available. The exception message includes
     /// platform-specific installation guidance.
     /// </exception>
-    public static IClipboardProvider Detect()
+    public static IClipboardProvider Detect() => s_cachedProvider.Value;
+
+    private static IClipboardProvider DetectCore()
     {
         if (OperatingSystem.IsWindows())
         {
